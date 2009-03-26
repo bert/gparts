@@ -1,0 +1,98 @@
+gEDA
+
+GPL Electronic Design Automation
+------------------------------------------------------------------------------
+
+REQUIREMENTS
+------------
+Building GParts requires the following packages:
+
+    gcc
+    libgtk2.0-dev
+    pkg-config
+
+Additionally, GParts requires a database for the back-end.  Currently, GParts
+can use either MySQL or PostgreSQL.  In order to use MySQL, the packages listed
+below must be installed.  The mysql-server package may not be required if
+configured to use a remote server.
+
+    libmysqlclient15-dev
+    mysql-client
+    mysql-server
+
+In order to use PostgreSQL, the following packages must be installed:
+(TODO: PostgreSQL not supported yet.)
+
+    libpq-dev
+    postgresql
+
+Of course, installing all packages before building allows the application to
+use either database for the back-end.
+
+BUILDING GPARTS
+---------------
+TODO: Finish documentation
+
+
+DATABASE CREATION (MySQL)
+-------------------------
+Install MySQL.
+
+    Tested under 5.0.51a-3ubuntu5.1.
+
+To create the database, enter MySQL command line mode as root and enter the SQL
+commands below.  Placing the password in the command line could leave the
+password in the command line history.  Using only the -p option will cause
+mysql to prompt for the password and avoid this situation.  A different
+database name, other than gparts, can be specified by the user.  Using
+different names, the user can create multiple GPart databases.  Additionally,
+user accounts may need to be created.
+
+    $ mysql -u root -p
+
+    mysql> create database GParts;
+    mysql> use GParts;
+    mysql> grant all privileges on *.* to 'user'@'localhost'
+           identified by 'password';
+
+After creating the database, the base tables and part-specific tables must be
+created.  All the SQL commands to perform these operations are included in the
+distributed files.  Enter the following commands at the MySQL command line.
+
+    mysql> source sql/mysql/create-create.sql
+    mysql> source sql/mysql/create-categories.sql
+    mysql> source sql/mysql/create-discretes.sql
+    mysql> source sql/mysql/create-passives.sql
+
+Begin loading the database, starting with package data.  The package data must
+be loaded before any parts.
+
+    mysql> source data/packages.sql
+
+The package includes a tool to parse the symbol libraries and generate an
+SQL file for import into the database.  Run the tool at the shell prompt, then
+import the file from an MySQL prompt.  The tool requires the root gEDA
+directory as the only parameter. Your gEDA root directory may be different than
+below.  The symbol data must be loaded before any parts.
+
+    $ tools/symbols.py /usr/share/gEDA >tmp/symbols.sql
+
+    mysql> source tmp/symbols.sql
+
+The package includes a script to generate some sample part data.  Similar to
+the symbol tool, run the script at the shell prompt, then import the data at
+the MySQL prompt.
+
+    $ data/parts-bourns.py >tmp/parts-bourns.sql
+
+    mysql> source tmp/parts-bourns.sql
+
+
+DATABASE CREATION (PostgreSQL)
+------------------------------
+TODO: Finish implementation
+
+DATABASE CREATION (SQLite)
+------------------------------
+TODO: Finish implementation
+

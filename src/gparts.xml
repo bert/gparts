@@ -1,0 +1,687 @@
+<interface>
+
+    <object class="GtkUIManager" id="uimanager">
+        <child>
+            <object class="GtkActionGroup" id="main_action_group">
+                <child>
+                    <object class="GtkAction" id="database">
+                        <property name="name">database</property>
+                        <property name="label">_Database</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="database-connect">
+                        <property name="name">database-connect</property>
+                        <property name="label">Connect</property>
+                        <property name="stock-id">gtk-connect</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="database-disconnect">
+                        <property name="name">database-disconnect</property>
+                        <property name="label">Disconnect</property>
+                        <property name="stock-id">gtk-disconnect</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="view">
+                        <property name="name">view</property>
+                        <property name="label">_View</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="view-customize">
+                        <property name="name">view-customize</property>
+                        <property name="label">Customize...</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="view-refresh">
+                        <property name="name">refresh</property>
+                        <property name="label">_Refresh</property>
+                        <property name="stock-id">gtk-refresh</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="view-edit">
+                        <property name="name">view-edit</property>
+                        <property name="label">Edit</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="test-popup-2">
+                        <property name="name">popup-2</property>
+                        <property name="label">Test Popup 2</property>
+                    </object>
+                </child>
+            </object>
+        </child>
+
+        <ui>
+            <menubar name="main_menu">
+                <menu action="database">
+                    <menuitem action="database-connect"/>
+                    <menuitem action="database-disconnect"/>
+                </menu>
+                <menu action="view">
+                    <menuitem action="view-refresh"/>
+                    <menuitem action="view-edit"/>
+                    <menuitem action="view-customize"/>
+                </menu>
+            </menubar>
+            <toolbar name="main_toolbar">
+                <toolitem action="database-connect"/>
+                <toolitem action="view-refresh"/>
+            </toolbar>
+        </ui>
+    </object>
+
+    <object class="GtkWindow" id="main">
+        <child>
+            <object class="GtkVBox" id="vbox1">
+                <property name="visible">TRUE</property>
+                <child>
+                    <object class="GtkMenuBar" constructor="uimanager" id="main_menu">
+                        <property name="visible">TRUE</property>
+                    </object>
+                    <packing>
+                        <property name="expand">FALSE</property>
+                        <property name="fill">FALSE</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkToolbar" constructor="uimanager" id="main_toolbar">
+                        <property name="visible">TRUE</property>
+                    </object>
+                    <packing>
+                        <property name="expand">FALSE</property>
+                        <property name="fill">FALSE</property>
+                    </packing>
+                </child>
+
+                <child>
+                    <object class="GtkNotebook" id="notebook">
+                        <property name="visible">TRUE</property>
+
+
+
+                        <!-- A window for browsing all the companies in the library -->
+
+                        <child>
+                            <object class="GtkScrolledWindow" id="companies-scrolled">
+                                <property name="visible">TRUE</property>
+                                <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                <child>
+                                    <object class="GtkTreeView" id="companies-view">
+                                        <property name="height-request">480</property>
+                                        <property name="visible">TRUE</property>
+                                        <property name="width-request">640</property>
+                                    </object>
+                                </child>
+                           </object>
+                        </child>
+                        <child type="tab">
+                            <object class="GtkLabel" id="companies-tab">
+                                <property name="label">Companies</property>
+                            </object>
+                        </child>
+
+
+
+                        <!-- A window for browsing all the devices in the library -->
+
+                        <child>
+                            <object class="GtkScrolledWindow" id="devices-scrolled">
+                                <property name="visible">TRUE</property>
+                                <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                <child>
+                                    <object class="GtkTreeView" id="devices-view">
+                                        <property name="height-request">480</property>
+                                        <property name="visible">TRUE</property>
+                                        <property name="width-request">640</property>
+                                    </object>
+                                </child>
+                           </object>
+                        </child>
+                        <child type="tab">
+                            <object class="GtkLabel" id="devices-tab">
+                                <property name="label">Devices</property>
+                            </object>
+                        </child>
+
+
+
+                        <!-- A window for browsing all the documentation in the library -->
+
+                        <child>
+                            <object class="GtkScrolledWindow" id="documentation-scrolled">
+                                <property name="visible">TRUE</property>
+                                <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                <child>
+                                    <object class="GtkTreeView" id="documentation-view">
+                                        <property name="height-request">480</property>
+                                        <property name="visible">TRUE</property>
+                                        <property name="width-request">640</property>
+                                    </object>
+                                </child>
+                            </object>
+                       </child>
+                        <child type="tab">
+                            <object class="GtkLabel" id="documentation-tab">
+                                <property name="label">Documentation</property>
+                            </object>
+                        </child>
+
+
+
+                        <!-- A window for browsing all the footprints in the library -->
+
+                        <child>
+                            <object class="GtkHPaned" id="footprints-hpaned">
+                                <property name="visible">TRUE</property>
+                                <child>
+                                    <object class="GtkScrolledWindow" id="footprints-scrolled">
+                                        <property name="visible">TRUE</property>
+                                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                        <child>
+                                            <object class="GtkTreeView" id="footprints-view">
+                                                <property name="height-request">480</property>
+                                                <property name="visible">TRUE</property>
+                                                <property name="width-request">640</property>
+                                            </object>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="gparts-preview" id="footprints-graphic-view">
+                                        <property name="height-request">200</property>
+                                        <property name="visible">TRUE</property>
+                                        <property name="width-request">200</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                        <child type="tab">
+                            <object class="GtkLabel" id="footprints-tab">
+                                <property name="label">Footprints</property>
+                            </object>
+                        </child>
+
+
+
+                        <!-- A window for browsing all the packages in the library -->
+
+                        <child>
+                            <object class="GtkHPaned" id="symbols-hpaned">
+                                <property name="visible">TRUE</property>
+                                <child>
+                                    <object class="GtkScrolledWindow" id="packages-scrolled">
+                                        <property name="visible">TRUE</property>
+                                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                        <child>
+                                            <object class="GtkTreeView" id="packages-view">
+                                                <property name="height-request">480</property>
+                                                <property name="visible">TRUE</property>
+                                                <property name="width-request">640</property>
+                                            </object>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkScrolledWindow" id="packages-footprints-scrolled">
+                                        <property name="visible">TRUE</property>
+                                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                        <child>
+                                            <object class="GtkTreeView" id="packages-footprints-view">
+                                                <property name="height-request">480</property>
+                                                <property name="visible">TRUE</property>
+                                                <property name="width-request">140</property>
+                                            </object>
+                                        </child>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                        <child type="tab">
+                            <object class="GtkLabel" id="packages-tab">
+                                <property name="label">Packages</property>
+                            </object>
+                        </child>
+
+
+                        <!-- A window for browsing all the parts in the library -->
+
+                        <child>
+                            <object class="GtkHPaned" id="zippy">
+                                <property name="visible">TRUE</property>
+                                <child>
+                                    <object class="GtkScrolledWindow" id="category-scrolled">
+                                        <property name="visible">TRUE</property>
+                                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                        <child>
+                                            <object class="GtkTreeView" id="category-view">
+                                                <property name="visible">TRUE</property>
+                                                <property name="width-request">200</property>
+                                            </object>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkHPaned" id="hpaned-2">
+                                        <property name="visible">TRUE</property>
+
+                                        <child>
+                                            <object class="GtkScrolledWindow" id="parts-scrolled-window">
+                                                <property name="visible">TRUE</property>
+                                                <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                                <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                                <child>
+                                                    <object class="GPartsResultView" id="parts-tree-view">
+                                                        <property name="height-request">480</property>
+                                                        <property name="visible">TRUE</property>
+                                                        <property name="width-request">600</property>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                        </child>
+
+                                        <child>
+                                            <object class="GtkVPaned" id="vpaned-1">
+                                                <property name="visible">TRUE</property>
+                                                <child>
+                                                    <object class="GtkScrolledWindow" id="symbols-scrolled-window">
+                                                        <property name="visible">TRUE</property>
+                                                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                                        <child>
+                                                            <object class="gparts-preview" id="symbols-graphic-view">
+                                                                <property name="height-request">200</property>
+                                                                <property name="visible">TRUE</property>
+                                                                <property name="width-request">200</property>
+                                                            </object>
+                                                        </child>
+                                                     </object>
+                                                </child>
+                                                <child>
+                                                    <object class="GtkScrolledWindow" id="symbols-scrolled-window">
+                                                        <property name="visible">TRUE</property>
+                                                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                                        <child>
+                                                            <object class="GtkTreeView" id="symbols-tree-view">
+                                                                <property name="height-request">200</property>
+                                                                <property name="visible">TRUE</property>
+                                                                <property name="width-request">200</property>
+                                                            </object>
+                                                        </child>
+                                                     </object>
+                                                </child>
+                                            </object>
+                                        </child>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                        <child type="tab">
+                            <object class="GtkLabel" id="parts-tab">
+                                <property name="label">Parts</property>
+                            </object>
+                        </child>
+
+
+
+                        <!-- A window for browsing all the symbols in the library -->
+
+                        <child>
+                            <object class="GtkVPaned" id="symbols-window-vpaned-1">
+                                <property name="visible">TRUE</property>
+                                <child>
+                                    <object class="GtkHPaned" id="symbols-window-hpaned-1">
+                                        <property name="visible">TRUE</property>
+                                        <child>
+                                            <object class="GtkScrolledWindow" id="symbols-scrolled">
+                                                <property name="visible">TRUE</property>
+                                                <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                                <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                                <child>
+                                                    <object class="GtkTreeView" id="symbols-view">
+                                                        <property name="height-request">480</property>
+                                                        <property name="visible">TRUE</property>
+                                                        <property name="width-request">640</property>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="gparts-preview" id="symbols-graphic-view">
+                                                <property name="height-request">200</property>
+                                                <property name="visible">TRUE</property>
+                                                <property name="width-request">200</property>
+                                            </object>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkScrolledWindow" id="symbol-details-scrolled">
+                                        <property name="visible">TRUE</property>
+                                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                        <child>
+                                            <object class="GtkTreeView" id="symbol-details-view">
+                                                <property name="height-request">100</property>
+                                                <property name="visible">TRUE</property>
+                                                <property name="width-request">640</property>
+                                            </object>
+                                        </child>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                        <child type="tab">
+                            <object class="GtkLabel" id="symbols-tab">
+                                <property name="label">Symbols</property>
+                            </object>
+                        </child>
+
+
+                    </object>
+                </child>
+            </object>
+        </child>
+    </object>
+
+
+
+    <!-- A window for browsing all the companies in the library -->
+
+    <object class="GtkWindow" id="companies-window">
+        <property name="title">Companies</property>
+    </object>
+
+
+
+    <!-- A window for browsing all the devices in the library -->
+
+    <object class="GtkWindow" id="devices-window">
+        <property name="title">Devices</property>
+    </object>
+
+
+
+    <!-- A window for browsing all the documentation in the library -->
+
+    <object class="GtkWindow" id="documentation-window">
+        <property name="title">Documentation</property>
+    </object>
+
+
+
+    <!-- A window for browsing all the footprints in the library -->
+
+    <object class="GtkWindow" id="footprints-window">
+        <property name="title">Footprints</property>
+    </object>
+
+
+
+    <!-- A window for browsing all the packages in the library -->
+
+    <object class="GtkWindow" id="packages-window">
+        <property name="title">Packages</property>
+    </object>
+
+
+
+    <!-- A window for browsing all the symbols in the library -->
+
+    <object class="GtkWindow" id="symbols-window">
+        <property name="title">Symbols</property>
+    </object>
+
+
+
+
+
+
+    <object class="GtkDialog" id="preferences">
+        <child internal-child="vbox">
+            <object class="GtkVBox" id="vbox111">
+                <property name="visible">TRUE</property>
+                <child>
+                    <object class="GtkNotebook" id="colorthing">
+                        <property name="visible">TRUE</property>
+                        <child>
+                            <object class="GtkVBox" id="vbox111">
+                                <property name="visible">TRUE</property>
+                                <child>
+                                    <object class="GtkTreeView" id="colortree">
+                                        <property name="visible">TRUE</property>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkHButtonBox" id="hbox11">
+                                        <property name="layout-style">GTK_BUTTONBOX_START</property>
+                                        <property name="visible">TRUE</property>
+                                        <child>
+                                            <object class="GtkButton" id="button_add">
+                                                <property name="label">gtk-add</property>
+                                                <property name="use-stock">TRUE</property>
+                                                <property name="visible">TRUE</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkButton" id="button_remove">
+                                                <property name="label">gtk-remove</property>
+                                                <property name="use-stock">TRUE</property>
+                                                <property name="visible">TRUE</property>
+                                            </object>
+                                        </child>
+                                    </object>
+                                    <packing>
+                                        <property name="expand">FALSE</property>
+                                    </packing>
+                                </child>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+            </object>
+        </child>
+        <child internal-child="action_area">
+            <object class="GtkHButtonBox" id="hbox111">
+                <property name="visible">TRUE</property>
+                <child>
+                    <object class="GtkButton" id="button_help">
+                        <property name="label">gtk-help</property>
+                        <property name="use-stock">TRUE</property>
+                        <property name="visible">TRUE</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkButton" id="button_cancel">
+                        <property name="label">gtk-cancel</property>
+                        <property name="use-stock">TRUE</property>
+                        <property name="visible">TRUE</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkButton" id="button_ok">
+                        <property name="label">gtk-apply</property>
+                        <property name="use-stock">TRUE</property>
+                        <property name="visible">TRUE</property>
+                    </object>
+                </child>
+            </object>
+        </child>
+        <action-widgets>
+            <action-widget response="3">button_ok</action-widget>
+            <action-widget response="-5">button_cancel</action-widget>
+        </action-widgets>
+    </object>
+
+
+
+
+    <object class="GtkDialog" id="database-login-mysql">
+        <property name="title">Connect to Database</property>
+        <child internal-child="vbox">
+            <object class="GtkVBox" id="vbox">
+                <property name="visible">TRUE</property>
+                <child>
+                    <object class="GtkTable" id="vbox">
+                        <property name="border_width">10</property>
+                        <property name="column_spacing">5</property>
+                        <property name="n_columns">1</property>
+                        <property name="n_rows">5</property>
+                        <property name="row_spacing">5</property>
+                        <property name="visible">TRUE</property>
+                        <child>
+                            <object class="GtkLabel" id="user-name-label">
+                                <property name="label">User Name</property>
+                                <property name="visible">TRUE</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">0</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkEntry" id="user-name-entry">
+                                <property name="text">root</property>
+                                <property name="visible">TRUE</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">0</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkLabel" id="password-label">
+                                <property name="label">Password</property>
+                                <property name="visible">TRUE</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">1</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkEntry" id="password-entry">
+                                <property name="visible">TRUE</property>
+                                <property name="visibility">FALSE</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">1</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkLabel" id="server-label">
+                                <property name="label">Server</property>
+                                <property name="visible">TRUE</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">2</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkEntry" id="server-entry">
+                                <property name="text">localhost</property>
+                                <property name="visible">TRUE</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">2</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkLabel" id="database-label">
+                                <property name="label">Database</property>
+                                <property name="visible">TRUE</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">3</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkEntry" id="database-entry">
+                                <property name="text">GParts</property>
+                                <property name="visible">TRUE</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">3</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkLabel" id="filename-label">
+                                <property name="label">Filename</property>
+                                <property name="visible">TRUE</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">4</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkEntry" id="filename-entry">
+                                <property name="text">gparts</property>
+                                <property name="visible">TRUE</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">4</property>
+                            </packing>
+                        </child>
+
+                    </object>
+                </child>
+            </object>
+        </child>
+        <child internal-child="action_area">
+            <object class="GtkHButtonBox" id="buttons">
+                <property name="visible">TRUE</property>
+                <child>
+                    <object class="GtkButton" id="button-help">
+                        <property name="label">gtk-help</property>
+                        <property name="use-stock">TRUE</property>
+                        <property name="visible">TRUE</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkButton" id="button-cancel">
+                        <property name="label">gtk-cancel</property>
+                        <property name="use-stock">TRUE</property>
+                        <property name="visible">TRUE</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkButton" id="button-ok">
+                        <property name="label">gtk-ok</property>
+                        <property name="use-stock">TRUE</property>
+                        <property name="visible">TRUE</property>
+                    </object>
+                </child>
+            </object>
+        </child>
+        <action-widgets>
+            <action-widget response="3">button-ok</action-widget>
+            <action-widget response="-5">button-cancel</action-widget>
+        </action-widgets>
+    </object>
+
+
+    <object class="GPartsObjectList" id="controllers">
+
+    </object>
+
+</interface>

@@ -1,0 +1,26 @@
+** (gparts:29057): DEBUG: Supported 1
+** (gparts:29057): DEBUG: Path      test/libgparts-mysql
+** (gparts:29057): DEBUG: (nil)
+** (gparts:29057): DEBUG: ./.libs/: cannot read file data: Is a directory
+** (gparts:29057): DEBUG: Template: SELECT * FROM %s
+** (gparts:29057): DEBUG: Template: SELECT * FROM %s WHERE DeviceID = $(DeviceID)
+** (gparts:29057): DEBUG: Template: SELECT * FROM %s
+** (gparts:29057): DEBUG: Template: SELECT * FROM %s
+** (gparts:29057): DEBUG: Template: SELECT * FROM %s
+** (gparts:29057): DEBUG: Template: SELECT * FROM %s
+** (gparts:29057): DEBUG: Template: SELECT * FROM %s
+** (gparts:29057): DEBUG: Template: SELECT * FROM %s
+** (gparts:29057): DEBUG: Template: SELECT * FROM %s WHERE SymbolID = $(SymbolID)
+** (gparts:29064): DEBUG: Supported 1
+** (gparts:29064): DEBUG: Path      test/libgparts-mysql
+** (gparts:29064): DEBUG: (nil)
+** (gparts:29064): DEBUG: ./.libs/: cannot read file data: Is a directory
+** (gparts:29064): DEBUG: Template: SELECT * FROM %s
+** (gparts:29064): DEBUG: Template: SELECT * FROM %s WHERE DeviceID = $(DeviceID)
+** (gparts:29064): DEBUG: Template: SELECT * FROM %s
+** (gparts:29064): DEBUG: Template: SELECT * FROM %s
+** (gparts:29064): DEBUG: Template: SELECT * FROM %s
+** (gparts:29064): DEBUG: Template: SELECT * FROM %s
+** (gparts:29064): DEBUG: Template: SELECT * FROM %s
+** (gparts:29064): DEBUG: Template: SELECT * FROM %s
+** (gparts:29064): DEBUG: Template: SELECT * FROM %s WHERE SymbolID = $(SymbolID)
