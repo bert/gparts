@@ -71,9 +71,9 @@ AC_SUBST(MYSQL_LDADD)
 ##
 AC_PATH_PROG([POSTGRESQL_CONFIG],'pg_config')
 if test $POSTGRESQL_CONFIG; then
-    POSTGRESQL_VERSION=`$PG_CONFIG --version`
-    POSTGRESQL_CFLAGS=`$PG_CONFIG --cflags`
-    POSTGRESQL_LIBS=`$PG_CONFIG --libs`
+    POSTGRESQL_VERSION=`$POSTGRESQL_CONFIG --version`
+    POSTGRESQL_CFLAGS=`$POSTGRESQL_CONFIG --cflags`
+    POSTGRESQL_LIBS=`$POSTGRESQL_CONFIG --libs`
 #    PG_LDADD='libgparts-postgresql.la'
 else
     AC_MSG_WARN([Unable to locate pg_config.  Make sure PostgreSQL development libraries are installed and pg_config is in the path.])

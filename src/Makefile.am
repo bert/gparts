@@ -66,3 +66,8 @@ libgparts_sqlite_la_SOURCES = \
 libgparts_sqlite_la_CFLAGS = $(AM_CFLAGS) $(GLIB_CFLAGS) $(SQLITE_CFLAGS)
 libgparts_sqlite_la_LIBADD = $(SQLITE_LIBS)
 
+MOSTLYCLEANFILES = core *~
+CLEANFILES = core *~
+DISTCLEANFILES = core *~
+MAINTAINERCLEANFILES = core *~ Makefile.in
+
