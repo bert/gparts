@@ -296,7 +296,7 @@
                                             <object class="GtkVPaned" id="vpaned-1">
                                                 <property name="visible">TRUE</property>
                                                 <child>
-                                                    <object class="GtkScrolledWindow" id="symbols-scrolled-window">
+                                                    <object class="GtkScrolledWindow" id="symbols-graphic-scrolled">
                                                         <property name="visible">TRUE</property>
                                                         <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                         <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
@@ -310,7 +310,7 @@
                                                      </object>
                                                 </child>
                                                 <child>
-                                                    <object class="GtkScrolledWindow" id="symbols-scrolled-window">
+                                                    <object class="GtkScrolledWindow" id="symbols-tree-scrolled">
                                                         <property name="visible">TRUE</property>
                                                         <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                         <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
@@ -452,7 +452,7 @@
 
     <object class="GtkDialog" id="preferences">
         <child internal-child="vbox">
-            <object class="GtkVBox" id="vbox111">
+            <object class="GtkVBox" id="preferences-vbox">
                 <property name="visible">TRUE</property>
                 <child>
                     <object class="GtkNotebook" id="colorthing">
@@ -532,10 +532,10 @@
     <object class="GtkDialog" id="database-login-mysql">
         <property name="title">Connect to Database</property>
         <child internal-child="vbox">
-            <object class="GtkVBox" id="vbox">
+            <object class="GtkVBox" id="database-login-vbox">
                 <property name="visible">TRUE</property>
                 <child>
-                    <object class="GtkTable" id="vbox">
+                    <object class="GtkTable" id="database-login-table">
                         <property name="border_width">10</property>
                         <property name="column_spacing">5</property>
                         <property name="n_columns">1</property>
