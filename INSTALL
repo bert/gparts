@@ -59,7 +59,7 @@ After creating the database, the base tables and part-specific tables must be
 created.  All the SQL commands to perform these operations are included in the
 distributed files.  Enter the following commands at the MySQL command line.
 
-    mysql> source sql/mysql/create-create.sql
+    mysql> source sql/mysql/create-basic.sql
     mysql> source sql/mysql/create-categories.sql
     mysql> source sql/mysql/create-discretes.sql
     mysql> source sql/mysql/create-passives.sql
