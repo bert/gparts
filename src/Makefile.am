@@ -2,7 +2,8 @@
 #
 #
 
-bin_PROGRAMS = gparts
+bin_PROGRAMS = gparts gsymview
+
 gparts_SOURCES = \
 	gparts-category-model.c \
 	gparts-category-controller.c \
@@ -21,10 +22,20 @@ gparts_SOURCES = \
 	gparts-result-controller.c \
 	gparts-result-view.c \
 	gparts-state.c \
-	gparts-units.c
+	gparts-units.c 
 gparts_CFLAGS = $(AM_CFLAGS) $(GMODULE_CFLAGS) $(GTK_CFLAGS)
-gparts_LDADD = $(GMODULE_LIBS) $(GTK_LIBS)
+gparts_LDADD = $(GMODULE_LIBS) $(GTK_LIBS) libgeom.la libsch.la libschgui.la
 #gparts_DEPENDENCIES = $(MYSQL_LDADD) $(POSTGRESQL_LDADD) $(SQLITE_LDADD)
+
+
+# A small GUI program for testing the drawing loader and drawing view widget.
+#
+gsymview_SOURCES = \
+	gsymview-main.c
+gsymview_CFLAGS = $(AM_CFLAGS) $(GTK_CFLAGS)
+gsymview_LDADD = $(GTK_LIBS) libgeom.la libsch.la libschgui.la
+
+
 
 # TODO libraries in EXTRA_LTLIBRARIES do not seem to work with g_module_open (no .so?)
 # Libraries in lib_LTLIBRARIES must be built.  If conditionally not there, then the
@@ -33,7 +44,10 @@ gparts_LDADD = $(GMODULE_LIBS) $(GTK_LIBS)
 # build.
 
 lib_LTLIBRARIES = \
-	libgparts-mysql.la
+	libgeom.la \
+	libgparts-mysql.la \
+	libsch.la \
+	libschgui.la
 
 EXTRA_LTLIBRARIES = \
 	libgparts-postgresql.la \
@@ -70,4 +84,43 @@ MOSTLYCLEANFILES = core *~
 CLEANFILES = core *~
 DISTCLEANFILES = core *~
 MAINTAINERCLEANFILES = core *~ Makefile.in
+
+libsch_la_SOURCES = \
+	sch-arc.c \
+	sch-box.c \
+	sch-bus.c \
+	sch-circle.c \
+	sch-color.c \
+	sch-component.c \
+	sch-drafter.c \
+	sch-drawing.c \
+	sch-fill-style.c \
+	sch-line.c \
+	sch-line-style.c \
+	sch-loader.c \
+	sch-multiline.c \
+	sch-net.c \
+	sch-pin.c \
+        sch-shape.c \
+	sch-text.c
+libsch_la_CFLAGS = -Wall $(AM_CFLAGS) $(GLIB_CFLAGS)
+libsch_la_LIBADD = $(GLIB_LIBS) libgeom.la
+
+libschgui_la_SOURCES = \
+	schgui-cairo-drafter.c \
+	schgui-drawing-cfg.c \
+	schgui-drawing-view.c
+libschgui_la_CFLAGS = -Wall $(AM_CFLAGS) $(GTK_CFLAGS)
+libschgui_la_LIBADD = $(GTK_LIBS)
+
+libgeom_la_SOURCES = \
+	geom-angle.c \
+	geom-arc.c \
+	geom-bounds.c \
+	geom-box.c \
+	geom-circle.c \
+	geom-line.c \
+	geom-transform.c
+libgeom_la_CFLAGS = -Wall $(AM_CFLAGS) $(GLIB_CFLAGS)
+libgeom_la_LIBADD = $(GLIB_LIBS)
 

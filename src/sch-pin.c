@@ -1,0 +1,401 @@
+/*! \file xxx-schematic-pin.c
+ *
+ *  \brief A wrapper for gschem's pin.
+ */
+
+#include <glib.h>
+#include <glib-object.h>
+
+#include "geom.h"
+
+#include "sch-multiline.h"
+#include "sch-shape.h"
+#include "sch-pin.h"
+#include "sch-text.h"
+#include "sch-drafter.h"
+
+#define SCH_PIN_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_PIN,SchPinPrivate))
+
+enum
+{
+    SCH_PIN_X1 = 1,
+    SCH_PIN_Y1,
+    SCH_PIN_X2,
+    SCH_PIN_Y2,
+    SCH_PIN_COLOR,
+    SCH_PIN_PIN_TYPE,
+    SCH_PIN_PIN_END
+};
+
+typedef struct _SchPinPrivate SchPinPrivate;
+
+struct _SchPinPrivate
+{
+    GeomLine line;
+    gint     color;
+    gint     pin_type;
+    gint     pin_end;
+};
+
+static gboolean
+sch_pin_bounds(SchShape *shape, SchDrafter *drafter, GeomBounds *bounds);
+
+static void
+sch_pin_class_init(gpointer g_class, gpointer g_class_data);
+
+static void
+sch_pin_draw(SchShape *shape, SchDrafter *drafter);
+
+static void
+sch_pin_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
+
+static void
+sch_pin_schematic_shape_init(gpointer g_iface, gpointer g_iface_data);
+
+static void
+sch_pin_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
+
+static void
+sch_pin_rotate(SchShape *shape, int angle);
+
+static void
+sch_pin_transform(SchShape *shape, const struct _GeomTransform *transform);
+
+static void
+sch_pin_translate(SchShape *shape, int dx, int dy);
+
+
+
+static gboolean
+sch_pin_bounds(SchShape *shape, SchDrafter *drafter, GeomBounds *bounds)
+{
+    SchPinPrivate *privat = SCH_PIN_GET_PRIVATE(shape);
+    gboolean success = FALSE;
+
+    if (privat != NULL)
+    {
+        GeomBounds line_bounds;
+
+        geom_bounds_init(&line_bounds);
+        geom_line_bounds(&(privat->line), &line_bounds);
+        geom_bounds_expand(&line_bounds, &line_bounds, 10);
+        geom_bounds_union(bounds, bounds, &line_bounds);
+
+        success = TRUE;
+    }
+
+    return success;
+}
+
+static void
+sch_pin_class_init(gpointer g_class, gpointer g_class_data)
+{
+    GObjectClass *object_class = G_OBJECT_CLASS(g_class);
+
+    g_type_class_add_private(object_class, sizeof(SchPinPrivate));
+
+    object_class->get_property = sch_pin_get_property;
+    object_class->set_property = sch_pin_set_property;
+
+    g_object_class_install_property(
+        object_class,
+        SCH_PIN_X1,
+        g_param_spec_int(
+            "x1",
+            "X1",
+            "X1",
+            G_MININT,
+            G_MAXINT,
+            0,
+            G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
+            )
+        );
+
+    g_object_class_install_property(
+        object_class,
+        SCH_PIN_Y1,
+        g_param_spec_int(
+            "y1",
+            "Y1",
+            "Y1",
+            G_MININT,
+            G_MAXINT,
+            0,
+            G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
+            )
+        );
+
+    g_object_class_install_property(
+        object_class,
+        SCH_PIN_X2,
+        g_param_spec_int(
+            "x2",
+            "X2",
+            "X2",
+            G_MININT,
+            G_MAXINT,
+            0,
+            G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
+            )
+        );
+
+    g_object_class_install_property(
+        object_class,
+        SCH_PIN_Y2,
+        g_param_spec_int(
+            "y2",
+            "Y2",
+            "Y2",
+            G_MININT,
+            G_MAXINT,
+            0,
+            G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
+            )
+        );
+
+    g_object_class_install_property(
+        object_class,
+        SCH_PIN_COLOR,
+        g_param_spec_int(
+            "color",
+            "Color",
+            "Color",
+            0, /*COLOR_MIN,*/
+            31, /*COLOR_MAX,*/
+            3, /*COLOR_GRAPHIC,*/
+            G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
+            )
+        );
+
+    g_object_class_install_property(
+        object_class,
+        SCH_PIN_PIN_TYPE,
+        g_param_spec_int(
+            "pin-type",
+            "Pin Type",
+            "Pin Type",
+            0,
+            G_MAXINT,
+            0,
+            G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
+            )
+        );
+
+    g_object_class_install_property(
+        object_class,
+        SCH_PIN_PIN_END,
+        g_param_spec_int(
+            "pin-end",
+            "Pin End",
+            "Pin End",
+            0,
+            2,
+            0,
+            G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
+            )
+        );
+}
+
+static void
+sch_pin_draw(SchShape *shape, SchDrafter *drafter)
+{
+    sch_drafter_draw_pin(drafter, SCH_PIN(shape));
+}
+
+static void
+sch_pin_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
+{
+    SchPinPrivate *privat = SCH_PIN_GET_PRIVATE(object);
+
+    switch (property_id)
+    {
+        case SCH_PIN_X1:
+            g_value_set_int(value, privat->line.x[0]);
+            break;
+
+        case SCH_PIN_Y1:
+            g_value_set_int(value, privat->line.y[0]);
+            break;
+
+        case SCH_PIN_X2:
+            g_value_set_int(value, privat->line.x[1]);
+            break;
+
+        case SCH_PIN_Y2:
+            g_value_set_int(value, privat->line.y[1]);
+            break;
+
+        case SCH_PIN_COLOR:
+            g_value_set_int(value, privat->color);
+            break;
+
+        case SCH_PIN_PIN_TYPE:
+            g_value_set_int(value, privat->pin_type);
+            break;
+
+        case SCH_PIN_PIN_END:
+            g_value_set_int(value, privat->pin_end);
+            break;
+
+        default:
+            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+    }
+}
+
+GType
+sch_pin_get_type(void)
+{
+    static GType type = G_TYPE_INVALID;
+
+    if (type == G_TYPE_INVALID)
+    {
+        static const GTypeInfo tinfo = {
+            sizeof(SchPinClass),    /* class_size */
+            NULL,                             /* base_init */
+            NULL,                             /* base_finalize */
+            sch_pin_class_init,    /* class_init */
+            NULL,                             /* class_finalize */
+            NULL,                             /* class_data */
+            sizeof(SchPin),         /* instance_size */
+            0,                                /* n_preallocs */
+            NULL,                             /* instance_init */
+            NULL                              /* value_table */
+            };
+
+        static const GInterfaceInfo iinfo = {
+            sch_pin_schematic_shape_init,    /* interface_init */
+            NULL,                                       /* interface_finalize */
+            NULL                                        /* interface_data */
+            };
+
+        type = g_type_register_static(
+            G_TYPE_OBJECT,
+            "SchPin",
+            &tinfo,
+            0
+            );
+
+        g_type_add_interface_static(type, SCH_TYPE_SHAPE, &iinfo);
+    }
+
+    return type;
+}
+
+static void
+sch_pin_schematic_shape_init(gpointer g_iface, gpointer g_iface_data)
+{
+    SchShapeInterface *iface = (SchShapeInterface*) g_iface;
+
+    iface->bounds    = sch_pin_bounds;
+    iface->draw      = sch_pin_draw;
+    iface->rotate    = sch_pin_rotate;
+    iface->transform = sch_pin_transform;
+    iface->translate = sch_pin_translate;
+}
+
+static void
+sch_pin_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec)
+{
+    SchPinPrivate *privat = SCH_PIN_GET_PRIVATE(object);
+
+    switch (property_id)
+    {
+        case SCH_PIN_X1:
+            privat->line.x[0] = g_value_get_int(value);
+            break;
+
+        case SCH_PIN_Y1:
+            privat->line.y[0] = g_value_get_int(value);
+            break;
+
+        case SCH_PIN_X2:
+            privat->line.x[1] = g_value_get_int(value);
+            break;
+
+        case SCH_PIN_Y2:
+            privat->line.y[1] = g_value_get_int(value);
+            break;
+
+        case SCH_PIN_COLOR:
+            privat->color = g_value_get_int(value);
+            break;
+
+        case SCH_PIN_PIN_TYPE:
+            privat->pin_type = g_value_get_int(value);
+            break;
+
+        case SCH_PIN_PIN_END:
+            privat->pin_end = g_value_get_int(value);
+            break;
+
+        default:
+            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+    }
+}
+
+void
+sch_pin_get_color(const SchPin *shape, int *index)
+{
+    SchPinPrivate *privat = SCH_PIN_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        *index = privat->color;
+    }
+    else
+    {
+        *index = 0; /* FIXME use line default */
+    }
+}
+
+void
+sch_pin_get_line(const SchPin *shape, GeomLine *line)
+{
+    SchPinPrivate *privat = SCH_PIN_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        *line = privat->line;
+    }
+
+    /* FIXME initialize line to some value in else */
+}
+
+static void
+sch_pin_rotate(SchShape *shape, int angle)
+{
+    SchPinPrivate *privat = SCH_PIN_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        geom_line_rotate(&(privat->line), angle);
+    }
+}
+
+static void
+sch_pin_transform(SchShape *shape, const struct _GeomTransform *transform)
+{
+    if (transform != NULL)
+    {
+        SchPinPrivate *privat = SCH_PIN_GET_PRIVATE(shape);
+
+        if (privat != NULL)
+        {
+            geom_line_transform(&(privat->line), transform);
+        }
+    }
+}
+
+
+static void
+sch_pin_translate(SchShape *shape, int dx, int dy)
+{
+    SchPinPrivate *privat = SCH_PIN_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        geom_line_translate(&(privat->line), dx, dy);
+    }
+}
+
+

@@ -1,0 +1,75 @@
+<interface>
+
+    <object class="GtkUIManager" id="uimanager">
+        <child>
+            <object class="GtkActionGroup" id="main-action-group">
+                <child>
+                    <object class="GtkAction" id="file">
+                        <property name="name">file</property>
+                        <property name="label">_File</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="file-quit">
+                        <property name="name">file-close</property>
+                        <property name="label">Quit</property>
+                        <property name="stock-id">gtk-quit</property>
+                    </object>
+                </child>
+            </object>
+        </child>
+ 
+        <ui>
+            <menubar name="main-menu">
+                <menu action="file">
+                    <menuitem action="file-quit"/>
+                </menu>
+            </menubar>
+        </ui>
+   </object>
+
+    <object class="GtkWindow" id="main">
+        <property name="height-request">600</property>
+        <property name="title">gsymview</property>
+        <property name="width-request">800</property>
+        <child>
+            <object class="GtkVBox" id="main-vbox">
+                <property name="visible">TRUE</property>
+                <child>
+                    <object class="GtkMenuBar" constructor="uimanager" id="main-menu">
+                        <property name="visible">TRUE</property>
+                    </object>
+                    <packing>
+                        <property name="expand">FALSE</property>
+                        <property name="fill">FALSE</property>
+                    </packing>
+                </child>
+                <child>
+                     <object class="GtkHPaned" id="preview-hpaned">
+                         <property name="border-width">5</property>
+                         <property name="position">550</property>
+                         <property name="visible">TRUE</property>
+                         <child>
+                             <object class="GtkFileChooserWidget" id="preview-file">
+                                 <property name="visible">TRUE</property>
+                             </object>
+                         </child>
+                         <child>
+                             <object class="GtkScrolledWindow" id="preview-scrolled">
+                                 <property name="visible">TRUE</property>
+                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                 <child>
+                                     <object class="SchGUIDrawingView" id="preview-view">
+                                         <property name="visible">TRUE</property>
+                                     </object>
+                                 </child>
+                             </object>
+                         </child>
+                     </object>
+                 </child>
+             </object>
+        </child>
+    </object>
+
+</interface>
