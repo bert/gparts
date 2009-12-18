@@ -20,6 +20,8 @@
 
 #include <gtk/gtk.h>
 
+#include "misc-object.h"
+
 #include "gparts-main.h"
 #include "gparts-database-result.h"
 #include "gparts-database.h"
@@ -94,11 +96,14 @@ gparts_dispose(GObject *object)
 
     g_object_unref(privat->builder);
     g_object_unref(privat->controllers);
+
+    misc_object_chain_dispose(object);
 }
 
 static void
 gparts_finalize(GObject *object)
 {
+    misc_object_chain_finalize(object);
 }
 
 GType

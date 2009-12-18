@@ -20,6 +20,8 @@
 
 #include <gtk/gtk.h>
 
+#include "misc-object.h"
+
 #include "gparts-object-list.h"
 
 #define GPARTS_OBJECT_LIST_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),GPARTS_TYPE_OBJECT_LIST,GPartsObjectListPrivate))
@@ -77,6 +79,8 @@ gparts_object_list_dispose(GObject *object)
     g_slist_foreach(privat->objects, g_object_unref, NULL);
     g_slist_free(privat->objects);
     privat->objects = NULL;
+
+    misc_object_chain_dispose(object);
 }
 
 GType

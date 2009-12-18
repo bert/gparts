@@ -22,6 +22,8 @@
 #include <gmodule.h>
 #include <mysql.h>
 
+#include "misc-object.h"
+
 #include "gparts-database-result.h"
 #include "gparts-database.h"
 #include "gparts-mysql-result.h"
@@ -233,6 +235,7 @@ gparts_mysql_database_finalize(GObject *object)
     g_debug("gparts_mysql_database_finalize()");
 
     
+    misc_object_chain_finalize(object);
 }
 
 static void

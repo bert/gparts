@@ -21,6 +21,8 @@
 #include <glib-object.h>
 #include <gmodule.h>
 
+#include "misc-object.h"
+
 #include "gparts-database-type.h"
 
 #define GPARTS_DATABASE_TYPE_GET_PRIVATE(object) G_TYPE_INSTANCE_GET_PRIVATE(object, GPARTS_TYPE_DATABASE_TYPE, GPartsDatabaseTypePrivate)
@@ -85,6 +87,7 @@ gparts_database_type_class_init(gpointer g_class, gpointer g_class_data)
 static void
 gparts_database_type_dispose(GObject *object)
 {
+    misc_object_chain_dispose(object);
 }
 
 static void
@@ -93,6 +96,8 @@ gparts_database_type_finalize(GObject *object)
     GPartsDatabaseTypePrivate *privat = GPARTS_DATABASE_TYPE_GET_PRIVATE(object);
 
     g_array_free(privat->modules, TRUE);
+
+    misc_object_chain_finalize(object);
 }
 
 gboolean

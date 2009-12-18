@@ -20,6 +20,8 @@
 
 #include <gtk/gtk.h>
 
+#include "misc-object.h"
+
 #include "gparts-customize-model.h"
 
 #define GPARTS_CUSTOMIZE_MODEL_GET_PRIVATE(object) G_TYPE_INSTANCE_GET_PRIVATE(object,GPARTS_TYPE_CUSTOMIZE_MODEL,GPartsCustomizeModelPrivate)
@@ -129,8 +131,9 @@ gparts_customize_model_dispose(GObject *object)
 
     gparts_customize_model_set_view(object, NULL);
 
-    GObjectClass *parent_class = g_type_class_peek_parent(GPARTS_CUSTOMIZE_MODEL_GET_CLASS(object));
-    G_OBJECT_CLASS(parent_class)->dispose(object);
+    //GObjectClass *parent_class = g_type_class_peek_parent(GPARTS_CUSTOMIZE_MODEL_GET_CLASS(object));
+    //G_OBJECT_CLASS(parent_class)->dispose(object);
+    misc_object_chain_dispose(object);
 }
 
 static void
@@ -138,8 +141,9 @@ gparts_customize_model_finalize(GObject *object)
 {
     g_debug("gparts_customize_model_finalize()");
 
-    GObjectClass *parent_class = g_type_class_peek_parent(GPARTS_CUSTOMIZE_MODEL_GET_CLASS(object));
-    G_OBJECT_CLASS(parent_class)->finalize(object);
+    //GObjectClass *parent_class = g_type_class_peek_parent(GPARTS_CUSTOMIZE_MODEL_GET_CLASS(object));
+    //G_OBJECT_CLASS(parent_class)->finalize(object);
+    misc_object_chain_finalize(object);
 }
 
 /*! \brief Gets the GType of a given column.

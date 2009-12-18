@@ -20,6 +20,8 @@
 
 #include <gtk/gtk.h>
 
+#include "misc-object.h"
+
 #include "geom.h"
 
 #include "sch-multiline.h"
@@ -91,12 +93,13 @@ gsymview_dispose(GObject *object)
         }
     }
 
-    /* TODO: chain up */
+    misc_object_chain_dispose(object);
 }
 
 static void
 gsymview_finalize(GObject *object)
 {
+    misc_object_chain_finalize(object);
 }
 
 GType

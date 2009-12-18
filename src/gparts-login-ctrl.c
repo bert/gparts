@@ -21,6 +21,8 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
+#include "misc-object.h"
+
 #include "gparts-database-result.h"
 #include "gparts-database.h"
 #include "gparts-database-type.h"
@@ -464,6 +466,8 @@ static void
 gparts_login_ctrl_dispose(GObject *object)
 {
     gparts_login_ctrl_set_database(GPARTS_LOGIN_CTRL(object), NULL);
+
+    misc_object_chain_dispose(object);
 }
 
 /*! \brief Deallocate all resources.
@@ -476,6 +480,8 @@ static void
 gparts_login_ctrl_finalize(GObject *object)
 {
     GPartsLoginCtrlPrivate *private = GPARTS_LOGIN_CTRL_GET_PRIVATE(object);
+
+    misc_object_chain_finalize(object);
 }
 
 /*! \brief Gets the GType of the GPartsLoginCtrl class.

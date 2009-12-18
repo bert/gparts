@@ -20,6 +20,8 @@
 
 #include <gtk/gtk.h>
 
+#include "misc-object.h"
+
 #include "gparts-database-result.h"
 #include "gparts-database.h"
 #include "gparts-preview-ctrl.h"
@@ -139,6 +141,8 @@ gparts_preview_ctrl_dispose(GObject *object)
 {
     //gparts_preview_ctrl_set_database(object, NULL);
     //gparts_preview_ctrl_set_target(object, NULL);
+
+    misc_object_chain_dispose(object);
 }
 
 /*! \brief Deallocate all resources.
@@ -153,6 +157,8 @@ gparts_preview_ctrl_finalize(GObject *object)
     g_debug("gparts_preview_ctrl_finalize");
 
     GPartsPreviewCtrlPrivate *private = GPARTS_PREVIEW_CTRL_GET_PRIVATE(object);
+
+    misc_object_chain_finalize(object);
 }
 
 static void

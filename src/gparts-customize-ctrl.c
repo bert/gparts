@@ -20,6 +20,8 @@
 
 #include <gtk/gtk.h>
 
+#include "misc-object.h"
+
 #include "gparts-customize-ctrl.h"
 #include "gparts-customize-model.h"
 
@@ -236,7 +238,7 @@ gparts_customize_ctrl_dispose(GObject *object)
     gparts_customize_ctrl_set_customize_dialog(controller, NULL);
     gparts_customize_ctrl_set_target_view(controller, NULL);
 
-    /* TODO Chain up */
+    misc_object_chain_dispose(object);
 }
 
 static void
@@ -244,7 +246,7 @@ gparts_customize_ctrl_finalize(GObject *object)
 {
     GPartsCustomizeCtrlPrivate *private = GPARTS_CUSTOMIZE_CTRL_GET_PRIVATE(object);
 
-    /* TODO Chain up */
+    misc_object_chain_finalize(object);
 }
 
 static void

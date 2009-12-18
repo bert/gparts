@@ -29,6 +29,8 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
+#include "misc-object.h"
+
 #include "gparts-database-result.h"
 #include "gparts-database.h"
 #include "gparts-category-model.h"
@@ -224,9 +226,8 @@ gparts_category_model_dispose(GObject *object)
 
     gparts_category_model_set_database(object, NULL);
 
-    /*\todo Do the signal handlers for the tree store need to be disconnected? */
-
   //  g_object_unref(private->tree_store);
+    misc_object_chain_dispose(object);
 }
 
 /*! \brief Deallocate all resources.
@@ -238,6 +239,7 @@ gparts_category_model_dispose(GObject *object)
 static void
 gparts_category_model_finalize(GObject *object)
 {
+    misc_object_chain_finalize(object);
 }
 
 gchar*

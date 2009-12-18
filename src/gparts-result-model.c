@@ -20,6 +20,8 @@
 
 #include <gtk/gtk.h>
 
+#include "misc-object.h"
+
 #include "gparts-database-result.h"
 #include "gparts-result-model.h"
 #include "gparts-units.h"
@@ -134,8 +136,7 @@ gparts_result_model_dispose(GObject *object)
 
     gparts_result_model_set_result(object, NULL);
 
-    GObjectClass *parent_class = g_type_class_peek_parent(GPARTS_RESULT_MODEL_GET_CLASS(object));
-    G_OBJECT_CLASS(parent_class)->dispose(object);
+    misc_object_chain_dispose(object);
 }
 
 static void
@@ -143,8 +144,9 @@ gparts_result_model_finalize(GObject *object)
 {
     g_debug("gparts_result_model_finalize()");
 
-    GObjectClass *parent_class = g_type_class_peek_parent(GPARTS_RESULT_MODEL_GET_CLASS(object));
-    G_OBJECT_CLASS(parent_class)->finalize(object);
+    misc_object_chain_finalize(object);
+    //GObjectClass *parent_class = g_type_class_peek_parent(GPARTS_RESULT_MODEL_GET_CLASS(object));
+    //G_OBJECT_CLASS(parent_class)->finalize(object);
 }
 
 gboolean

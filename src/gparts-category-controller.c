@@ -21,6 +21,8 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
+#include "misc-object.h"
+
 #include "gparts-database-result.h"
 #include "gparts-database.h"
 #include "gparts-category-model.h"
@@ -154,6 +156,8 @@ gparts_category_controller_dispose(GObject *object)
 
     gparts_category_controller_set_database_controller(controller, NULL);
     gparts_category_controller_set_target(controller, NULL);
+
+    misc_object_chain_dispose(object);
 }
 
 static gchar*

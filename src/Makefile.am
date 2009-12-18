@@ -24,7 +24,7 @@ gparts_SOURCES = \
 	gparts-state.c \
 	gparts-units.c 
 gparts_CFLAGS = $(AM_CFLAGS) $(GMODULE_CFLAGS) $(GTK_CFLAGS)
-gparts_LDADD = $(GMODULE_LIBS) $(GTK_LIBS) libgeom.la libsch.la libschgui.la
+gparts_LDADD = $(GMODULE_LIBS) $(GTK_LIBS) libgeom.la libmisc.la libsch.la libschgui.la
 #gparts_DEPENDENCIES = $(MYSQL_LDADD) $(POSTGRESQL_LDADD) $(SQLITE_LDADD)
 
 
@@ -33,7 +33,7 @@ gparts_LDADD = $(GMODULE_LIBS) $(GTK_LIBS) libgeom.la libsch.la libschgui.la
 gsymview_SOURCES = \
 	gsymview-main.c
 gsymview_CFLAGS = $(AM_CFLAGS) $(GTK_CFLAGS)
-gsymview_LDADD = $(GTK_LIBS) libgeom.la libsch.la libschgui.la
+gsymview_LDADD = $(GTK_LIBS) libgeom.la libmisc.la libsch.la libschgui.la
 
 
 
@@ -46,6 +46,7 @@ gsymview_LDADD = $(GTK_LIBS) libgeom.la libsch.la libschgui.la
 lib_LTLIBRARIES = \
 	libgeom.la \
 	libgparts-mysql.la \
+	libmisc.la \
 	libsch.la \
 	libschgui.la
 
@@ -104,7 +105,7 @@ libsch_la_SOURCES = \
         sch-shape.c \
 	sch-text.c
 libsch_la_CFLAGS = -Wall $(AM_CFLAGS) $(GLIB_CFLAGS)
-libsch_la_LIBADD = $(GLIB_LIBS) libgeom.la
+libsch_la_LIBADD = $(GLIB_LIBS) libgeom.la libmisc.la
 
 libschgui_la_SOURCES = \
 	schgui-cairo-drafter.c \
@@ -123,4 +124,9 @@ libgeom_la_SOURCES = \
 	geom-transform.c
 libgeom_la_CFLAGS = -Wall $(AM_CFLAGS) $(GLIB_CFLAGS)
 libgeom_la_LIBADD = $(GLIB_LIBS)
+
+libmisc_la_SOURCES = \
+	misc-object.c
+libmisc_la_CFLAGS = -Wall $(AM_CFLAGS) $(GLIB_CFLAGS)
+libmisc_la_LIBADD = $(GLIB_LIBS)
 

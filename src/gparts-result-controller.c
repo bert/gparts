@@ -21,6 +21,8 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
+#include "misc-object.h"
+
 #include "gparts-database-result.h"
 #include "gparts-database.h"
 #include "gparts-controller.h"
@@ -345,6 +347,8 @@ gparts_result_controller_dispose(GObject *object)
 
     gparts_result_controller_set_login_ctrl(controller, NULL);
     gparts_result_controller_set_target(controller, NULL);
+
+    misc_object_chain_dispose(object);
 }
 
 /*! \brief Deallocate all resources.
@@ -360,6 +364,8 @@ gparts_result_controller_finalize(GObject *object)
 
     g_free(private->template);
     g_free(private->view_name);
+
+    misc_object_chain_finalize(object);
 }
 
 static gchar*

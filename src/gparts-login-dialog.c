@@ -20,6 +20,8 @@
 
 #include <gtk/gtk.h>
 
+#include "misc-object.h"
+
 #include "gparts-login-dialog.h"
 
 enum
@@ -235,6 +237,8 @@ static void
 gparts_login_dialog_dispose(GObject *object)
 {
     gparts_login_dialog_set_database(object, NULL);
+
+    misc_object_chain_dispose(object);
 }
 
 /*! \brief Deallocate all resources.
@@ -249,6 +253,8 @@ gparts_login_dialog_finalize(GObject *object)
     GPartsLoginDialogPrivate *private = GPARTS_LOGIN_DIALOG_GET_PRIVATE(object);
 
     g_array_free(private->view_controllers, TRUE);
+
+    misc_object_chain_finalize(object);
 }
 
 /*! \brief Gets the GType of the GPartsLoginDialog class.

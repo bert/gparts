@@ -20,6 +20,8 @@
 
 #include <glib-object.h>
 
+#include "misc-object.h"
+
 #include "gparts-state.h"
 
 #define GPARTS_STATE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),GPARTS_TYPE_STATE,GPartsStatePrivate))
@@ -66,6 +68,7 @@ gparts_state_dispose(GObject *object)
 {
     GPartsStatePrivate *privat = GPARTS_STATE_GET_PRIVATE(object);
 
+    misc_object_chain_dispose(object);
 }
 
 static void
@@ -77,6 +80,8 @@ gparts_state_finalize(GObject *object)
     {
         g_key_file_free(privat->state);
     }
+
+    misc_object_chain_finalize(object);
 }
 
 static void
