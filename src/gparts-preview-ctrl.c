@@ -26,6 +26,19 @@
 #include "gparts-database.h"
 #include "gparts-preview-ctrl.h"
 
+#include "geom.h"
+
+#include "sch-multiline.h"
+#include "sch-shape.h"
+#include "sch-line.h"
+#include "sch-text.h"
+#include "sch-drafter.h"
+#include "sch-drawing.h"
+
+#include "schgui-cairo-drafter.h"
+#include "schgui-drawing-view.h"
+
+
 enum
 {
     GPARTS_PREVIEW_CTRL_PROPID_COPY_ACTION = 1,
@@ -74,6 +87,40 @@ gparts_preview_ctrl_copy_action_cb(GtkAction *action, GPartsPreviewCtrl *preview
 
 static void
 gparts_preview_ctrl_show_cb(GtkWidget *widget, GPartsPreviewCtrl *controller);
+
+
+
+static void
+gparts_preview_ctrl_updated_cb(GtkWidget *widget, GPartsPreviewCtrl *controller)
+{
+    GPartsPreviewCtrlPrivate *privat = GPARTS_PREVIEW_CTRL_GET_PRIVATE(controller);
+
+    if (privat != NULL)
+    {
+        SchDrawing *drawing = NULL;
+        gchar      *symbol_name;
+
+        symbol_name = gparts_controller_get_field(privat->symbol_source, "SymbolPath");
+
+        if (symbol_name != NULL)
+        {
+            g_debug("Symbol Name: %s", symbol_name);
+
+            drawing = load2(symbol_name, NULL);
+
+            g_free(symbol_name);
+        }
+
+        schgui_drawing_view_set_drawing(privat->target, drawing);
+
+        if (drawing != NULL)
+        {
+            g_object_unref(drawing);
+        }
+    }
+}
+
+
 
 /*! \brief Initialize class data.
  *
@@ -277,6 +324,12 @@ gparts_preview_ctrl_set_symbol_source(GPartsPreviewCtrl *preview_ctrl, GtkTreeVi
     {
         if (privat->symbol_source != NULL)
         {
+            g_signal_handlers_disconnect_by_func(
+                privat->symbol_source,
+                G_CALLBACK(gparts_preview_ctrl_updated_cb),
+                preview_ctrl
+                );
+
             g_object_unref(privat->symbol_source);
         }
 
@@ -285,6 +338,13 @@ gparts_preview_ctrl_set_symbol_source(GPartsPreviewCtrl *preview_ctrl, GtkTreeVi
         if (privat->symbol_source != NULL)
         {
             g_object_ref(privat->symbol_source);
+
+            g_signal_connect(
+                privat->symbol_source,
+                "updated",
+                G_CALLBACK(gparts_preview_ctrl_updated_cb),
+                preview_ctrl
+                );
         }
 
         g_object_notify(G_OBJECT(preview_ctrl), "symbol-source");

@@ -36,8 +36,21 @@
 
 #include "gparts-result-controller.h"
 #include "gparts-category-controller.h"
+#include "gparts-preview-ctrl.h"
 #include "gparts-object-list.h"
 #include "gparts-result-view.h"
+
+#include "geom.h"
+
+#include "sch-multiline.h"
+#include "sch-shape.h"
+#include "sch-line.h"
+#include "sch-text.h"
+#include "sch-drafter.h"
+#include "sch-drawing.h"
+
+#include "schgui-cairo-drafter.h"
+#include "schgui-drawing-view.h"
 
 #define GPARTS_GET_PRIVATE(object) G_TYPE_INSTANCE_GET_PRIVATE(object, GPARTS_TYPE, GPartsPrivate)
 
@@ -154,6 +167,8 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
     //GPARTS_TYPE_RESULT_TREE;
     GPARTS_TYPE_OBJECT_LIST;
     GPARTS_TYPE_RESULT_VIEW;
+
+    SCHGUI_TYPE_DRAWING_VIEW;
 
     private->builder = gtk_builder_new();
 
@@ -300,6 +315,21 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         "view-name",           "SymbolDetail",
         NULL
         );
+
+    g_object_new(
+        GPARTS_TYPE_PREVIEW_CTRL,
+        "symbol-source", symbol_controller,
+        "target",        SCHGUI_DRAWING_VIEW(gtk_builder_get_object(private->builder, "parts-graphic-view")),
+        NULL
+        );
+
+    g_object_new(
+        GPARTS_TYPE_PREVIEW_CTRL,
+        "symbol-source", symbol_controller2,
+        "target",        SCHGUI_DRAWING_VIEW(gtk_builder_get_object(private->builder, "symbols-graphic-view")),
+        NULL
+        );
+
 
         //"customize-dialog", NULL,
 

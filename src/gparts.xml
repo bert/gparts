@@ -296,12 +296,12 @@
                                             <object class="GtkVPaned" id="vpaned-1">
                                                 <property name="visible">TRUE</property>
                                                 <child>
-                                                    <object class="GtkScrolledWindow" id="symbols-graphic-scrolled">
+                                                    <object class="GtkScrolledWindow" id="parts-graphic-scrolled">
                                                         <property name="visible">TRUE</property>
                                                         <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                         <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                         <child>
-                                                            <object class="gparts-preview" id="symbols-graphic-view">
+                                                            <object class="SchGUIDrawingView" id="parts-graphic-view">
                                                                 <property name="height-request">200</property>
                                                                 <property name="visible">TRUE</property>
                                                                 <property name="width-request">200</property>
@@ -360,7 +360,7 @@
                                             </object>
                                         </child>
                                         <child>
-                                            <object class="gparts-preview" id="symbols-graphic-view">
+                                            <object class="SchGUIDrawingView" id="symbols-graphic-view">
                                                 <property name="height-request">200</property>
                                                 <property name="visible">TRUE</property>
                                                 <property name="width-request">200</property>
