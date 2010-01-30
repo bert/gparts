@@ -6,6 +6,8 @@ SUFFIXES = .x
 .c.x:
 	guile-snarf -o $@ $< $(AM_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS)
 
+BUILT_SOURCES = \
+	scmcfg-config.x
 
 bin_PROGRAMS = gparts gsymview
 
@@ -88,7 +90,7 @@ libgparts_sqlite_la_CFLAGS = $(AM_CFLAGS) $(GLIB_CFLAGS) $(SQLITE_CFLAGS)
 libgparts_sqlite_la_LIBADD = $(SQLITE_LIBS)
 
 MOSTLYCLEANFILES = core *~
-CLEANFILES = core *~
+CLEANFILES = core *~ scmcfg-config.x
 DISTCLEANFILES = core *~
 MAINTAINERCLEANFILES = core *~ Makefile.in
 
