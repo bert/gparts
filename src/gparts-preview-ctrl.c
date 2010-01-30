@@ -35,6 +35,8 @@
 #include "sch-drafter.h"
 #include "sch-drawing.h"
 
+#include "sch-loader.h"
+
 #include "schgui-cairo-drafter.h"
 #include "schgui-drawing-view.h"
 
@@ -104,9 +106,12 @@ gparts_preview_ctrl_updated_cb(GtkWidget *widget, GPartsPreviewCtrl *controller)
 
         if (symbol_name != NULL)
         {
-            g_debug("Symbol Name: %s", symbol_name);
+            SchLoader *loader = sch_loader_get_default();
 
-            drawing = load2(symbol_name, NULL);
+            if (loader != NULL)
+            {
+                drawing = sch_loader_load_symbol(loader, symbol_name, NULL);
+            }
 
             g_free(symbol_name);
         }

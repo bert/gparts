@@ -52,6 +52,8 @@
 #include "schgui-cairo-drafter.h"
 #include "schgui-drawing-view.h"
 
+#include "scmcfg-config.h"
+
 #define GPARTS_GET_PRIVATE(object) G_TYPE_INSTANCE_GET_PRIVATE(object, GPARTS_TYPE, GPartsPrivate)
 
 typedef struct _GPartsPrivate GPartsPrivate;
@@ -342,6 +344,9 @@ int main(int argc, char* argv[])
 
     g_type_init();
     gtk_init(&argc, &argv);
+
+    scmcfg_config_init();
+    scmcfg_config_load();
 
     gparts = gparts_new();
 

@@ -2,6 +2,11 @@
 #
 #
 
+SUFFIXES = .x
+.c.x:
+	guile-snarf -o $@ $< $(AM_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS)
+
+
 bin_PROGRAMS = gparts gsymview
 
 gparts_SOURCES = \
@@ -24,7 +29,7 @@ gparts_SOURCES = \
 	gparts-state.c \
 	gparts-units.c 
 gparts_CFLAGS = $(AM_CFLAGS) $(GMODULE_CFLAGS) $(GTK_CFLAGS)
-gparts_LDADD = $(GMODULE_LIBS) $(GTK_LIBS) libgeom.la libmisc.la libsch.la libschgui.la
+gparts_LDADD = $(GMODULE_LIBS) $(GTK_LIBS) libgeom.la libmisc.la libsch.la libschgui.la libscmcfg.la
 #gparts_DEPENDENCIES = $(MYSQL_LDADD) $(POSTGRESQL_LDADD) $(SQLITE_LDADD)
 
 
@@ -33,7 +38,7 @@ gparts_LDADD = $(GMODULE_LIBS) $(GTK_LIBS) libgeom.la libmisc.la libsch.la libsc
 gsymview_SOURCES = \
 	gsymview-main.c
 gsymview_CFLAGS = $(AM_CFLAGS) $(GTK_CFLAGS)
-gsymview_LDADD = $(GTK_LIBS) libgeom.la libmisc.la libsch.la libschgui.la
+gsymview_LDADD = $(GTK_LIBS) libgeom.la libmisc.la libsch.la libschgui.la libscmcfg.la
 
 
 
@@ -48,7 +53,8 @@ lib_LTLIBRARIES = \
 	libgparts-mysql.la \
 	libmisc.la \
 	libsch.la \
-	libschgui.la
+	libschgui.la \
+	libscmcfg.la
 
 EXTRA_LTLIBRARIES = \
 	libgparts-postgresql.la \
@@ -95,6 +101,7 @@ libsch_la_SOURCES = \
 	sch-component.c \
 	sch-drafter.c \
 	sch-drawing.c \
+	sch-factory.c \
 	sch-fill-style.c \
 	sch-line.c \
 	sch-line-style.c \
@@ -129,4 +136,9 @@ libmisc_la_SOURCES = \
 	misc-object.c
 libmisc_la_CFLAGS = -Wall $(AM_CFLAGS) $(GLIB_CFLAGS)
 libmisc_la_LIBADD = $(GLIB_LIBS)
+
+libscmcfg_la_SOURCES = \
+	scmcfg-config.c
+libscmcfg_la_CFLAGS = -Wall $(AM_CFLAGS) $(GLIB_CFLAGS) $(GUILE_CFLAGS)
+libscmcfg_la_LIBADD = $(GLIB_LIBS) $(GUILE_LIBS)
 

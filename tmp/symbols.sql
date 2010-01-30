@@ -1,9 +1,13 @@
 CALL AddDevice(
-    'MAX1211'
+    'XC2S150-5PQ208I'
     );
 
 CALL AddDevice(
-    'FLAG'
+    'BC182'
+    );
+
+CALL AddDevice(
+    'MAX1211'
     );
 
 CALL AddDevice(
@@ -107,11 +111,11 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'MSP430x12x2'
+    'LED'
     );
 
 CALL AddDevice(
-    'MAX12528'
+    'NPN_TRANSISTOR'
     );
 
 CALL AddDevice(
@@ -143,7 +147,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'AF_OUTPUT_TRANSFORMER'
+    '40195'
     );
 
 CALL AddDevice(
@@ -159,7 +163,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'ATtiny15L'
+    'RESISTORPACK_7'
     );
 
 CALL AddDevice(
@@ -172,10 +176,6 @@ CALL AddDevice(
 
 CALL AddDevice(
     'MSP430x44x'
-    );
-
-CALL AddDevice(
-    'pad'
     );
 
 CALL AddDevice(
@@ -247,7 +247,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'MAX4106'
+    'CONNECTOR_37'
     );
 
 CALL AddDevice(
@@ -288,6 +288,10 @@ CALL AddDevice(
 
 CALL AddDevice(
     'xnor6'
+    );
+
+CALL AddDevice(
+    'HCPL-2430'
     );
 
 CALL AddDevice(
@@ -435,10 +439,6 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'MAX4662'
-    );
-
-CALL AddDevice(
     '7401'
     );
 
@@ -551,7 +551,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'Dual_Two_Way_Switch'
+    'and5'
     );
 
 CALL AddDevice(
@@ -571,11 +571,11 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'LED'
+    'MSP430x12x2'
     );
 
 CALL AddDevice(
-    'CONNECTOR_10'
+    'PIC18F242'
     );
 
 CALL AddDevice(
@@ -595,7 +595,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'NPN_TRANSISTOR'
+    'MAX12528'
     );
 
 CALL AddDevice(
@@ -647,7 +647,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'ADC0804'
+    'PIC16F877A'
     );
 
 CALL AddDevice(
@@ -683,11 +683,11 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    '4503'
+    '4051'
     );
 
 CALL AddDevice(
-    '93Cx6'
+    '4061'
     );
 
 CALL AddDevice(
@@ -695,7 +695,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'NMOS_TRANSISTOR'
+    'LM317'
     );
 
 CALL AddDevice(
@@ -743,6 +743,14 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
+    'SWITCH_DIP4'
+    );
+
+CALL AddDevice(
+    'pad'
+    );
+
+CALL AddDevice(
     '40193'
     );
 
@@ -783,10 +791,6 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'CONNECTOR_7'
-    );
-
-CALL AddDevice(
     '74133'
     );
 
@@ -803,7 +807,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    '40195'
+    'AF_OUTPUT_TRANSFORMER'
     );
 
 CALL AddDevice(
@@ -868,6 +872,10 @@ CALL AddDevice(
 
 CALL AddDevice(
     'T1-1T-X65'
+    );
+
+CALL AddDevice(
+    'CONNECTOR_35'
     );
 
 CALL AddDevice(
@@ -955,6 +963,10 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
+    'DIN41612C96'
+    );
+
+CALL AddDevice(
     '40147'
     );
 
@@ -999,6 +1011,10 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
+    'Z80PIO'
+    );
+
+CALL AddDevice(
     'xnor4'
     );
 
@@ -1016,6 +1032,10 @@ CALL AddDevice(
 
 CALL AddDevice(
     'nor7'
+    );
+
+CALL AddDevice(
+    'HEADER18'
     );
 
 CALL AddDevice(
@@ -1039,15 +1059,15 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
+    'MAX662A'
+    );
+
+CALL AddDevice(
     'MAX478'
     );
 
 CALL AddDevice(
     'MC1496'
-    );
-
-CALL AddDevice(
-    'XC2S150-5PQ208I'
     );
 
 CALL AddDevice(
@@ -1072,10 +1092,6 @@ CALL AddDevice(
 
 CALL AddDevice(
     'LM358'
-    );
-
-CALL AddDevice(
-    'MC10E136'
     );
 
 CALL AddDevice(
@@ -1231,7 +1247,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'T-Line'
+    '4017'
     );
 
 CALL AddDevice(
@@ -1275,7 +1291,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    '74688'
+    '74243'
     );
 
 CALL AddDevice(
@@ -1288,10 +1304,6 @@ CALL AddDevice(
 
 CALL AddDevice(
     'AT89C51_PLCC'
-    );
-
-CALL AddDevice(
-    'FUSE'
     );
 
 CALL AddDevice(
@@ -1323,15 +1335,15 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'HEADER16'
-    );
-
-CALL AddDevice(
     '4002'
     );
 
 CALL AddDevice(
     'HCTL-2016'
+    );
+
+CALL AddDevice(
+    'ADG601'
     );
 
 CALL AddDevice(
@@ -1355,7 +1367,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'CONNECTOR_37'
+    'MAX4106'
     );
 
 CALL AddDevice(
@@ -1495,7 +1507,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'MAX122'
+    '4078'
     );
 
 CALL AddDevice(
@@ -1515,7 +1527,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'RESISTORPACK_7'
+    'ATtiny15L'
     );
 
 CALL AddDevice(
@@ -1591,14 +1603,6 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'MAX662A'
-    );
-
-CALL AddDevice(
-    'HCPL-2430'
-    );
-
-CALL AddDevice(
     '40102'
     );
 
@@ -1608,10 +1612,6 @@ CALL AddDevice(
 
 CALL AddDevice(
     'MAX214'
-    );
-
-CALL AddDevice(
-    'CONNECTOR_35'
     );
 
 CALL AddDevice(
@@ -1628,10 +1628,6 @@ CALL AddDevice(
 
 CALL AddDevice(
     '74259'
-    );
-
-CALL AddDevice(
-    'Z80PIO'
     );
 
 CALL AddDevice(
@@ -1663,7 +1659,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    '4017'
+    'T-Line'
     );
 
 CALL AddDevice(
@@ -1703,10 +1699,6 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'SWITCH_DIP4'
-    );
-
-CALL AddDevice(
     '74132'
     );
 
@@ -1728,6 +1720,10 @@ CALL AddDevice(
 
 CALL AddDevice(
     'header32'
+    );
+
+CALL AddDevice(
+    'ADC0804'
     );
 
 CALL AddDevice(
@@ -1787,7 +1783,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'CONNECTOR_39'
+    'SPDT'
     );
 
 CALL AddDevice(
@@ -1843,15 +1839,11 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    '4501'
+    '4053'
     );
 
 CALL AddDevice(
-    'MOV'
-    );
-
-CALL AddDevice(
-    'VARISTOR'
+    '4556'
     );
 
 CALL AddDevice(
@@ -1887,7 +1879,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    '74280'
+    '7815'
     );
 
 CALL AddDevice(
@@ -1935,7 +1927,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'SPDT'
+    'CONNECTOR_39'
     );
 
 CALL AddDevice(
@@ -1944,10 +1936,6 @@ CALL AddDevice(
 
 CALL AddDevice(
     'xor7'
-    );
-
-CALL AddDevice(
-    'UAA170'
     );
 
 CALL AddDevice(
@@ -1979,7 +1967,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    '4047'
+    '4511'
     );
 
 CALL AddDevice(
@@ -2063,11 +2051,11 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'CONNECTOR_18'
+    'AT90S2313'
     );
 
 CALL AddDevice(
-    '4514'
+    '4042'
     );
 
 CALL AddDevice(
@@ -2076,10 +2064,6 @@ CALL AddDevice(
 
 CALL AddDevice(
     'nor8'
-    );
-
-CALL AddDevice(
-    'DIP24'
     );
 
 CALL AddDevice(
@@ -2112,6 +2096,10 @@ CALL AddDevice(
 
 CALL AddDevice(
     'PORT1'
+    );
+
+CALL AddDevice(
+    'ZENER_DIODE'
     );
 
 CALL AddDevice(
@@ -2183,6 +2171,10 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
+    'NMOS_TRANSISTOR'
+    );
+
+CALL AddDevice(
     '74125'
     );
 
@@ -2223,6 +2215,10 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
+    'FLAG'
+    );
+
+CALL AddDevice(
     'SWITCH_DIP8'
     );
 
@@ -2232,10 +2228,6 @@ CALL AddDevice(
 
 CALL AddDevice(
     'LT1761SD'
-    );
-
-CALL AddDevice(
-    'HEADER18'
     );
 
 CALL AddDevice(
@@ -2267,11 +2259,15 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
+    'UAA170'
+    );
+
+CALL AddDevice(
     'MAX232'
     );
 
 CALL AddDevice(
-    '4053'
+    '4501'
     );
 
 CALL AddDevice(
@@ -2295,7 +2291,15 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    '4556'
+    'AT89C51_DIP'
+    );
+
+CALL AddDevice(
+    'MOV'
+    );
+
+CALL AddDevice(
+    'VARISTOR'
     );
 
 CALL AddDevice(
@@ -2479,7 +2483,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    '7815'
+    '74280'
     );
 
 CALL AddDevice(
@@ -2503,7 +2507,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'PIC16C5x'
+    '40100'
     );
 
 CALL AddDevice(
@@ -2527,7 +2531,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'CONNECTOR_22'
+    'MAX4662'
     );
 
 CALL AddDevice(
@@ -2540,10 +2544,6 @@ CALL AddDevice(
 
 CALL AddDevice(
     'ADG620'
-    );
-
-CALL AddDevice(
-    '4078'
     );
 
 CALL AddDevice(
@@ -2667,15 +2667,15 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'ADG601'
-    );
-
-CALL AddDevice(
-    'CONNECTOR_3'
+    'MAX1011'
     );
 
 CALL AddDevice(
     'AUI'
+    );
+
+CALL AddDevice(
+    '4512'
     );
 
 CALL AddDevice(
@@ -2684,10 +2684,6 @@ CALL AddDevice(
 
 CALL AddDevice(
     'RESISTORPACK_10'
-    );
-
-CALL AddDevice(
-    'AT89C51_DIP'
     );
 
 CALL AddDevice(
@@ -2704,10 +2700,6 @@ CALL AddDevice(
 
 CALL AddDevice(
     'MAX1080'
-    );
-
-CALL AddDevice(
-    'ATtiny12'
     );
 
 CALL AddDevice(
@@ -2739,7 +2731,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    '4046'
+    '4510'
     );
 
 CALL AddDevice(
@@ -2751,15 +2743,11 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'ZENER_DIODE'
+    'CONNECTOR_3'
     );
 
 CALL AddDevice(
-    '6n137'
-    );
-
-CALL AddDevice(
-    '4050'
+    '4502'
     );
 
 CALL AddDevice(
@@ -2783,15 +2771,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    '6N135'
-    );
-
-CALL AddDevice(
     'AT45DB021B'
-    );
-
-CALL AddDevice(
-    'or6'
     );
 
 CALL AddDevice(
@@ -2800,6 +2780,10 @@ CALL AddDevice(
 
 CALL AddDevice(
     'MAX1620'
+    );
+
+CALL AddDevice(
+    '74193'
     );
 
 CALL AddDevice(
@@ -2819,7 +2803,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'MAX1207'
+    'vac'
     );
 
 CALL AddDevice(
@@ -2832,10 +2816,6 @@ CALL AddDevice(
 
 CALL AddDevice(
     '4034'
-    );
-
-CALL AddDevice(
-    'MAX1011'
     );
 
 CALL AddDevice(
@@ -2907,6 +2887,10 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
+    'CONNECTOR_22'
+    );
+
+CALL AddDevice(
     'HA5221'
     );
 
@@ -2927,15 +2911,15 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
+    'ATtiny12'
+    );
+
+CALL AddDevice(
     'MAX1206'
     );
 
 CALL AddDevice(
     'ATMEGA32'
-    );
-
-CALL AddDevice(
-    '4512'
     );
 
 CALL AddDevice(
@@ -2963,7 +2947,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'and5'
+    'Dual_Two_Way_Switch'
     );
 
 CALL AddDevice(
@@ -2971,7 +2955,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    '74243'
+    '74688'
     );
 
 CALL AddDevice(
@@ -3015,7 +2999,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'PIC18F242'
+    'CONNECTOR_10'
     );
 
 CALL AddDevice(
@@ -3035,11 +3019,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'N82S23N'
-    );
-
-CALL AddDevice(
-    '4061'
+    '93Cx6'
     );
 
 CALL AddDevice(
@@ -3051,7 +3031,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'DIN41612C96'
+    'FUSE'
     );
 
 CALL AddDevice(
@@ -3075,7 +3055,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    '4511'
+    '4047'
     );
 
 CALL AddDevice(
@@ -3095,11 +3075,15 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
+    '6n137'
+    );
+
+CALL AddDevice(
     'MAX3491'
     );
 
 CALL AddDevice(
-    '4502'
+    '4050'
     );
 
 CALL AddDevice(
@@ -3179,6 +3163,10 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
+    'HEADER16'
+    );
+
+CALL AddDevice(
     'xnor3'
     );
 
@@ -3187,7 +3175,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'AT90S2313'
+    'CONNECTOR_18'
     );
 
 CALL AddDevice(
@@ -3195,11 +3183,11 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    '7805'
+    'DIP24'
     );
 
 CALL AddDevice(
-    'XINGER4A1305-3'
+    '7805'
     );
 
 CALL AddDevice(
@@ -3244,6 +3232,10 @@ CALL AddDevice(
 
 CALL AddDevice(
     '4055'
+    );
+
+CALL AddDevice(
+    '6N135'
     );
 
 CALL AddDevice(
@@ -3299,11 +3291,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'PIC16F877A'
-    );
-
-CALL AddDevice(
-    '4042'
+    'or6'
     );
 
 CALL AddDevice(
@@ -3332,10 +3320,6 @@ CALL AddDevice(
 
 CALL AddDevice(
     'NTC'
-    );
-
-CALL AddDevice(
-    '74193'
     );
 
 CALL AddDevice(
@@ -3399,11 +3383,15 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    '7496'
+    'SLA7024M'
     );
 
 CALL AddDevice(
     'pic16F876'
+    );
+
+CALL AddDevice(
+    'or5'
     );
 
 CALL AddDevice(
@@ -3415,11 +3403,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'vac'
-    );
-
-CALL AddDevice(
-    'DS26C31'
+    'MAX1207'
     );
 
 CALL AddDevice(
@@ -3439,7 +3423,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    '4051'
+    '4503'
     );
 
 CALL AddDevice(
@@ -3463,11 +3447,11 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'LM317'
+    'MAX238'
     );
 
 CALL AddDevice(
-    'MAX238'
+    'N82S23N'
     );
 
 CALL AddDevice(
@@ -3500,6 +3484,10 @@ CALL AddDevice(
 
 CALL AddDevice(
     'MAX4429'
+    );
+
+CALL AddDevice(
+    '4514'
     );
 
 CALL AddDevice(
@@ -3567,7 +3555,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'SLA7024M'
+    '7496'
     );
 
 CALL AddDevice(
@@ -3579,19 +3567,11 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'Si9986'
-    );
-
-CALL AddDevice(
     '74163'
     );
 
 CALL AddDevice(
     'CONNECTOR_11'
-    );
-
-CALL AddDevice(
-    'or5'
     );
 
 CALL AddDevice(
@@ -3603,11 +3583,11 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'HEADER26'
+    'lt1108'
     );
 
 CALL AddDevice(
-    '4522'
+    'PAL12H6'
     );
 
 CALL AddDevice(
@@ -3616,6 +3596,10 @@ CALL AddDevice(
 
 CALL AddDevice(
     'or2'
+    );
+
+CALL AddDevice(
+    'DS26C31'
     );
 
 CALL AddDevice(
@@ -3631,6 +3615,10 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
+    'HEADER26'
+    );
+
+CALL AddDevice(
     'AT-1XX'
     );
 
@@ -3640,10 +3628,6 @@ CALL AddDevice(
 
 CALL AddDevice(
     '4513'
-    );
-
-CALL AddDevice(
-    'BC182'
     );
 
 CALL AddDevice(
@@ -3743,7 +3727,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    '40100'
+    'PIC16C5x'
     );
 
 CALL AddDevice(
@@ -3767,7 +3751,7 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    '4510'
+    '4046'
     );
 
 CALL AddDevice(
@@ -3780,6 +3764,10 @@ CALL AddDevice(
 
 CALL AddDevice(
     'RF2155'
+    );
+
+CALL AddDevice(
+    'MC10E136'
     );
 
 CALL AddDevice(
@@ -3828,6 +3816,10 @@ CALL AddDevice(
 
 CALL AddDevice(
     'nand5'
+    );
+
+CALL AddDevice(
+    'XINGER4A1305-3'
     );
 
 CALL AddDevice(
@@ -3911,7 +3903,15 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'PAL12H6'
+    'Si9986'
+    );
+
+CALL AddDevice(
+    'CONNECTOR_7'
+    );
+
+CALL AddDevice(
+    '4522'
     );
 
 CALL AddDevice(
@@ -3931,10 +3931,6 @@ CALL AddDevice(
     );
 
 CALL AddDevice(
-    'lt1108'
-    );
-
-CALL AddDevice(
     'ULN2801A'
     );
 
@@ -3948,6 +3944,10 @@ CALL AddDevice(
 
 CALL AddDevice(
     'SPICE-nullor'
+    );
+
+CALL AddDevice(
+    'MAX122'
     );
 
 CALL AddDevice(
@@ -3975,6613 +3975,6613 @@ CALL AddDevice(
     );
 
 CALL AddSymbol(
-    'MAX1211',
-    'sym/maxim/max1211-1.sym'
-    );
-
-CALL AddSymbol(
-    'FLAG',
-    'sym/gnetman/io.sym'
-    );
-
-CALL AddSymbol(
-    'darlington, NPN',
-    'sym/analog/darlington_NPN_PNP-1.sym'
-    );
-
-CALL AddSymbol(
-    'TOKO4DFA',
-    'sym/rf/TOKO4DFA-1.sym'
-    );
-
-CALL AddSymbol(
-    'SPICE-ccvs',
-    'sym/spice/ccvs-1.sym'
-    );
-
-CALL AddSymbol(
-    '74257',
-    'sym/74/74257-1.sym'
-    );
-
-CALL AddSymbol(
-    'xnor',
-    'sym/verilog/xnor2-1.sym'
-    );
-
-CALL AddSymbol(
-    'nor9',
-    'sym/vhdl/nor9-1.sym'
-    );
-
-CALL AddSymbol(
-    'LOOP_ANTENNA',
-    'sym/radio/loop_antenna-2.sym'
-    );
-
-CALL AddSymbol(
-    'model',
-    'sym/spice/gnucap-model-1.sym'
-    );
-
-CALL AddSymbol(
-    '40163',
-    'sym/4000/40163-1.sym'
-    );
-
-CALL AddSymbol(
-    'SWITCAP-vcvs',
-    'sym/switcap/switcap-vcvs-2.sym'
-    );
-
-CALL AddSymbol(
-    'or',
-    'sym/verilog/or3-2.sym'
-    );
-
-CALL AddSymbol(
-    'xor9',
-    'sym/vhdl/xor9-1.sym'
-    );
-
-CALL AddSymbol(
-    '40117',
-    'sym/4000/40117-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX1480A',
-    'sym/maxim/max1480A-1.sym'
-    );
-
-CALL AddSymbol(
-    'RESISTORPACK_11',
-    'sym/analog/resistorpack11-1.sym'
-    );
-
-CALL AddSymbol(
-    'PIC12F675',
-    'sym/micro/pic12F675-1.sym'
-    );
-
-CALL AddSymbol(
-    'sc52-11',
-    'sym/diode/sc52-11-1.sym'
-    );
-
-CALL AddSymbol(
-    'OUTPUT',
-    'sym/io/out-1.sym'
-    );
-
-CALL AddSymbol(
-    '7885',
-    'sym/linear/lm7885-1.sym'
-    );
-
-CALL AddSymbol(
-    'PORT2',
-    'sym/rf/port2-1.sym'
-    );
-
-CALL AddSymbol(
-    'cascade-source',
-    'sym/cascade/cascade-source-1.sym'
-    );
-
-CALL AddSymbol(
-    '8255A',
-    'sym/micro/8255A-1.sym'
-    );
-
-CALL AddSymbol(
-    'MC68HC912B32',
-    'sym/micro/mc68hc912b32-1.sym'
-    );
-
-CALL AddSymbol(
-    'nor',
-    'sym/verilog/nor9-1.sym'
-    );
-
-CALL AddSymbol(
-    'MSP430x12x2',
-    'sym/micro/MSP430x12x.sym'
-    );
-
-CALL AddSymbol(
-    'MAX12528',
-    'sym/maxim/max12528-1.sym'
-    );
-
-CALL AddSymbol(
-    'IRF1010N',
-    'sym/transistor/IRF1010N-1.sym'
-    );
-
-CALL AddSymbol(
-    'or7',
-    'sym/vhdl/or7-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_6',
-    'sym/connector/connector6-2.sym'
-    );
-
-CALL AddSymbol(
-    'MAINS_ENTRY',
-    'sym/connector/mains-entry-1.sym'
-    );
-
-CALL AddSymbol(
-    '74520',
-    'sym/74/74520-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX507',
-    'sym/maxim/max507-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_16',
-    'sym/connector/connector16-1.sym'
-    );
-
-CALL AddSymbol(
-    'AF_OUTPUT_TRANSFORMER',
-    'sym/radio/af_output_transformer-1.sym'
-    );
-
-CALL AddSymbol(
-    '4N29',
-    'sym/opto/K3020P-1.sym'
-    );
-
-CALL AddSymbol(
-    '24Cxx',
-    'sym/memory/24Cxx-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_26',
-    'sym/connector/connector26-1.sym'
-    );
-
-CALL AddSymbol(
-    'ATtiny15L',
-    'sym/micro/ATtiny15L-1.sym'
-    );
-
-CALL AddSymbol(
-    '74145',
-    'sym/74/74145-1.sym'
-    );
-
-CALL AddSymbol(
-    '74160',
-    'sym/74/74160-1.sym'
-    );
-
-CALL AddSymbol(
-    'MSP430x44x',
-    'sym/micro/MSP430x44x.sym'
-    );
-
-CALL AddSymbol(
-    'pad',
-    'sym/asicpads/pad_io.sym'
-    );
-
-CALL AddSymbol(
-    'MCX',
-    'sym/connector/MCX-1.sym'
-    );
-
-CALL AddSymbol(
-    'DIN41612C48',
-    'sym/connector/DIN41612C48-2.sym'
-    );
-
-CALL AddSymbol(
-    '4024',
-    'sym/4000/4024-1.sym'
-    );
-
-CALL AddSymbol(
-    '74190',
-    'sym/74/74190-1.sym'
-    );
-
-CALL AddSymbol(
-    'AOP-Standard',
-    'sym/spice/aop-spice-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_25',
-    'sym/connector/connector25-2.sym'
-    );
-
-CALL AddSymbol(
-    'VOLTAGE_SOURCE',
-    'sym/analog/voltage-2.sym'
-    );
-
-CALL AddSymbol(
-    '74520',
-    'sym/74/74520-2.sym'
-    );
-
-CALL AddSymbol(
-    '74192',
-    'sym/74/74192-1.sym'
-    );
-
-CALL AddSymbol(
-    '7432',
-    'sym/74/7432-1.sym'
-    );
-
-CALL AddSymbol(
-    '4067',
-    'sym/4000/4067-1.sym'
-    );
-
-CALL AddSymbol(
-    'DIODE',
-    'sym/diode/zener-4.sym'
-    );
-
-CALL AddSymbol(
-    '4062',
-    'sym/4000/4062-1.sym'
-    );
-
-CALL AddSymbol(
-    'IPS521',
-    'sym/transistor/ips521-1.sym'
-    );
-
-CALL AddSymbol(
-    '40245',
-    'sym/4000/40245-1.sym'
-    );
-
-CALL AddSymbol(
-    'xnor',
-    'sym/verilog/xnor8-1.sym'
-    );
-
-CALL AddSymbol(
-    '4006',
-    'sym/4000/4006-2.sym'
-    );
-
-CALL AddSymbol(
-    'MC100ELT23',
-    'sym/ecl/MC100ELT23-1.sym'
-    );
-
-CALL AddSymbol(
-    '40103',
-    'sym/4000/40103-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX4106',
-    'sym/maxim/max4106-1.sym'
-    );
-
-CALL AddSymbol(
-    'DB9',
-    'sym/connector/DB9-2.sym'
-    );
-
-CALL AddSymbol(
-    'DIN41617C31',
-    'sym/connector/DIN41617C31-1.sym'
-    );
-
-CALL AddSymbol(
-    'VARIABLE_CAPACITOR',
-    'sym/analog/capacitor-variable-1.sym'
-    );
-
-CALL AddSymbol(
-    '4527',
-    'sym/4000/4527-1.sym'
-    );
-
-CALL AddSymbol(
-    'NPN_TRANSISTOR_IGBT',
-    'sym/analog/npn-IGBT-1.sym'
-    );
-
-CALL AddSymbol(
-    'VTXO',
-    'sym/analog/txo-1.sym'
-    );
-
-CALL AddSymbol(
-    'photodiode',
-    'sym/analog/photodiode-1.sym'
-    );
-
-CALL AddSymbol(
-    '74684',
-    'sym/74/74684-1.sym'
-    );
-
-CALL AddSymbol(
-    'LM339',
-    'sym/linear/lm339-1.sym'
-    );
-
-CALL AddSymbol(
-    'xnor6',
-    'sym/vhdl/xnor6-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX535',
-    'sym/maxim/max535-1.sym'
-    );
-
-CALL AddSymbol(
-    '4071',
-    'sym/4000/4071-1.sym'
-    );
-
-CALL AddSymbol(
-    'RESISTORPACK_5',
-    'sym/analog/resistorpack5-1.sym'
-    );
-
-CALL AddSymbol(
-    'XC2S50-6PQ208C',
-    'sym/xilinx/XC2S50-6PQ208C.sym'
-    );
-
-CALL AddSymbol(
-    '74574',
-    'sym/74/74574-1.sym'
-    );
-
-CALL AddSymbol(
-    'LM555',
-    'sym/linear/lm555-1.sym'
-    );
-
-CALL AddSymbol(
-    'ISP2032',
-    'sym/lattice/isp2032-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX135',
-    'sym/maxim/max135-1.sym'
-    );
-
-CALL AddSymbol(
-    'XC95108-PC84',
-    'sym/xilinx/XC95108-PC84.sym'
-    );
-
-CALL AddSymbol(
-    'DRC_Directive',
-    'sym/misc/nc-bottom-1.sym'
-    );
-
-CALL AddSymbol(
-    'RESISTORPACK_8',
-    'sym/analog/resistorpack8-1.sym'
-    );
-
-CALL AddSymbol(
-    'ADM707',
-    'sym/supervisor/adm707.sym'
-    );
-
-CALL AddSymbol(
-    'LM2576T',
-    'sym/linear/lm2576T-1.sym'
-    );
-
-CALL AddSymbol(
-    '7404',
-    'sym/74/7404-2.sym'
-    );
-
-CALL AddSymbol(
-    'VARIABLE_CAPACITOR',
-    'sym/analog/capacitor-variable-2.sym'
-    );
-
-CALL AddSymbol(
-    'vexp',
-    'sym/spice/vexp-1.sym'
-    );
-
-CALL AddSymbol(
-    'nor',
-    'sym/verilog/nor2-2.sym'
-    );
-
-CALL AddSymbol(
-    'OPAD',
-    'sym/vhdl/opad6-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX101A',
-    'sym/maxim/max101A-1.sym'
-    );
-
-CALL AddSymbol(
-    'AT89C5131_PLCC',
-    'sym/micro/AT89C5131_PLCC-1.sym'
-    );
-
-CALL AddSymbol(
-    'CLIN',
-    'sym/rf/coupler-1.sym'
-    );
-
-CALL AddSymbol(
-    'pic16F877',
-    'sym/micro/pic16F877-1.sym'
-    );
-
-CALL AddSymbol(
-    '7411',
-    'sym/74/7411-2.sym'
-    );
-
-CALL AddSymbol(
-    '581000',
-    'sym/memory/581000-1.sym'
-    );
-
-CALL AddSymbol(
-    'nor',
-    'sym/verilog/nor6-1.sym'
-    );
-
-CALL AddSymbol(
-    'SWITCH_PUSHBUTTON_NO',
-    'sym/switch/switch-pushbutton-no-1.sym'
-    );
-
-CALL AddSymbol(
-    'AT90S8535_DIP',
-    'sym/micro/AT90S8535_DIP.sym'
-    );
-
-CALL AddSymbol(
-    '4070',
-    'sym/4000/4070-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_8',
-    'sym/connector/connector8-2.sym'
-    );
-
-CALL AddSymbol(
-    'VOLTAGE_SOURCE',
-    'sym/analog/voltmeter-1.sym'
-    );
-
-CALL AddSymbol(
-    '7412',
-    'sym/74/7412-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_23',
-    'sym/connector/connector23-2.sym'
-    );
-
-CALL AddSymbol(
-    '74373',
-    'sym/74/74373-1.sym'
-    );
-
-CALL AddSymbol(
-    '74173',
-    'sym/74/74173-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_19',
-    'sym/connector/connector19-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX7852',
-    'sym/maxim/max7652-1.sym'
-    );
-
-CALL AddSymbol(
-    '74191',
-    'sym/74/74191-2.sym'
-    );
-
-CALL AddSymbol(
-    'LM135',
-    'sym/linear/lm135-1.sym'
-    );
-
-CALL AddSymbol(
-    'IPS021',
-    'sym/irf/ips021-1.sym'
-    );
-
-CALL AddSymbol(
-    'MC10E137',
-    'sym/ecl/MC10E137-1.sym'
-    );
-
-CALL AddSymbol(
-    'or',
-    'sym/verilog/or9-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX4662',
-    'sym/maxim/max4662-2.sym'
-    );
-
-CALL AddSymbol(
-    '7401',
-    'sym/74/7401-1.sym'
-    );
-
-CALL AddSymbol(
-    '4021',
-    'sym/4000/4021-2.sym'
-    );
-
-CALL AddSymbol(
-    'DS1602',
-    'sym/micro/DS1602-1.sym'
-    );
-
-CALL AddSymbol(
-    'ADC0831',
-    'sym/national/ADC0831-1.sym'
-    );
-
-CALL AddSymbol(
-    'ATmega8',
-    'sym/micro/ATmega8-1.sym'
-    );
-
-CALL AddSymbol(
-    'CNY17',
-    'sym/opto/CNY17-1.sym'
-    );
-
-CALL AddSymbol(
-    'BC307',
-    'sym/transistor/BC307-1.sym'
-    );
-
-CALL AddSymbol(
-    '74123',
-    'sym/74/74123-2.sym'
-    );
-
-CALL AddSymbol(
-    '4012',
-    'sym/4000/4012-1.sym'
-    );
-
-CALL AddSymbol(
-    'MC13175',
-    'sym/rf/mc13175-1.sym'
-    );
-
-CALL AddSymbol(
-    'or',
-    'sym/verilog/or6-2.sym'
-    );
-
-CALL AddSymbol(
-    'SWITCH_DIP6',
-    'sym/switch/switch-dip6-1.sym'
-    );
-
-CALL AddSymbol(
-    'DIODE',
-    'sym/diode/diode-3.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_21',
-    'sym/connector/connector21-2.sym'
-    );
-
-CALL AddSymbol(
-    'HEADER3',
-    'sym/connector/header3-1.sym'
-    );
-
-CALL AddSymbol(
-    'ADM202',
-    'sym/maxim/adm202-2.sym'
-    );
-
-CALL AddSymbol(
-    '2N3055',
-    'sym/transistor/2N3055-1.sym'
-    );
-
-CALL AddSymbol(
-    'xnor',
-    'sym/verilog/xnor5-1.sym'
-    );
-
-CALL AddSymbol(
-    'xnor5',
-    'sym/vhdl/xnor5-1.sym'
-    );
-
-CALL AddSymbol(
-    'nand4',
-    'sym/vhdl/nand4-1.sym'
-    );
-
-CALL AddSymbol(
-    'ATmega161_DIP',
-    'sym/micro/ATmega161_DIP.sym'
-    );
-
-CALL AddSymbol(
-    'DS26C32',
-    'sym/national/DS26C32-2.sym'
-    );
-
-CALL AddSymbol(
-    '7473',
-    'sym/74/7473-1.sym'
-    );
-
-CALL AddSymbol(
-    'not',
-    'sym/verilog/not-1.sym'
-    );
-
-CALL AddSymbol(
-    '74175',
-    'sym/74/74175-1.sym'
-    );
-
-CALL AddSymbol(
-    'ST39SF020A',
-    'sym/memory/ST39SF020A-1.sym'
-    );
-
-CALL AddSymbol(
-    'LORLIN-12pos-1com',
-    'sym/switch/switch-LORLIN-12pos-1com-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX1482',
-    'sym/maxim/max1482-1.sym'
-    );
-
-CALL AddSymbol(
-    'LP2954IT',
-    'sym/linear/lp2954IT-1.sym'
-    );
-
-CALL AddSymbol(
-    '4063',
-    'sym/4000/4063-1.sym'
-    );
-
-CALL AddSymbol(
-    'LTP-757-G',
-    'sym/misc/ltp-757g-1.sym'
-    );
-
-CALL AddSymbol(
-    'Dual_Two_Way_Switch',
-    'sym/switch/switch-spdt-2.sym'
-    );
-
-CALL AddSymbol(
-    'HEADER22',
-    'sym/connector/header22-1.sym'
-    );
-
-CALL AddSymbol(
-    '9602',
-    'sym/74/9602-2.sym'
-    );
-
-CALL AddSymbol(
-    'TL062',
-    'sym/misc/tl062-1.sym'
-    );
-
-CALL AddSymbol(
-    'LM324',
-    'sym/linear/lm324-1.sym'
-    );
-
-CALL AddSymbol(
-    'LED',
-    'sym/analog/leddual-2.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_10',
-    'sym/connector/connector10-1.sym'
-    );
-
-CALL AddSymbol(
-    'xor6',
-    'sym/vhdl/xor6-1.sym'
-    );
-
-CALL AddSymbol(
-    'RESISTORPACK_9',
-    'sym/analog/resistorpack9-1.sym'
-    );
-
-CALL AddSymbol(
-    'TEC4x3',
-    'sym/io/TEC4x3-1.sym'
-    );
-
-CALL AddSymbol(
-    'DC319',
-    'sym/dec/DC319-1.sym'
-    );
-
-CALL AddSymbol(
-    'NPN_TRANSISTOR',
-    'sym/analog/npn-1.sym'
-    );
-
-CALL AddSymbol(
-    '7422',
-    'sym/74/7422-2.sym'
-    );
-
-CALL AddSymbol(
-    'and',
-    'sym/verilog/and9-2.sym'
-    );
-
-CALL AddSymbol(
-    'MC12429',
-    'sym/ecl/MC12429-1.sym'
-    );
-
-CALL AddSymbol(
-    'xor8',
-    'sym/vhdl/xor8-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_38',
-    'sym/connector/connector38-2.sym'
-    );
-
-CALL AddSymbol(
-    '7402',
-    'sym/74/7402-1.sym'
-    );
-
-CALL AddSymbol(
-    'Atmega128',
-    'sym/micro/ATmega128-1.sym'
-    );
-
-CALL AddSymbol(
-    'VARIABLE_RESISTOR',
-    'sym/analog/pot-2.sym'
-    );
-
-CALL AddSymbol(
-    'nand3',
-    'sym/vhdl/nand3-1.sym'
-    );
-
-CALL AddSymbol(
-    '4011',
-    'sym/4000/4011-1.sym'
-    );
-
-CALL AddSymbol(
-    '4020',
-    'sym/4000/4020-1.sym'
-    );
-
-CALL AddSymbol(
-    '4081',
-    'sym/4000/4081-1.sym'
-    );
-
-CALL AddSymbol(
-    'ADC0804',
-    'sym/national/ADC0804-1.sym'
-    );
-
-CALL AddSymbol(
-    '74161',
-    'sym/74/74161-2.sym'
-    );
-
-CALL AddSymbol(
-    'si9200',
-    'sym/misc/si9200-1.sym'
-    );
-
-CALL AddSymbol(
-    '74153',
-    'sym/74/74153-2.sym'
-    );
-
-CALL AddSymbol(
-    'DC004C',
-    'sym/dec/DC004C-1.sym'
-    );
-
-CALL AddSymbol(
-    '12SA7',
-    'sym/tube/12SA7-1.sym'
-    );
-
-CALL AddSymbol(
-    '4076',
-    'sym/4000/4076-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX1114',
-    'sym/maxim/max1114-1.sym'
-    );
-
-CALL AddSymbol(
-    'AOP-Standard',
-    'sym/analog/aop-std-1.sym'
-    );
-
-CALL AddSymbol(
-    'DB31',
-    'sym/connector/DB31-1.sym'
-    );
-
-CALL AddSymbol(
-    'VOLTAGE_SOURCE',
-    'sym/analog/voltage-1.sym'
-    );
-
-CALL AddSymbol(
-    '4503',
-    'sym/4000/4503-1.sym'
-    );
-
-CALL AddSymbol(
-    '93Cx6',
-    'sym/memory/93Cx6-1.sym'
-    );
-
-CALL AddSymbol(
-    '810',
-    'sym/opto/810-1.sym'
-    );
-
-CALL AddSymbol(
-    'NMOS_TRANSISTOR',
-    'sym/analog/nmos-2.sym'
-    );
-
-CALL AddSymbol(
-    'StAVeR24M32',
-    'sym/micro/staver24m32-1.sym'
-    );
-
-CALL AddSymbol(
-    '74HCT03',
-    'sym/74/74HCT03-1.sym'
-    );
-
-CALL AddSymbol(
-    'DC331',
-    'sym/dec/DC331-1.sym'
-    );
-
-CALL AddSymbol(
-    '74107',
-    'sym/74/74107-2.sym'
-    );
-
-CALL AddSymbol(
-    'xor',
-    'sym/verilog/xor4-1.sym'
-    );
-
-CALL AddSymbol(
-    'EPF10K10QC208',
-    'sym/altera/EPF10K-1.sym'
-    );
-
-CALL AddSymbol(
-    'nand7',
-    'sym/vhdl/nand7-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_4',
-    'sym/connector/connector4-2.sym'
-    );
-
-CALL AddSymbol(
-    'DB25',
-    'sym/connector/DB25-1.sym'
-    );
-
-CALL AddSymbol(
-    '4025',
-    'sym/4000/4025-1.sym'
-    );
-
-CALL AddSymbol(
-    'HEADER8',
-    'sym/connector/header8-2.sym'
-    );
-
-CALL AddSymbol(
-    'pad',
-    'sym/asicpads/pad.sym'
-    );
-
-CALL AddSymbol(
-    'or',
-    'sym/verilog/or5-1.sym'
-    );
-
-CALL AddSymbol(
-    '40193',
-    'sym/4000/40193-1.sym'
-    );
-
-CALL AddSymbol(
-    '4031',
-    'sym/4000/4031-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_17',
-    'sym/connector/connector17-2.sym'
-    );
-
-CALL AddSymbol(
-    '74123',
-    'sym/74/74123-1.sym'
-    );
-
-CALL AddSymbol(
-    '4082',
-    'sym/4000/4082-2.sym'
-    );
-
-CALL AddSymbol(
-    'nor3',
-    'sym/vhdl/nor3-1.sym'
-    );
-
-CALL AddSymbol(
-    'PNP_TRANSISTOR',
-    'sym/analog/pnp-3.sym'
-    );
-
-CALL AddSymbol(
-    'INPUT',
-    'sym/io/input-1.sym'
-    );
-
-CALL AddSymbol(
-    '74HCT541',
-    'sym/74/74HCT541-1.sym'
-    );
-
-CALL AddSymbol(
-    'FT245BM',
-    'sym/micro/FT245BM-1.sym'
-    );
-
-CALL AddSymbol(
-    'BC547',
-    'sym/transistor/BC547-2.sym'
-    );
-
-CALL AddSymbol(
-    'nor',
-    'sym/verilog/nor5-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_7',
-    'sym/connector/connector7-2.sym'
-    );
-
-CALL AddSymbol(
-    '74133',
-    'sym/74/74133-2.sym'
-    );
-
-CALL AddSymbol(
-    'SPICE-NPN',
-    'sym/spice/spice-npn-1.sym'
-    );
-
-CALL AddSymbol(
-    '4066',
-    'sym/4000/4066-1.sym'
-    );
-
-CALL AddSymbol(
-    '4035',
-    'sym/4000/4035-1.sym'
-    );
-
-CALL AddSymbol(
-    '4N29',
-    'sym/opto/4N29-1.sym'
-    );
-
-CALL AddSymbol(
-    '40195',
-    'sym/4000/40195-1.sym'
-    );
-
-CALL AddSymbol(
-    'PMOS_TRANSISTOR',
-    'sym/asic/asic-pmv-1.sym'
-    );
-
-CALL AddSymbol(
-    'ACE1202LN14',
-    'sym/micro/ACE1202-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX531',
-    'sym/maxim/max531-1.sym'
-    );
-
-CALL AddSymbol(
-    'MC3479',
-    'sym/misc/mc3479-1.sym'
-    );
-
-CALL AddSymbol(
-    'TEST',
-    'sym/verilog/test_verilog.sym'
-    );
-
-CALL AddSymbol(
-    '7824',
-    'sym/linear/lm7824-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX12558',
-    'sym/maxim/max12558-1.sym'
-    );
-
-CALL AddSymbol(
-    'XC2S30-6PQ208C',
-    'sym/xilinx/XC2S30-6PQ208C.sym'
-    );
-
-CALL AddSymbol(
-    '7408',
-    'sym/74/7408-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_2',
-    'sym/connector/connector2-1.sym'
-    );
-
-CALL AddSymbol(
-    'TL16C554AFN',
-    'sym/misc/tl16c554afn-1.sym'
-    );
-
-CALL AddSymbol(
-    'HCTL-2000',
-    'sym/opto/HCTL-2000-1.sym'
-    );
-
-CALL AddSymbol(
-    'interpage_from',
-    'sym/misc/interpage_from-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_15',
-    'sym/connector/connector15-2.sym'
-    );
-
-CALL AddSymbol(
-    'T1-1T-X65',
-    'sym/minicircuits/T1-1T-X65-1.sym'
-    );
-
-CALL AddSymbol(
-    'xor4',
-    'sym/vhdl/xor4-1.sym'
-    );
-
-CALL AddSymbol(
-    '4054',
-    'sym/4000/4054-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX4107',
-    'sym/maxim/max4107-1.sym'
-    );
-
-CALL AddSymbol(
-    'LRPS-2-11',
-    'sym/rf/LRPS-2-11.sym'
-    );
-
-CALL AddSymbol(
-    'RPAK_CTS',
-    'sym/analog/rpack-1.sym'
-    );
-
-CALL AddSymbol(
-    '74139',
-    'sym/74/74139-1.sym'
-    );
-
-CALL AddSymbol(
-    'SMITH',
-    'sym/rf/smith-1.sym'
-    );
-
-CALL AddSymbol(
-    '74HC244',
-    'sym/74/74HC244-2.sym'
-    );
-
-CALL AddSymbol(
-    'nor',
-    'sym/verilog/nor2-1.sym'
-    );
-
-CALL AddSymbol(
-    'SWITCH_PUSHBUTTON_NC',
-    'sym/switch/switch-pushbutton-nc-2.sym'
-    );
-
-CALL AddSymbol(
-    '4033',
-    'sym/4000/4033-2.sym'
-    );
-
-CALL AddSymbol(
-    'TINY-TIGER',
-    'sym/micro/tiny-tiger-1.sym'
-    );
-
-CALL AddSymbol(
-    'XINGER4A3305',
-    'sym/rf/xinger-split3-1.sym'
-    );
-
-CALL AddSymbol(
-    'ADM202',
-    'sym/maxim/adm202-1.sym'
-    );
-
-CALL AddSymbol(
-    '74HC244',
-    'sym/74/74HC244-1.sym'
-    );
-
-CALL AddSymbol(
-    'SPARAMBLOCK',
-    'sym/rf/s-param-1.sym'
-    );
-
-CALL AddSymbol(
-    'SAB80C537',
-    'sym/misc/SAB80C537-1.sym'
-    );
-
-CALL AddSymbol(
-    'xor2',
-    'sym/vhdl/xor2-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX1407',
-    'sym/maxim/max1407-1.sym'
-    );
-
-CALL AddSymbol(
-    'TL082',
-    'sym/misc/tl082-1.sym'
-    );
-
-CALL AddSymbol(
-    'LM337',
-    'sym/linear/lm337-1.sym'
-    );
-
-CALL AddSymbol(
-    '74170',
-    'sym/74/74170-1.sym'
-    );
-
-CALL AddSymbol(
-    '4007',
-    'sym/4000/4007-1.sym'
-    );
-
-CALL AddSymbol(
-    'nand',
-    'sym/verilog/nand6-2.sym'
-    );
-
-CALL AddSymbol(
-    'nor',
-    'sym/verilog/nor8-1.sym'
-    );
-
-CALL AddSymbol(
-    '40147',
-    'sym/4000/40147-1.sym'
-    );
-
-CALL AddSymbol(
-    '4018',
-    'sym/4000/4018-2.sym'
-    );
-
-CALL AddSymbol(
-    'RESISTOR',
-    'sym/analog/resistor-2.sym'
-    );
-
-CALL AddSymbol(
-    'spice-IO',
-    'sym/spice/spice-subcircuit-IO-1.sym'
-    );
-
-CALL AddSymbol(
-    '2N3904',
-    'sym/transistor/2N3904-2.sym'
-    );
-
-CALL AddSymbol(
-    'AT89S8252-24PC',
-    'sym/micro/AT89S53-24PI-1.sym'
-    );
-
-CALL AddSymbol(
-    '7454',
-    'sym/74/7454-1.sym'
-    );
-
-CALL AddSymbol(
-    '74HCT245',
-    'sym/74/74HCT245-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX874',
-    'sym/maxim/max874-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_40',
-    'sym/connector/connector40-2.sym'
-    );
-
-CALL AddSymbol(
-    'include',
-    'sym/spice/spice-include-1.sym'
-    );
-
-CALL AddSymbol(
-    'or',
-    'sym/verilog/or4-1.sym'
-    );
-
-CALL AddSymbol(
-    'RESISTORPACK_8',
-    'sym/analog/resistorpack8-2.sym'
-    );
-
-CALL AddSymbol(
-    'xnor4',
-    'sym/vhdl/xnor4-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_1',
-    'sym/connector/connector1-2.sym'
-    );
-
-CALL AddSymbol(
-    'LM311',
-    'sym/linear/lm311-1.sym'
-    );
-
-CALL AddSymbol(
-    'vicor-xxx',
-    'sym/misc/vicor_gen1.sym'
-    );
-
-CALL AddSymbol(
-    '74520',
-    'sym/74/74520-3.sym'
-    );
-
-CALL AddSymbol(
-    'nor7',
-    'sym/vhdl/nor7-1.sym'
-    );
-
-CALL AddSymbol(
-    '7400',
-    'sym/74/7400-2.sym'
-    );
-
-CALL AddSymbol(
-    'MAX1005',
-    'sym/maxim/max1005-1.sym'
-    );
-
-CALL AddSymbol(
-    '7475',
-    'sym/74/7475-1.sym'
-    );
-
-CALL AddSymbol(
-    'PHOTORESISTOR',
-    'sym/analog/photo-resistor-1.sym'
-    );
-
-CALL AddSymbol(
-    'and4',
-    'sym/vhdl/and4-1.sym'
-    );
-
-CALL AddSymbol(
-    'DRC_Directive',
-    'sym/misc/nc-left-1.sym'
-    );
-
-CALL AddSymbol(
-    'nor',
-    'sym/verilog/nor3-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX478',
-    'sym/maxim/max478-1.sym'
-    );
-
-CALL AddSymbol(
-    'MC1496',
-    'sym/misc/mc1496-1.sym'
-    );
-
-CALL AddSymbol(
     'XC2S150-5PQ208I',
-    'sym/xilinx/XC2S150-5PQ208I.sym'
-    );
-
-CALL AddSymbol(
-    'nor5',
-    'sym/vhdl/nor5-1.sym'
-    );
-
-CALL AddSymbol(
-    'QT60040',
-    'sym/misc/QT60040-1.sym'
-    );
-
-CALL AddSymbol(
-    '40110',
-    'sym/4000/40110-1.sym'
-    );
-
-CALL AddSymbol(
-    'ISA-98W-SOCKET',
-    'sym/connector/ISA-98W-SOCKET-1.sym'
-    );
-
-CALL AddSymbol(
-    '4534',
-    'sym/4000/4534-1.sym'
-    );
-
-CALL AddSymbol(
-    'LM358',
-    'sym/linear/lm358-1.sym'
-    );
-
-CALL AddSymbol(
-    'MC10E136',
-    'sym/ecl/MC10E136-1.sym'
-    );
-
-CALL AddSymbol(
-    '40109',
-    'sym/4000/40109-1.sym'
-    );
-
-CALL AddSymbol(
-    '74595',
-    'sym/74/74595-1.sym'
-    );
-
-CALL AddSymbol(
-    'TRANSFORMER ',
-    'sym/analog/transformer-4.sym'
-    );
-
-CALL AddSymbol(
-    'DB25',
-    'sym/connector/DB25-3.sym'
-    );
-
-CALL AddSymbol(
-    'or',
-    'sym/verilog/or2-2.sym'
-    );
-
-CALL AddSymbol(
-    '4353',
-    'sym/4000/4353-1.sym'
-    );
-
-CALL AddSymbol(
-    'LM393',
-    'sym/linear/lm393-1.sym'
-    );
-
-CALL AddSymbol(
-    '7403',
-    'sym/74/7403-2.sym'
-    );
-
-CALL AddSymbol(
-    '4075',
-    'sym/4000/4075-2.sym'
-    );
-
-CALL AddSymbol(
-    'OSC',
-    'sym/misc/osc-2.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_9',
-    'sym/connector/connector9-2.sym'
-    );
-
-CALL AddSymbol(
-    'or',
-    'sym/verilog/or3-1.sym'
-    );
-
-CALL AddSymbol(
-    '27256',
-    'sym/memory/27256-1.sym'
-    );
-
-CALL AddSymbol(
-    'xnor8',
-    'sym/vhdl/xnor8-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_5',
-    'sym/connector/connector5-2.sym'
-    );
-
-CALL AddSymbol(
-    'nor',
-    'sym/verilog/nor5-2.sym'
-    );
-
-CALL AddSymbol(
-    '4019',
-    'sym/4000/4019-2.sym'
-    );
-
-CALL AddSymbol(
-    '4032',
-    'sym/4000/4032-2.sym'
-    );
-
-CALL AddSymbol(
-    'PA140',
-    'sym/apex/pa140-1.sym'
-    );
-
-CALL AddSymbol(
-    'PA91',
-    'sym/apex/pa91-1.sym'
-    );
-
-CALL AddSymbol(
-    'AT90S8535J',
-    'sym/micro/AT90S8535J-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX436',
-    'sym/maxim/max436-1.sym'
-    );
-
-CALL AddSymbol(
-    'PIC16C74A',
-    'sym/micro/pic16C74A-1.sym'
-    );
-
-CALL AddSymbol(
-    'TL072',
-    'sym/misc/tl072-1.sym'
-    );
-
-CALL AddSymbol(
-    'LM3909',
-    'sym/linear/lm3909-1.sym'
-    );
-
-CALL AddSymbol(
-    'nand2',
-    'sym/vhdl/nand2-1.sym'
-    );
-
-CALL AddSymbol(
-    'SWITCH_DIP5',
-    'sym/switch/switch-dip5-2.sym'
-    );
-
-CALL AddSymbol(
-    'LM2822M',
-    'sym/linear/lm2822-1.sym'
-    );
-
-CALL AddSymbol(
-    'IR2110',
-    'sym/misc/ir2110-1.sym'
-    );
-
-CALL AddSymbol(
-    '7456',
-    'sym/74/7456-1.sym'
-    );
-
-CALL AddSymbol(
-    '74122',
-    'sym/74/74122-1.sym'
-    );
-
-CALL AddSymbol(
-    'SWITCAP-capacitor',
-    'sym/switcap/switcap-capacitor-1.sym'
-    );
-
-CALL AddSymbol(
-    '74148',
-    'sym/74/74148-1.sym'
-    );
-
-CALL AddSymbol(
-    'SWITCAP-analysis',
-    'sym/switcap/switcap-analysis-1.sym'
-    );
-
-CALL AddSymbol(
-    'ATmega323',
-    'sym/micro/ATmega323-1.sym'
-    );
-
-CALL AddSymbol(
-    '6821',
-    'sym/micro/6821-1.sym'
-    );
-
-CALL AddSymbol(
-    '7405',
-    'sym/74/7405-1.sym'
-    );
-
-CALL AddSymbol(
-    '4PHASE-STEPPER-8LEADS',
-    'sym/misc/4phase-stepper8-1.sym'
-    );
-
-CALL AddSymbol(
-    'MC68HC705KJ1',
-    'sym/micro/mc68hc705kj1-1.sym'
-    );
-
-CALL AddSymbol(
-    'nor',
-    'sym/verilog/nor9-2.sym'
-    );
-
-CALL AddSymbol(
-    '74245',
-    'sym/74/74245-1.sym'
-    );
-
-CALL AddSymbol(
-    'ATtiny28_DIP',
-    'sym/micro/ATtiny28_DIP.sym'
-    );
-
-CALL AddSymbol(
-    'HSDL-3612',
-    'sym/opto/hsdl3612-1.sym'
-    );
-
-CALL AddSymbol(
-    'T-Line',
-    'sym/spice/tline.sym'
-    );
-
-CALL AddSymbol(
-    'AT90S4433_TQFP',
-    'sym/micro/AT90S4433_TQFP.sym'
-    );
-
-CALL AddSymbol(
-    'or',
-    'sym/verilog/or5-2.sym'
-    );
-
-CALL AddSymbol(
-    'NPN_TRANSISTOR',
-    'sym/analog/npn-2.sym'
-    );
-
-CALL AddSymbol(
-    '12SQ7',
-    'sym/tube/12SQ7-1.sym'
-    );
-
-CALL AddSymbol(
-    '10K10LC84',
-    'sym/altera/10K10LC84-1.sym'
-    );
-
-CALL AddSymbol(
-    'MT8870',
-    'sym/misc/mt8870-1.sym'
-    );
-
-CALL AddSymbol(
-    'HCPL4701',
-    'sym/opto/HCPL4701-1.sym'
-    );
-
-CALL AddSymbol(
-    '4073',
-    'sym/4000/4073-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX4420',
-    'sym/maxim/max4420-1.sym'
-    );
-
-CALL AddSymbol(
-    'VARIABLE_RESISTOR',
-    'sym/analog/pot-1.sym'
-    );
-
-CALL AddSymbol(
-    'COIL',
-    'sym/analog/coil-1.sym'
-    );
-
-CALL AddSymbol(
-    '4021',
-    'sym/4000/4021-1.sym'
-    );
-
-CALL AddSymbol(
-    '22V10-PLCC',
-    'sym/pla/22V10-PLCC.sym'
-    );
-
-CALL AddSymbol(
-    'MC100ELT21',
-    'sym/ecl/MC100ELT21-1.sym'
-    );
-
-CALL AddSymbol(
-    '74688',
-    'sym/74/74688-2.sym'
-    );
-
-CALL AddSymbol(
-    'IPAD',
-    'sym/verilog/ipad-1.sym'
-    );
-
-CALL AddSymbol(
-    'xnor9',
-    'sym/vhdl/xnor9-1.sym'
-    );
-
-CALL AddSymbol(
-    'AT89C51_PLCC',
-    'sym/micro/AT89C51_PLCC.sym'
-    );
-
-CALL AddSymbol(
-    'FUSE',
-    'sym/analog/fuse-1.sym'
-    );
-
-CALL AddSymbol(
-    '4069',
-    'sym/4000/4069-1.sym'
-    );
-
-CALL AddSymbol(
-    'PMOS_TRANSISTOR',
-    'sym/analog/pmos-3.sym'
-    );
-
-CALL AddSymbol(
-    '7476',
-    'sym/74/7476-1.sym'
-    );
-
-CALL AddSymbol(
-    'PC104B',
-    'sym/bus/pc104B-1.sym'
-    );
-
-CALL AddSymbol(
-    'SPICE-vccs',
-    'sym/spice/vccs-1.sym'
-    );
-
-CALL AddSymbol(
-    '4555',
-    'sym/4000/4555-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX19538',
-    'sym/maxim/max19538-1.sym'
-    );
-
-CALL AddSymbol(
-    '4538',
-    'sym/4000/4538-1.sym'
-    );
-
-CALL AddSymbol(
-    'HEADER16',
-    'sym/connector/header16-1.sym'
-    );
-
-CALL AddSymbol(
-    '4002',
-    'sym/4000/4002-2.sym'
-    );
-
-CALL AddSymbol(
-    'HCTL-2016',
-    'sym/opto/HCTL-2016-1.sym'
-    );
-
-CALL AddSymbol(
-    '4521',
-    'sym/4000/4521-1.sym'
-    );
-
-CALL AddSymbol(
-    'none',
-    'sym/misc/busripper-2.sym'
-    );
-
-CALL AddSymbol(
-    '4068',
-    'sym/4000/4068-2.sym'
-    );
-
-CALL AddSymbol(
-    'K',
-    'sym/spice/kmutual-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX713',
-    'sym/maxim/max713-1.sym'
-    );
-
-CALL AddSymbol(
-    'NPN_TRANSISTOR',
-    'sym/transistor/mosfet-with-diode-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_37',
-    'sym/connector/connector37-2.sym'
-    );
-
-CALL AddSymbol(
-    'HM6264P15',
-    'sym/memory/HM6264P15-1.sym'
-    );
-
-CALL AddSymbol(
-    '7483',
-    'sym/74/7483-1.sym'
-    );
-
-CALL AddSymbol(
-    '4026',
-    'sym/4000/4026-1.sym'
-    );
-
-CALL AddSymbol(
-    'OSC_COIL',
-    'sym/radio/osc_coil_aircore-1.sym'
-    );
-
-CALL AddSymbol(
-    'xnor7',
-    'sym/vhdl/xnor7-1.sym'
-    );
-
-CALL AddSymbol(
-    'PIC18F4431-DIP',
-    'sym/micro/pic18F4431-1.sym'
-    );
-
-CALL AddSymbol(
-    'bufif0',
-    'sym/verilog/bufif0-1.sym'
-    );
-
-CALL AddSymbol(
-    'DIN41612C48',
-    'sym/connector/DIN41612C48-1.sym'
-    );
-
-CALL AddSymbol(
-    '4580',
-    'sym/4000/4580-1.sym'
-    );
-
-CALL AddSymbol(
-    '40108',
-    'sym/4000/40108-1.sym'
-    );
-
-CALL AddSymbol(
-    'BC557',
-    'sym/transistor/BC557-2.sym'
-    );
-
-CALL AddSymbol(
-    'CURRENT_SOURCE',
-    'sym/spice/idc-1.sym'
-    );
-
-CALL AddSymbol(
-    'SPICE-cccs',
-    'sym/spice/cccs-1.sym'
-    );
-
-CALL AddSymbol(
-    '74124',
-    'sym/74/74124-2.sym'
-    );
-
-CALL AddSymbol(
-    'OPAMP',
-    'sym/analog/opamp-2.sym'
-    );
-
-CALL AddSymbol(
-    'spice-subcircuit-LL',
-    'sym/spice/spice-subcircuit-LL-1.sym'
-    );
-
-CALL AddSymbol(
-    'ATtiny11',
-    'sym/micro/ATtiny11.sym'
-    );
-
-CALL AddSymbol(
-    'LED',
-    'sym/analog/leddual-1.sym'
-    );
-
-CALL AddSymbol(
-    '4022',
-    'sym/4000/4022-1.sym'
-    );
-
-CALL AddSymbol(
-    'HEADER20',
-    'sym/connector/header20-2.sym'
-    );
-
-CALL AddSymbol(
-    '4096',
-    'sym/4000/4096-1.sym'
-    );
-
-CALL AddSymbol(
-    'DS2405',
-    'sym/national/DS2405-1.sym'
-    );
-
-CALL AddSymbol(
-    '7491',
-    'sym/74/7491-1.sym'
-    );
-
-CALL AddSymbol(
-    'SPST',
-    'sym/switch/switch-spst-1.sym'
-    );
-
-CALL AddSymbol(
-    'cascade-source',
-    'sym/cascade/cascade-source-2.sym'
-    );
-
-CALL AddSymbol(
-    'MC10E104',
-    'sym/ecl/MC10E104-1.sym'
-    );
-
-CALL AddSymbol(
-    'MSP430x11x1',
-    'sym/micro/MSP430x11x1.sym'
-    );
-
-CALL AddSymbol(
-    '74141',
-    'sym/74/74141-1.sym'
-    );
-
-CALL AddSymbol(
-    'L293',
-    'sym/misc/L293.sym'
-    );
-
-CALL AddSymbol(
-    '7431',
-    'sym/74/7431-1.sym'
-    );
-
-CALL AddSymbol(
-    '7451',
-    'sym/74/7451-1.sym'
-    );
-
-CALL AddSymbol(
-    'PIC12C5xx',
-    'sym/micro/pic12c5xx-1.sym'
-    );
-
-CALL AddSymbol(
-    '4543',
-    'sym/4000/4543-1.sym'
-    );
-
-CALL AddSymbol(
-    'header26',
-    'sym/connector/header26-2.sym'
-    );
-
-CALL AddSymbol(
-    '40181',
-    'sym/4000/40181-1.sym'
-    );
-
-CALL AddSymbol(
-    'none',
-    'sym/misc/decon-1.sym'
-    );
-
-CALL AddSymbol(
-    'ATmega163_TQFP',
-    'sym/micro/ATmega163_TQFP.sym'
-    );
-
-CALL AddSymbol(
-    '74195',
-    'sym/74/74195-1.sym'
-    );
-
-CALL AddSymbol(
-    'and',
-    'sym/verilog/and5-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX122',
-    'sym/maxim/max122-1.sym'
-    );
-
-CALL AddSymbol(
-    'and',
-    'sym/verilog/and7-1.sym'
-    );
-
-CALL AddSymbol(
-    '7448',
-    'sym/74/7448-1.sym'
-    );
-
-CALL AddSymbol(
-    'DC8640',
-    'sym/dec/DC8640-1.sym'
-    );
-
-CALL AddSymbol(
-    'or',
-    'sym/verilog/or4-2.sym'
-    );
-
-CALL AddSymbol(
-    '7432',
-    'sym/74/7432-2.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_33',
-    'sym/connector/connector33-2.sym'
-    );
-
-CALL AddSymbol(
-    'ADG602',
-    'sym/misc/ADG602-1.sym'
-    );
-
-CALL AddSymbol(
-    'RESISTORPACK_7',
-    'sym/analog/resistorpack7-2.sym'
-    );
-
-CALL AddSymbol(
-    'MAX038',
-    'sym/maxim/max038-2.sym'
-    );
-
-CALL AddSymbol(
-    '27512',
-    'sym/memory/27512-1.sym'
-    );
-
-CALL AddSymbol(
-    '74131',
-    'sym/74/74131-1.sym'
-    );
-
-CALL AddSymbol(
-    'AT90S2323',
-    'sym/micro/AT90S2323.sym'
-    );
-
-CALL AddSymbol(
-    '4006',
-    'sym/4000/4006-1.sym'
-    );
-
-CALL AddSymbol(
-    '4069',
-    'sym/4000/4069-2.sym'
-    );
-
-CALL AddSymbol(
-    'ADT1-1WT',
-    'sym/minicircuits/ADT1-1WT-1.sym'
-    );
-
-CALL AddSymbol(
-    '74157',
-    'sym/74/74157-1.sym'
-    );
-
-CALL AddSymbol(
-    'POLARIZED_CAPACITOR',
-    'sym/analog/capacitor-2.sym'
-    );
-
-CALL AddSymbol(
-    'T2-1T-KK81',
-    'sym/minicircuits/T2-1T-KK81-1.sym'
-    );
-
-CALL AddSymbol(
-    '4737',
-    'sym/4000/4737-1.sym'
-    );
-
-CALL AddSymbol(
-    'DS89C450',
-    'sym/maxim/DS89C450-1.sym'
-    );
-
-CALL AddSymbol(
-    '4532',
-    'sym/4000/4532-1.sym'
-    );
-
-CALL AddSymbol(
-    '4572',
-    'sym/4000/4572-1.sym'
-    );
-
-CALL AddSymbol(
-    'LM741',
-    'sym/linear/lm386-1.sym'
-    );
-
-CALL AddSymbol(
-    '9602',
-    'sym/74/9602-1.sym'
-    );
-
-CALL AddSymbol(
-    'LM75',
-    'sym/linear/lm75-1.sym'
-    );
-
-CALL AddSymbol(
-    '4066',
-    'sym/4000/4066-2.sym'
-    );
-
-CALL AddSymbol(
-    '4095',
-    'sym/4000/4095-1.sym'
-    );
-
-CALL AddSymbol(
-    'LM339',
-    'sym/linear/lm339-2.sym'
-    );
-
-CALL AddSymbol(
-    'PIC16F628',
-    'sym/micro/pic16F628-1.sym'
-    );
-
-CALL AddSymbol(
-    'HIGH',
-    'sym/verilog/high-1.sym'
-    );
-
-CALL AddSymbol(
-    'Atmega103',
-    'sym/micro/ATmega103.sym'
-    );
-
-CALL AddSymbol(
-    'MAX662A',
-    'sym/maxim/max662A-1.sym'
-    );
-
-CALL AddSymbol(
-    'HCPL-2430',
-    'sym/opto/hcpl-2430-1.sym'
-    );
-
-CALL AddSymbol(
-    '40102',
-    'sym/4000/40102-1.sym'
-    );
-
-CALL AddSymbol(
-    'nand9',
-    'sym/vhdl/nand9-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX214',
-    'sym/maxim/max214-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_35',
-    'sym/connector/connector35-2.sym'
-    );
-
-CALL AddSymbol(
-    '7404',
-    'sym/74/7404-4.sym'
-    );
-
-CALL AddSymbol(
-    '7404',
-    'sym/74/7404-1.sym'
-    );
-
-CALL AddSymbol(
-    '74152',
-    'sym/74/74152-1.sym'
-    );
-
-CALL AddSymbol(
-    'sn75176a',
-    'sym/misc/75176-1.sym'
-    );
-
-CALL AddSymbol(
-    '74138',
-    'sym/74/74138-2.sym'
-    );
-
-CALL AddSymbol(
-    '74259',
-    'sym/74/74259-1.sym'
-    );
-
-CALL AddSymbol(
-    'Z80PIO',
-    'sym/micro/z80pio-1.sym'
-    );
-
-CALL AddSymbol(
-    'VIPEC-GRID',
-    'sym/rf/grid-1.sym'
-    );
-
-CALL AddSymbol(
-    'nand',
-    'sym/verilog/nand9-2.sym'
-    );
-
-CALL AddSymbol(
-    'SWITCH_DIP6',
-    'sym/switch/switch-dip6-2.sym'
-    );
-
-CALL AddSymbol(
-    'LT1374CS8',
-    'sym/linear/lt1374cs8.sym'
-    );
-
-CALL AddSymbol(
-    '4352',
-    'sym/4000/4352-1.sym'
-    );
-
-CALL AddSymbol(
-    '4520',
-    'sym/4000/4520-1.sym'
-    );
-
-CALL AddSymbol(
-    '80(C)52-BASIC',
-    'sym/micro/8052basic-1.sym'
-    );
-
-CALL AddSymbol(
-    'or',
-    'sym/verilog/or8-2.sym'
-    );
-
-CALL AddSymbol(
-    'MAX1609',
-    'sym/maxim/max1609-1.sym'
-    );
-
-CALL AddSymbol(
-    'MC68HC05J1A',
-    'sym/micro/mc68hc05j1a-1.sym'
-    );
-
-CALL AddSymbol(
-    '4017',
-    'sym/4000/4017-1.sym'
-    );
-
-CALL AddSymbol(
-    '4056',
-    'sym/4000/4056-1.sym'
-    );
-
-CALL AddSymbol(
-    'and7',
-    'sym/vhdl/and7-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX6018',
-    'sym/maxim/max6018-1.sym'
-    );
-
-CALL AddSymbol(
-    '4035',
-    'sym/4000/4035-2.sym'
-    );
-
-CALL AddSymbol(
-    'options',
-    'sym/spice/gnucap-options-1.sym'
-    );
-
-CALL AddSymbol(
-    'HM628511HC',
-    'sym/memory/HM628511HC-SOJ36-1.sym'
-    );
-
-CALL AddSymbol(
-    '74168',
-    'sym/74/74168-1.sym'
-    );
-
-CALL AddSymbol(
-    '7497',
-    'sym/74/7497-1.sym'
-    );
-
-CALL AddSymbol(
-    '40161',
-    'sym/4000/40161-1.sym'
-    );
-
-CALL AddSymbol(
-    '7912',
-    'sym/linear/lm7912-1.sym'
-    );
-
-CALL AddSymbol(
-    'SWITCH_DIP4',
-    'sym/switch/switch-dip4-2.sym'
-    );
-
-CALL AddSymbol(
-    '74132',
-    'sym/74/74132-1.sym'
-    );
-
-CALL AddSymbol(
-    'LT1376-5',
-    'sym/linear/lt1376-5.sym'
-    );
-
-CALL AddSymbol(
-    '6A259DIP',
-    'sym/misc/6A259-1.sym'
-    );
-
-CALL AddSymbol(
-    'none',
-    'sym/io/input-2.sym'
-    );
-
-CALL AddSymbol(
-    'PAL20X10',
-    'sym/pla/PAL20X10-1.sym'
-    );
-
-CALL AddSymbol(
-    'OSC',
-    'sym/misc/osc-1.sym'
-    );
-
-CALL AddSymbol(
-    '74197',
-    'sym/74/74197-1.sym'
-    );
-
-CALL AddSymbol(
-    '74191',
-    'sym/74/74191-1.sym'
-    );
-
-CALL AddSymbol(
-    'SWITCAP-vcvs',
-    'sym/switcap/switcap-vcvs-3.sym'
-    );
-
-CALL AddSymbol(
-    'header32',
-    'sym/connector/header32-2.sym'
-    );
-
-CALL AddSymbol(
-    '40257',
-    'sym/4000/40257-1.sym'
-    );
-
-CALL AddSymbol(
-    'darlington, NPN',
-    'sym/analog/darlington_NPN-1.sym'
-    );
-
-CALL AddSymbol(
-    '4018',
-    'sym/4000/4018-1.sym'
-    );
-
-CALL AddSymbol(
-    'PMOS_TRANSISTOR',
-    'sym/asic/asic-phhv-1.sym'
-    );
-
-CALL AddSymbol(
-    'and3',
-    'sym/vhdl/and3-1.sym'
-    );
-
-CALL AddSymbol(
-    '40160',
-    'sym/4000/40160-1.sym'
-    );
-
-CALL AddSymbol(
-    'vpwl',
-    'sym/spice/vpwl-1.sym'
-    );
-
-CALL AddSymbol(
-    'LTC2400',
-    'sym/linear/ltc2400-1.sym'
-    );
-
-CALL AddSymbol(
-    'AT90S8515_PLCC',
-    'sym/micro/AT90S8515_PLCC.sym'
-    );
-
-CALL AddSymbol(
-    'AT89C51_TQFT',
-    'sym/micro/AT89C51_TQFP.sym'
-    );
-
-CALL AddSymbol(
-    'MAX488',
-    'sym/maxim/max488-1.sym'
-    );
-
-CALL AddSymbol(
-    'LT1181',
-    'sym/linear/lt1181-1.sym'
-    );
-
-CALL AddSymbol(
-    '4PHASE-STEPPER-6LEADS',
-    'sym/misc/4phase-stepper6-1.sym'
-    );
-
-CALL AddSymbol(
-    'DS80C310',
-    'sym/micro/DS80C310.sym'
-    );
-
-CALL AddSymbol(
-    'or3',
-    'sym/vhdl/or3-1.sym'
-    );
-
-CALL AddSymbol(
-    'HOLE',
-    'sym/misc/hole-1.sym'
-    );
-
-CALL AddSymbol(
-    'L200',
-    'sym/linear/l200-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_39',
-    'sym/connector/connector39-2.sym'
-    );
-
-CALL AddSymbol(
-    'HEADER10',
-    'sym/connector/header10-1.sym'
-    );
-
-CALL AddSymbol(
-    '2732',
-    'sym/memory/2732-1.sym'
-    );
-
-CALL AddSymbol(
-    '4531',
-    'sym/4000/4531-1.sym'
-    );
-
-CALL AddSymbol(
-    'BNC',
-    'sym/misc/arfx1229-1.sym'
-    );
-
-CALL AddSymbol(
-    'or',
-    'sym/verilog/or7-2.sym'
-    );
-
-CALL AddSymbol(
-    'PC16550D',
-    'sym/national/pc16500d-1.sym'
-    );
-
-CALL AddSymbol(
-    'neg',
-    'sym/vhdl/not-1.sym'
-    );
-
-CALL AddSymbol(
-    'XINGER4A4305',
-    'sym/rf/xinger-split4-1.sym'
-    );
-
-CALL AddSymbol(
-    'AT90S4433_DIP',
-    'sym/micro/AT90S4433_DIP.sym'
-    );
-
-CALL AddSymbol(
-    'MSP430x11x2',
-    'sym/micro/MSP430x11x2.sym'
-    );
-
-CALL AddSymbol(
-    'xnor',
-    'sym/verilog/xnor6-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_24',
-    'sym/connector/connector24-2.sym'
-    );
-
-CALL AddSymbol(
-    'and',
-    'sym/verilog/and9-1.sym'
-    );
-
-CALL AddSymbol(
-    'cascade-filter',
-    'sym/cascade/cascade-filter-1.sym'
-    );
-
-CALL AddSymbol(
-    '4067',
-    'sym/4000/4067-2.sym'
-    );
-
-CALL AddSymbol(
-    'MAX1608',
-    'sym/maxim/max1608-1.sym'
-    );
-
-CALL AddSymbol(
-    '25Cxx',
-    'sym/memory/25Cxx-1.sym'
-    );
-
-CALL AddSymbol(
-    '4501',
-    'sym/4000/4501-1.sym'
-    );
-
-CALL AddSymbol(
-    'MOV',
-    'sym/analog/varistor-1.sym'
-    );
-
-CALL AddSymbol(
-    'POWER',
-    'sym/gnetman/vdd.sym'
-    );
-
-CALL AddSymbol(
-    '74265',
-    'sym/74/74265-2.sym'
-    );
-
-CALL AddSymbol(
-    'buf',
-    'sym/verilog/buf-1.sym'
-    );
-
-CALL AddSymbol(
-    '74114',
-    'sym/74/74114-1.sym'
-    );
-
-CALL AddSymbol(
-    '4027',
-    'sym/4000/4027-1.sym'
-    );
-
-CALL AddSymbol(
-    '74374',
-    'sym/74/74374-1.sym'
-    );
-
-CALL AddSymbol(
-    'MSP430x43x',
-    'sym/micro/MSP430x43x.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_14',
-    'sym/connector/connector14-2.sym'
-    );
-
-CALL AddSymbol(
-    '74280',
-    'sym/74/74280-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX6314',
-    'sym/maxim/max6314-1.sym'
-    );
-
-CALL AddSymbol(
-    '628512',
-    'sym/memory/628512-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX1114',
-    'sym/maxim/max1114-2.sym'
-    );
-
-CALL AddSymbol(
-    'interpage_to',
-    'sym/misc/interpage_to-1.sym'
-    );
-
-CALL AddSymbol(
-    '7414',
-    'sym/74/7414-1.sym'
-    );
-
-CALL AddSymbol(
-    'pad',
-    'sym/asicpads/pad_analog.sym'
-    );
-
-CALL AddSymbol(
-    '74541',
-    'sym/74/74541-1.sym'
-    );
-
-CALL AddSymbol(
-    '7411',
-    'sym/74/7411-1.sym'
-    );
-
-CALL AddSymbol(
-    '7492',
-    'sym/74/7492-1.sym'
-    );
-
-CALL AddSymbol(
-    'Atmega128',
-    'sym/micro/ATmega128-2.sym'
-    );
-
-CALL AddSymbol(
-    'MAX100',
-    'sym/maxim/max100-1.sym'
-    );
-
-CALL AddSymbol(
-    'xor',
-    'sym/verilog/xor3-1.sym'
-    );
-
-CALL AddSymbol(
-    '74HCT08',
-    'sym/74/74HCT08-1.sym'
-    );
-
-CALL AddSymbol(
-    'XC2S50-5PQ208C',
-    'sym/xilinx/XC2S50-5PQ208C.sym'
-    );
-
-CALL AddSymbol(
-    'POLARIZED_CAPACITOR',
-    'sym/analog/capacitor-4.sym'
-    );
-
-CALL AddSymbol(
-    'RESISTOR',
-    'sym/asic/asic-res-3.sym'
-    );
-
-CALL AddSymbol(
-    'MAX1055',
-    'sym/maxim/max1055-1.sym'
-    );
-
-CALL AddSymbol(
-    'model',
-    'sym/spice/spice-model-1.sym'
-    );
-
-CALL AddSymbol(
-    'PS2501-1',
-    'sym/opto/ps2501-1.sym'
-    );
-
-CALL AddSymbol(
-    'SPDT',
-    'sym/switch/switch-spdt-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX982',
-    'sym/maxim/max982-1.sym'
-    );
-
-CALL AddSymbol(
-    '74107',
-    'sym/74/74107-1.sym'
-    );
-
-CALL AddSymbol(
-    'xor7',
-    'sym/vhdl/xor7-1.sym'
-    );
-
-CALL AddSymbol(
-    'UAA170',
-    'sym/misc/UAA170-1.sym'
-    );
-
-CALL AddSymbol(
-    'DIODE',
-    'sym/diode/schottky-1.sym'
-    );
-
-CALL AddSymbol(
-    'and',
-    'sym/verilog/and6-1.sym'
-    );
-
-CALL AddSymbol(
-    '2N5911',
-    'sym/transistor/2N5911-1.sym'
-    );
-
-CALL AddSymbol(
-    '74147',
-    'sym/74/74147-1.sym'
-    );
-
-CALL AddSymbol(
-    'HEADER8',
-    'sym/connector/header8-1.sym'
-    );
-
-CALL AddSymbol(
-    'nand',
-    'sym/verilog/nand8-2.sym'
-    );
-
-CALL AddSymbol(
-    'ATTENUATOR',
-    'sym/rf/attenuator-1.sym'
-    );
-
-CALL AddSymbol(
-    '40174',
-    'sym/4000/40174-1.sym'
-    );
-
-CALL AddSymbol(
-    '40240',
-    'sym/4000/40240-1.sym'
-    );
-
-CALL AddSymbol(
-    'none',
-    'sym/io/output-2.sym'
-    );
-
-CALL AddSymbol(
-    'DC003C',
-    'sym/dec/DC003C-1.sym'
-    );
-
-CALL AddSymbol(
-    'directive',
-    'sym/spice/spice-directive-1.sym'
-    );
-
-CALL AddSymbol(
-    'include',
-    'sym/spice/gnucap-include-1.sym'
-    );
-
-CALL AddSymbol(
-    '4047',
-    'sym/4000/4047-1.sym'
-    );
-
-CALL AddSymbol(
-    'LT1181',
-    'sym/linear/lm1877-1.sym'
-    );
-
-CALL AddSymbol(
-    'PS2501-1',
-    'sym/analog/photo-transistor-1.sym'
-    );
-
-CALL AddSymbol(
-    '7420',
-    'sym/74/7420-1.sym'
-    );
-
-CALL AddSymbol(
-    '74158',
-    'sym/74/74158-1.sym'
-    );
-
-CALL AddSymbol(
-    'ATmega16L_DIP',
-    'sym/micro/ATmega16L-1.sym'
-    );
-
-CALL AddSymbol(
-    'DC_MOTOR',
-    'sym/misc/dc_motor-1.sym'
-    );
-
-CALL AddSymbol(
-    'BC547',
-    'sym/transistor/BC547-1.sym'
-    );
-
-CALL AddSymbol(
-    '4028',
-    'sym/4000/4028-2.sym'
-    );
-
-CALL AddSymbol(
-    'AT90S8515_DIP',
-    'sym/micro/AT90S8515_DIP.sym'
-    );
-
-CALL AddSymbol(
-    'QUAD_OPAMP',
-    'sym/analog/quad_opamp-1.sym'
-    );
-
-CALL AddSymbol(
-    'EPC1LC20',
-    'sym/altera/EPC1LC20-1.sym'
-    );
-
-CALL AddSymbol(
-    'SmartMedia',
-    'sym/connector/smart-media-1.sym'
-    );
-
-CALL AddSymbol(
-    'xnor',
-    'sym/verilog/xnor4-1.sym'
-    );
-
-CALL AddSymbol(
-    'BEEPER',
-    'sym/analog/beeper-1.sym'
-    );
-
-CALL AddSymbol(
-    'MC68HC908GP32CP',
-    'sym/micro/mc68hc908gp32cp-1.sym'
-    );
-
-CALL AddSymbol(
-    'interpage_bidir',
-    'sym/misc/interpage_bidir-1.sym'
-    );
-
-CALL AddSymbol(
-    'and',
-    'sym/verilog/and3-1.sym'
-    );
-
-CALL AddSymbol(
-    'SWITCAP-switch',
-    'sym/switcap/switcap-switch-1.sym'
-    );
-
-CALL AddSymbol(
-    'LTC1799',
-    'sym/linear/ltc1799-1.sym'
-    );
-
-CALL AddSymbol(
-    'OPAMP',
-    'sym/analog/opamp-1.sym'
-    );
-
-CALL AddSymbol(
-    '74124',
-    'sym/74/74124-1.sym'
-    );
-
-CALL AddSymbol(
-    'DC310ES',
-    'sym/dec/DC310ES-1.sym'
-    );
-
-CALL AddSymbol(
-    'HCPL-2631',
-    'sym/opto/hcpl-2631-1.sym'
-    );
-
-CALL AddSymbol(
-    'SPICE-VC-switch',
-    'sym/spice/spice-vc-switch-1.sym'
-    );
-
-CALL AddSymbol(
-    'HEADER10',
-    'sym/connector/header10-2.sym'
-    );
-
-CALL AddSymbol(
-    'nand',
-    'sym/verilog/nand2-1.sym'
-    );
-
-CALL AddSymbol(
-    '7421',
-    'sym/74/7421-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX1005',
-    'sym/maxim/max1005-2.sym'
-    );
-
-CALL AddSymbol(
-    'pad',
-    'sym/asicpads/pad_pull_up.sym'
-    );
-
-CALL AddSymbol(
-    '4028',
-    'sym/4000/4028-1.sym'
-    );
-
-CALL AddSymbol(
-    'notif0',
-    'sym/verilog/notif0-1.sym'
-    );
-
-CALL AddSymbol(
-    '7402',
-    'sym/74/7402-2.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_18',
-    'sym/connector/connector18-2.sym'
-    );
-
-CALL AddSymbol(
-    '4514',
-    'sym/4000/4514-1.sym'
-    );
-
-CALL AddSymbol(
-    '4040',
-    'sym/4000/4040-1.sym'
-    );
-
-CALL AddSymbol(
-    'nor8',
-    'sym/vhdl/nor8-1.sym'
-    );
-
-CALL AddSymbol(
-    '27256',
-    'sym/memory/27C256-1.sym'
-    );
-
-CALL AddSymbol(
-    'DIP24',
-    'sym/connector/dip24-1.sym'
-    );
-
-CALL AddSymbol(
-    'VARIABLE_RESISTOR',
-    'sym/analog/resistor-variable-1.sym'
-    );
-
-CALL AddSymbol(
-    'OMRON_G2R-24-DC5',
-    'sym/relay/omron-G5V-1-DCx-1.sym'
-    );
-
-CALL AddSymbol(
-    '4097',
-    'sym/4000/4097-1.sym'
-    );
-
-CALL AddSymbol(
-    'HSDL7000',
-    'sym/opto/HSDL7000-1.sym'
-    );
-
-CALL AddSymbol(
-    'DS80C320_DIP',
-    'sym/micro/DS80C320-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX1208',
-    'sym/maxim/max1208-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_29',
-    'sym/connector/connector29-2.sym'
-    );
-
-CALL AddSymbol(
-    'PORT1',
-    'sym/rf/port1-1.sym'
-    );
-
-CALL AddSymbol(
-    '74139',
-    'sym/74/74139-2.sym'
-    );
-
-CALL AddSymbol(
-    '74112',
-    'sym/74/74112-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_9',
-    'sym/connector/connector9-1.sym'
-    );
-
-CALL AddSymbol(
-    'IOPAD',
-    'sym/vhdl/iopad-1.sym'
-    );
-
-CALL AddSymbol(
-    '7403',
-    'sym/74/7403-1.sym'
-    );
-
-CALL AddSymbol(
-    '4517',
-    'sym/4000/4517-1.sym'
-    );
-
-CALL AddSymbol(
-    'XC2S50-5PQ208I',
-    'sym/xilinx/XC2S50-5PQ208I.sym'
-    );
-
-CALL AddSymbol(
-    'TINIm390-RevD',
-    'sym/micro/TINIm390-RevD.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_31',
-    'sym/connector/connector31-2.sym'
-    );
-
-CALL AddSymbol(
-    '74283',
-    'sym/74/74283-1.sym'
-    );
-
-CALL AddSymbol(
-    'SWITCAP-title',
-    'sym/switcap/switcap-title-1.sym'
-    );
-
-CALL AddSymbol(
-    '4038',
-    'sym/4000/4038-2.sym'
-    );
-
-CALL AddSymbol(
-    'PIC16C84',
-    'sym/micro/pic16C84.sym'
-    );
-
-CALL AddSymbol(
-    'SWITCH_PUSHBUTTON_SPDT',
-    'sym/switch/switch-pushbutton-spdt-1.sym'
-    );
-
-CALL AddSymbol(
-    '74573',
-    'sym/74/74573-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX1081',
-    'sym/maxim/max1081-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_41',
-    'sym/connector/connector41-1.sym'
-    );
-
-CALL AddSymbol(
-    'AT43USB320A',
-    'sym/micro/AT43USB320A.sym'
-    );
-
-CALL AddSymbol(
-    'RJ45',
-    'sym/connector/rj45-1.sym'
-    );
-
-CALL AddSymbol(
-    '74133',
-    'sym/74/74133-1.sym'
-    );
-
-CALL AddSymbol(
-    '4044',
-    'sym/4000/4044-2.sym'
-    );
-
-CALL AddSymbol(
-    'NMOS_TRANSISTOR',
-    'sym/asic/asic-nmos-1.sym'
-    );
-
-CALL AddSymbol(
-    '74125',
-    'sym/74/74125-1.sym'
-    );
-
-CALL AddSymbol(
-    'BATTERY',
-    'sym/analog/battery-3.sym'
-    );
-
-CALL AddSymbol(
-    '7410',
-    'sym/74/7410-1.sym'
-    );
-
-CALL AddSymbol(
-    '35Z5GT',
-    'sym/tube/35Z5GT-1.sym'
-    );
-
-CALL AddSymbol(
-    'and6',
-    'sym/vhdl/and6-1.sym'
-    );
-
-CALL AddSymbol(
-    'ATmega161_TQFP',
-    'sym/micro/ATmega161_TQFP.sym'
-    );
-
-CALL AddSymbol(
-    'MAX233',
-    'sym/maxim/max233-2.sym'
-    );
-
-CALL AddSymbol(
-    'nor',
-    'sym/verilog/nor8-2.sym'
-    );
-
-CALL AddSymbol(
-    '4013',
-    'sym/4000/4013-1.sym'
-    );
-
-CALL AddSymbol(
-    'DS2480B',
-    'sym/micro/DS2480B-1.sym'
-    );
-
-CALL AddSymbol(
-    'AT90S8515_TQFP',
-    'sym/micro/AT90S8515_TQFP.sym'
-    );
-
-CALL AddSymbol(
-    'FLAG',
-    'sym/gnetman/in.sym'
-    );
-
-CALL AddSymbol(
-    'SWITCH_DIP8',
-    'sym/switch/switch-dip8-1.sym'
-    );
-
-CALL AddSymbol(
-    '4536',
-    'sym/4000/4536-1.sym'
-    );
-
-CALL AddSymbol(
-    'and',
-    'sym/verilog/and2-1.sym'
-    );
-
-CALL AddSymbol(
-    'LT1761SD',
-    'sym/linear/lt1761sd-1.sym'
-    );
-
-CALL AddSymbol(
-    'HEADER18',
-    'sym/connector/header18-2.sym'
-    );
-
-CALL AddSymbol(
-    '74244',
-    'sym/74/74244-2.sym'
-    );
-
-CALL AddSymbol(
-    'AT90S8535_PLCC',
-    'sym/micro/AT90S8535_PLCC.sym'
-    );
-
-CALL AddSymbol(
-    'LM4871M',
-    'sym/national/lm4871m-1.sym'
-    );
-
-CALL AddSymbol(
-    'AT90S1200',
-    'sym/micro/AT90S1200.sym'
-    );
-
-CALL AddSymbol(
-    'XC2S150-6PQ208C',
-    'sym/xilinx/XC2S150-6PQ208C.sym'
-    );
-
-CALL AddSymbol(
-    '2TRI',
-    'sym/misc/2tri-1.sym'
-    );
-
-CALL AddSymbol(
-    'PAL20X4',
-    'sym/pla/PAL20X4-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX232',
-    'sym/maxim/max233-1.sym'
-    );
-
-CALL AddSymbol(
-    '4053',
-    'sym/4000/4053-1.sym'
-    );
-
-CALL AddSymbol(
-    'HCNR201',
-    'sym/opto/hcnr201-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX189',
-    'sym/maxim/max186-2.sym'
-    );
-
-CALL AddSymbol(
-    '7400',
-    'sym/74/7400-1.sym'
-    );
-
-CALL AddSymbol(
-    'HEADER50',
-    'sym/connector/header50r-1.sym'
-    );
-
-CALL AddSymbol(
-    'nor2',
-    'sym/vhdl/nor2-1.sym'
-    );
-
-CALL AddSymbol(
-    'xor',
-    'sym/verilog/xor9-1.sym'
-    );
-
-CALL AddSymbol(
-    '4556',
-    'sym/4000/4556-1.sym'
-    );
-
-CALL AddSymbol(
-    '7490',
-    'sym/74/7490-1.sym'
-    );
-
-CALL AddSymbol(
-    '2PHASE-STEPPER-4LEADS',
-    'sym/misc/2phase-stepper-1.sym'
-    );
-
-CALL AddSymbol(
-    'DIODE-BRIDGE',
-    'sym/diode/diode-bridge-1.sym'
-    );
-
-CALL AddSymbol(
-    'LT1782',
-    'sym/linear/lt1782-1.sym'
-    );
-
-CALL AddSymbol(
-    '7427',
-    'sym/74/7427-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX378',
-    'sym/maxim/max378-1.sym'
-    );
-
-CALL AddSymbol(
-    'SWITCH_PUSHBUTTON_NC',
-    'sym/switch/switch-pushbutton-nc-1.sym'
-    );
-
-CALL AddSymbol(
-    '4048',
-    'sym/4000/4048-1.sym'
-    );
-
-CALL AddSymbol(
-    '4052',
-    'sym/4000/4052-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX202',
-    'sym/maxim/max202-1.sym'
-    );
-
-CALL AddSymbol(
-    'CAPACITOR',
-    'sym/asic/asic-cap-3.sym'
-    );
-
-CALL AddSymbol(
-    'xnor',
-    'sym/verilog/xnor3-1.sym'
-    );
-
-CALL AddSymbol(
-    '4060',
-    'sym/4000/4060-2.sym'
-    );
-
-CALL AddSymbol(
-    '74162',
-    'sym/74/74162-1.sym'
-    );
-
-CALL AddSymbol(
-    'AT89S8252-24PC',
-    'sym/micro/AT89S8252-24PC-1.sym'
-    );
-
-CALL AddSymbol(
-    '74??',
-    'sym/74/74power-1.sym'
-    );
-
-CALL AddSymbol(
-    '74189',
-    'sym/74/74189-1.sym'
-    );
-
-CALL AddSymbol(
-    '4094',
-    'sym/4000/4094-2.sym'
-    );
-
-CALL AddSymbol(
-    'SWITCAP-clock',
-    'sym/switcap/switcap-clock-1.sym'
-    );
-
-CALL AddSymbol(
-    '4014',
-    'sym/4000/4014-2.sym'
-    );
-
-CALL AddSymbol(
-    '4089',
-    'sym/4000/4089-1.sym'
-    );
-
-CALL AddSymbol(
-    'RELAY',
-    'sym/switch/relay-1.sym'
-    );
-
-CALL AddSymbol(
-    'CS5396-KS',
-    'sym/analog/CS5396-1.sym'
-    );
-
-CALL AddSymbol(
-    '74153',
-    'sym/74/74153-1.sym'
-    );
-
-CALL AddSymbol(
-    '74393',
-    'sym/74/74393-1.sym'
-    );
-
-CALL AddSymbol(
-    '4508',
-    'sym/4000/4508-1.sym'
-    );
-
-CALL AddSymbol(
-    'LED',
-    'sym/diode/led-3.sym'
-    );
-
-CALL AddSymbol(
-    'IPAD',
-    'sym/vhdl/ipad-1.sym'
-    );
-
-CALL AddSymbol(
-    '8259A',
-    'sym/micro/8259A-1.sym'
-    );
-
-CALL AddSymbol(
-    '74113',
-    'sym/74/74113-1.sym'
-    );
-
-CALL AddSymbol(
-    'PCF8563',
-    'sym/philips/PCF8563-1.sym'
-    );
-
-CALL AddSymbol(
-    '40194',
-    'sym/4000/40194-1.sym'
-    );
-
-CALL AddSymbol(
-    'and9',
-    'sym/vhdl/and9-1.sym'
-    );
-
-CALL AddSymbol(
-    '4585',
-    'sym/4000/4585-1.sym'
-    );
-
-CALL AddSymbol(
-    'IDT7204',
-    'sym/idt/idt7204-1.sym'
-    );
-
-CALL AddSymbol(
-    'lm628n-6',
-    'sym/linear/lm628n-6.sym'
-    );
-
-CALL AddSymbol(
-    'DS26LS31',
-    'sym/national/DS26LS31-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX12557',
-    'sym/maxim/max12557-1.sym'
-    );
-
-CALL AddSymbol(
-    '74673A',
-    'sym/74/74673A-2.sym'
-    );
-
-CALL AddSymbol(
-    'MAX12555',
-    'sym/maxim/max12555-1.sym'
-    );
-
-CALL AddSymbol(
-    '40374',
-    'sym/4000/40374-1.sym'
-    );
-
-CALL AddSymbol(
-    '4001',
-    'sym/4000/4001-1.sym'
-    );
-
-CALL AddSymbol(
-    'NMOS_TRANSISTOR',
-    'sym/asic/asic-nhhv-1.sym'
-    );
-
-CALL AddSymbol(
-    '74367',
-    'sym/74/74367-1.sym'
-    );
-
-CALL AddSymbol(
-    'XC2S200-5PQ208C',
-    'sym/xilinx/XC2S200-5PQ208C.sym'
-    );
-
-CALL AddSymbol(
-    '4518',
-    'sym/4000/4518-1.sym'
-    );
-
-CALL AddSymbol(
-    'TRIAC',
-    'sym/analog/triac-1.sym'
-    );
-
-CALL AddSymbol(
-    '7415',
-    'sym/74/7415-1.sym'
-    );
-
-CALL AddSymbol(
-    'MXT429',
-    'sym/maxim/mxt429-1.sym'
-    );
-
-CALL AddSymbol(
-    'COMPACT_FLASH',
-    'sym/connector/header50-2.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_6',
-    'sym/connector/connector6-1.sym'
-    );
-
-CALL AddSymbol(
-    '7474',
-    'sym/74/7474-2.sym'
-    );
-
-CALL AddSymbol(
-    'FND5148',
-    'sym/misc/FND5148-1.sym'
-    );
-
-CALL AddSymbol(
-    '7815',
-    'sym/linear/lm7815-1.sym'
-    );
-
-CALL AddSymbol(
-    '7404',
-    'sym/74/7404-3.sym'
-    );
-
-CALL AddSymbol(
-    '4504',
-    'sym/4000/4504-1.sym'
-    );
-
-CALL AddSymbol(
-    '62256',
-    'sym/memory/62256-1.sym'
-    );
-
-CALL AddSymbol(
-    '74238',
-    'sym/74/74238-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX807',
-    'sym/maxim/max807-1.sym'
-    );
-
-CALL AddSymbol(
-    'VARIABLE_RESISTOR',
-    'sym/analog/pot-bourns.sym'
-    );
-
-CALL AddSymbol(
-    'RESISTORPACK_3',
-    'sym/analog/resistorpack3-1.sym'
-    );
-
-CALL AddSymbol(
-    'PIC16C5x',
-    'sym/micro/pic16c5x-1.sym'
-    );
-
-CALL AddSymbol(
-    '4021',
-    'sym/4000/4021-3.sym'
-    );
-
-CALL AddSymbol(
-    'XC2S30-5PQ208I',
-    'sym/xilinx/XC2S30-5PQ208I.sym'
-    );
-
-CALL AddSymbol(
-    'nand',
-    'sym/verilog/nand3-1.sym'
-    );
-
-CALL AddSymbol(
-    'DUAL_OPAMP',
-    'sym/analog/dual-opamp-1.sym'
-    );
-
-CALL AddSymbol(
-    '7420',
-    'sym/74/7420-2.sym'
-    );
-
-CALL AddSymbol(
-    '4016',
-    'sym/4000/4016-1.sym'
-    );
-
-CALL AddSymbol(
-    'xor',
-    'sym/verilog/xor6-1.sym'
-    );
-
-CALL AddSymbol(
-    'T1-1T-W38',
-    'sym/minicircuits/T1-1T-W38-1.sym'
-    );
-
-CALL AddSymbol(
-    'PMOS_TRANSISTOR',
-    'sym/asic/asic-phv-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX189',
-    'sym/maxim/max189-1.sym'
-    );
-
-CALL AddSymbol(
-    'HCPL-2630',
-    'sym/opto/hcpl-2630-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_22',
-    'sym/connector/connector22-2.sym'
-    );
-
-CALL AddSymbol(
-    '40244',
-    'sym/4000/40244-1.sym'
-    );
-
-CALL AddSymbol(
-    'SWITCH_DIP12',
-    'sym/switch/switch-dip12.sym'
-    );
-
-CALL AddSymbol(
-    'ADG620',
-    'sym/misc/ADG620-1.sym'
-    );
-
-CALL AddSymbol(
-    '4078',
-    'sym/4000/4078-2.sym'
-    );
-
-CALL AddSymbol(
-    'LM723',
-    'sym/linear/lm723-1.sym'
-    );
-
-CALL AddSymbol(
-    'nor6',
-    'sym/vhdl/nor6-1.sym'
-    );
-
-CALL AddSymbol(
-    'xor3',
-    'sym/vhdl/xor3-1.sym'
-    );
-
-CALL AddSymbol(
-    '40373',
-    'sym/4000/40373-1.sym'
-    );
-
-CALL AddSymbol(
-    '4078',
-    'sym/4000/4078-1.sym'
-    );
-
-CALL AddSymbol(
-    'PC104A',
-    'sym/bus/pc104A-1.sym'
-    );
-
-CALL AddSymbol(
-    'DM9368',
-    'sym/misc/DM9368.sym'
-    );
-
-CALL AddSymbol(
-    'DAC08',
-    'sym/misc/dac08sm-1.sym'
-    );
-
-CALL AddSymbol(
-    'AM27S13D',
-    'sym/memory/am27S13D-1.sym'
-    );
-
-CALL AddSymbol(
-    '4316',
-    'sym/4000/4316-1.sym'
-    );
-
-CALL AddSymbol(
-    '4041',
-    'sym/4000/4041-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX237',
-    'sym/maxim/max237-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_20',
-    'sym/connector/connector20-1.sym'
-    );
-
-CALL AddSymbol(
-    'AT90S2343',
-    'sym/micro/AT90S2343.sym'
-    );
-
-CALL AddSymbol(
-    '4N25',
-    'sym/opto/4N25-1.sym'
-    );
-
-CALL AddSymbol(
-    'NMOS_TRANSISTOR',
-    'sym/analog/nmos-3.sym'
-    );
-
-CALL AddSymbol(
-    'MAX3120',
-    'sym/maxim/max3120-1.sym'
-    );
-
-CALL AddSymbol(
-    'none',
-    'sym/misc/busripper-1.sym'
-    );
-
-CALL AddSymbol(
-    '4002',
-    'sym/4000/4002-1.sym'
-    );
-
-CALL AddSymbol(
-    'SWITCH_DIP5',
-    'sym/switch/switch-dip5-1.sym'
-    );
-
-CALL AddSymbol(
-    'PCA82C250',
-    'sym/philips/PCA82C250-1.sym'
-    );
-
-CALL AddSymbol(
-    'DB37',
-    'sym/connector/DB37-1.sym'
-    );
-
-CALL AddSymbol(
-    'TRANSFORMER',
-    'sym/analog/transformer-3.sym'
-    );
-
-CALL AddSymbol(
-    'include',
-    'sym/misc/include-1.sym'
-    );
-
-CALL AddSymbol(
-    'IOPAD',
-    'sym/verilog/iopad-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX400',
-    'sym/maxim/max400-1.sym'
-    );
-
-CALL AddSymbol(
-    '22V10',
-    'sym/pla/22V10-DIP-1.sym'
-    );
-
-CALL AddSymbol(
-    '4049',
-    'sym/4000/4049-1.sym'
-    );
-
-CALL AddSymbol(
-    'notif1',
-    'sym/verilog/notif1-1.sym'
-    );
-
-CALL AddSymbol(
-    '4541',
-    'sym/4000/4541-1.sym'
-    );
-
-CALL AddSymbol(
-    'cascade-defaults',
-    'sym/cascade/cascade-defaults-1.sym'
-    );
-
-CALL AddSymbol(
-    'or',
-    'sym/verilog/or2-1.sym'
-    );
-
-CALL AddSymbol(
-    'ATmega16_DIP',
-    'sym/micro/ATmega16_DIP-1.sym'
-    );
-
-CALL AddSymbol(
-    '74HCT01',
-    'sym/74/74HCT01-1.sym'
-    );
-
-CALL AddSymbol(
-    '74159',
-    'sym/74/74159-1.sym'
-    );
-
-CALL AddSymbol(
-    '4044',
-    'sym/4000/4044-1.sym'
-    );
-
-CALL AddSymbol(
-    'HEADER10',
-    'sym/connector/rs232-idc10.sym'
-    );
-
-CALL AddSymbol(
-    '4515',
-    'sym/4000/4515-1.sym'
-    );
-
-CALL AddSymbol(
-    '74161',
-    'sym/74/74161-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX3674',
-    'sym/maxim/max3674-1.sym'
-    );
-
-CALL AddSymbol(
-    'ADG601',
-    'sym/misc/ADG601-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_3',
-    'sym/connector/connector3-2.sym'
-    );
-
-CALL AddSymbol(
-    'AUI',
-    'sym/connector/aui-1.sym'
-    );
-
-CALL AddSymbol(
-    '4033',
-    'sym/4000/4033-1.sym'
-    );
-
-CALL AddSymbol(
-    '4093',
-    'sym/4000/4093-1.sym'
-    );
-
-CALL AddSymbol(
-    'RESISTORPACK_10',
-    'sym/analog/resistorpack10-1.sym'
-    );
-
-CALL AddSymbol(
-    'AT89C51_DIP',
-    'sym/micro/AT89C51_DIP.sym'
-    );
-
-CALL AddSymbol(
-    'BLOCK',
-    'sym/verilog/block-1.sym'
-    );
-
-CALL AddSymbol(
-    '74379',
-    'sym/74/74379-1.sym'
-    );
-
-CALL AddSymbol(
-    '74126',
-    'sym/74/74126-1.sym'
-    );
-
-CALL AddSymbol(
-    '74265',
-    'sym/74/74265-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX1080',
-    'sym/maxim/max1080-1.sym'
-    );
-
-CALL AddSymbol(
-    'and',
-    'sym/verilog/and3-2.sym'
-    );
-
-CALL AddSymbol(
-    'ATtiny12',
-    'sym/micro/ATtiny12.sym'
-    );
-
-CALL AddSymbol(
-    'INDUCTOR',
-    'sym/analog/inductor-1.sym'
-    );
-
-CALL AddSymbol(
-    '74137',
-    'sym/74/74137-1.sym'
-    );
-
-CALL AddSymbol(
-    '7409',
-    'sym/74/7409-2.sym'
-    );
-
-CALL AddSymbol(
-    'or9',
-    'sym/vhdl/or9-1.sym'
-    );
-
-CALL AddSymbol(
-    '8088',
-    'sym/micro/8088-1.sym'
-    );
-
-CALL AddSymbol(
-    'HEADER20',
-    'sym/connector/header20-1.sym'
-    );
-
-CALL AddSymbol(
-    'AT89C2051',
-    'sym/micro/AT89C2051-1.sym'
-    );
-
-CALL AddSymbol(
-    'LT1308',
-    'sym/linear/lt1308-1.sym'
-    );
-
-CALL AddSymbol(
-    '4046',
-    'sym/4000/4046-1.sym'
-    );
-
-CALL AddSymbol(
-    'MC10E104',
-    'sym/ecl/MC10E104-2.sym'
-    );
-
-CALL AddSymbol(
-    'ATmega163_DIP',
-    'sym/micro/ATmega163_DIP.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_34',
-    'sym/connector/connector34-2.sym'
-    );
-
-CALL AddSymbol(
-    'ZENER_DIODE',
-    'sym/diode/zener-1.sym'
-    );
-
-CALL AddSymbol(
-    '62256',
-    'sym/memory/62256-2.sym'
-    );
-
-CALL AddSymbol(
-    '6n137',
-    'sym/opto/6n137-1.sym'
-    );
-
-CALL AddSymbol(
-    '4050',
-    'sym/4000/4050-1.sym'
-    );
-
-CALL AddSymbol(
-    'SX28AC',
-    'sym/micro/sx28ac-1.sym'
-    );
-
-CALL AddSymbol(
-    '74123',
-    'sym/74/74123-3.sym'
-    );
-
-CALL AddSymbol(
-    '74109',
-    'sym/74/74109-1.sym'
-    );
-
-CALL AddSymbol(
-    'max865eua',
-    'sym/maxim/max865EUA-1.sym'
-    );
-
-CALL AddSymbol(
-    'nand',
-    'sym/verilog/nand4-2.sym'
-    );
-
-CALL AddSymbol(
-    '7455',
-    'sym/74/7455-1.sym'
-    );
-
-CALL AddSymbol(
-    '7430',
-    'sym/74/7430-2.sym'
-    );
-
-CALL AddSymbol(
-    '6N135',
-    'sym/opto/6N135-1.sym'
-    );
-
-CALL AddSymbol(
-    'and',
-    'sym/verilog/and4-1.sym'
-    );
-
-CALL AddSymbol(
-    'AT45DB021B',
-    'sym/memory/AT45db021bso8w-1.sym'
-    );
-
-CALL AddSymbol(
-    'BC547',
-    'sym/transistor/BC547-3.sym'
-    );
-
-CALL AddSymbol(
-    'RESISTOR',
-    'sym/asic/asic-res-4.sym'
-    );
-
-CALL AddSymbol(
-    'DIODE',
-    'sym/diode/diode-2.sym'
-    );
-
-CALL AddSymbol(
-    'or6',
-    'sym/vhdl/or6-1.sym'
-    );
-
-CALL AddSymbol(
-    'BRIDGE',
-    'sym/analog/bridge-2.sym'
-    );
-
-CALL AddSymbol(
-    'MAX1620',
-    'sym/maxim/max1620-1.sym'
-    );
-
-CALL AddSymbol(
-    'POWER',
-    'sym/gnetman/vss.sym'
-    );
-
-CALL AddSymbol(
-    '40208',
-    'sym/4000/40208-1.sym'
-    );
-
-CALL AddSymbol(
-    '4008',
-    'sym/4000/4008-1.sym'
-    );
-
-CALL AddSymbol(
-    'sa52-11',
-    'sym/diode/sa52-11-1.sym'
-    );
-
-CALL AddSymbol(
-    'RESISTOR',
-    'sym/asic/asic-res-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX12559',
-    'sym/maxim/max12559-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_2',
-    'sym/connector/connector2-2.sym'
-    );
-
-CALL AddSymbol(
-    'T-Line',
-    'sym/spice/wline-1x.sym'
-    );
-
-CALL AddSymbol(
-    'MAX1207',
-    'sym/maxim/max1207-1.sym'
-    );
-
-CALL AddSymbol(
-    '7408',
-    'sym/74/7408-2.sym'
-    );
-
-CALL AddSymbol(
-    '6821',
-    'sym/micro/6821-2.sym'
-    );
-
-CALL AddSymbol(
-    'DS8641',
-    'sym/dec/DS8641_1.sym'
-    );
-
-CALL AddSymbol(
-    '7810',
-    'sym/linear/lm7810-1.sym'
-    );
-
-CALL AddSymbol(
-    '4034',
-    'sym/4000/4034-1.sym'
-    );
-
-CALL AddSymbol(
-    'and',
-    'sym/verilog/and5-2.sym'
-    );
-
-CALL AddSymbol(
-    'CAPACITOR',
-    'sym/analog/capacitor-1.sym'
-    );
-
-CALL AddSymbol(
-    'xor',
-    'sym/verilog/xor2-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX1011',
-    'sym/maxim/max1011-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX12527',
-    'sym/maxim/max12527-1.sym'
-    );
-
-CALL AddSymbol(
-    '12SK7',
-    'sym/tube/12SK7-1.sym'
-    );
-
-CALL AddSymbol(
-    'TLIN',
-    'sym/rf/txline4-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX038',
-    'sym/maxim/max038-1.sym'
-    );
-
-CALL AddSymbol(
-    'ATtiny28_TQFP',
-    'sym/micro/ATtiny28_TQFP.sym'
-    );
-
-CALL AddSymbol(
-    'DS80C310_DIP',
-    'sym/micro/DS80C310-1.sym'
-    );
-
-CALL AddSymbol(
-    '40104',
-    'sym/4000/40104-1.sym'
-    );
-
-CALL AddSymbol(
-    'RESISTORPACK_7',
-    'sym/analog/resistorpack7-1.sym'
-    );
-
-CALL AddSymbol(
-    '74HC374',
-    'sym/74/74HC374-1.sym'
-    );
-
-CALL AddSymbol(
-    'TDA2822M',
-    'sym/linear/TDA2822M-1.sym'
-    );
-
-CALL AddSymbol(
-    'RESISTORPACK_12',
-    'sym/analog/resistorpack12-1.sym'
-    );
-
-CALL AddSymbol(
-    'pad',
-    'sym/asicpads/pad_gnd.sym'
-    );
-
-CALL AddSymbol(
-    'bufif1',
-    'sym/verilog/bufif1-1.sym'
-    );
-
-CALL AddSymbol(
-    'PIC16F628',
-    'sym/micro/pic16F628-2.sym'
-    );
-
-CALL AddSymbol(
-    'MAX663',
-    'sym/maxim/max663-1.sym'
-    );
-
-CALL AddSymbol(
-    '4045',
-    'sym/4000/4045-1.sym'
-    );
-
-CALL AddSymbol(
-    'nand',
-    'sym/verilog/nand3-2.sym'
-    );
-
-CALL AddSymbol(
-    'LCB110',
-    'sym/switch/ssrelay-spst-lcb110-1.sym'
-    );
-
-CALL AddSymbol(
-    '7495',
-    'sym/74/7495-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX872',
-    'sym/maxim/max872-1.sym'
-    );
-
-CALL AddSymbol(
-    '74164',
-    'sym/74/74164-1.sym'
-    );
-
-CALL AddSymbol(
-    'ADT1-1WT',
-    'sym/minicircuits/ADT1-1WT-2.sym'
-    );
-
-CALL AddSymbol(
-    'COIL',
-    'sym/analog/coil-2.sym'
-    );
-
-CALL AddSymbol(
-    '4077',
-    'sym/4000/4077-1.sym'
-    );
-
-CALL AddSymbol(
-    'VOLTAGE_SOURCE',
-    'sym/analog/voltage-3.sym'
-    );
-
-CALL AddSymbol(
-    'HA5221',
-    'sym/analog/HA5221-1.sym'
-    );
-
-CALL AddSymbol(
-    'JOSEPHSON_JUNCTION',
-    'sym/analog/jj-1.sym'
-    );
-
-CALL AddSymbol(
-    '74673A',
-    'sym/74/74673A-1.sym'
-    );
-
-CALL AddSymbol(
-    'PMOS_TRANSISTOR',
-    'sym/analog/pmos-2.sym'
-    );
-
-CALL AddSymbol(
-    '6N136',
-    'sym/opto/6N136-1.sym'
-    );
-
-CALL AddSymbol(
-    'A3967SLB',
-    'sym/allegro/3967-2.sym'
-    );
-
-CALL AddSymbol(
-    '50L6GT',
-    'sym/tube/50L6GT-1.sym'
-    );
-
-CALL AddSymbol(
-    '7422',
-    'sym/74/7422-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX1206',
-    'sym/maxim/max1206-1.sym'
-    );
-
-CALL AddSymbol(
-    'ATMEGA32',
-    'sym/micro/ATmega32MLF-1.sym'
-    );
-
-CALL AddSymbol(
-    'DRC_Directive',
-    'sym/misc/nc-top-1.sym'
-    );
-
-CALL AddSymbol(
-    'nand',
-    'sym/verilog/nand9-1.sym'
-    );
-
-CALL AddSymbol(
-    '4512',
-    'sym/4000/4512-1.sym'
-    );
-
-CALL AddSymbol(
-    'MSP430x13/4x',
-    'sym/micro/MSP430x13-4x.sym'
-    );
-
-CALL AddSymbol(
-    'SPICE-ccvs',
-    'sym/gnetman/ccvs-1.sym'
-    );
-
-CALL AddSymbol(
-    'nor',
-    'sym/verilog/nor7-2.sym'
-    );
-
-CALL AddSymbol(
-    'ds26c31',
-    'sym/national/DS26C61-1.sym'
-    );
-
-CALL AddSymbol(
-    'DRC_Directive',
-    'sym/misc/nc-right-1.sym'
-    );
-
-CALL AddSymbol(
-    '74266',
-    'sym/74/74266-1.sym'
-    );
-
-CALL AddSymbol(
-    'and',
-    'sym/verilog/and7-2.sym'
-    );
-
-CALL AddSymbol(
-    '74181',
-    'sym/74/74181-1.sym'
-    );
-
-CALL AddSymbol(
-    '7485',
-    'sym/74/7485-1.sym'
-    );
-
-CALL AddSymbol(
-    '4164',
-    'sym/memory/4164-1.sym'
-    );
-
-CALL AddSymbol(
-    'FLAG',
-    'sym/gnetman/out.sym'
-    );
-
-CALL AddSymbol(
-    'and5',
-    'sym/vhdl/and5-1.sym'
-    );
-
-CALL AddSymbol(
-    'AROMAT-TQ4',
-    'sym/relay/aromat-tq4.sym'
-    );
-
-CALL AddSymbol(
-    '74243',
-    'sym/74/74243-1.sym'
-    );
-
-CALL AddSymbol(
-    'VIPEC',
-    'sym/rf/vipec-analysis-1.sym'
-    );
-
-CALL AddSymbol(
-    '4017',
-    'sym/4000/4017-2.sym'
-    );
-
-CALL AddSymbol(
-    'N82S100N',
-    'sym/pla/N82S100N-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX12553',
-    'sym/maxim/max12553-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX186',
-    'sym/maxim/max186-1.sym'
-    );
-
-CALL AddSymbol(
-    '7474',
-    'sym/74/7474-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX218',
-    'sym/maxim/max218-1.sym'
-    );
-
-CALL AddSymbol(
-    '4009',
-    'sym/4000/4009-1.sym'
-    );
-
-CALL AddSymbol(
-    'MC100ELT24',
-    'sym/ecl/MC100ELT24-1.sym'
-    );
-
-CALL AddSymbol(
-    'xor',
-    'sym/verilog/xor5-1.sym'
-    );
-
-CALL AddSymbol(
-    'or',
-    'sym/verilog/or8-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX1614',
-    'sym/maxim/max1614-1.sym'
-    );
-
-CALL AddSymbol(
-    'VOLTAGE_SOURCE',
-    'sym/spice/vdc-1.sym'
-    );
-
-CALL AddSymbol(
-    '4000',
-    'sym/4000/4000-1.sym'
-    );
-
-CALL AddSymbol(
-    '31-71043',
-    'sym/amphenol/31-71043-1.sym'
-    );
-
-CALL AddSymbol(
-    'and',
-    'sym/verilog/and4-2.sym'
-    );
-
-CALL AddSymbol(
-    'PIC18F242',
-    'sym/micro/pic18F242-1.sym'
-    );
-
-CALL AddSymbol(
-    '74154',
-    'sym/74/74154-1.sym'
-    );
-
-CALL AddSymbol(
-    '4085',
-    'sym/4000/4085-1.sym'
-    );
-
-CALL AddSymbol(
-    '4086',
-    'sym/4000/4086-1.sym'
-    );
-
-CALL AddSymbol(
-    'M41T00',
-    'sym/micro/M41T00-SO8-1.sym'
-    );
-
-CALL AddSymbol(
-    'N82S23N',
-    'sym/memory/N82S23N-1.sym'
-    );
-
-CALL AddSymbol(
-    '4061',
-    'sym/4000/4061-1.sym'
-    );
-
-CALL AddSymbol(
-    'NE592',
-    'sym/misc/NE-592-1.sym'
-    );
-
-CALL AddSymbol(
-    '74182',
-    'sym/74/74182-1.sym'
-    );
-
-CALL AddSymbol(
-    'DIN41612C96',
-    'sym/connector/DIN41612C96-1.sym'
-    );
-
-CALL AddSymbol(
-    'SWITCH_DIP4',
-    'sym/switch/switch-dip4-1.sym'
-    );
-
-CALL AddSymbol(
-    'nand6',
-    'sym/vhdl/nand6-1.sym'
-    );
-
-CALL AddSymbol(
-    '4072',
-    'sym/4000/4072-2.sym'
-    );
-
-CALL AddSymbol(
-    'BATTERY',
-    'sym/analog/battery-1.sym'
-    );
-
-CALL AddSymbol(
-    '40192',
-    'sym/4000/40192-1.sym'
-    );
-
-CALL AddSymbol(
-    'NMOS_TRANSISTOR',
-    'sym/asic/asic-nmmv-1.sym'
-    );
-
-CALL AddSymbol(
-    '7472',
-    'sym/74/7472-1.sym'
-    );
-
-CALL AddSymbol(
-    'IRLZ24N',
-    'sym/transistor/IRLZ24N-1.sym'
-    );
-
-CALL AddSymbol(
-    'xor',
-    'sym/verilog/xor7-1.sym'
-    );
-
-CALL AddSymbol(
-    '4511',
-    'sym/4000/4511-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_36',
-    'sym/connector/connector36-2.sym'
-    );
-
-CALL AddSymbol(
-    '4010',
-    'sym/4000/4010-1.sym'
-    );
-
-CALL AddSymbol(
-    'XC2S100-6PQ208C',
-    'sym/xilinx/XC2S100-6PQ208C.sym'
-    );
-
-CALL AddSymbol(
-    '7421',
-    'sym/74/7421-2.sym'
-    );
-
-CALL AddSymbol(
-    'MAINS_CONNECTOR',
-    'sym/connector/mains-plug-1.sym'
-    );
-
-CALL AddSymbol(
-    'xnor',
-    'sym/verilog/xnor9-1.sym'
-    );
-
-CALL AddSymbol(
-    'none',
-    'sym/io/passive-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX3491',
-    'sym/maxim/max3491-1.sym'
-    );
-
-CALL AddSymbol(
-    '4502',
-    'sym/4000/4502-1.sym'
-    );
-
-CALL AddSymbol(
-    'SPLITTER',
-    'sym/rf/splitter-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX492',
-    'sym/maxim/max492-1.sym'
-    );
-
-CALL AddSymbol(
-    'LOOP_ANTENNA',
-    'sym/radio/loop_antenna-1.sym'
-    );
-
-CALL AddSymbol(
-    'SWITCAP-vcvs',
-    'sym/switcap/switcap-vcvs-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_12',
-    'sym/connector/connector12-2.sym'
-    );
-
-CALL AddSymbol(
-    '74HC373',
-    'sym/74/74HC373-1.sym'
-    );
-
-CALL AddSymbol(
-    '4032',
-    'sym/4000/4032-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAINS_CONNECTOR',
-    'sym/connector/mains-plug-2.sym'
-    );
-
-CALL AddSymbol(
-    'nand8',
-    'sym/vhdl/nand8-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX6674',
-    'sym/maxim/max6674-1.sym'
-    );
-
-CALL AddSymbol(
-    'DIN41617C13',
-    'sym/connector/DIN41617C13-1.sym'
-    );
-
-CALL AddSymbol(
-    'AT89C5132_TQFP',
-    'sym/micro/AT89C5132_TQFP-1.sym'
-    );
-
-CALL AddSymbol(
-    'POLARIZED_CAPACITOR',
-    'sym/analog/capacitor-3.sym'
-    );
-
-CALL AddSymbol(
-    'nand',
-    'sym/verilog/nand7-1.sym'
-    );
-
-CALL AddSymbol(
-    '4053',
-    'sym/4000/4053-2.sym'
-    );
-
-CALL AddSymbol(
-    'MAX1209',
-    'sym/maxim/max1209-1.sym'
-    );
-
-CALL AddSymbol(
-    'transformer',
-    'sym/analog/pwrxfmr-1.sym'
-    );
-
-CALL AddSymbol(
-    'DS1602',
-    'sym/national/DS1620-1.sym'
-    );
-
-CALL AddSymbol(
-    'xor5',
-    'sym/vhdl/xor5-1.sym'
-    );
-
-CALL AddSymbol(
-    'DIN41612C56',
-    'sym/connector/DIN41612C56-1.sym'
-    );
-
-CALL AddSymbol(
-    'LT1160',
-    'sym/linear/lt1160-1.sym'
-    );
-
-CALL AddSymbol(
-    '4073',
-    'sym/4000/4073-2.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_26',
-    'sym/connector/connector26-2.sym'
-    );
-
-CALL AddSymbol(
-    'ST7538',
-    'sym/st/ST7538-1.sym'
-    );
-
-CALL AddSymbol(
-    'NPN_TRANSISTOR',
-    'sym/analog/npn-3.sym'
-    );
-
-CALL AddSymbol(
-    '74154',
-    'sym/74/74154-2.sym'
-    );
-
-CALL AddSymbol(
-    'and',
-    'sym/verilog/and6-2.sym'
-    );
-
-CALL AddSymbol(
-    'HEADER34',
-    'sym/connector/header34-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX4636',
-    'sym/maxim/max4636-1.sym'
-    );
-
-CALL AddSymbol(
-    '74109',
-    'sym/74/74109-2.sym'
-    );
-
-CALL AddSymbol(
-    '74166',
-    'sym/74/74166-1.sym'
-    );
-
-CALL AddSymbol(
-    'vsin',
-    'sym/spice/vsin-1.sym'
-    );
-
-CALL AddSymbol(
-    '7493',
-    'sym/74/7493-1.sym'
-    );
-
-CALL AddSymbol(
-    'nor',
-    'sym/verilog/nor6-2.sym'
-    );
-
-CALL AddSymbol(
-    '7415',
-    'sym/74/7415-2.sym'
-    );
-
-CALL AddSymbol(
-    'xnor3',
-    'sym/vhdl/xnor3-1.sym'
-    );
-
-CALL AddSymbol(
-    'TRANSFORMER ',
-    'sym/analog/transformer-5.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_30',
-    'sym/connector/connector30-2.sym'
-    );
-
-CALL AddSymbol(
-    'AT90S2313',
-    'sym/micro/AT90S2313.sym'
-    );
-
-CALL AddSymbol(
-    'AT90S8535P',
-    'sym/micro/AT90S8535P-1.sym'
-    );
-
-CALL AddSymbol(
-    'LM741',
-    'sym/linear/lm741-1.sym'
-    );
-
-CALL AddSymbol(
-    '7805',
-    'sym/linear/lm7805-1.sym'
-    );
-
-CALL AddSymbol(
-    'XINGER4A1305-3',
-    'sym/rf/xinger-splitter-1.sym'
-    );
-
-CALL AddSymbol(
-    'and',
-    'sym/verilog/and8-2.sym'
-    );
-
-CALL AddSymbol(
-    '7432',
-    'sym/74/7432-3.sym'
-    );
-
-CALL AddSymbol(
-    'AD633JR',
-    'sym/linear/ad633JR-1.sym'
-    );
-
-CALL AddSymbol(
-    '74189',
-    'sym/74/74189-2.sym'
-    );
-
-CALL AddSymbol(
-    '74HCT4094',
-    'sym/74/74HCT4094-1.sym'
-    );
-
-CALL AddSymbol(
-    '40182',
-    'sym/4000/40182-1.sym'
-    );
-
-CALL AddSymbol(
-    'HCPL-4534',
-    'sym/opto/hcpl-4534-1.sym'
-    );
-
-CALL AddSymbol(
-    'OUTPUT',
-    'sym/io/output-1.sym'
-    );
-
-CALL AddSymbol(
-    'MSP430x41x',
-    'sym/micro/MSP430x41x.sym'
-    );
-
-CALL AddSymbol(
-    'cascade-transformer',
-    'sym/cascade/cascade-transformer-1.sym'
-    );
-
-CALL AddSymbol(
-    '74273',
-    'sym/74/74273-1.sym'
-    );
-
-CALL AddSymbol(
-    'GND',
-    'sym/power/vcc-orcad-circle-1.sym'
-    );
-
-CALL AddSymbol(
-    '7445',
-    'sym/74/7445-1.sym'
-    );
-
-CALL AddSymbol(
-    'xnor2',
-    'sym/vhdl/xnor2-1.sym'
-    );
-
-CALL AddSymbol(
-    '4055',
-    'sym/4000/4055-1.sym'
-    );
-
-CALL AddSymbol(
-    'CAPACITOR',
-    'sym/asic/asic-cap-1.sym'
-    );
-
-CALL AddSymbol(
-    'TLIN',
-    'sym/rf/txline-1.sym'
-    );
-
-CALL AddSymbol(
-    'SPEAKER',
-    'sym/analog/speaker-2.sym'
-    );
-
-CALL AddSymbol(
-    'MAX232',
-    'sym/maxim/max232-2.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_32',
-    'sym/connector/connector32-2.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_12',
-    'sym/connector/connector12-1.sym'
-    );
-
-CALL AddSymbol(
-    'nand',
-    'sym/verilog/nand2-2.sym'
-    );
-
-CALL AddSymbol(
-    '8254',
-    'sym/micro/8254-1.sym'
-    );
-
-CALL AddSymbol(
-    'vpulse',
-    'sym/spice/vpulse-1.sym'
-    );
-
-CALL AddSymbol(
-    '4043',
-    'sym/4000/4043-1.sym'
-    );
-
-CALL AddSymbol(
-    '7495',
-    'sym/74/7495-2.sym'
-    );
-
-CALL AddSymbol(
-    'OPAMP',
-    'sym/analog/inamp-1.sym'
-    );
-
-CALL AddSymbol(
-    'CURRENT_SOURCE',
-    'sym/analog/current-1.sym'
-    );
-
-CALL AddSymbol(
-    'HEADER50',
-    'sym/connector/header50-1.sym'
-    );
-
-CALL AddSymbol(
-    'LT1162',
-    'sym/linear/lt1162-1.sym'
-    );
-
-CALL AddSymbol(
-    '2N5245',
-    'sym/transistor/2N5245-1.sym'
-    );
-
-CALL AddSymbol(
-    'OPAD',
-    'sym/vhdl/opad-1.sym'
-    );
-
-CALL AddSymbol(
-    '27C2001',
-    'sym/memory/27C2001-1.sym'
-    );
-
-CALL AddSymbol(
-    'MC34063',
-    'sym/misc/MC34063-1.sym'
-    );
-
-CALL AddSymbol(
-    'DB15',
-    'sym/connector/DB15-1.sym'
-    );
-
-CALL AddSymbol(
-    'icl7660',
-    'sym/misc/icl7660-1.sym'
-    );
-
-CALL AddSymbol(
-    'LCC110',
-    'sym/switch/ssrelay-spdt-lcc110-1.sym'
-    );
-
-CALL AddSymbol(
-    'nand',
-    'sym/verilog/nand5-1.sym'
-    );
-
-CALL AddSymbol(
-    '7412',
-    'sym/74/7412-2.sym'
-    );
-
-CALL AddSymbol(
-    'RESISTORPACK_6',
-    'sym/analog/resistorpack6-1.sym'
-    );
-
-CALL AddSymbol(
-    'PIC16F877A',
-    'sym/micro/pic16F877A-1.sym'
-    );
-
-CALL AddSymbol(
-    '4042',
-    'sym/4000/4042-2.sym'
-    );
-
-CALL AddSymbol(
-    'nand',
-    'sym/verilog/nand8-1.sym'
-    );
-
-CALL AddSymbol(
-    'AM9128',
-    'sym/memory/am9128-1.sym'
-    );
-
-CALL AddSymbol(
-    '4008',
-    'sym/4000/4008-2.sym'
-    );
-
-CALL AddSymbol(
-    '7486',
-    'sym/74/7486-1.sym'
-    );
-
-CALL AddSymbol(
-    '4723',
-    'sym/4000/4723-1.sym'
-    );
-
-CALL AddSymbol(
-    '40101',
-    'sym/4000/40101-1.sym'
-    );
-
-CALL AddSymbol(
-    'NMOS_TRANSISTOR',
-    'sym/analog/nmos-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAC160',
-    'sym/misc/MAC160-1.sym'
-    );
-
-CALL AddSymbol(
-    '8086',
-    'sym/micro/8086-1.sym'
-    );
-
-CALL AddSymbol(
-    'NTC',
-    'sym/analog/ntc-1.sym'
-    );
-
-CALL AddSymbol(
-    '7409',
-    'sym/74/7409-1.sym'
-    );
-
-CALL AddSymbol(
-    '74193',
-    'sym/74/74193-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_3',
-    'sym/connector/connector3-1.sym'
-    );
-
-CALL AddSymbol(
-    'PNP_TRANSISTOR',
-    'sym/analog/pnp-1.sym'
-    );
-
-CALL AddSymbol(
-    '4019',
-    'sym/4000/4019-1.sym'
-    );
-
-CALL AddSymbol(
-    '4023',
-    'sym/4000/4023-1.sym'
-    );
-
-CALL AddSymbol(
-    'pad',
-    'sym/asicpads/pad_vdd.sym'
-    );
-
-CALL AddSymbol(
-    '4038',
-    'sym/4000/4038-1.sym'
-    );
-
-CALL AddSymbol(
-    'SWITCAP-options',
-    'sym/switcap/switcap-options-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_20',
-    'sym/connector/connector20-2.sym'
-    );
-
-CALL AddSymbol(
-    'SWITCAP-timing',
-    'sym/switcap/switcap-timing-1.sym'
-    );
-
-CALL AddSymbol(
-    'BLOCK',
-    'sym/verilog/block_pos-1.sym'
-    );
-
-CALL AddSymbol(
-    'PAL16L8',
-    'sym/pla/PAL16L8-1.sym'
-    );
-
-CALL AddSymbol(
-    'PIC12F675',
-    'sym/micro/pic12F675-2.sym'
-    );
-
-CALL AddSymbol(
-    'MAX4005',
-    'sym/maxim/max4005-1.sym'
-    );
-
-CALL AddSymbol(
-    'terminal',
-    'sym/connector/terminal-1.sym'
-    );
-
-CALL AddSymbol(
-    'PCF8591',
-    'sym/misc/PCF8591.sym'
-    );
-
-CALL AddSymbol(
-    '4022',
-    'sym/4000/4022-2.sym'
-    );
-
-CALL AddSymbol(
-    'XC2S200-6PQ208C',
-    'sym/xilinx/XC2S200-6PQ208C.sym'
-    );
-
-CALL AddSymbol(
-    'directive',
-    'sym/spice/gnucap-directive-1.sym'
-    );
-
-CALL AddSymbol(
-    '7818',
-    'sym/linear/lm7818-1.sym'
-    );
-
-CALL AddSymbol(
-    'AD633JN',
-    'sym/linear/ad633JN-1.sym'
-    );
-
-CALL AddSymbol(
-    'XC2S100-5PQ208C',
-    'sym/xilinx/XC2S100-5PQ208C.sym'
-    );
-
-CALL AddSymbol(
-    '4016',
-    'sym/4000/4016-2.sym'
-    );
-
-CALL AddSymbol(
-    'and',
-    'sym/verilog/and2-2.sym'
-    );
-
-CALL AddSymbol(
-    'or8',
-    'sym/vhdl/or8-1.sym'
-    );
-
-CALL AddSymbol(
-    'nand',
-    'sym/verilog/nand4-1.sym'
-    );
-
-CALL AddSymbol(
-    '74244',
-    'sym/74/74244-1.sym'
-    );
-
-CALL AddSymbol(
-    'DAC0808',
-    'sym/national/DAC0808-1.sym'
-    );
-
-CALL AddSymbol(
-    '7414',
-    'sym/74/7414-2.sym'
-    );
-
-CALL AddSymbol(
-    'MAX3223E',
-    'sym/maxim/max3223e-1.sym'
-    );
-
-CALL AddSymbol(
-    '7442',
-    'sym/74/7442-1.sym'
-    );
-
-CALL AddSymbol(
-    'DS26C32',
-    'sym/national/DS26C32-1.sym'
-    );
-
-CALL AddSymbol(
-    '7496',
-    'sym/74/7496-1.sym'
-    );
-
-CALL AddSymbol(
-    'pic16F876',
-    'sym/micro/pic16F876-1.sym'
-    );
-
-CALL AddSymbol(
-    'OPAD',
-    'sym/verilog/opad-1.sym'
-    );
-
-CALL AddSymbol(
-    'HFA1100',
-    'sym/misc/HFA1100-1.sym'
-    );
-
-CALL AddSymbol(
-    'GPIB',
-    'sym/connector/gpib-1.sym'
-    );
-
-CALL AddSymbol(
-    'pad',
-    'sym/asicpads/pad_pull_down.sym'
-    );
-
-CALL AddSymbol(
-    'vac',
-    'sym/spice/vac-1.sym'
-    );
-
-CALL AddSymbol(
-    'DS26C31',
-    'sym/national/DS26C31-1.sym'
-    );
-
-CALL AddSymbol(
-    'xor',
-    'sym/verilog/xor8-1.sym'
-    );
-
-CALL AddSymbol(
-    'AT90S8535_TQFP',
-    'sym/micro/AT90S8535_TQFP.sym'
-    );
-
-CALL AddSymbol(
-    'nor4',
-    'sym/vhdl/nor4-1.sym'
-    );
-
-CALL AddSymbol(
-    '7805',
-    'sym/linear/volt_reg_adj-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX1637',
-    'sym/maxim/max1637-1.sym'
-    );
-
-CALL AddSymbol(
-    'nor',
-    'sym/verilog/nor4-2.sym'
-    );
-
-CALL AddSymbol(
-    'an82527',
-    'sym/misc/AN82527.sym'
-    );
-
-CALL AddSymbol(
-    'xnor',
-    'sym/verilog/xnor7-1.sym'
-    );
-
-CALL AddSymbol(
-    '4051',
-    'sym/4000/4051-1.sym'
-    );
-
-CALL AddSymbol(
-    '4060',
-    'sym/4000/4060-1.sym'
-    );
-
-CALL AddSymbol(
-    '4043',
-    'sym/4000/4043-2.sym'
-    );
-
-CALL AddSymbol(
-    'max3226',
-    'sym/maxim/max3226-1.sym'
-    );
-
-CALL AddSymbol(
-    'or4',
-    'sym/vhdl/or4-1.sym'
-    );
-
-CALL AddSymbol(
-    'ADG619',
-    'sym/misc/ADG619-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX147',
-    'sym/maxim/max147-1.sym'
-    );
-
-CALL AddSymbol(
-    '4029',
-    'sym/4000/4029-1.sym'
-    );
-
-CALL AddSymbol(
-    '4011',
-    'sym/4000/4011-2.sym'
-    );
-
-CALL AddSymbol(
-    'LM317',
-    'sym/linear/lm317-1.sym'
-    );
-
-CALL AddSymbol(
-    '4094',
-    'sym/4000/4094-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX238',
-    'sym/maxim/max238-1.sym'
-    );
-
-CALL AddSymbol(
-    'MC3487',
-    'sym/misc/mc3487-1.sym'
-    );
-
-CALL AddSymbol(
-    '74151',
-    'sym/74/74151-2.sym'
-    );
-
-CALL AddSymbol(
-    '74HCT05',
-    'sym/74/74HCT05-1.sym'
-    );
-
-CALL AddSymbol(
-    'LCD',
-    'sym/io/LCD-1.sym'
-    );
-
-CALL AddSymbol(
-    '8031',
-    'sym/micro/8031.sym'
-    );
-
-CALL AddSymbol(
-    'cascade-defaults-top',
-    'sym/cascade/cascade-defaults-2.sym'
-    );
-
-CALL AddSymbol(
-    'XC2S100-5PQ208I',
-    'sym/xilinx/XC2S100-5PQ208I.sym'
-    );
-
-CALL AddSymbol(
-    'MAX4429',
-    'sym/maxim/max4429-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_4',
-    'sym/connector/connector4-1.sym'
-    );
-
-CALL AddSymbol(
-    '7430',
-    'sym/74/7430-1.sym'
-    );
-
-CALL AddSymbol(
-    'none',
-    'sym/io/io-1.sym'
-    );
-
-CALL AddSymbol(
-    '4042',
-    'sym/4000/4042-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_16',
-    'sym/connector/connector16-2.sym'
-    );
-
-CALL AddSymbol(
-    'ULN2003',
-    'sym/transistor/ULN2003-1.sym'
-    );
-
-CALL AddSymbol(
-    '40107',
-    'sym/4000/40107-1.sym'
-    );
-
-CALL AddSymbol(
-    '74377',
-    'sym/74/74377-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX12554',
-    'sym/maxim/max12554-1.sym'
-    );
-
-CALL AddSymbol(
-    'ds1307',
-    'sym/maxim/DS1307-1.sym'
-    );
-
-CALL AddSymbol(
-    'HEADER40',
-    'sym/connector/header40-2.sym'
-    );
-
-CALL AddSymbol(
-    '4516',
-    'sym/4000/4516-1.sym'
-    );
-
-CALL AddSymbol(
-    'BNC',
-    'sym/connector/BNC-1.sym'
-    );
-
-CALL AddSymbol(
-    'MC68HC811E2FN',
-    'sym/micro/mc68hc811e2fn-1.sym'
-    );
-
-CALL AddSymbol(
-    'or',
-    'sym/verilog/or9-2.sym'
-    );
-
-CALL AddSymbol(
-    'DB25',
-    'sym/connector/DB25-2.sym'
-    );
-
-CALL AddSymbol(
-    '7812',
-    'sym/linear/lm7812-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX489',
-    'sym/maxim/max489-1.sym'
-    );
-
-CALL AddSymbol(
-    'SPICE-vcvs',
-    'sym/spice/vcvs-1.sym'
-    );
-
-CALL AddSymbol(
-    'cascade-amp',
-    'sym/cascade/cascade-amp-1.sym'
-    );
-
-CALL AddSymbol(
-    '7410',
-    'sym/74/7410-2.sym'
-    );
-
-CALL AddSymbol(
-    'XINGER1A1305-20',
-    'sym/rf/xinger-coupler-1.sym'
-    );
-
-CALL AddSymbol(
-    'AT90S8535',
-    'sym/micro/AT90S8535.sym'
-    );
-
-CALL AddSymbol(
-    'INPUT',
-    'sym/io/in-1.sym'
-    );
-
-CALL AddSymbol(
-    'or',
-    'sym/verilog/or6-1.sym'
-    );
-
-CALL AddSymbol(
-    'MC100ELT23',
-    'sym/ecl/MC100ELT23-2.sym'
-    );
-
-CALL AddSymbol(
-    'and2',
-    'sym/vhdl/and2-1.sym'
-    );
-
-CALL AddSymbol(
-    'BAV70LT1',
-    'sym/diode/bav70lt1-1.sym'
-    );
-
-CALL AddSymbol(
-    'SLA7024M',
-    'sym/linear/SLA7024M.sym'
-    );
-
-CALL AddSymbol(
-    'DS2890',
-    'sym/national/DS2890_TO92-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX1588',
-    'sym/maxim/max1588-1.sym'
-    );
-
-CALL AddSymbol(
-    'Si9986',
-    'sym/misc/Si9986.sym'
-    );
-
-CALL AddSymbol(
-    'DB9',
-    'sym/connector/DB9-1.sym'
-    );
-
-CALL AddSymbol(
-    '4000',
-    'sym/4000/4000-2.sym'
-    );
-
-CALL AddSymbol(
-    '74163',
-    'sym/74/74163-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_11',
-    'sym/connector/connector11-2.sym'
-    );
-
-CALL AddSymbol(
-    'or5',
-    'sym/vhdl/or5-1.sym'
-    );
-
-CALL AddSymbol(
-    '4014',
-    'sym/4000/4014-1.sym'
-    );
-
-CALL AddSymbol(
-    'LM2822M',
-    'sym/linear/lm2822m-1.sym'
-    );
-
-CALL AddSymbol(
-    'pad',
-    'sym/asicpads/pad_no_esd.sym'
-    );
-
-CALL AddSymbol(
-    'DIODE',
-    'sym/asic/asic-diode-1.sym'
-    );
-
-CALL AddSymbol(
-    '40175',
-    'sym/4000/40175-1.sym'
-    );
-
-CALL AddSymbol(
-    'LSI11BUS',
-    'sym/dec/LSI11BUS-1.sym'
-    );
-
-CALL AddSymbol(
-    'HEADER26',
-    'sym/connector/header26-1.sym'
-    );
-
-CALL AddSymbol(
-    'pad',
-    'sym/asicpads/pad_in.sym'
-    );
-
-CALL AddSymbol(
-    'MAX232',
-    'sym/maxim/max232-1.sym'
-    );
-
-CALL AddSymbol(
-    '4072',
-    'sym/4000/4072-1.sym'
-    );
-
-CALL AddSymbol(
-    '4522',
-    'sym/4000/4522-1.sym'
-    );
-
-CALL AddSymbol(
-    'PNP_TRANSISTOR',
-    'sym/spice/spice-pnp-1.sym'
-    );
-
-CALL AddSymbol(
-    'XINGER11305-3',
-    'sym/rf/xinger-hybrid-1.sym'
-    );
-
-CALL AddSymbol(
-    'or',
-    'sym/verilog/or7-1.sym'
-    );
-
-CALL AddSymbol(
-    '74138',
-    'sym/74/74138-1.sym'
-    );
-
-CALL AddSymbol(
-    'or2',
-    'sym/vhdl/or2-1.sym'
-    );
-
-CALL AddSymbol(
-    'HEADER20',
-    'sym/connector/header20-3.sym'
-    );
-
-CALL AddSymbol(
-    'SWITCAP-vsrc',
-    'sym/switcap/switcap-vsrc-1.sym'
-    );
-
-CALL AddSymbol(
-    'DS2450',
-    'sym/micro/DS2450-1.sym'
-    );
-
-CALL AddSymbol(
-    'BasicStamp2',
-    'sym/micro/basicstamp-1.sym'
-    );
-
-CALL AddSymbol(
-    'NPN_TRANSISTOR',
-    'sym/spice/gnucap-npn-1.sym'
-    );
-
-CALL AddSymbol(
-    'AT-1XX',
-    'sym/rf/at-1xx.sym'
-    );
-
-CALL AddSymbol(
-    'NMOS_TRANSISTOR',
-    'sym/asic/asic-nmv-1.sym'
-    );
-
-CALL AddSymbol(
-    '3TRI',
-    'sym/misc/3tri-1.sym'
-    );
-
-CALL AddSymbol(
-    '4513',
-    'sym/4000/4513-1.sym'
+    'XC2S150-5PQ208I.sym'
     );
 
 CALL AddSymbol(
     'BC182',
-    'sym/transistor/BC182-1.sym'
+    'BC182-1.sym'
     );
 
 CALL AddSymbol(
-    'TESTPOINT',
-    'sym/analog/testpt-1.sym'
+    'MAX1211',
+    'max1211-1.sym'
     );
 
 CALL AddSymbol(
-    'CONNECTOR_8',
-    'sym/connector/connector8-1.sym'
+    'darlington, NPN',
+    'darlington_NPN_PNP-1.sym'
     );
 
 CALL AddSymbol(
-    'pad',
-    'sym/asicpads/pad_out.sym'
+    'TOKO4DFA',
+    'TOKO4DFA-1.sym'
     );
 
 CALL AddSymbol(
-    'MSP430x12x2',
-    'sym/micro/MSP430x12x2.sym'
+    'SPICE-ccvs',
+    'ccvs-1.sym'
     );
 
 CALL AddSymbol(
-    'MAX1011',
-    'sym/maxim/max1011-2.sym'
+    '74257',
+    '74257-1.sym'
     );
 
 CALL AddSymbol(
-    '7457',
-    'sym/74/7457-1.sym'
+    'xnor',
+    'xnor2-1.sym'
     );
 
 CALL AddSymbol(
-    'FILTER',
-    'sym/rf/filter-1.sym'
+    'nor9',
+    'nor9-1.sym'
     );
 
 CALL AddSymbol(
-    '74196',
-    'sym/74/74196-1.sym'
+    'LOOP_ANTENNA',
+    'loop_antenna-2.sym'
     );
 
 CALL AddSymbol(
-    'PMOS_TRANSISTOR',
-    'sym/asic/asic-pmos-1.sym'
+    'model',
+    'gnucap-model-1.sym'
     );
 
 CALL AddSymbol(
-    'LM2941T',
-    'sym/linear/lm2941-1.sym'
+    '40163',
+    '40163-1.sym'
     );
 
 CALL AddSymbol(
-    'XC2S200-5PQ208I',
-    'sym/xilinx/XC2S200-5PQ208I.sym'
+    'SWITCAP-vcvs',
+    'switcap-vcvs-2.sym'
     );
 
 CALL AddSymbol(
-    'SMDA05',
-    'sym/diode/smda05-1.sym'
+    'or',
+    'or3-2.sym'
     );
 
 CALL AddSymbol(
-    '74150',
-    'sym/74/74150-1.sym'
+    'xor9',
+    'xor9-1.sym'
     );
 
 CALL AddSymbol(
-    'MC10E137',
-    'sym/ecl/MC10E137-2.sym'
+    '40117',
+    '40117-1.sym'
     );
 
 CALL AddSymbol(
-    'DS75176',
-    'sym/national/DS75176-1.sym'
+    'MAX1480A',
+    'max1480A-1.sym'
     );
 
 CALL AddSymbol(
-    'transformer',
-    'sym/analog/transformer-1.sym'
+    'RESISTORPACK_11',
+    'resistorpack11-1.sym'
     );
 
 CALL AddSymbol(
-    'PCM2702E',
-    'sym/misc/PCM2702E-1.sym'
+    'PIC12F675',
+    'pic12F675-1.sym'
     );
 
 CALL AddSymbol(
-    'HCPL4502',
-    'sym/opto/HCPL4502-1.sym'
+    'sc52-11',
+    'sc52-11-1.sym'
     );
 
 CALL AddSymbol(
-    'and8',
-    'sym/vhdl/and8-1.sym'
+    'OUTPUT',
+    'out-1.sym'
     );
 
 CALL AddSymbol(
-    'nand',
-    'sym/verilog/nand6-1.sym'
+    '7885',
+    'lm7885-1.sym'
     );
 
 CALL AddSymbol(
-    'DIN41612C56',
-    'sym/connector/DIN41612C56-2.sym'
+    'PORT2',
+    'port2-1.sym'
     );
 
 CALL AddSymbol(
-    '7497',
-    'sym/74/7497-2.sym'
+    'cascade-source',
+    'cascade-source-1.sym'
     );
 
 CALL AddSymbol(
-    'MAX1674',
-    'sym/maxim/max1674-1.sym'
+    '8255A',
+    '8255A-1.sym'
     );
 
 CALL AddSymbol(
-    'JUMPER',
-    'sym/connector/jumper-1.sym'
-    );
-
-CALL AddSymbol(
-    'ZENER_DIODE',
-    'sym/diode/zener-2.sym'
-    );
-
-CALL AddSymbol(
-    'VARIABLE_RESISTOR',
-    'sym/analog/resistor-variable-2.sym'
-    );
-
-CALL AddSymbol(
-    'MCT9001',
-    'sym/opto/mct9001-1.sym'
-    );
-
-CALL AddSymbol(
-    'RESISTOR',
-    'sym/analog/resistor-1.sym'
-    );
-
-CALL AddSymbol(
-    'MAX12529',
-    'sym/maxim/max12529-1.sym'
-    );
-
-CALL AddSymbol(
-    'DS80C320',
-    'sym/micro/DS80C320.sym'
+    'MC68HC912B32',
+    'mc68hc912b32-1.sym'
     );
 
 CALL AddSymbol(
     'nor',
-    'sym/verilog/nor4-1.sym'
-    );
-
-CALL AddSymbol(
-    'MSP430x15/6x',
-    'sym/micro/MSP430x15-6x.sym'
-    );
-
-CALL AddSymbol(
-    'SPEAKER',
-    'sym/analog/speaker-1.sym'
-    );
-
-CALL AddSymbol(
-    '74121',
-    'sym/74/74121-1.sym'
+    'nor9-1.sym'
     );
 
 CALL AddSymbol(
     'LED',
-    'sym/diode/led-2.sym'
+    'leddual-2.sym'
     );
 
 CALL AddSymbol(
-    'GLOW_LAMP',
-    'sym/analog/glow-lamp-1.sym'
+    'NPN_TRANSISTOR',
+    'npn-1.sym'
+    );
+
+CALL AddSymbol(
+    'IRF1010N',
+    'IRF1010N-1.sym'
+    );
+
+CALL AddSymbol(
+    'or7',
+    'or7-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_6',
+    'connector6-2.sym'
+    );
+
+CALL AddSymbol(
+    'MAINS_ENTRY',
+    'mains-entry-1.sym'
+    );
+
+CALL AddSymbol(
+    '74520',
+    '74520-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX507',
+    'max507-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_16',
+    'connector16-1.sym'
+    );
+
+CALL AddSymbol(
+    '40195',
+    '40195-1.sym'
+    );
+
+CALL AddSymbol(
+    '4N29',
+    'K3020P-1.sym'
+    );
+
+CALL AddSymbol(
+    '24Cxx',
+    '24Cxx-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_26',
+    'connector26-1.sym'
+    );
+
+CALL AddSymbol(
+    'RESISTORPACK_7',
+    'resistorpack7-2.sym'
+    );
+
+CALL AddSymbol(
+    '74145',
+    '74145-1.sym'
+    );
+
+CALL AddSymbol(
+    '74160',
+    '74160-1.sym'
+    );
+
+CALL AddSymbol(
+    'MSP430x44x',
+    'MSP430x44x.sym'
+    );
+
+CALL AddSymbol(
+    'MCX',
+    'MCX-1.sym'
+    );
+
+CALL AddSymbol(
+    'DIN41612C48',
+    'DIN41612C48-2.sym'
+    );
+
+CALL AddSymbol(
+    '4024',
+    '4024-1.sym'
+    );
+
+CALL AddSymbol(
+    '74190',
+    '74190-1.sym'
+    );
+
+CALL AddSymbol(
+    'AOP-Standard',
+    'aop-spice-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_25',
+    'connector25-2.sym'
+    );
+
+CALL AddSymbol(
+    'VOLTAGE_SOURCE',
+    'voltage-2.sym'
+    );
+
+CALL AddSymbol(
+    '74520',
+    '74520-2.sym'
+    );
+
+CALL AddSymbol(
+    '74192',
+    '74192-1.sym'
+    );
+
+CALL AddSymbol(
+    '7432',
+    '7432-1.sym'
+    );
+
+CALL AddSymbol(
+    '4067',
+    '4067-1.sym'
     );
 
 CALL AddSymbol(
     'DIODE',
-    'sym/diode/diode-1.sym'
+    'zener-4.sym'
     );
 
 CALL AddSymbol(
-    '7405',
-    'sym/74/7405-2.sym'
+    '4062',
+    '4062-1.sym'
     );
 
 CALL AddSymbol(
-    'PIC16C505',
-    'sym/micro/pic16c505-1.sym'
+    'IPS521',
+    'ips521-1.sym'
     );
 
 CALL AddSymbol(
-    'CONNECTOR_28',
-    'sym/connector/connector28-2.sym'
+    '40245',
+    '40245-1.sym'
     );
 
 CALL AddSymbol(
-    '74169',
-    'sym/74/74169-1.sym'
+    'xnor',
+    'xnor8-1.sym'
     );
 
 CALL AddSymbol(
-    'cascade-mixer',
-    'sym/cascade/cascade-mixer-1.sym'
+    '4006',
+    '4006-2.sym'
     );
 
 CALL AddSymbol(
-    '40100',
-    'sym/4000/40100-1.sym'
+    'MC100ELT23',
+    'MC100ELT23-1.sym'
     );
 
 CALL AddSymbol(
-    'MBR1545CT',
-    'sym/diode/mbr1545ct-1.sym'
+    '40103',
+    '40103-1.sym'
     );
 
 CALL AddSymbol(
-    'RESISTOR',
-    'sym/asic/asic-res-2.sym'
+    'CONNECTOR_37',
+    'connector37-2.sym'
+    );
+
+CALL AddSymbol(
+    'DB9',
+    'DB9-2.sym'
+    );
+
+CALL AddSymbol(
+    'DIN41617C31',
+    'DIN41617C31-1.sym'
+    );
+
+CALL AddSymbol(
+    'VARIABLE_CAPACITOR',
+    'capacitor-variable-1.sym'
+    );
+
+CALL AddSymbol(
+    '4527',
+    '4527-1.sym'
+    );
+
+CALL AddSymbol(
+    'NPN_TRANSISTOR_IGBT',
+    'npn-IGBT-1.sym'
+    );
+
+CALL AddSymbol(
+    'VTXO',
+    'txo-1.sym'
+    );
+
+CALL AddSymbol(
+    'photodiode',
+    'photodiode-1.sym'
+    );
+
+CALL AddSymbol(
+    '74684',
+    '74684-1.sym'
+    );
+
+CALL AddSymbol(
+    'LM339',
+    'lm339-1.sym'
+    );
+
+CALL AddSymbol(
+    'xnor6',
+    'xnor6-1.sym'
+    );
+
+CALL AddSymbol(
+    'HCPL-2430',
+    'hcpl-2430-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX535',
+    'max535-1.sym'
+    );
+
+CALL AddSymbol(
+    '4071',
+    '4071-1.sym'
+    );
+
+CALL AddSymbol(
+    'RESISTORPACK_5',
+    'resistorpack5-1.sym'
+    );
+
+CALL AddSymbol(
+    'XC2S50-6PQ208C',
+    'XC2S50-6PQ208C.sym'
+    );
+
+CALL AddSymbol(
+    '74574',
+    '74574-1.sym'
+    );
+
+CALL AddSymbol(
+    'LM555',
+    'lm555-1.sym'
+    );
+
+CALL AddSymbol(
+    'ISP2032',
+    'isp2032-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX135',
+    'max135-1.sym'
+    );
+
+CALL AddSymbol(
+    'XC95108-PC84',
+    'XC95108-PC84.sym'
+    );
+
+CALL AddSymbol(
+    'DRC_Directive',
+    'nc-bottom-1.sym'
+    );
+
+CALL AddSymbol(
+    'RESISTORPACK_8',
+    'resistorpack8-1.sym'
+    );
+
+CALL AddSymbol(
+    'ADM707',
+    'adm707.sym'
+    );
+
+CALL AddSymbol(
+    'LM2576T',
+    'lm2576T-1.sym'
+    );
+
+CALL AddSymbol(
+    '7404',
+    '7404-2.sym'
+    );
+
+CALL AddSymbol(
+    'VARIABLE_CAPACITOR',
+    'capacitor-variable-2.sym'
+    );
+
+CALL AddSymbol(
+    'vexp',
+    'vexp-1.sym'
     );
 
 CALL AddSymbol(
     'nor',
-    'sym/verilog/nor3-2.sym'
+    'nor2-2.sym'
     );
 
 CALL AddSymbol(
-    'TFDS4500',
-    'sym/opto/tfds4500-1.sym'
+    'OPAD',
+    'opad6-1.sym'
     );
 
 CALL AddSymbol(
-    '2S2K3',
-    'sym/transistor/2S2K3-1.sym'
+    'MAX101A',
+    'max101A-1.sym'
     );
 
 CALL AddSymbol(
-    'DUAL_GATE_NMOS_TRANSISTOR',
-    'sym/transistor/dgnmos-1.sym'
+    'AT89C5131_PLCC',
+    'AT89C5131_PLCC-1.sym'
     );
 
 CALL AddSymbol(
-    'CRYSTAL',
-    'sym/analog/crystal-1.sym'
+    'CLIN',
+    'coupler-1.sym'
     );
 
 CALL AddSymbol(
-    'DIN41612C96',
-    'sym/connector/DIN41612C96-2.sym'
+    'pic16F877',
+    'pic16F877-1.sym'
     );
 
 CALL AddSymbol(
-    'options',
-    'sym/spice/spice-options-1.sym'
+    '7411',
+    '7411-2.sym'
     );
 
 CALL AddSymbol(
-    '4075',
-    'sym/4000/4075-1.sym'
+    '581000',
+    '581000-1.sym'
     );
 
 CALL AddSymbol(
-    '4510',
-    'sym/4000/4510-1.sym'
+    'nor',
+    'nor6-1.sym'
     );
 
 CALL AddSymbol(
-    'nand',
-    'sym/verilog/nand5-2.sym'
+    'SWITCH_PUSHBUTTON_NO',
+    'switch-pushbutton-no-1.sym'
     );
 
 CALL AddSymbol(
-    '7446',
-    'sym/74/7446-1.sym'
+    'AT90S8535_DIP',
+    'AT90S8535_DIP.sym'
     );
 
 CALL AddSymbol(
-    'TC5516AP',
-    'sym/misc/TC5516AP-1.sym'
+    '4070',
+    '4070-1.sym'
     );
 
 CALL AddSymbol(
-    'RF2155',
-    'sym/rf/rf2155-1.sym'
+    'CONNECTOR_8',
+    'connector8-2.sym'
     );
 
 CALL AddSymbol(
-    'CONNECTOR_15',
-    'sym/connector/connector15-1.sym'
+    'VOLTAGE_SOURCE',
+    'voltmeter-1.sym'
     );
 
 CALL AddSymbol(
-    '7401',
-    'sym/74/7401-2.sym'
+    '7412',
+    '7412-1.sym'
     );
 
 CALL AddSymbol(
-    '4059',
-    'sym/4000/4059-1.sym'
+    'CONNECTOR_23',
+    'connector23-2.sym'
     );
 
 CALL AddSymbol(
-    '7806',
-    'sym/linear/lm7806-1.sym'
+    '74373',
+    '74373-1.sym'
     );
 
 CALL AddSymbol(
-    'ADC0820',
-    'sym/maxim/adc0820-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_5',
-    'sym/connector/connector5-1.sym'
-    );
-
-CALL AddSymbol(
-    '7478',
-    'sym/74/7478-1.sym'
-    );
-
-CALL AddSymbol(
-    'HIP4080A',
-    'sym/misc/HIP4080A-1.sym'
-    );
-
-CALL AddSymbol(
-    'OMRON_G2R-24-DC5',
-    'sym/relay/omron_g2r_24_dc5.sym'
-    );
-
-CALL AddSymbol(
-    '4724',
-    'sym/4000/4724-1.sym'
-    );
-
-CALL AddSymbol(
-    'MICROPHONE',
-    'sym/analog/microphone-1.sym'
-    );
-
-CALL AddSymbol(
-    '40106',
-    'sym/4000/40106-1.sym'
-    );
-
-CALL AddSymbol(
-    'CONNECTOR_27',
-    'sym/connector/connector27-2.sym'
-    );
-
-CALL AddSymbol(
-    '74164',
-    'sym/74/74164-2.sym'
-    );
-
-CALL AddSymbol(
-    '7447',
-    'sym/74/7447-1.sym'
-    );
-
-CALL AddSymbol(
-    'BC557',
-    'sym/transistor/BC557-1.sym'
-    );
-
-CALL AddSymbol(
-    'IF_TRANSFORMER',
-    'sym/radio/if_trans_aircore-1.sym'
-    );
-
-CALL AddSymbol(
-    'nand5',
-    'sym/vhdl/nand5-1.sym'
-    );
-
-CALL AddSymbol(
-    '74139',
-    'sym/74/74139-3.sym'
-    );
-
-CALL AddSymbol(
-    'and',
-    'sym/verilog/and8-1.sym'
-    );
-
-CALL AddSymbol(
-    'PMOS_TRANSISTOR',
-    'sym/analog/pmos-1.sym'
-    );
-
-CALL AddSymbol(
-    '74165',
-    'sym/74/74165-1.sym'
-    );
-
-CALL AddSymbol(
-    'ZENER_DIODE',
-    'sym/diode/zener-3.sym'
-    );
-
-CALL AddSymbol(
-    'OSC',
-    'sym/misc/osc-3.sym'
-    );
-
-CALL AddSymbol(
-    '7407',
-    'sym/74/7407-1.sym'
+    '74173',
+    '74173-1.sym'
     );
 
 CALL AddSymbol(
     'CONNECTOR_19',
-    'sym/connector/connector19-2.sym'
+    'connector19-1.sym'
     );
 
 CALL AddSymbol(
-    'LM319',
-    'sym/linear/lm319-1.sym'
+    'MAX7852',
+    'max7652-1.sym'
     );
 
 CALL AddSymbol(
-    'nor',
-    'sym/verilog/nor7-1.sym'
+    '74191',
+    '74191-2.sym'
     );
 
 CALL AddSymbol(
-    '4098',
-    'sym/4000/4098-1.sym'
+    'LM135',
+    'lm135-1.sym'
     );
 
 CALL AddSymbol(
-    '2N3904',
-    'sym/transistor/2N3904-1.sym'
+    'IPS021',
+    'ips021-1.sym'
     );
 
 CALL AddSymbol(
-    'XC2S150-5PQ208C',
-    'sym/xilinx/XC2S150-5PQ208C.sym'
+    'MC10E137',
+    'MC10E137-1.sym'
     );
 
 CALL AddSymbol(
-    'MC68HC812A4',
-    'sym/micro/mc68hc812a4-1.sym'
+    'or',
+    'or9-1.sym'
     );
 
 CALL AddSymbol(
-    'nand',
-    'sym/verilog/nand7-2.sym'
+    '7401',
+    '7401-1.sym'
     );
 
 CALL AddSymbol(
-    '74240',
-    'sym/74/74240-1.sym'
+    '4021',
+    '4021-2.sym'
     );
 
 CALL AddSymbol(
-    'bridge',
-    'sym/analog/bridge-1.sym'
+    'DS1602',
+    'DS1602-1.sym'
     );
 
 CALL AddSymbol(
-    'a3967lsb',
-    'sym/allegro/3967-1.sym'
+    'ADC0831',
+    'ADC0831-1.sym'
     );
 
 CALL AddSymbol(
-    '2N2222',
-    'sym/transistor/2N2222-1.sym'
+    'ATmega8',
+    'ATmega8-1.sym'
     );
 
 CALL AddSymbol(
-    'TRANSFORMER',
-    'sym/analog/transformer-2.sym'
+    'CNY17',
+    'CNY17-1.sym'
     );
 
 CALL AddSymbol(
-    '4069UB',
-    'sym/4000/4069-3.sym'
+    'BC307',
+    'BC307-1.sym'
     );
 
 CALL AddSymbol(
-    '40162',
-    'sym/4000/40162-1.sym'
+    '74123',
+    '74123-2.sym'
     );
 
 CALL AddSymbol(
-    '74194',
-    'sym/74/74194-1.sym'
+    '4012',
+    '4012-1.sym'
     );
 
 CALL AddSymbol(
-    'HEADER50',
-    'sym/connector/header50-3.sym'
+    'MC13175',
+    'mc13175-1.sym'
     );
 
 CALL AddSymbol(
-    '7474',
-    'sym/74/7474-3.sym'
+    'or',
+    'or6-2.sym'
     );
 
 CALL AddSymbol(
-    'DIN41617C15',
-    'sym/connector/DIN41617C15-1.sym'
+    'SWITCH_DIP6',
+    'switch-dip6-1.sym'
     );
 
 CALL AddSymbol(
-    'LED',
-    'sym/analog/led-1.sym'
+    'DIODE',
+    'diode-3.sym'
     );
 
 CALL AddSymbol(
-    '74688',
-    'sym/74/74688-1.sym'
+    'CONNECTOR_21',
+    'connector21-2.sym'
     );
 
 CALL AddSymbol(
-    '4015',
-    'sym/4000/4015-1.sym'
+    'HEADER3',
+    'header3-1.sym'
     );
 
 CALL AddSymbol(
-    'Atmega64',
-    'sym/micro/ATmega64-1.sym'
+    'ADM202',
+    'adm202-2.sym'
     );
 
 CALL AddSymbol(
-    'PWRJACK',
-    'sym/connector/pwrjack-1.sym'
+    '2N3055',
+    '2N3055-1.sym'
     );
 
 CALL AddSymbol(
-    'PAL20X8',
-    'sym/pla/PAL20X8-1.sym'
+    'xnor',
+    'xnor5-1.sym'
     );
 
 CALL AddSymbol(
-    '4582',
-    'sym/4000/4582-1.sym'
+    'xnor5',
+    'xnor5-1.sym'
     );
 
 CALL AddSymbol(
-    'IPS3310',
-    'sym/transistor/ips3310-1.sym'
+    'nand4',
+    'nand4-1.sym'
     );
 
 CALL AddSymbol(
-    'FUSE',
-    'sym/analog/fuse-2.sym'
+    'ATmega161_DIP',
+    'ATmega161_DIP.sym'
     );
 
 CALL AddSymbol(
-    'PAL12H6',
-    'sym/pla/PAL12H6-1.sym'
+    'DS26C32',
+    'DS26C32-2.sym'
     );
 
 CALL AddSymbol(
-    'LM2902',
-    'sym/linear/lm2902-1.sym'
+    '7473',
+    '7473-1.sym'
     );
 
 CALL AddSymbol(
-    'CONNECTOR_10',
-    'sym/connector/connector10-2.sym'
+    'not',
+    'not-1.sym'
     );
 
 CALL AddSymbol(
-    '40105',
-    'sym/4000/40105-1.sym'
+    '74175',
+    '74175-1.sym'
     );
 
 CALL AddSymbol(
-    'PMOS_TRANSISTOR',
-    'sym/asic/asic-pmmv-1.sym'
+    'ST39SF020A',
+    'ST39SF020A-1.sym'
     );
 
 CALL AddSymbol(
-    '74299',
-    'sym/74/74299-1.sym'
+    'LORLIN-12pos-1com',
+    'switch-LORLIN-12pos-1com-1.sym'
     );
 
 CALL AddSymbol(
-    '74151',
-    'sym/74/74151-1.sym'
+    'MAX1482',
+    'max1482-1.sym'
     );
 
 CALL AddSymbol(
-    'AD633JN',
-    'sym/linear/ad633JN-2.sym'
+    'LP2954IT',
+    'lp2954IT-1.sym'
     );
 
 CALL AddSymbol(
-    'MAX664',
-    'sym/maxim/max664-1.sym'
+    '4063',
+    '4063-1.sym'
     );
 
 CALL AddSymbol(
-    'lt1108',
-    'sym/linear/lt1108-1.sym'
+    'LTP-757-G',
+    'ltp-757g-1.sym'
     );
 
 CALL AddSymbol(
-    'ULN2801A',
-    'sym/transistor/ULN2801A-1.sym'
+    'and5',
+    'and5-1.sym'
     );
 
 CALL AddSymbol(
-    'NMOS_TRANSISTOR',
-    'sym/asic/asic-nhv-1.sym'
+    'HEADER22',
+    'header22-1.sym'
     );
 
 CALL AddSymbol(
-    '4068',
-    'sym/4000/4068-1.sym'
+    '9602',
+    '9602-2.sym'
+    );
+
+CALL AddSymbol(
+    'TL062',
+    'tl062-1.sym'
+    );
+
+CALL AddSymbol(
+    'LM324',
+    'lm324-1.sym'
+    );
+
+CALL AddSymbol(
+    'MSP430x12x2',
+    'MSP430x12x.sym'
+    );
+
+CALL AddSymbol(
+    'PIC18F242',
+    'pic18F242-1.sym'
+    );
+
+CALL AddSymbol(
+    'xor6',
+    'xor6-1.sym'
+    );
+
+CALL AddSymbol(
+    'RESISTORPACK_9',
+    'resistorpack9-1.sym'
+    );
+
+CALL AddSymbol(
+    'TEC4x3',
+    'TEC4x3-1.sym'
+    );
+
+CALL AddSymbol(
+    'DC319',
+    'DC319-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX12528',
+    'max12528-1.sym'
+    );
+
+CALL AddSymbol(
+    '7422',
+    '7422-2.sym'
+    );
+
+CALL AddSymbol(
+    'and',
+    'and9-2.sym'
+    );
+
+CALL AddSymbol(
+    'MC12429',
+    'MC12429-1.sym'
+    );
+
+CALL AddSymbol(
+    'xor8',
+    'xor8-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_38',
+    'connector38-2.sym'
+    );
+
+CALL AddSymbol(
+    '7402',
+    '7402-1.sym'
     );
 
 CALL AddSymbol(
     'Atmega128',
-    'sym/micro/ATmega128-3.sym'
+    'ATmega128-1.sym'
     );
 
 CALL AddSymbol(
-    'BATTERY',
-    'sym/analog/battery-2.sym'
+    'VARIABLE_RESISTOR',
+    'pot-2.sym'
     );
 
 CALL AddSymbol(
-    '4528',
-    'sym/4000/4528-1.sym'
+    'nand3',
+    'nand3-1.sym'
     );
 
 CALL AddSymbol(
-    'XC2S30-5PQ208C',
-    'sym/xilinx/XC2S30-5PQ208C.sym'
+    '4011',
+    '4011-1.sym'
     );
 
 CALL AddSymbol(
-    '4030',
-    'sym/4000/4030-1.sym'
+    '4020',
+    '4020-1.sym'
     );
 
 CALL AddSymbol(
-    'INDUCTOR',
-    'sym/analog/inductor-dot-1.sym'
+    '4081',
+    '4081-1.sym'
     );
 
 CALL AddSymbol(
-    'PNP_TRANSISTOR',
-    'sym/analog/pnp-2.sym'
+    'PIC16F877A',
+    'pic16F877A-1.sym'
     );
 
 CALL AddSymbol(
-    'SPICE-nullor',
-    'sym/spice/nullor-1.sym'
+    '74161',
+    '74161-2.sym'
+    );
+
+CALL AddSymbol(
+    'si9200',
+    'si9200-1.sym'
+    );
+
+CALL AddSymbol(
+    '74153',
+    '74153-2.sym'
+    );
+
+CALL AddSymbol(
+    'DC004C',
+    'DC004C-1.sym'
+    );
+
+CALL AddSymbol(
+    '12SA7',
+    '12SA7-1.sym'
+    );
+
+CALL AddSymbol(
+    '4076',
+    '4076-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX1114',
+    'max1114-1.sym'
+    );
+
+CALL AddSymbol(
+    'AOP-Standard',
+    'aop-std-1.sym'
+    );
+
+CALL AddSymbol(
+    'DB31',
+    'DB31-1.sym'
+    );
+
+CALL AddSymbol(
+    'VOLTAGE_SOURCE',
+    'voltage-1.sym'
+    );
+
+CALL AddSymbol(
+    '4051',
+    '4051-1.sym'
+    );
+
+CALL AddSymbol(
+    '4061',
+    '4061-1.sym'
+    );
+
+CALL AddSymbol(
+    '810',
+    '810-1.sym'
+    );
+
+CALL AddSymbol(
+    'LM317',
+    'lm317-1.sym'
+    );
+
+CALL AddSymbol(
+    'StAVeR24M32',
+    'staver24m32-1.sym'
+    );
+
+CALL AddSymbol(
+    '74HCT03',
+    '74HCT03-1.sym'
+    );
+
+CALL AddSymbol(
+    'DC331',
+    'DC331-1.sym'
+    );
+
+CALL AddSymbol(
+    '74107',
+    '74107-2.sym'
+    );
+
+CALL AddSymbol(
+    'xor',
+    'xor4-1.sym'
+    );
+
+CALL AddSymbol(
+    'EPF10K10QC208',
+    'EPF10K-1.sym'
+    );
+
+CALL AddSymbol(
+    'nand7',
+    'nand7-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_4',
+    'connector4-2.sym'
+    );
+
+CALL AddSymbol(
+    'DB25',
+    'DB25-1.sym'
+    );
+
+CALL AddSymbol(
+    '4025',
+    '4025-1.sym'
+    );
+
+CALL AddSymbol(
+    'HEADER8',
+    'header8-2.sym'
+    );
+
+CALL AddSymbol(
+    'SWITCH_DIP4',
+    'switch-dip4-1.sym'
+    );
+
+CALL AddSymbol(
+    'pad',
+    'pad.sym'
+    );
+
+CALL AddSymbol(
+    'or',
+    'or5-1.sym'
+    );
+
+CALL AddSymbol(
+    '40193',
+    '40193-1.sym'
+    );
+
+CALL AddSymbol(
+    '4031',
+    '4031-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_17',
+    'connector17-2.sym'
+    );
+
+CALL AddSymbol(
+    '74123',
+    '74123-1.sym'
     );
 
 CALL AddSymbol(
     '4082',
-    'sym/4000/4082-1.sym'
+    '4082-2.sym'
     );
 
 CALL AddSymbol(
-    'RESISTORPACK_4',
-    'sym/analog/resistorpack4-1.sym'
+    'nor3',
+    'nor3-1.sym'
     );
 
 CALL AddSymbol(
-    'CONNECTOR_13',
-    'sym/connector/connector13-2.sym'
+    'PNP_TRANSISTOR',
+    'pnp-3.sym'
     );
 
 CALL AddSymbol(
-    '2N3906',
-    'sym/transistor/2N3906-1.sym'
+    'INPUT',
+    'input-1.sym'
+    );
+
+CALL AddSymbol(
+    '74HCT541',
+    '74HCT541-1.sym'
+    );
+
+CALL AddSymbol(
+    'FT245BM',
+    'FT245BM-1.sym'
+    );
+
+CALL AddSymbol(
+    'BC547',
+    'BC547-2.sym'
+    );
+
+CALL AddSymbol(
+    'nor',
+    'nor5-1.sym'
+    );
+
+CALL AddSymbol(
+    '74133',
+    '74133-2.sym'
+    );
+
+CALL AddSymbol(
+    'SPICE-NPN',
+    'spice-npn-1.sym'
+    );
+
+CALL AddSymbol(
+    '4066',
+    '4066-1.sym'
+    );
+
+CALL AddSymbol(
+    '4035',
+    '4035-1.sym'
+    );
+
+CALL AddSymbol(
+    '4N29',
+    '4N29-1.sym'
+    );
+
+CALL AddSymbol(
+    'AF_OUTPUT_TRANSFORMER',
+    'af_output_transformer-1.sym'
+    );
+
+CALL AddSymbol(
+    'PMOS_TRANSISTOR',
+    'asic-pmv-1.sym'
+    );
+
+CALL AddSymbol(
+    'ACE1202LN14',
+    'ACE1202-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX531',
+    'max531-1.sym'
+    );
+
+CALL AddSymbol(
+    'MC3479',
+    'mc3479-1.sym'
+    );
+
+CALL AddSymbol(
+    'TEST',
+    'test_verilog.sym'
+    );
+
+CALL AddSymbol(
+    '7824',
+    'lm7824-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX12558',
+    'max12558-1.sym'
+    );
+
+CALL AddSymbol(
+    'XC2S30-6PQ208C',
+    'XC2S30-6PQ208C.sym'
+    );
+
+CALL AddSymbol(
+    '7408',
+    '7408-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_2',
+    'connector2-1.sym'
+    );
+
+CALL AddSymbol(
+    'TL16C554AFN',
+    'tl16c554afn-1.sym'
+    );
+
+CALL AddSymbol(
+    'HCTL-2000',
+    'HCTL-2000-1.sym'
+    );
+
+CALL AddSymbol(
+    'interpage_from',
+    'interpage_from-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_15',
+    'connector15-2.sym'
+    );
+
+CALL AddSymbol(
+    'T1-1T-X65',
+    'T1-1T-X65-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_35',
+    'connector35-2.sym'
+    );
+
+CALL AddSymbol(
+    'xor4',
+    'xor4-1.sym'
+    );
+
+CALL AddSymbol(
+    '4054',
+    '4054-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX4107',
+    'max4107-1.sym'
+    );
+
+CALL AddSymbol(
+    'LRPS-2-11',
+    'LRPS-2-11.sym'
+    );
+
+CALL AddSymbol(
+    'RPAK_CTS',
+    'rpack-1.sym'
+    );
+
+CALL AddSymbol(
+    '74139',
+    '74139-1.sym'
+    );
+
+CALL AddSymbol(
+    'SMITH',
+    'smith-1.sym'
+    );
+
+CALL AddSymbol(
+    '74HC244',
+    '74HC244-2.sym'
+    );
+
+CALL AddSymbol(
+    'nor',
+    'nor2-1.sym'
+    );
+
+CALL AddSymbol(
+    'SWITCH_PUSHBUTTON_NC',
+    'switch-pushbutton-nc-2.sym'
+    );
+
+CALL AddSymbol(
+    '4033',
+    '4033-2.sym'
+    );
+
+CALL AddSymbol(
+    'TINY-TIGER',
+    'tiny-tiger-1.sym'
+    );
+
+CALL AddSymbol(
+    'XINGER4A3305',
+    'xinger-split3-1.sym'
+    );
+
+CALL AddSymbol(
+    'ADM202',
+    'adm202-1.sym'
+    );
+
+CALL AddSymbol(
+    '74HC244',
+    '74HC244-1.sym'
+    );
+
+CALL AddSymbol(
+    'SPARAMBLOCK',
+    's-param-1.sym'
+    );
+
+CALL AddSymbol(
+    'SAB80C537',
+    'SAB80C537-1.sym'
+    );
+
+CALL AddSymbol(
+    'xor2',
+    'xor2-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX1407',
+    'max1407-1.sym'
+    );
+
+CALL AddSymbol(
+    'TL082',
+    'tl082-1.sym'
+    );
+
+CALL AddSymbol(
+    'LM337',
+    'lm337-1.sym'
+    );
+
+CALL AddSymbol(
+    '74170',
+    '74170-1.sym'
+    );
+
+CALL AddSymbol(
+    '4007',
+    '4007-1.sym'
+    );
+
+CALL AddSymbol(
+    'nand',
+    'nand6-2.sym'
+    );
+
+CALL AddSymbol(
+    'nor',
+    'nor8-1.sym'
+    );
+
+CALL AddSymbol(
+    'DIN41612C96',
+    'DIN41612C96-1.sym'
+    );
+
+CALL AddSymbol(
+    '40147',
+    '40147-1.sym'
+    );
+
+CALL AddSymbol(
+    '4018',
+    '4018-2.sym'
+    );
+
+CALL AddSymbol(
+    'RESISTOR',
+    'resistor-2.sym'
+    );
+
+CALL AddSymbol(
+    'spice-IO',
+    'spice-subcircuit-IO-1.sym'
+    );
+
+CALL AddSymbol(
+    '2N3904',
+    '2N3904-2.sym'
+    );
+
+CALL AddSymbol(
+    'AT89S8252-24PC',
+    'AT89S53-24PI-1.sym'
+    );
+
+CALL AddSymbol(
+    '7454',
+    '7454-1.sym'
+    );
+
+CALL AddSymbol(
+    '74HCT245',
+    '74HCT245-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX874',
+    'max874-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_40',
+    'connector40-2.sym'
+    );
+
+CALL AddSymbol(
+    'include',
+    'spice-include-1.sym'
+    );
+
+CALL AddSymbol(
+    'Z80PIO',
+    'z80pio-1.sym'
+    );
+
+CALL AddSymbol(
+    'xnor4',
+    'xnor4-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_1',
+    'connector1-2.sym'
+    );
+
+CALL AddSymbol(
+    'LM311',
+    'lm311-1.sym'
+    );
+
+CALL AddSymbol(
+    'vicor-xxx',
+    'vicor_gen1.sym'
+    );
+
+CALL AddSymbol(
+    '74520',
+    '74520-3.sym'
+    );
+
+CALL AddSymbol(
+    'nor7',
+    'nor7-1.sym'
+    );
+
+CALL AddSymbol(
+    'HEADER18',
+    'header18-2.sym'
+    );
+
+CALL AddSymbol(
+    '7400',
+    '7400-2.sym'
+    );
+
+CALL AddSymbol(
+    'MAX1005',
+    'max1005-1.sym'
+    );
+
+CALL AddSymbol(
+    '7475',
+    '7475-1.sym'
+    );
+
+CALL AddSymbol(
+    'PHOTORESISTOR',
+    'photo-resistor-1.sym'
+    );
+
+CALL AddSymbol(
+    'and4',
+    'and4-1.sym'
+    );
+
+CALL AddSymbol(
+    'DRC_Directive',
+    'nc-left-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX662A',
+    'max662A-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX478',
+    'max478-1.sym'
+    );
+
+CALL AddSymbol(
+    'MC1496',
+    'mc1496-1.sym'
+    );
+
+CALL AddSymbol(
+    'nor5',
+    'nor5-1.sym'
+    );
+
+CALL AddSymbol(
+    'QT60040',
+    'QT60040-1.sym'
+    );
+
+CALL AddSymbol(
+    '40110',
+    '40110-1.sym'
+    );
+
+CALL AddSymbol(
+    'ISA-98W-SOCKET',
+    'ISA-98W-SOCKET-1.sym'
+    );
+
+CALL AddSymbol(
+    '4534',
+    '4534-1.sym'
+    );
+
+CALL AddSymbol(
+    'LM358',
+    'lm358-1.sym'
+    );
+
+CALL AddSymbol(
+    '40109',
+    '40109-1.sym'
+    );
+
+CALL AddSymbol(
+    '74595',
+    '74595-1.sym'
+    );
+
+CALL AddSymbol(
+    'TRANSFORMER ',
+    'transformer-4.sym'
+    );
+
+CALL AddSymbol(
+    'or',
+    'or2-2.sym'
+    );
+
+CALL AddSymbol(
+    '4353',
+    '4353-1.sym'
+    );
+
+CALL AddSymbol(
+    'LM393',
+    'lm393-1.sym'
+    );
+
+CALL AddSymbol(
+    '7403',
+    '7403-2.sym'
+    );
+
+CALL AddSymbol(
+    '4075',
+    '4075-2.sym'
+    );
+
+CALL AddSymbol(
+    'OSC',
+    'osc-2.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_9',
+    'connector9-2.sym'
+    );
+
+CALL AddSymbol(
+    'or',
+    'or3-1.sym'
+    );
+
+CALL AddSymbol(
+    '27256',
+    '27256-1.sym'
+    );
+
+CALL AddSymbol(
+    'xnor8',
+    'xnor8-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_5',
+    'connector5-2.sym'
+    );
+
+CALL AddSymbol(
+    'nor',
+    'nor5-2.sym'
+    );
+
+CALL AddSymbol(
+    '4019',
+    '4019-2.sym'
+    );
+
+CALL AddSymbol(
+    '4032',
+    '4032-2.sym'
+    );
+
+CALL AddSymbol(
+    'PA140',
+    'pa140-1.sym'
+    );
+
+CALL AddSymbol(
+    'PA91',
+    'pa91-1.sym'
+    );
+
+CALL AddSymbol(
+    'AT90S8535J',
+    'AT90S8535J-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX436',
+    'max436-1.sym'
+    );
+
+CALL AddSymbol(
+    'PIC16C74A',
+    'pic16C74A-1.sym'
+    );
+
+CALL AddSymbol(
+    'TL072',
+    'tl072-1.sym'
+    );
+
+CALL AddSymbol(
+    'LM3909',
+    'lm3909-1.sym'
+    );
+
+CALL AddSymbol(
+    'nand2',
+    'nand2-1.sym'
+    );
+
+CALL AddSymbol(
+    'SWITCH_DIP5',
+    'switch-dip5-2.sym'
+    );
+
+CALL AddSymbol(
+    'LM2822M',
+    'lm2822-1.sym'
+    );
+
+CALL AddSymbol(
+    'IR2110',
+    'ir2110-1.sym'
+    );
+
+CALL AddSymbol(
+    '7456',
+    '7456-1.sym'
+    );
+
+CALL AddSymbol(
+    '74122',
+    '74122-1.sym'
+    );
+
+CALL AddSymbol(
+    'SWITCAP-capacitor',
+    'switcap-capacitor-1.sym'
+    );
+
+CALL AddSymbol(
+    '74148',
+    '74148-1.sym'
+    );
+
+CALL AddSymbol(
+    'SWITCAP-analysis',
+    'switcap-analysis-1.sym'
+    );
+
+CALL AddSymbol(
+    'ATmega323',
+    'ATmega323-1.sym'
+    );
+
+CALL AddSymbol(
+    '6821',
+    '6821-1.sym'
+    );
+
+CALL AddSymbol(
+    '7405',
+    '7405-1.sym'
+    );
+
+CALL AddSymbol(
+    '4PHASE-STEPPER-8LEADS',
+    '4phase-stepper8-1.sym'
+    );
+
+CALL AddSymbol(
+    'MC68HC705KJ1',
+    'mc68hc705kj1-1.sym'
+    );
+
+CALL AddSymbol(
+    'nor',
+    'nor9-2.sym'
+    );
+
+CALL AddSymbol(
+    '74245',
+    '74245-1.sym'
+    );
+
+CALL AddSymbol(
+    'ATtiny28_DIP',
+    'ATtiny28_DIP.sym'
+    );
+
+CALL AddSymbol(
+    'HSDL-3612',
+    'hsdl3612-1.sym'
+    );
+
+CALL AddSymbol(
+    '4017',
+    '4017-1.sym'
+    );
+
+CALL AddSymbol(
+    'AT90S4433_TQFP',
+    'AT90S4433_TQFP.sym'
+    );
+
+CALL AddSymbol(
+    'or',
+    'or5-2.sym'
+    );
+
+CALL AddSymbol(
+    'NPN_TRANSISTOR',
+    'npn-2.sym'
+    );
+
+CALL AddSymbol(
+    '12SQ7',
+    '12SQ7-1.sym'
+    );
+
+CALL AddSymbol(
+    '10K10LC84',
+    '10K10LC84-1.sym'
+    );
+
+CALL AddSymbol(
+    'MT8870',
+    'mt8870-1.sym'
+    );
+
+CALL AddSymbol(
+    'HCPL4701',
+    'HCPL4701-1.sym'
+    );
+
+CALL AddSymbol(
+    '4073',
+    '4073-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX4420',
+    'max4420-1.sym'
+    );
+
+CALL AddSymbol(
+    'VARIABLE_RESISTOR',
+    'pot-1.sym'
+    );
+
+CALL AddSymbol(
+    'COIL',
+    'coil-1.sym'
+    );
+
+CALL AddSymbol(
+    '4021',
+    '4021-1.sym'
+    );
+
+CALL AddSymbol(
+    '22V10-PLCC',
+    '22V10-PLCC.sym'
+    );
+
+CALL AddSymbol(
+    'MC100ELT21',
+    'MC100ELT21-1.sym'
+    );
+
+CALL AddSymbol(
+    '74243',
+    '74243-1.sym'
+    );
+
+CALL AddSymbol(
+    'IPAD',
+    'ipad-1.sym'
+    );
+
+CALL AddSymbol(
+    'xnor9',
+    'xnor9-1.sym'
+    );
+
+CALL AddSymbol(
+    'AT89C51_PLCC',
+    'AT89C51_PLCC.sym'
+    );
+
+CALL AddSymbol(
+    'DRC_Directive',
+    'nc-top-1.sym'
+    );
+
+CALL AddSymbol(
+    '4069',
+    '4069-1.sym'
+    );
+
+CALL AddSymbol(
+    'PMOS_TRANSISTOR',
+    'pmos-3.sym'
+    );
+
+CALL AddSymbol(
+    '7476',
+    '7476-1.sym'
+    );
+
+CALL AddSymbol(
+    'PC104B',
+    'pc104B-1.sym'
+    );
+
+CALL AddSymbol(
+    'SPICE-vccs',
+    'vccs-1.sym'
+    );
+
+CALL AddSymbol(
+    '4555',
+    '4555-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX19538',
+    'max19538-1.sym'
+    );
+
+CALL AddSymbol(
+    '4538',
+    '4538-1.sym'
+    );
+
+CALL AddSymbol(
+    '4002',
+    '4002-2.sym'
+    );
+
+CALL AddSymbol(
+    'HCTL-2016',
+    'HCTL-2016-1.sym'
+    );
+
+CALL AddSymbol(
+    'ADG601',
+    'ADG601-1.sym'
+    );
+
+CALL AddSymbol(
+    '4521',
+    '4521-1.sym'
+    );
+
+CALL AddSymbol(
+    'none',
+    'busripper-2.sym'
+    );
+
+CALL AddSymbol(
+    '4068',
+    '4068-2.sym'
+    );
+
+CALL AddSymbol(
+    'K',
+    'kmutual-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX713',
+    'max713-1.sym'
+    );
+
+CALL AddSymbol(
+    'NPN_TRANSISTOR',
+    'mosfet-with-diode-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX4106',
+    'max4106-1.sym'
+    );
+
+CALL AddSymbol(
+    'HM6264P15',
+    'HM6264P15-1.sym'
+    );
+
+CALL AddSymbol(
+    '7483',
+    '7483-1.sym'
+    );
+
+CALL AddSymbol(
+    '4026',
+    '4026-1.sym'
+    );
+
+CALL AddSymbol(
+    'OSC_COIL',
+    'osc_coil_aircore-1.sym'
+    );
+
+CALL AddSymbol(
+    'xnor7',
+    'xnor7-1.sym'
+    );
+
+CALL AddSymbol(
+    'RESISTORPACK_8',
+    'resistorpack8-2.sym'
+    );
+
+CALL AddSymbol(
+    'PIC18F4431-DIP',
+    'pic18F4431-1.sym'
+    );
+
+CALL AddSymbol(
+    'bufif0',
+    'bufif0-1.sym'
+    );
+
+CALL AddSymbol(
+    'DIN41612C48',
+    'DIN41612C48-1.sym'
+    );
+
+CALL AddSymbol(
+    '4580',
+    '4580-1.sym'
+    );
+
+CALL AddSymbol(
+    '40108',
+    '40108-1.sym'
+    );
+
+CALL AddSymbol(
+    'BC557',
+    'BC557-2.sym'
+    );
+
+CALL AddSymbol(
+    'CURRENT_SOURCE',
+    'idc-1.sym'
+    );
+
+CALL AddSymbol(
+    'SPICE-cccs',
+    'cccs-1.sym'
+    );
+
+CALL AddSymbol(
+    '74124',
+    '74124-2.sym'
+    );
+
+CALL AddSymbol(
+    'OPAMP',
+    'opamp-2.sym'
+    );
+
+CALL AddSymbol(
+    'spice-subcircuit-LL',
+    'spice-subcircuit-LL-1.sym'
+    );
+
+CALL AddSymbol(
+    'ATtiny11',
+    'ATtiny11.sym'
+    );
+
+CALL AddSymbol(
+    'LED',
+    'leddual-1.sym'
+    );
+
+CALL AddSymbol(
+    '4022',
+    '4022-1.sym'
+    );
+
+CALL AddSymbol(
+    'HEADER20',
+    'header20-2.sym'
+    );
+
+CALL AddSymbol(
+    '4096',
+    '4096-1.sym'
+    );
+
+CALL AddSymbol(
+    'DS2405',
+    'DS2405-1.sym'
+    );
+
+CALL AddSymbol(
+    '7491',
+    '7491-1.sym'
+    );
+
+CALL AddSymbol(
+    'SPST',
+    'switch-spst-1.sym'
+    );
+
+CALL AddSymbol(
+    'cascade-source',
+    'cascade-source-2.sym'
+    );
+
+CALL AddSymbol(
+    'MC10E104',
+    'MC10E104-1.sym'
+    );
+
+CALL AddSymbol(
+    'MSP430x11x1',
+    'MSP430x11x1.sym'
+    );
+
+CALL AddSymbol(
+    '74141',
+    '74141-1.sym'
+    );
+
+CALL AddSymbol(
+    'L293',
+    'L293.sym'
+    );
+
+CALL AddSymbol(
+    '7431',
+    '7431-1.sym'
+    );
+
+CALL AddSymbol(
+    '7451',
+    '7451-1.sym'
+    );
+
+CALL AddSymbol(
+    'PIC12C5xx',
+    'pic12c5xx-1.sym'
+    );
+
+CALL AddSymbol(
+    '4543',
+    '4543-1.sym'
+    );
+
+CALL AddSymbol(
+    'header26',
+    'header26-2.sym'
+    );
+
+CALL AddSymbol(
+    '40181',
+    '40181-1.sym'
+    );
+
+CALL AddSymbol(
+    'none',
+    'decon-1.sym'
+    );
+
+CALL AddSymbol(
+    'ATmega163_TQFP',
+    'ATmega163_TQFP.sym'
+    );
+
+CALL AddSymbol(
+    '74195',
+    '74195-1.sym'
+    );
+
+CALL AddSymbol(
+    'and',
+    'and5-1.sym'
+    );
+
+CALL AddSymbol(
+    '4078',
+    '4078-2.sym'
+    );
+
+CALL AddSymbol(
+    'and',
+    'and7-1.sym'
+    );
+
+CALL AddSymbol(
+    '7448',
+    '7448-1.sym'
+    );
+
+CALL AddSymbol(
+    'DC8640',
+    'DC8640-1.sym'
+    );
+
+CALL AddSymbol(
+    '7432',
+    '7432-2.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_33',
+    'connector33-2.sym'
+    );
+
+CALL AddSymbol(
+    'ADG602',
+    'ADG602-1.sym'
+    );
+
+CALL AddSymbol(
+    'ATtiny15L',
+    'ATtiny15L-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX038',
+    'max038-2.sym'
+    );
+
+CALL AddSymbol(
+    '27512',
+    '27512-1.sym'
+    );
+
+CALL AddSymbol(
+    '74131',
+    '74131-1.sym'
+    );
+
+CALL AddSymbol(
+    'AT90S2323',
+    'AT90S2323.sym'
+    );
+
+CALL AddSymbol(
+    '4006',
+    '4006-1.sym'
+    );
+
+CALL AddSymbol(
+    '4069',
+    '4069-2.sym'
+    );
+
+CALL AddSymbol(
+    'ADT1-1WT',
+    'ADT1-1WT-1.sym'
+    );
+
+CALL AddSymbol(
+    '74157',
+    '74157-1.sym'
+    );
+
+CALL AddSymbol(
+    'POLARIZED_CAPACITOR',
+    'capacitor-2.sym'
+    );
+
+CALL AddSymbol(
+    'T2-1T-KK81',
+    'T2-1T-KK81-1.sym'
+    );
+
+CALL AddSymbol(
+    '4737',
+    '4737-1.sym'
+    );
+
+CALL AddSymbol(
+    'DS89C450',
+    'DS89C450-1.sym'
+    );
+
+CALL AddSymbol(
+    '4532',
+    '4532-1.sym'
+    );
+
+CALL AddSymbol(
+    '4572',
+    '4572-1.sym'
+    );
+
+CALL AddSymbol(
+    'LM741',
+    'lm386-1.sym'
+    );
+
+CALL AddSymbol(
+    '9602',
+    '9602-1.sym'
+    );
+
+CALL AddSymbol(
+    'LM75',
+    'lm75-1.sym'
+    );
+
+CALL AddSymbol(
+    '4066',
+    '4066-2.sym'
+    );
+
+CALL AddSymbol(
+    '4095',
+    '4095-1.sym'
+    );
+
+CALL AddSymbol(
+    'LM339',
+    'lm339-2.sym'
+    );
+
+CALL AddSymbol(
+    'PIC16F628',
+    'pic16F628-1.sym'
+    );
+
+CALL AddSymbol(
+    'HIGH',
+    'high-1.sym'
+    );
+
+CALL AddSymbol(
+    'Atmega103',
+    'ATmega103.sym'
+    );
+
+CALL AddSymbol(
+    'nor',
+    'nor3-1.sym'
+    );
+
+CALL AddSymbol(
+    '40102',
+    '40102-1.sym'
+    );
+
+CALL AddSymbol(
+    'nand9',
+    'nand9-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX214',
+    'max214-1.sym'
+    );
+
+CALL AddSymbol(
+    '7404',
+    '7404-4.sym'
+    );
+
+CALL AddSymbol(
+    '7404',
+    '7404-1.sym'
+    );
+
+CALL AddSymbol(
+    '74152',
+    '74152-1.sym'
+    );
+
+CALL AddSymbol(
+    'sn75176a',
+    '75176-1.sym'
+    );
+
+CALL AddSymbol(
+    '74138',
+    '74138-2.sym'
+    );
+
+CALL AddSymbol(
+    '74259',
+    '74259-1.sym'
+    );
+
+CALL AddSymbol(
+    'or',
+    'or4-1.sym'
+    );
+
+CALL AddSymbol(
+    'VIPEC-GRID',
+    'grid-1.sym'
+    );
+
+CALL AddSymbol(
+    'nand',
+    'nand9-2.sym'
+    );
+
+CALL AddSymbol(
+    'SWITCH_DIP6',
+    'switch-dip6-2.sym'
+    );
+
+CALL AddSymbol(
+    'LT1374CS8',
+    'lt1374cs8.sym'
+    );
+
+CALL AddSymbol(
+    '4352',
+    '4352-1.sym'
+    );
+
+CALL AddSymbol(
+    '4520',
+    '4520-1.sym'
+    );
+
+CALL AddSymbol(
+    '80(C)52-BASIC',
+    '8052basic-1.sym'
+    );
+
+CALL AddSymbol(
+    'or',
+    'or8-2.sym'
+    );
+
+CALL AddSymbol(
+    'MAX1609',
+    'max1609-1.sym'
+    );
+
+CALL AddSymbol(
+    'MC68HC05J1A',
+    'mc68hc05j1a-1.sym'
+    );
+
+CALL AddSymbol(
+    'T-Line',
+    'tline.sym'
+    );
+
+CALL AddSymbol(
+    '4056',
+    '4056-1.sym'
+    );
+
+CALL AddSymbol(
+    'and7',
+    'and7-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX6018',
+    'max6018-1.sym'
+    );
+
+CALL AddSymbol(
+    '4035',
+    '4035-2.sym'
+    );
+
+CALL AddSymbol(
+    'options',
+    'gnucap-options-1.sym'
+    );
+
+CALL AddSymbol(
+    'HM628511HC',
+    'HM628511HC-SOJ36-1.sym'
+    );
+
+CALL AddSymbol(
+    '74168',
+    '74168-1.sym'
+    );
+
+CALL AddSymbol(
+    '7497',
+    '7497-1.sym'
+    );
+
+CALL AddSymbol(
+    '40161',
+    '40161-1.sym'
+    );
+
+CALL AddSymbol(
+    '7912',
+    'lm7912-1.sym'
+    );
+
+CALL AddSymbol(
+    'SWITCH_DIP4',
+    'switch-dip4-2.sym'
+    );
+
+CALL AddSymbol(
+    '74132',
+    '74132-1.sym'
+    );
+
+CALL AddSymbol(
+    'LT1376-5',
+    'lt1376-5.sym'
+    );
+
+CALL AddSymbol(
+    '6A259DIP',
+    '6A259-1.sym'
+    );
+
+CALL AddSymbol(
+    'none',
+    'input-2.sym'
+    );
+
+CALL AddSymbol(
+    'PAL20X10',
+    'PAL20X10-1.sym'
+    );
+
+CALL AddSymbol(
+    'OSC',
+    'osc-1.sym'
+    );
+
+CALL AddSymbol(
+    '74197',
+    '74197-1.sym'
+    );
+
+CALL AddSymbol(
+    '74191',
+    '74191-1.sym'
+    );
+
+CALL AddSymbol(
+    'SWITCAP-vcvs',
+    'switcap-vcvs-3.sym'
+    );
+
+CALL AddSymbol(
+    'header32',
+    'header32-2.sym'
+    );
+
+CALL AddSymbol(
+    'ADC0804',
+    'ADC0804-1.sym'
+    );
+
+CALL AddSymbol(
+    '40257',
+    '40257-1.sym'
+    );
+
+CALL AddSymbol(
+    'darlington, NPN',
+    'darlington_NPN-1.sym'
+    );
+
+CALL AddSymbol(
+    '4018',
+    '4018-1.sym'
+    );
+
+CALL AddSymbol(
+    'PMOS_TRANSISTOR',
+    'asic-phhv-1.sym'
+    );
+
+CALL AddSymbol(
+    'and3',
+    'and3-1.sym'
+    );
+
+CALL AddSymbol(
+    '40160',
+    '40160-1.sym'
+    );
+
+CALL AddSymbol(
+    'vpwl',
+    'vpwl-1.sym'
+    );
+
+CALL AddSymbol(
+    'LTC2400',
+    'ltc2400-1.sym'
+    );
+
+CALL AddSymbol(
+    'AT90S8515_PLCC',
+    'AT90S8515_PLCC.sym'
+    );
+
+CALL AddSymbol(
+    'AT89C51_TQFT',
+    'AT89C51_TQFP.sym'
+    );
+
+CALL AddSymbol(
+    'MAX488',
+    'max488-1.sym'
+    );
+
+CALL AddSymbol(
+    'LT1181',
+    'lt1181-1.sym'
+    );
+
+CALL AddSymbol(
+    '4PHASE-STEPPER-6LEADS',
+    '4phase-stepper6-1.sym'
+    );
+
+CALL AddSymbol(
+    'DS80C310',
+    'DS80C310.sym'
+    );
+
+CALL AddSymbol(
+    'or3',
+    'or3-1.sym'
+    );
+
+CALL AddSymbol(
+    'HOLE',
+    'hole-1.sym'
+    );
+
+CALL AddSymbol(
+    'L200',
+    'l200-1.sym'
+    );
+
+CALL AddSymbol(
+    'SPDT',
+    'switch-spdt-1.sym'
+    );
+
+CALL AddSymbol(
+    'HEADER10',
+    'header10-1.sym'
+    );
+
+CALL AddSymbol(
+    '2732',
+    '2732-1.sym'
+    );
+
+CALL AddSymbol(
+    '4531',
+    '4531-1.sym'
+    );
+
+CALL AddSymbol(
+    'BNC',
+    'arfx1229-1.sym'
+    );
+
+CALL AddSymbol(
+    'or',
+    'or7-2.sym'
+    );
+
+CALL AddSymbol(
+    'PC16550D',
+    'pc16500d-1.sym'
+    );
+
+CALL AddSymbol(
+    'neg',
+    'not-1.sym'
+    );
+
+CALL AddSymbol(
+    'XINGER4A4305',
+    'xinger-split4-1.sym'
+    );
+
+CALL AddSymbol(
+    'AT90S4433_DIP',
+    'AT90S4433_DIP.sym'
+    );
+
+CALL AddSymbol(
+    'MSP430x11x2',
+    'MSP430x11x2.sym'
+    );
+
+CALL AddSymbol(
+    'xnor',
+    'xnor6-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_24',
+    'connector24-2.sym'
+    );
+
+CALL AddSymbol(
+    'and',
+    'and9-1.sym'
+    );
+
+CALL AddSymbol(
+    'cascade-filter',
+    'cascade-filter-1.sym'
+    );
+
+CALL AddSymbol(
+    '4067',
+    '4067-2.sym'
+    );
+
+CALL AddSymbol(
+    'MAX1608',
+    'max1608-1.sym'
+    );
+
+CALL AddSymbol(
+    '25Cxx',
+    '25Cxx-1.sym'
+    );
+
+CALL AddSymbol(
+    '4053',
+    '4053-1.sym'
+    );
+
+CALL AddSymbol(
+    '4556',
+    '4556-1.sym'
+    );
+
+CALL AddSymbol(
+    'POWER',
+    'vdd.sym'
+    );
+
+CALL AddSymbol(
+    '74265',
+    '74265-2.sym'
+    );
+
+CALL AddSymbol(
+    'buf',
+    'buf-1.sym'
+    );
+
+CALL AddSymbol(
+    '74114',
+    '74114-1.sym'
+    );
+
+CALL AddSymbol(
+    '4027',
+    '4027-1.sym'
+    );
+
+CALL AddSymbol(
+    '74374',
+    '74374-1.sym'
+    );
+
+CALL AddSymbol(
+    'MSP430x43x',
+    'MSP430x43x.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_14',
+    'connector14-2.sym'
+    );
+
+CALL AddSymbol(
+    '7815',
+    'lm7815-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX6314',
+    'max6314-1.sym'
+    );
+
+CALL AddSymbol(
+    '628512',
+    '628512-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX1114',
+    'max1114-2.sym'
+    );
+
+CALL AddSymbol(
+    'interpage_to',
+    'interpage_to-1.sym'
+    );
+
+CALL AddSymbol(
+    '7414',
+    '7414-1.sym'
+    );
+
+CALL AddSymbol(
+    'pad',
+    'pad_analog.sym'
+    );
+
+CALL AddSymbol(
+    '74541',
+    '74541-1.sym'
+    );
+
+CALL AddSymbol(
+    '7411',
+    '7411-1.sym'
+    );
+
+CALL AddSymbol(
+    '7492',
+    '7492-1.sym'
+    );
+
+CALL AddSymbol(
+    'Atmega128',
+    'ATmega128-2.sym'
+    );
+
+CALL AddSymbol(
+    'MAX100',
+    'max100-1.sym'
+    );
+
+CALL AddSymbol(
+    'PMOS_TRANSISTOR',
+    'asic-phv-1.sym'
+    );
+
+CALL AddSymbol(
+    '74HCT08',
+    '74HCT08-1.sym'
+    );
+
+CALL AddSymbol(
+    'XC2S50-5PQ208C',
+    'XC2S50-5PQ208C.sym'
+    );
+
+CALL AddSymbol(
+    'POLARIZED_CAPACITOR',
+    'capacitor-4.sym'
+    );
+
+CALL AddSymbol(
+    'RESISTOR',
+    'asic-res-3.sym'
+    );
+
+CALL AddSymbol(
+    'MAX1055',
+    'max1055-1.sym'
+    );
+
+CALL AddSymbol(
+    'model',
+    'spice-model-1.sym'
+    );
+
+CALL AddSymbol(
+    'PS2501-1',
+    'ps2501-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_39',
+    'connector39-2.sym'
+    );
+
+CALL AddSymbol(
+    'MAX982',
+    'max982-1.sym'
+    );
+
+CALL AddSymbol(
+    '74107',
+    '74107-1.sym'
+    );
+
+CALL AddSymbol(
+    'xor7',
+    'xor7-1.sym'
+    );
+
+CALL AddSymbol(
+    'DB25',
+    'DB25-3.sym'
+    );
+
+CALL AddSymbol(
+    'DIODE',
+    'schottky-1.sym'
+    );
+
+CALL AddSymbol(
+    'and',
+    'and6-1.sym'
+    );
+
+CALL AddSymbol(
+    '2N5911',
+    '2N5911-1.sym'
+    );
+
+CALL AddSymbol(
+    '74147',
+    '74147-1.sym'
+    );
+
+CALL AddSymbol(
+    'HEADER8',
+    'header8-1.sym'
+    );
+
+CALL AddSymbol(
+    'nand',
+    'nand8-2.sym'
+    );
+
+CALL AddSymbol(
+    'ATTENUATOR',
+    'attenuator-1.sym'
+    );
+
+CALL AddSymbol(
+    '40174',
+    '40174-1.sym'
+    );
+
+CALL AddSymbol(
+    '40240',
+    '40240-1.sym'
+    );
+
+CALL AddSymbol(
+    'none',
+    'output-2.sym'
+    );
+
+CALL AddSymbol(
+    'DC003C',
+    'DC003C-1.sym'
+    );
+
+CALL AddSymbol(
+    'directive',
+    'spice-directive-1.sym'
+    );
+
+CALL AddSymbol(
+    'include',
+    'gnucap-include-1.sym'
+    );
+
+CALL AddSymbol(
+    '4511',
+    '4511-1.sym'
+    );
+
+CALL AddSymbol(
+    'LT1181',
+    'lm1877-1.sym'
+    );
+
+CALL AddSymbol(
+    'PS2501-1',
+    'photo-transistor-1.sym'
+    );
+
+CALL AddSymbol(
+    '7420',
+    '7420-1.sym'
+    );
+
+CALL AddSymbol(
+    '74158',
+    '74158-1.sym'
+    );
+
+CALL AddSymbol(
+    'ATmega16L_DIP',
+    'ATmega16L-1.sym'
+    );
+
+CALL AddSymbol(
+    'DC_MOTOR',
+    'dc_motor-1.sym'
+    );
+
+CALL AddSymbol(
+    'BC547',
+    'BC547-1.sym'
+    );
+
+CALL AddSymbol(
+    '4028',
+    '4028-2.sym'
+    );
+
+CALL AddSymbol(
+    'AT90S8515_DIP',
+    'AT90S8515_DIP.sym'
+    );
+
+CALL AddSymbol(
+    'QUAD_OPAMP',
+    'quad_opamp-1.sym'
+    );
+
+CALL AddSymbol(
+    'EPC1LC20',
+    'EPC1LC20-1.sym'
+    );
+
+CALL AddSymbol(
+    'SmartMedia',
+    'smart-media-1.sym'
+    );
+
+CALL AddSymbol(
+    'xnor',
+    'xnor4-1.sym'
+    );
+
+CALL AddSymbol(
+    'BEEPER',
+    'beeper-1.sym'
+    );
+
+CALL AddSymbol(
+    'MC68HC908GP32CP',
+    'mc68hc908gp32cp-1.sym'
+    );
+
+CALL AddSymbol(
+    'interpage_bidir',
+    'interpage_bidir-1.sym'
+    );
+
+CALL AddSymbol(
+    'and',
+    'and3-1.sym'
+    );
+
+CALL AddSymbol(
+    'SWITCAP-switch',
+    'switcap-switch-1.sym'
+    );
+
+CALL AddSymbol(
+    'LTC1799',
+    'ltc1799-1.sym'
+    );
+
+CALL AddSymbol(
+    'OPAMP',
+    'opamp-1.sym'
+    );
+
+CALL AddSymbol(
+    '74124',
+    '74124-1.sym'
+    );
+
+CALL AddSymbol(
+    'DC310ES',
+    'DC310ES-1.sym'
+    );
+
+CALL AddSymbol(
+    'HCPL-2631',
+    'hcpl-2631-1.sym'
+    );
+
+CALL AddSymbol(
+    'SPICE-VC-switch',
+    'spice-vc-switch-1.sym'
+    );
+
+CALL AddSymbol(
+    'HEADER10',
+    'header10-2.sym'
+    );
+
+CALL AddSymbol(
+    'nand',
+    'nand2-1.sym'
+    );
+
+CALL AddSymbol(
+    '7421',
+    '7421-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX1005',
+    'max1005-2.sym'
+    );
+
+CALL AddSymbol(
+    'pad',
+    'pad_pull_up.sym'
+    );
+
+CALL AddSymbol(
+    '4028',
+    '4028-1.sym'
+    );
+
+CALL AddSymbol(
+    'notif0',
+    'notif0-1.sym'
+    );
+
+CALL AddSymbol(
+    '7402',
+    '7402-2.sym'
+    );
+
+CALL AddSymbol(
+    'AT90S2313',
+    'AT90S2313.sym'
+    );
+
+CALL AddSymbol(
+    '4042',
+    '4042-1.sym'
+    );
+
+CALL AddSymbol(
+    '4040',
+    '4040-1.sym'
+    );
+
+CALL AddSymbol(
+    'nor8',
+    'nor8-1.sym'
+    );
+
+CALL AddSymbol(
+    '27256',
+    '27C256-1.sym'
+    );
+
+CALL AddSymbol(
+    '4078',
+    '4078-1.sym'
+    );
+
+CALL AddSymbol(
+    'OMRON_G2R-24-DC5',
+    'omron-G5V-1-DCx-1.sym'
+    );
+
+CALL AddSymbol(
+    '4097',
+    '4097-1.sym'
+    );
+
+CALL AddSymbol(
+    'HSDL7000',
+    'HSDL7000-1.sym'
+    );
+
+CALL AddSymbol(
+    'DS80C320_DIP',
+    'DS80C320-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX1208',
+    'max1208-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_29',
+    'connector29-2.sym'
+    );
+
+CALL AddSymbol(
+    'PORT1',
+    'port1-1.sym'
+    );
+
+CALL AddSymbol(
+    '74139',
+    '74139-2.sym'
+    );
+
+CALL AddSymbol(
+    'ZENER_DIODE',
+    'zener-2.sym'
+    );
+
+CALL AddSymbol(
+    '74112',
+    '74112-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_9',
+    'connector9-1.sym'
+    );
+
+CALL AddSymbol(
+    'IOPAD',
+    'iopad-1.sym'
+    );
+
+CALL AddSymbol(
+    '7403',
+    '7403-1.sym'
+    );
+
+CALL AddSymbol(
+    '4517',
+    '4517-1.sym'
+    );
+
+CALL AddSymbol(
+    'XC2S50-5PQ208I',
+    'XC2S50-5PQ208I.sym'
+    );
+
+CALL AddSymbol(
+    'TINIm390-RevD',
+    'TINIm390-RevD.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_31',
+    'connector31-2.sym'
+    );
+
+CALL AddSymbol(
+    '74283',
+    '74283-1.sym'
+    );
+
+CALL AddSymbol(
+    'SWITCAP-title',
+    'switcap-title-1.sym'
+    );
+
+CALL AddSymbol(
+    '4038',
+    '4038-2.sym'
+    );
+
+CALL AddSymbol(
+    'PIC16C84',
+    'pic16C84.sym'
+    );
+
+CALL AddSymbol(
+    'SWITCH_PUSHBUTTON_SPDT',
+    'switch-pushbutton-spdt-1.sym'
+    );
+
+CALL AddSymbol(
+    '74573',
+    '74573-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX1081',
+    'max1081-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_41',
+    'connector41-1.sym'
+    );
+
+CALL AddSymbol(
+    'AT43USB320A',
+    'AT43USB320A.sym'
+    );
+
+CALL AddSymbol(
+    'RJ45',
+    'rj45-1.sym'
+    );
+
+CALL AddSymbol(
+    '74133',
+    '74133-1.sym'
+    );
+
+CALL AddSymbol(
+    '4044',
+    '4044-2.sym'
+    );
+
+CALL AddSymbol(
+    'NMOS_TRANSISTOR',
+    'asic-nmos-1.sym'
+    );
+
+CALL AddSymbol(
+    '74125',
+    '74125-1.sym'
+    );
+
+CALL AddSymbol(
+    'BATTERY',
+    'battery-3.sym'
+    );
+
+CALL AddSymbol(
+    '7410',
+    '7410-1.sym'
+    );
+
+CALL AddSymbol(
+    '35Z5GT',
+    '35Z5GT-1.sym'
+    );
+
+CALL AddSymbol(
+    'and6',
+    'and6-1.sym'
+    );
+
+CALL AddSymbol(
+    'ATmega161_TQFP',
+    'ATmega161_TQFP.sym'
+    );
+
+CALL AddSymbol(
+    'MAX233',
+    'max233-2.sym'
+    );
+
+CALL AddSymbol(
+    'nor',
+    'nor8-2.sym'
+    );
+
+CALL AddSymbol(
+    '4013',
+    '4013-1.sym'
+    );
+
+CALL AddSymbol(
+    'DS2480B',
+    'DS2480B-1.sym'
+    );
+
+CALL AddSymbol(
+    'AT90S8515_TQFP',
+    'AT90S8515_TQFP.sym'
+    );
+
+CALL AddSymbol(
+    'FLAG',
+    'in.sym'
+    );
+
+CALL AddSymbol(
+    'SWITCH_DIP8',
+    'switch-dip8-1.sym'
+    );
+
+CALL AddSymbol(
+    '4536',
+    '4536-1.sym'
+    );
+
+CALL AddSymbol(
+    'and',
+    'and2-1.sym'
+    );
+
+CALL AddSymbol(
+    'LT1761SD',
+    'lt1761sd-1.sym'
+    );
+
+CALL AddSymbol(
+    '74244',
+    '74244-2.sym'
+    );
+
+CALL AddSymbol(
+    'AT90S8535_PLCC',
+    'AT90S8535_PLCC.sym'
+    );
+
+CALL AddSymbol(
+    'LM4871M',
+    'lm4871m-1.sym'
+    );
+
+CALL AddSymbol(
+    'AT90S1200',
+    'AT90S1200.sym'
+    );
+
+CALL AddSymbol(
+    'XC2S150-6PQ208C',
+    'XC2S150-6PQ208C.sym'
+    );
+
+CALL AddSymbol(
+    '2TRI',
+    '2tri-1.sym'
+    );
+
+CALL AddSymbol(
+    'PAL20X4',
+    'PAL20X4-1.sym'
+    );
+
+CALL AddSymbol(
+    'UAA170',
+    'UAA170-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX232',
+    'max233-1.sym'
+    );
+
+CALL AddSymbol(
+    '4501',
+    '4501-1.sym'
+    );
+
+CALL AddSymbol(
+    'HCNR201',
+    'hcnr201-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX189',
+    'max186-2.sym'
+    );
+
+CALL AddSymbol(
+    '7400',
+    '7400-1.sym'
+    );
+
+CALL AddSymbol(
+    'HEADER50',
+    'header50r-1.sym'
+    );
+
+CALL AddSymbol(
+    'nor2',
+    'nor2-1.sym'
+    );
+
+CALL AddSymbol(
+    'xor',
+    'xor9-1.sym'
+    );
+
+CALL AddSymbol(
+    'AT89C51_DIP',
+    'AT89C51_DIP.sym'
+    );
+
+CALL AddSymbol(
+    'MOV',
+    'varistor-1.sym'
+    );
+
+CALL AddSymbol(
+    '7490',
+    '7490-1.sym'
+    );
+
+CALL AddSymbol(
+    '2PHASE-STEPPER-4LEADS',
+    '2phase-stepper-1.sym'
+    );
+
+CALL AddSymbol(
+    'DIODE-BRIDGE',
+    'diode-bridge-1.sym'
+    );
+
+CALL AddSymbol(
+    'LT1782',
+    'lt1782-1.sym'
+    );
+
+CALL AddSymbol(
+    '7427',
+    '7427-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX378',
+    'max378-1.sym'
+    );
+
+CALL AddSymbol(
+    'SWITCH_PUSHBUTTON_NC',
+    'switch-pushbutton-nc-1.sym'
+    );
+
+CALL AddSymbol(
+    '4048',
+    '4048-1.sym'
+    );
+
+CALL AddSymbol(
+    '4052',
+    '4052-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX202',
+    'max202-1.sym'
     );
 
 CALL AddSymbol(
     'CAPACITOR',
-    'sym/asic/asic-cap-2.sym'
+    'asic-cap-3.sym'
+    );
+
+CALL AddSymbol(
+    'xnor',
+    'xnor3-1.sym'
+    );
+
+CALL AddSymbol(
+    '4060',
+    '4060-2.sym'
+    );
+
+CALL AddSymbol(
+    '74162',
+    '74162-1.sym'
+    );
+
+CALL AddSymbol(
+    'AT89S8252-24PC',
+    'AT89S8252-24PC-1.sym'
+    );
+
+CALL AddSymbol(
+    '74??',
+    '74power-1.sym'
+    );
+
+CALL AddSymbol(
+    '74189',
+    '74189-1.sym'
+    );
+
+CALL AddSymbol(
+    '4094',
+    '4094-2.sym'
+    );
+
+CALL AddSymbol(
+    'SWITCAP-clock',
+    'switcap-clock-1.sym'
+    );
+
+CALL AddSymbol(
+    '4014',
+    '4014-2.sym'
+    );
+
+CALL AddSymbol(
+    '4089',
+    '4089-1.sym'
+    );
+
+CALL AddSymbol(
+    'RELAY',
+    'relay-1.sym'
+    );
+
+CALL AddSymbol(
+    'CS5396-KS',
+    'CS5396-1.sym'
+    );
+
+CALL AddSymbol(
+    '74153',
+    '74153-1.sym'
+    );
+
+CALL AddSymbol(
+    '74393',
+    '74393-1.sym'
+    );
+
+CALL AddSymbol(
+    '4508',
+    '4508-1.sym'
+    );
+
+CALL AddSymbol(
+    'LED',
+    'led-3.sym'
+    );
+
+CALL AddSymbol(
+    'IPAD',
+    'ipad-1.sym'
+    );
+
+CALL AddSymbol(
+    '8259A',
+    '8259A-1.sym'
+    );
+
+CALL AddSymbol(
+    '74113',
+    '74113-1.sym'
+    );
+
+CALL AddSymbol(
+    'PCF8563',
+    'PCF8563-1.sym'
+    );
+
+CALL AddSymbol(
+    '40194',
+    '40194-1.sym'
+    );
+
+CALL AddSymbol(
+    'and9',
+    'and9-1.sym'
+    );
+
+CALL AddSymbol(
+    '4585',
+    '4585-1.sym'
+    );
+
+CALL AddSymbol(
+    'IDT7204',
+    'idt7204-1.sym'
+    );
+
+CALL AddSymbol(
+    'lm628n-6',
+    'lm628n-6.sym'
+    );
+
+CALL AddSymbol(
+    'DS26LS31',
+    'DS26LS31-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX12557',
+    'max12557-1.sym'
+    );
+
+CALL AddSymbol(
+    '74673A',
+    '74673A-2.sym'
+    );
+
+CALL AddSymbol(
+    'MAX12555',
+    'max12555-1.sym'
+    );
+
+CALL AddSymbol(
+    '40374',
+    '40374-1.sym'
+    );
+
+CALL AddSymbol(
+    '4001',
+    '4001-1.sym'
+    );
+
+CALL AddSymbol(
+    'NMOS_TRANSISTOR',
+    'asic-nhhv-1.sym'
+    );
+
+CALL AddSymbol(
+    '74367',
+    '74367-1.sym'
+    );
+
+CALL AddSymbol(
+    'XC2S200-5PQ208C',
+    'XC2S200-5PQ208C.sym'
+    );
+
+CALL AddSymbol(
+    '4518',
+    '4518-1.sym'
+    );
+
+CALL AddSymbol(
+    'TRIAC',
+    'triac-1.sym'
+    );
+
+CALL AddSymbol(
+    '7415',
+    '7415-1.sym'
+    );
+
+CALL AddSymbol(
+    'MXT429',
+    'mxt429-1.sym'
+    );
+
+CALL AddSymbol(
+    'COMPACT_FLASH',
+    'header50-2.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_6',
+    'connector6-1.sym'
+    );
+
+CALL AddSymbol(
+    '7474',
+    '7474-2.sym'
+    );
+
+CALL AddSymbol(
+    'FND5148',
+    'FND5148-1.sym'
+    );
+
+CALL AddSymbol(
+    '74280',
+    '74280-1.sym'
+    );
+
+CALL AddSymbol(
+    '7404',
+    '7404-3.sym'
+    );
+
+CALL AddSymbol(
+    '4504',
+    '4504-1.sym'
+    );
+
+CALL AddSymbol(
+    '62256',
+    '62256-1.sym'
+    );
+
+CALL AddSymbol(
+    '74238',
+    '74238-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX807',
+    'max807-1.sym'
+    );
+
+CALL AddSymbol(
+    'VARIABLE_RESISTOR',
+    'pot-bourns.sym'
+    );
+
+CALL AddSymbol(
+    'RESISTORPACK_3',
+    'resistorpack3-1.sym'
+    );
+
+CALL AddSymbol(
+    '40100',
+    '40100-1.sym'
+    );
+
+CALL AddSymbol(
+    '4021',
+    '4021-3.sym'
+    );
+
+CALL AddSymbol(
+    'XC2S30-5PQ208I',
+    'XC2S30-5PQ208I.sym'
+    );
+
+CALL AddSymbol(
+    'nand',
+    'nand3-1.sym'
+    );
+
+CALL AddSymbol(
+    'DUAL_OPAMP',
+    'dual-opamp-1.sym'
+    );
+
+CALL AddSymbol(
+    '7420',
+    '7420-2.sym'
+    );
+
+CALL AddSymbol(
+    '4016',
+    '4016-1.sym'
+    );
+
+CALL AddSymbol(
+    'xor',
+    'xor6-1.sym'
+    );
+
+CALL AddSymbol(
+    'T1-1T-W38',
+    'T1-1T-W38-1.sym'
+    );
+
+CALL AddSymbol(
+    'xor',
+    'xor3-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX189',
+    'max189-1.sym'
+    );
+
+CALL AddSymbol(
+    'HCPL-2630',
+    'hcpl-2630-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX4662',
+    'max4662-2.sym'
+    );
+
+CALL AddSymbol(
+    '40244',
+    '40244-1.sym'
+    );
+
+CALL AddSymbol(
+    'SWITCH_DIP12',
+    'switch-dip12.sym'
+    );
+
+CALL AddSymbol(
+    'ADG620',
+    'ADG620-1.sym'
+    );
+
+CALL AddSymbol(
+    'LM723',
+    'lm723-1.sym'
+    );
+
+CALL AddSymbol(
+    'nor6',
+    'nor6-1.sym'
+    );
+
+CALL AddSymbol(
+    'xor3',
+    'xor3-1.sym'
+    );
+
+CALL AddSymbol(
+    '40373',
+    '40373-1.sym'
+    );
+
+CALL AddSymbol(
+    'VARIABLE_RESISTOR',
+    'resistor-variable-1.sym'
+    );
+
+CALL AddSymbol(
+    'PC104A',
+    'pc104A-1.sym'
+    );
+
+CALL AddSymbol(
+    'DM9368',
+    'DM9368.sym'
+    );
+
+CALL AddSymbol(
+    'DAC08',
+    'dac08sm-1.sym'
+    );
+
+CALL AddSymbol(
+    'AM27S13D',
+    'am27S13D-1.sym'
+    );
+
+CALL AddSymbol(
+    '4316',
+    '4316-1.sym'
+    );
+
+CALL AddSymbol(
+    '4041',
+    '4041-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX237',
+    'max237-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_20',
+    'connector20-1.sym'
+    );
+
+CALL AddSymbol(
+    'AT90S2343',
+    'AT90S2343.sym'
+    );
+
+CALL AddSymbol(
+    '4N25',
+    '4N25-1.sym'
+    );
+
+CALL AddSymbol(
+    'NMOS_TRANSISTOR',
+    'nmos-3.sym'
+    );
+
+CALL AddSymbol(
+    'MAX3120',
+    'max3120-1.sym'
+    );
+
+CALL AddSymbol(
+    'none',
+    'busripper-1.sym'
+    );
+
+CALL AddSymbol(
+    '4002',
+    '4002-1.sym'
+    );
+
+CALL AddSymbol(
+    'SWITCH_DIP5',
+    'switch-dip5-1.sym'
+    );
+
+CALL AddSymbol(
+    'PCA82C250',
+    'PCA82C250-1.sym'
+    );
+
+CALL AddSymbol(
+    'DB37',
+    'DB37-1.sym'
+    );
+
+CALL AddSymbol(
+    'TRANSFORMER',
+    'transformer-3.sym'
+    );
+
+CALL AddSymbol(
+    'include',
+    'include-1.sym'
+    );
+
+CALL AddSymbol(
+    'IOPAD',
+    'iopad-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX400',
+    'max400-1.sym'
+    );
+
+CALL AddSymbol(
+    '22V10',
+    '22V10-DIP-1.sym'
+    );
+
+CALL AddSymbol(
+    '4049',
+    '4049-1.sym'
+    );
+
+CALL AddSymbol(
+    'notif1',
+    'notif1-1.sym'
+    );
+
+CALL AddSymbol(
+    '4541',
+    '4541-1.sym'
+    );
+
+CALL AddSymbol(
+    'cascade-defaults',
+    'cascade-defaults-1.sym'
+    );
+
+CALL AddSymbol(
+    'or',
+    'or2-1.sym'
+    );
+
+CALL AddSymbol(
+    'ATmega16_DIP',
+    'ATmega16_DIP-1.sym'
+    );
+
+CALL AddSymbol(
+    '74HCT01',
+    '74HCT01-1.sym'
+    );
+
+CALL AddSymbol(
+    '74159',
+    '74159-1.sym'
+    );
+
+CALL AddSymbol(
+    '4044',
+    '4044-1.sym'
+    );
+
+CALL AddSymbol(
+    'HEADER10',
+    'rs232-idc10.sym'
+    );
+
+CALL AddSymbol(
+    '4515',
+    '4515-1.sym'
+    );
+
+CALL AddSymbol(
+    '74161',
+    '74161-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX3674',
+    'max3674-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX1011',
+    'max1011-1.sym'
+    );
+
+CALL AddSymbol(
+    'AUI',
+    'aui-1.sym'
+    );
+
+CALL AddSymbol(
+    '4512',
+    '4512-1.sym'
+    );
+
+CALL AddSymbol(
+    '4093',
+    '4093-1.sym'
+    );
+
+CALL AddSymbol(
+    'RESISTORPACK_10',
+    'resistorpack10-1.sym'
+    );
+
+CALL AddSymbol(
+    'xor',
+    'xor5-1.sym'
+    );
+
+CALL AddSymbol(
+    'BLOCK',
+    'block-1.sym'
+    );
+
+CALL AddSymbol(
+    '74379',
+    '74379-1.sym'
+    );
+
+CALL AddSymbol(
+    '74126',
+    '74126-1.sym'
+    );
+
+CALL AddSymbol(
+    '74265',
+    '74265-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX1080',
+    'max1080-1.sym'
+    );
+
+CALL AddSymbol(
+    'and',
+    'and3-2.sym'
+    );
+
+CALL AddSymbol(
+    'INDUCTOR',
+    'inductor-1.sym'
+    );
+
+CALL AddSymbol(
+    '74137',
+    '74137-1.sym'
+    );
+
+CALL AddSymbol(
+    '7409',
+    '7409-2.sym'
+    );
+
+CALL AddSymbol(
+    'or9',
+    'or9-1.sym'
+    );
+
+CALL AddSymbol(
+    '8088',
+    '8088-1.sym'
+    );
+
+CALL AddSymbol(
+    'HEADER20',
+    'header20-1.sym'
+    );
+
+CALL AddSymbol(
+    'AT89C2051',
+    'AT89C2051-1.sym'
+    );
+
+CALL AddSymbol(
+    'LT1308',
+    'lt1308-1.sym'
+    );
+
+CALL AddSymbol(
+    '4510',
+    '4510-1.sym'
+    );
+
+CALL AddSymbol(
+    'MC10E104',
+    'MC10E104-2.sym'
+    );
+
+CALL AddSymbol(
+    'ATmega163_DIP',
+    'ATmega163_DIP.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_34',
+    'connector34-2.sym'
+    );
+
+CALL AddSymbol(
+    'ZENER_DIODE',
+    'zener-1.sym'
+    );
+
+CALL AddSymbol(
+    '62256',
+    '62256-2.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_3',
+    'connector3-2.sym'
+    );
+
+CALL AddSymbol(
+    '4502',
+    '4502-1.sym'
+    );
+
+CALL AddSymbol(
+    'SX28AC',
+    'sx28ac-1.sym'
+    );
+
+CALL AddSymbol(
+    '74123',
+    '74123-3.sym'
+    );
+
+CALL AddSymbol(
+    '74109',
+    '74109-1.sym'
+    );
+
+CALL AddSymbol(
+    'max865eua',
+    'max865EUA-1.sym'
+    );
+
+CALL AddSymbol(
+    'nand',
+    'nand4-2.sym'
+    );
+
+CALL AddSymbol(
+    '7455',
+    '7455-1.sym'
+    );
+
+CALL AddSymbol(
+    '7430',
+    '7430-2.sym'
+    );
+
+CALL AddSymbol(
+    '4033',
+    '4033-1.sym'
+    );
+
+CALL AddSymbol(
+    'and',
+    'and4-1.sym'
+    );
+
+CALL AddSymbol(
+    'AT45DB021B',
+    'AT45db021bso8w-1.sym'
+    );
+
+CALL AddSymbol(
+    'BC547',
+    'BC547-3.sym'
+    );
+
+CALL AddSymbol(
+    'RESISTOR',
+    'asic-res-4.sym'
+    );
+
+CALL AddSymbol(
+    'DIODE',
+    'diode-2.sym'
+    );
+
+CALL AddSymbol(
+    'BRIDGE',
+    'bridge-2.sym'
+    );
+
+CALL AddSymbol(
+    'MAX1620',
+    'max1620-1.sym'
+    );
+
+CALL AddSymbol(
+    '74193',
+    '74193-1.sym'
+    );
+
+CALL AddSymbol(
+    '40208',
+    '40208-1.sym'
+    );
+
+CALL AddSymbol(
+    '4008',
+    '4008-1.sym'
+    );
+
+CALL AddSymbol(
+    'sa52-11',
+    'sa52-11-1.sym'
+    );
+
+CALL AddSymbol(
+    'RESISTOR',
+    'asic-res-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX12559',
+    'max12559-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_2',
+    'connector2-2.sym'
+    );
+
+CALL AddSymbol(
+    'T-Line',
+    'wline-1x.sym'
+    );
+
+CALL AddSymbol(
+    'vac',
+    'vac-1.sym'
+    );
+
+CALL AddSymbol(
+    '7408',
+    '7408-2.sym'
+    );
+
+CALL AddSymbol(
+    '6821',
+    '6821-2.sym'
+    );
+
+CALL AddSymbol(
+    'DS8641',
+    'DS8641_1.sym'
+    );
+
+CALL AddSymbol(
+    '7810',
+    'lm7810-1.sym'
+    );
+
+CALL AddSymbol(
+    '4034',
+    '4034-1.sym'
+    );
+
+CALL AddSymbol(
+    'and',
+    'and5-2.sym'
+    );
+
+CALL AddSymbol(
+    'CAPACITOR',
+    'capacitor-1.sym'
+    );
+
+CALL AddSymbol(
+    'xor',
+    'xor2-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX12527',
+    'max12527-1.sym'
+    );
+
+CALL AddSymbol(
+    '12SK7',
+    '12SK7-1.sym'
+    );
+
+CALL AddSymbol(
+    'TLIN',
+    'txline4-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX038',
+    'max038-1.sym'
+    );
+
+CALL AddSymbol(
+    'ATtiny28_TQFP',
+    'ATtiny28_TQFP.sym'
+    );
+
+CALL AddSymbol(
+    'DS80C310_DIP',
+    'DS80C310-1.sym'
+    );
+
+CALL AddSymbol(
+    '40104',
+    '40104-1.sym'
+    );
+
+CALL AddSymbol(
+    'RESISTORPACK_7',
+    'resistorpack7-1.sym'
+    );
+
+CALL AddSymbol(
+    '74HC374',
+    '74HC374-1.sym'
+    );
+
+CALL AddSymbol(
+    'TDA2822M',
+    'TDA2822M-1.sym'
+    );
+
+CALL AddSymbol(
+    'RESISTORPACK_12',
+    'resistorpack12-1.sym'
+    );
+
+CALL AddSymbol(
+    'pad',
+    'pad_gnd.sym'
+    );
+
+CALL AddSymbol(
+    'bufif1',
+    'bufif1-1.sym'
+    );
+
+CALL AddSymbol(
+    'PIC16F628',
+    'pic16F628-2.sym'
+    );
+
+CALL AddSymbol(
+    'MAX663',
+    'max663-1.sym'
+    );
+
+CALL AddSymbol(
+    '4045',
+    '4045-1.sym'
+    );
+
+CALL AddSymbol(
+    'nand',
+    'nand3-2.sym'
+    );
+
+CALL AddSymbol(
+    'LCB110',
+    'ssrelay-spst-lcb110-1.sym'
+    );
+
+CALL AddSymbol(
+    '7495',
+    '7495-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX872',
+    'max872-1.sym'
+    );
+
+CALL AddSymbol(
+    '74164',
+    '74164-1.sym'
+    );
+
+CALL AddSymbol(
+    'ADT1-1WT',
+    'ADT1-1WT-2.sym'
+    );
+
+CALL AddSymbol(
+    'COIL',
+    'coil-2.sym'
+    );
+
+CALL AddSymbol(
+    '4077',
+    '4077-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_22',
+    'connector22-2.sym'
+    );
+
+CALL AddSymbol(
+    'VOLTAGE_SOURCE',
+    'voltage-3.sym'
+    );
+
+CALL AddSymbol(
+    'HA5221',
+    'HA5221-1.sym'
+    );
+
+CALL AddSymbol(
+    'JOSEPHSON_JUNCTION',
+    'jj-1.sym'
+    );
+
+CALL AddSymbol(
+    '74673A',
+    '74673A-1.sym'
+    );
+
+CALL AddSymbol(
+    'PMOS_TRANSISTOR',
+    'pmos-2.sym'
+    );
+
+CALL AddSymbol(
+    '6N136',
+    '6N136-1.sym'
+    );
+
+CALL AddSymbol(
+    'A3967SLB',
+    '3967-2.sym'
+    );
+
+CALL AddSymbol(
+    '50L6GT',
+    '50L6GT-1.sym'
+    );
+
+CALL AddSymbol(
+    '7422',
+    '7422-1.sym'
+    );
+
+CALL AddSymbol(
+    'ATtiny12',
+    'ATtiny12.sym'
+    );
+
+CALL AddSymbol(
+    'MAX1206',
+    'max1206-1.sym'
+    );
+
+CALL AddSymbol(
+    'ATMEGA32',
+    'ATmega32MLF-1.sym'
+    );
+
+CALL AddSymbol(
+    'nand',
+    'nand9-1.sym'
+    );
+
+CALL AddSymbol(
+    'PNP_TRANSISTOR',
+    'pnp-2.sym'
+    );
+
+CALL AddSymbol(
+    'MSP430x13/4x',
+    'MSP430x13-4x.sym'
+    );
+
+CALL AddSymbol(
+    'SPICE-ccvs',
+    'ccvs-1.sym'
+    );
+
+CALL AddSymbol(
+    'nor',
+    'nor7-2.sym'
+    );
+
+CALL AddSymbol(
+    'ds26c31',
+    'DS26C61-1.sym'
+    );
+
+CALL AddSymbol(
+    'DRC_Directive',
+    'nc-right-1.sym'
+    );
+
+CALL AddSymbol(
+    '74266',
+    '74266-1.sym'
+    );
+
+CALL AddSymbol(
+    'and',
+    'and7-2.sym'
+    );
+
+CALL AddSymbol(
+    '74181',
+    '74181-1.sym'
+    );
+
+CALL AddSymbol(
+    '7485',
+    '7485-1.sym'
+    );
+
+CALL AddSymbol(
+    '4164',
+    '4164-1.sym'
+    );
+
+CALL AddSymbol(
+    'FLAG',
+    'out.sym'
+    );
+
+CALL AddSymbol(
+    'Dual_Two_Way_Switch',
+    'switch-spdt-2.sym'
+    );
+
+CALL AddSymbol(
+    'AROMAT-TQ4',
+    'aromat-tq4.sym'
+    );
+
+CALL AddSymbol(
+    '74688',
+    '74688-2.sym'
+    );
+
+CALL AddSymbol(
+    'VIPEC',
+    'vipec-analysis-1.sym'
+    );
+
+CALL AddSymbol(
+    '4017',
+    '4017-2.sym'
+    );
+
+CALL AddSymbol(
+    'N82S100N',
+    'N82S100N-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX12553',
+    'max12553-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX186',
+    'max186-1.sym'
+    );
+
+CALL AddSymbol(
+    '7474',
+    '7474-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX218',
+    'max218-1.sym'
+    );
+
+CALL AddSymbol(
+    '4009',
+    '4009-1.sym'
+    );
+
+CALL AddSymbol(
+    'MC100ELT24',
+    'MC100ELT24-1.sym'
+    );
+
+CALL AddSymbol(
+    'or',
+    'or8-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX1614',
+    'max1614-1.sym'
+    );
+
+CALL AddSymbol(
+    'VOLTAGE_SOURCE',
+    'vdc-1.sym'
+    );
+
+CALL AddSymbol(
+    '4000',
+    '4000-1.sym'
+    );
+
+CALL AddSymbol(
+    '31-71043',
+    '31-71043-1.sym'
+    );
+
+CALL AddSymbol(
+    'and',
+    'and4-2.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_10',
+    'connector10-1.sym'
+    );
+
+CALL AddSymbol(
+    '74154',
+    '74154-1.sym'
+    );
+
+CALL AddSymbol(
+    '4085',
+    '4085-1.sym'
+    );
+
+CALL AddSymbol(
+    '4086',
+    '4086-1.sym'
+    );
+
+CALL AddSymbol(
+    'M41T00',
+    'M41T00-SO8-1.sym'
+    );
+
+CALL AddSymbol(
+    '93Cx6',
+    '93Cx6-1.sym'
+    );
+
+CALL AddSymbol(
+    'NE592',
+    'NE-592-1.sym'
+    );
+
+CALL AddSymbol(
+    '74182',
+    '74182-1.sym'
+    );
+
+CALL AddSymbol(
+    'FUSE',
+    'fuse-1.sym'
+    );
+
+CALL AddSymbol(
+    'nand6',
+    'nand6-1.sym'
+    );
+
+CALL AddSymbol(
+    '4072',
+    '4072-2.sym'
+    );
+
+CALL AddSymbol(
+    'BATTERY',
+    'battery-1.sym'
+    );
+
+CALL AddSymbol(
+    '40192',
+    '40192-1.sym'
+    );
+
+CALL AddSymbol(
+    'NMOS_TRANSISTOR',
+    'asic-nmmv-1.sym'
+    );
+
+CALL AddSymbol(
+    '7472',
+    '7472-1.sym'
+    );
+
+CALL AddSymbol(
+    'IRLZ24N',
+    'IRLZ24N-1.sym'
+    );
+
+CALL AddSymbol(
+    'xor',
+    'xor7-1.sym'
+    );
+
+CALL AddSymbol(
+    '4047',
+    '4047-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_36',
+    'connector36-2.sym'
+    );
+
+CALL AddSymbol(
+    '4010',
+    '4010-1.sym'
+    );
+
+CALL AddSymbol(
+    'XC2S100-6PQ208C',
+    'XC2S100-6PQ208C.sym'
+    );
+
+CALL AddSymbol(
+    '7421',
+    '7421-2.sym'
+    );
+
+CALL AddSymbol(
+    'MAINS_CONNECTOR',
+    'mains-plug-1.sym'
+    );
+
+CALL AddSymbol(
+    'xnor',
+    'xnor9-1.sym'
+    );
+
+CALL AddSymbol(
+    'none',
+    'passive-1.sym'
+    );
+
+CALL AddSymbol(
+    '6n137',
+    '6n137-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX3491',
+    'max3491-1.sym'
+    );
+
+CALL AddSymbol(
+    '4050',
+    '4050-1.sym'
+    );
+
+CALL AddSymbol(
+    'SPLITTER',
+    'splitter-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX492',
+    'max492-1.sym'
+    );
+
+CALL AddSymbol(
+    'LOOP_ANTENNA',
+    'loop_antenna-1.sym'
+    );
+
+CALL AddSymbol(
+    'SWITCAP-vcvs',
+    'switcap-vcvs-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_12',
+    'connector12-2.sym'
+    );
+
+CALL AddSymbol(
+    '74HC373',
+    '74HC373-1.sym'
+    );
+
+CALL AddSymbol(
+    '4032',
+    '4032-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAINS_CONNECTOR',
+    'mains-plug-2.sym'
+    );
+
+CALL AddSymbol(
+    'nand8',
+    'nand8-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX6674',
+    'max6674-1.sym'
+    );
+
+CALL AddSymbol(
+    'DIN41617C13',
+    'DIN41617C13-1.sym'
+    );
+
+CALL AddSymbol(
+    'AT89C5132_TQFP',
+    'AT89C5132_TQFP-1.sym'
+    );
+
+CALL AddSymbol(
+    'POLARIZED_CAPACITOR',
+    'capacitor-3.sym'
+    );
+
+CALL AddSymbol(
+    'nand',
+    'nand7-1.sym'
+    );
+
+CALL AddSymbol(
+    '4053',
+    '4053-2.sym'
+    );
+
+CALL AddSymbol(
+    'MAX1209',
+    'max1209-1.sym'
+    );
+
+CALL AddSymbol(
+    'transformer',
+    'pwrxfmr-1.sym'
+    );
+
+CALL AddSymbol(
+    'DS1602',
+    'DS1620-1.sym'
+    );
+
+CALL AddSymbol(
+    'xor5',
+    'xor5-1.sym'
+    );
+
+CALL AddSymbol(
+    'DIN41612C56',
+    'DIN41612C56-1.sym'
+    );
+
+CALL AddSymbol(
+    'LT1160',
+    'lt1160-1.sym'
+    );
+
+CALL AddSymbol(
+    '4073',
+    '4073-2.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_26',
+    'connector26-2.sym'
+    );
+
+CALL AddSymbol(
+    'ST7538',
+    'ST7538-1.sym'
+    );
+
+CALL AddSymbol(
+    'NPN_TRANSISTOR',
+    'npn-3.sym'
+    );
+
+CALL AddSymbol(
+    '74154',
+    '74154-2.sym'
+    );
+
+CALL AddSymbol(
+    'and',
+    'and6-2.sym'
+    );
+
+CALL AddSymbol(
+    'HEADER34',
+    'header34-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX4636',
+    'max4636-1.sym'
+    );
+
+CALL AddSymbol(
+    '74109',
+    '74109-2.sym'
+    );
+
+CALL AddSymbol(
+    '74166',
+    '74166-1.sym'
+    );
+
+CALL AddSymbol(
+    'vsin',
+    'vsin-1.sym'
+    );
+
+CALL AddSymbol(
+    '7493',
+    '7493-1.sym'
+    );
+
+CALL AddSymbol(
+    'nor',
+    'nor6-2.sym'
+    );
+
+CALL AddSymbol(
+    'HEADER16',
+    'header16-1.sym'
+    );
+
+CALL AddSymbol(
+    '7415',
+    '7415-2.sym'
+    );
+
+CALL AddSymbol(
+    'xnor3',
+    'xnor3-1.sym'
+    );
+
+CALL AddSymbol(
+    'TRANSFORMER ',
+    'transformer-5.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_30',
+    'connector30-2.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_18',
+    'connector18-2.sym'
+    );
+
+CALL AddSymbol(
+    'AT90S8535P',
+    'AT90S8535P-1.sym'
+    );
+
+CALL AddSymbol(
+    'DIP24',
+    'dip24-1.sym'
+    );
+
+CALL AddSymbol(
+    'LM741',
+    'lm741-1.sym'
+    );
+
+CALL AddSymbol(
+    '7805',
+    'lm7805-1.sym'
+    );
+
+CALL AddSymbol(
+    '74139',
+    '74139-3.sym'
+    );
+
+CALL AddSymbol(
+    'and',
+    'and8-2.sym'
+    );
+
+CALL AddSymbol(
+    '7432',
+    '7432-3.sym'
+    );
+
+CALL AddSymbol(
+    'AD633JR',
+    'ad633JR-1.sym'
+    );
+
+CALL AddSymbol(
+    '74189',
+    '74189-2.sym'
+    );
+
+CALL AddSymbol(
+    '74HCT4094',
+    '74HCT4094-1.sym'
+    );
+
+CALL AddSymbol(
+    '40182',
+    '40182-1.sym'
+    );
+
+CALL AddSymbol(
+    'HCPL-4534',
+    'hcpl-4534-1.sym'
+    );
+
+CALL AddSymbol(
+    'OUTPUT',
+    'output-1.sym'
+    );
+
+CALL AddSymbol(
+    'MSP430x41x',
+    'MSP430x41x.sym'
+    );
+
+CALL AddSymbol(
+    'cascade-transformer',
+    'cascade-transformer-1.sym'
+    );
+
+CALL AddSymbol(
+    '74273',
+    '74273-1.sym'
+    );
+
+CALL AddSymbol(
+    'GND',
+    'vcc-orcad-circle-1.sym'
+    );
+
+CALL AddSymbol(
+    '7445',
+    '7445-1.sym'
+    );
+
+CALL AddSymbol(
+    'xnor2',
+    'xnor2-1.sym'
+    );
+
+CALL AddSymbol(
+    '4055',
+    '4055-1.sym'
+    );
+
+CALL AddSymbol(
+    'CAPACITOR',
+    'asic-cap-1.sym'
+    );
+
+CALL AddSymbol(
+    'TLIN',
+    'txline-1.sym'
+    );
+
+CALL AddSymbol(
+    '6N135',
+    '6N135-1.sym'
+    );
+
+CALL AddSymbol(
+    'SPEAKER',
+    'speaker-2.sym'
+    );
+
+CALL AddSymbol(
+    'MAX232',
+    'max232-2.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_32',
+    'connector32-2.sym'
+    );
+
+CALL AddSymbol(
+    'nand',
+    'nand2-2.sym'
+    );
+
+CALL AddSymbol(
+    '8254',
+    '8254-1.sym'
+    );
+
+CALL AddSymbol(
+    'vpulse',
+    'vpulse-1.sym'
+    );
+
+CALL AddSymbol(
+    '4043',
+    '4043-1.sym'
+    );
+
+CALL AddSymbol(
+    '7495',
+    '7495-2.sym'
+    );
+
+CALL AddSymbol(
+    'OPAMP',
+    'inamp-1.sym'
+    );
+
+CALL AddSymbol(
+    'CURRENT_SOURCE',
+    'current-1.sym'
+    );
+
+CALL AddSymbol(
+    'HEADER50',
+    'header50-1.sym'
+    );
+
+CALL AddSymbol(
+    'LT1162',
+    'lt1162-1.sym'
+    );
+
+CALL AddSymbol(
+    '2N5245',
+    '2N5245-1.sym'
+    );
+
+CALL AddSymbol(
+    'OPAD',
+    'opad-1.sym'
+    );
+
+CALL AddSymbol(
+    '27C2001',
+    '27C2001-1.sym'
+    );
+
+CALL AddSymbol(
+    'MC34063',
+    'MC34063-1.sym'
+    );
+
+CALL AddSymbol(
+    'DB15',
+    'DB15-1.sym'
+    );
+
+CALL AddSymbol(
+    'icl7660',
+    'icl7660-1.sym'
+    );
+
+CALL AddSymbol(
+    'LCC110',
+    'ssrelay-spdt-lcc110-1.sym'
+    );
+
+CALL AddSymbol(
+    'nand',
+    'nand5-1.sym'
+    );
+
+CALL AddSymbol(
+    '7412',
+    '7412-2.sym'
+    );
+
+CALL AddSymbol(
+    'RESISTORPACK_6',
+    'resistorpack6-1.sym'
+    );
+
+CALL AddSymbol(
+    'or6',
+    'or6-1.sym'
+    );
+
+CALL AddSymbol(
+    '4042',
+    '4042-2.sym'
+    );
+
+CALL AddSymbol(
+    'nand',
+    'nand8-1.sym'
+    );
+
+CALL AddSymbol(
+    'AM9128',
+    'am9128-1.sym'
+    );
+
+CALL AddSymbol(
+    '4008',
+    '4008-2.sym'
+    );
+
+CALL AddSymbol(
+    '7486',
+    '7486-1.sym'
+    );
+
+CALL AddSymbol(
+    '4723',
+    '4723-1.sym'
+    );
+
+CALL AddSymbol(
+    '40101',
+    '40101-1.sym'
+    );
+
+CALL AddSymbol(
+    'NMOS_TRANSISTOR',
+    'nmos-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAC160',
+    'MAC160-1.sym'
+    );
+
+CALL AddSymbol(
+    '8086',
+    '8086-1.sym'
+    );
+
+CALL AddSymbol(
+    'NTC',
+    'ntc-1.sym'
+    );
+
+CALL AddSymbol(
+    '7409',
+    '7409-1.sym'
+    );
+
+CALL AddSymbol(
+    'POWER',
+    'vss.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_3',
+    'connector3-1.sym'
+    );
+
+CALL AddSymbol(
+    'PNP_TRANSISTOR',
+    'pnp-1.sym'
+    );
+
+CALL AddSymbol(
+    '4019',
+    '4019-1.sym'
+    );
+
+CALL AddSymbol(
+    '4023',
+    '4023-1.sym'
+    );
+
+CALL AddSymbol(
+    'pad',
+    'pad_vdd.sym'
+    );
+
+CALL AddSymbol(
+    '4038',
+    '4038-1.sym'
+    );
+
+CALL AddSymbol(
+    'SWITCAP-options',
+    'switcap-options-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_20',
+    'connector20-2.sym'
+    );
+
+CALL AddSymbol(
+    'SWITCAP-timing',
+    'switcap-timing-1.sym'
+    );
+
+CALL AddSymbol(
+    'BLOCK',
+    'block_pos-1.sym'
+    );
+
+CALL AddSymbol(
+    'PAL16L8',
+    'PAL16L8-1.sym'
+    );
+
+CALL AddSymbol(
+    'PIC12F675',
+    'pic12F675-2.sym'
+    );
+
+CALL AddSymbol(
+    'MAX4005',
+    'max4005-1.sym'
+    );
+
+CALL AddSymbol(
+    'terminal',
+    'terminal-1.sym'
+    );
+
+CALL AddSymbol(
+    'PCF8591',
+    'PCF8591.sym'
+    );
+
+CALL AddSymbol(
+    '4022',
+    '4022-2.sym'
+    );
+
+CALL AddSymbol(
+    'XC2S200-6PQ208C',
+    'XC2S200-6PQ208C.sym'
+    );
+
+CALL AddSymbol(
+    'directive',
+    'gnucap-directive-1.sym'
+    );
+
+CALL AddSymbol(
+    '7818',
+    'lm7818-1.sym'
+    );
+
+CALL AddSymbol(
+    'AD633JN',
+    'ad633JN-1.sym'
+    );
+
+CALL AddSymbol(
+    'XC2S100-5PQ208C',
+    'XC2S100-5PQ208C.sym'
+    );
+
+CALL AddSymbol(
+    '4016',
+    '4016-2.sym'
+    );
+
+CALL AddSymbol(
+    'and',
+    'and2-2.sym'
+    );
+
+CALL AddSymbol(
+    'or8',
+    'or8-1.sym'
+    );
+
+CALL AddSymbol(
+    'nand',
+    'nand4-1.sym'
+    );
+
+CALL AddSymbol(
+    '74244',
+    '74244-1.sym'
+    );
+
+CALL AddSymbol(
+    'DAC0808',
+    'DAC0808-1.sym'
+    );
+
+CALL AddSymbol(
+    '7414',
+    '7414-2.sym'
+    );
+
+CALL AddSymbol(
+    'MAX3223E',
+    'max3223e-1.sym'
+    );
+
+CALL AddSymbol(
+    '7442',
+    '7442-1.sym'
+    );
+
+CALL AddSymbol(
+    'DS26C32',
+    'DS26C32-1.sym'
+    );
+
+CALL AddSymbol(
+    'SLA7024M',
+    'SLA7024M.sym'
+    );
+
+CALL AddSymbol(
+    'pic16F876',
+    'pic16F876-1.sym'
+    );
+
+CALL AddSymbol(
+    'or5',
+    'or5-1.sym'
+    );
+
+CALL AddSymbol(
+    'HFA1100',
+    'HFA1100-1.sym'
+    );
+
+CALL AddSymbol(
+    'GPIB',
+    'gpib-1.sym'
+    );
+
+CALL AddSymbol(
+    'pad',
+    'pad_pull_down.sym'
+    );
+
+CALL AddSymbol(
+    'MAX1207',
+    'max1207-1.sym'
+    );
+
+CALL AddSymbol(
+    'HEADER20',
+    'header20-3.sym'
+    );
+
+CALL AddSymbol(
+    'xor',
+    'xor8-1.sym'
+    );
+
+CALL AddSymbol(
+    'AT90S8535_TQFP',
+    'AT90S8535_TQFP.sym'
+    );
+
+CALL AddSymbol(
+    'nor4',
+    'nor4-1.sym'
+    );
+
+CALL AddSymbol(
+    '7805',
+    'volt_reg_adj-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX1637',
+    'max1637-1.sym'
+    );
+
+CALL AddSymbol(
+    'nor',
+    'nor4-2.sym'
+    );
+
+CALL AddSymbol(
+    'an82527',
+    'AN82527.sym'
+    );
+
+CALL AddSymbol(
+    'xnor',
+    'xnor7-1.sym'
+    );
+
+CALL AddSymbol(
+    '4503',
+    '4503-1.sym'
+    );
+
+CALL AddSymbol(
+    '4060',
+    '4060-1.sym'
+    );
+
+CALL AddSymbol(
+    '4043',
+    '4043-2.sym'
+    );
+
+CALL AddSymbol(
+    'max3226',
+    'max3226-1.sym'
+    );
+
+CALL AddSymbol(
+    'or4',
+    'or4-1.sym'
+    );
+
+CALL AddSymbol(
+    'ADG619',
+    'ADG619-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX147',
+    'max147-1.sym'
+    );
+
+CALL AddSymbol(
+    '4029',
+    '4029-1.sym'
+    );
+
+CALL AddSymbol(
+    '4011',
+    '4011-2.sym'
+    );
+
+CALL AddSymbol(
+    'NMOS_TRANSISTOR',
+    'nmos-2.sym'
+    );
+
+CALL AddSymbol(
+    '4094',
+    '4094-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX238',
+    'max238-1.sym'
+    );
+
+CALL AddSymbol(
+    'N82S23N',
+    'N82S23N-1.sym'
+    );
+
+CALL AddSymbol(
+    'MC3487',
+    'mc3487-1.sym'
+    );
+
+CALL AddSymbol(
+    '74151',
+    '74151-2.sym'
+    );
+
+CALL AddSymbol(
+    '74HCT05',
+    '74HCT05-1.sym'
+    );
+
+CALL AddSymbol(
+    'LCD',
+    'LCD-1.sym'
+    );
+
+CALL AddSymbol(
+    '8031',
+    '8031.sym'
+    );
+
+CALL AddSymbol(
+    'LED',
+    'led-1.sym'
+    );
+
+CALL AddSymbol(
+    'cascade-defaults-top',
+    'cascade-defaults-2.sym'
+    );
+
+CALL AddSymbol(
+    'XC2S100-5PQ208I',
+    'XC2S100-5PQ208I.sym'
+    );
+
+CALL AddSymbol(
+    'MAX4429',
+    'max4429-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_4',
+    'connector4-1.sym'
+    );
+
+CALL AddSymbol(
+    '7430',
+    '7430-1.sym'
+    );
+
+CALL AddSymbol(
+    'none',
+    'io-1.sym'
+    );
+
+CALL AddSymbol(
+    '4514',
+    '4514-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_16',
+    'connector16-2.sym'
+    );
+
+CALL AddSymbol(
+    'ULN2003',
+    'ULN2003-1.sym'
+    );
+
+CALL AddSymbol(
+    '40107',
+    '40107-1.sym'
+    );
+
+CALL AddSymbol(
+    '74377',
+    '74377-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX12554',
+    'max12554-1.sym'
+    );
+
+CALL AddSymbol(
+    'ds1307',
+    'DS1307-1.sym'
+    );
+
+CALL AddSymbol(
+    'HEADER40',
+    'header40-2.sym'
+    );
+
+CALL AddSymbol(
+    '4516',
+    '4516-1.sym'
+    );
+
+CALL AddSymbol(
+    'BNC',
+    'BNC-1.sym'
+    );
+
+CALL AddSymbol(
+    'MC68HC811E2FN',
+    'mc68hc811e2fn-1.sym'
+    );
+
+CALL AddSymbol(
+    'or',
+    'or9-2.sym'
+    );
+
+CALL AddSymbol(
+    'FLAG',
+    'io.sym'
+    );
+
+CALL AddSymbol(
+    'DB25',
+    'DB25-2.sym'
+    );
+
+CALL AddSymbol(
+    '7812',
+    'lm7812-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX489',
+    'max489-1.sym'
+    );
+
+CALL AddSymbol(
+    'SPICE-vcvs',
+    'vcvs-1.sym'
+    );
+
+CALL AddSymbol(
+    'cascade-amp',
+    'cascade-amp-1.sym'
+    );
+
+CALL AddSymbol(
+    '7410',
+    '7410-2.sym'
+    );
+
+CALL AddSymbol(
+    'XINGER1A1305-20',
+    'xinger-coupler-1.sym'
+    );
+
+CALL AddSymbol(
+    'AT90S8535',
+    'AT90S8535.sym'
+    );
+
+CALL AddSymbol(
+    'INPUT',
+    'in-1.sym'
+    );
+
+CALL AddSymbol(
+    'or',
+    'or6-1.sym'
+    );
+
+CALL AddSymbol(
+    'MC100ELT23',
+    'MC100ELT23-2.sym'
+    );
+
+CALL AddSymbol(
+    'and2',
+    'and2-1.sym'
+    );
+
+CALL AddSymbol(
+    'BAV70LT1',
+    'bav70lt1-1.sym'
+    );
+
+CALL AddSymbol(
+    '7496',
+    '7496-1.sym'
+    );
+
+CALL AddSymbol(
+    'DS2890',
+    'DS2890_TO92-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX1588',
+    'max1588-1.sym'
+    );
+
+CALL AddSymbol(
+    'FUSE',
+    'fuse-2.sym'
+    );
+
+CALL AddSymbol(
+    'DB9',
+    'DB9-1.sym'
+    );
+
+CALL AddSymbol(
+    '4000',
+    '4000-2.sym'
+    );
+
+CALL AddSymbol(
+    '74163',
+    '74163-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_11',
+    'connector11-2.sym'
+    );
+
+CALL AddSymbol(
+    'OPAD',
+    'opad-1.sym'
+    );
+
+CALL AddSymbol(
+    '4014',
+    '4014-1.sym'
+    );
+
+CALL AddSymbol(
+    'LM2822M',
+    'lm2822m-1.sym'
+    );
+
+CALL AddSymbol(
+    'pad',
+    'pad_no_esd.sym'
+    );
+
+CALL AddSymbol(
+    'DIODE',
+    'asic-diode-1.sym'
+    );
+
+CALL AddSymbol(
+    '40175',
+    '40175-1.sym'
+    );
+
+CALL AddSymbol(
+    'LSI11BUS',
+    'LSI11BUS-1.sym'
+    );
+
+CALL AddSymbol(
+    'lt1108',
+    'lt1108-1.sym'
+    );
+
+CALL AddSymbol(
+    'pad',
+    'pad_in.sym'
+    );
+
+CALL AddSymbol(
+    'MAX232',
+    'max232-1.sym'
+    );
+
+CALL AddSymbol(
+    '4072',
+    '4072-1.sym'
+    );
+
+CALL AddSymbol(
+    'PAL12H6',
+    'PAL12H6-1.sym'
+    );
+
+CALL AddSymbol(
+    'PNP_TRANSISTOR',
+    'spice-pnp-1.sym'
+    );
+
+CALL AddSymbol(
+    'XINGER11305-3',
+    'xinger-hybrid-1.sym'
+    );
+
+CALL AddSymbol(
+    'or',
+    'or7-1.sym'
+    );
+
+CALL AddSymbol(
+    '74138',
+    '74138-1.sym'
+    );
+
+CALL AddSymbol(
+    'or2',
+    'or2-1.sym'
+    );
+
+CALL AddSymbol(
+    'DS26C31',
+    'DS26C31-1.sym'
+    );
+
+CALL AddSymbol(
+    'SWITCAP-vsrc',
+    'switcap-vsrc-1.sym'
+    );
+
+CALL AddSymbol(
+    'DS2450',
+    'DS2450-1.sym'
+    );
+
+CALL AddSymbol(
+    'BasicStamp2',
+    'basicstamp-1.sym'
+    );
+
+CALL AddSymbol(
+    'NPN_TRANSISTOR',
+    'gnucap-npn-1.sym'
+    );
+
+CALL AddSymbol(
+    'HEADER26',
+    'header26-1.sym'
+    );
+
+CALL AddSymbol(
+    'AT-1XX',
+    'at-1xx.sym'
+    );
+
+CALL AddSymbol(
+    'NMOS_TRANSISTOR',
+    'asic-nmv-1.sym'
+    );
+
+CALL AddSymbol(
+    '3TRI',
+    '3tri-1.sym'
+    );
+
+CALL AddSymbol(
+    '4513',
+    '4513-1.sym'
+    );
+
+CALL AddSymbol(
+    'pad',
+    'pad_io.sym'
+    );
+
+CALL AddSymbol(
+    'TESTPOINT',
+    'testpt-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_8',
+    'connector8-1.sym'
+    );
+
+CALL AddSymbol(
+    'pad',
+    'pad_out.sym'
+    );
+
+CALL AddSymbol(
+    'MSP430x12x2',
+    'MSP430x12x2.sym'
+    );
+
+CALL AddSymbol(
+    'MAX1011',
+    'max1011-2.sym'
+    );
+
+CALL AddSymbol(
+    '7457',
+    '7457-1.sym'
+    );
+
+CALL AddSymbol(
+    'FILTER',
+    'filter-1.sym'
+    );
+
+CALL AddSymbol(
+    '74196',
+    '74196-1.sym'
+    );
+
+CALL AddSymbol(
+    'PMOS_TRANSISTOR',
+    'asic-pmos-1.sym'
+    );
+
+CALL AddSymbol(
+    'LM2941T',
+    'lm2941-1.sym'
+    );
+
+CALL AddSymbol(
+    'XC2S200-5PQ208I',
+    'XC2S200-5PQ208I.sym'
+    );
+
+CALL AddSymbol(
+    'SMDA05',
+    'smda05-1.sym'
+    );
+
+CALL AddSymbol(
+    '74150',
+    '74150-1.sym'
+    );
+
+CALL AddSymbol(
+    'MC10E137',
+    'MC10E137-2.sym'
+    );
+
+CALL AddSymbol(
+    'DS75176',
+    'DS75176-1.sym'
+    );
+
+CALL AddSymbol(
+    'transformer',
+    'transformer-1.sym'
+    );
+
+CALL AddSymbol(
+    'PCM2702E',
+    'PCM2702E-1.sym'
+    );
+
+CALL AddSymbol(
+    'HCPL4502',
+    'HCPL4502-1.sym'
+    );
+
+CALL AddSymbol(
+    'and8',
+    'and8-1.sym'
+    );
+
+CALL AddSymbol(
+    'nand',
+    'nand6-1.sym'
+    );
+
+CALL AddSymbol(
+    'DIN41612C56',
+    'DIN41612C56-2.sym'
+    );
+
+CALL AddSymbol(
+    '7497',
+    '7497-2.sym'
+    );
+
+CALL AddSymbol(
+    'MAX1674',
+    'max1674-1.sym'
+    );
+
+CALL AddSymbol(
+    'JUMPER',
+    'jumper-1.sym'
+    );
+
+CALL AddSymbol(
+    'VARIABLE_RESISTOR',
+    'resistor-variable-2.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_12',
+    'connector12-1.sym'
+    );
+
+CALL AddSymbol(
+    'MCT9001',
+    'mct9001-1.sym'
+    );
+
+CALL AddSymbol(
+    'RESISTOR',
+    'resistor-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX12529',
+    'max12529-1.sym'
+    );
+
+CALL AddSymbol(
+    'DS80C320',
+    'DS80C320.sym'
+    );
+
+CALL AddSymbol(
+    'nor',
+    'nor4-1.sym'
+    );
+
+CALL AddSymbol(
+    'MSP430x15/6x',
+    'MSP430x15-6x.sym'
+    );
+
+CALL AddSymbol(
+    'SPEAKER',
+    'speaker-1.sym'
+    );
+
+CALL AddSymbol(
+    '74121',
+    '74121-1.sym'
+    );
+
+CALL AddSymbol(
+    'LED',
+    'led-2.sym'
+    );
+
+CALL AddSymbol(
+    'GLOW_LAMP',
+    'glow-lamp-1.sym'
+    );
+
+CALL AddSymbol(
+    'DIODE',
+    'diode-1.sym'
+    );
+
+CALL AddSymbol(
+    '7405',
+    '7405-2.sym'
+    );
+
+CALL AddSymbol(
+    'PIC16C505',
+    'pic16c505-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_28',
+    'connector28-2.sym'
+    );
+
+CALL AddSymbol(
+    '74169',
+    '74169-1.sym'
+    );
+
+CALL AddSymbol(
+    'cascade-mixer',
+    'cascade-mixer-1.sym'
+    );
+
+CALL AddSymbol(
+    'PIC16C5x',
+    'pic16c5x-1.sym'
+    );
+
+CALL AddSymbol(
+    'MBR1545CT',
+    'mbr1545ct-1.sym'
+    );
+
+CALL AddSymbol(
+    'RESISTOR',
+    'asic-res-2.sym'
+    );
+
+CALL AddSymbol(
+    'nor',
+    'nor3-2.sym'
+    );
+
+CALL AddSymbol(
+    'TFDS4500',
+    'tfds4500-1.sym'
+    );
+
+CALL AddSymbol(
+    '2S2K3',
+    '2S2K3-1.sym'
+    );
+
+CALL AddSymbol(
+    'DUAL_GATE_NMOS_TRANSISTOR',
+    'dgnmos-1.sym'
+    );
+
+CALL AddSymbol(
+    'CRYSTAL',
+    'crystal-1.sym'
+    );
+
+CALL AddSymbol(
+    'NMOS_TRANSISTOR',
+    'asic-nhv-1.sym'
+    );
+
+CALL AddSymbol(
+    'options',
+    'spice-options-1.sym'
+    );
+
+CALL AddSymbol(
+    '4075',
+    '4075-1.sym'
+    );
+
+CALL AddSymbol(
+    '4046',
+    '4046-1.sym'
+    );
+
+CALL AddSymbol(
+    'nand',
+    'nand5-2.sym'
+    );
+
+CALL AddSymbol(
+    '7446',
+    '7446-1.sym'
+    );
+
+CALL AddSymbol(
+    'TC5516AP',
+    'TC5516AP-1.sym'
+    );
+
+CALL AddSymbol(
+    'RF2155',
+    'rf2155-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_15',
+    'connector15-1.sym'
+    );
+
+CALL AddSymbol(
+    'MC10E136',
+    'MC10E136-1.sym'
+    );
+
+CALL AddSymbol(
+    '7401',
+    '7401-2.sym'
+    );
+
+CALL AddSymbol(
+    '4059',
+    '4059-1.sym'
+    );
+
+CALL AddSymbol(
+    '7806',
+    'lm7806-1.sym'
+    );
+
+CALL AddSymbol(
+    'ADC0820',
+    'adc0820-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_5',
+    'connector5-1.sym'
+    );
+
+CALL AddSymbol(
+    '7478',
+    '7478-1.sym'
+    );
+
+CALL AddSymbol(
+    'HIP4080A',
+    'HIP4080A-1.sym'
+    );
+
+CALL AddSymbol(
+    'OMRON_G2R-24-DC5',
+    'omron_g2r_24_dc5.sym'
+    );
+
+CALL AddSymbol(
+    '4724',
+    '4724-1.sym'
+    );
+
+CALL AddSymbol(
+    'MICROPHONE',
+    'microphone-1.sym'
+    );
+
+CALL AddSymbol(
+    '40106',
+    '40106-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_27',
+    'connector27-2.sym'
+    );
+
+CALL AddSymbol(
+    '74164',
+    '74164-2.sym'
+    );
+
+CALL AddSymbol(
+    '7447',
+    '7447-1.sym'
+    );
+
+CALL AddSymbol(
+    'BC557',
+    'BC557-1.sym'
+    );
+
+CALL AddSymbol(
+    'IF_TRANSFORMER',
+    'if_trans_aircore-1.sym'
+    );
+
+CALL AddSymbol(
+    'nand5',
+    'nand5-1.sym'
+    );
+
+CALL AddSymbol(
+    'XINGER4A1305-3',
+    'xinger-splitter-1.sym'
+    );
+
+CALL AddSymbol(
+    'and',
+    'and8-1.sym'
+    );
+
+CALL AddSymbol(
+    'PMOS_TRANSISTOR',
+    'pmos-1.sym'
+    );
+
+CALL AddSymbol(
+    '74165',
+    '74165-1.sym'
+    );
+
+CALL AddSymbol(
+    'ZENER_DIODE',
+    'zener-3.sym'
+    );
+
+CALL AddSymbol(
+    'OSC',
+    'osc-3.sym'
+    );
+
+CALL AddSymbol(
+    '7407',
+    '7407-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_19',
+    'connector19-2.sym'
+    );
+
+CALL AddSymbol(
+    'LM319',
+    'lm319-1.sym'
+    );
+
+CALL AddSymbol(
+    'nor',
+    'nor7-1.sym'
+    );
+
+CALL AddSymbol(
+    '4098',
+    '4098-1.sym'
+    );
+
+CALL AddSymbol(
+    '2N3904',
+    '2N3904-1.sym'
+    );
+
+CALL AddSymbol(
+    'XC2S150-5PQ208C',
+    'XC2S150-5PQ208C.sym'
+    );
+
+CALL AddSymbol(
+    'MC68HC812A4',
+    'mc68hc812a4-1.sym'
+    );
+
+CALL AddSymbol(
+    'nand',
+    'nand7-2.sym'
+    );
+
+CALL AddSymbol(
+    '74240',
+    '74240-1.sym'
+    );
+
+CALL AddSymbol(
+    'bridge',
+    'bridge-1.sym'
+    );
+
+CALL AddSymbol(
+    '4082',
+    '4082-1.sym'
+    );
+
+CALL AddSymbol(
+    'a3967lsb',
+    '3967-1.sym'
+    );
+
+CALL AddSymbol(
+    '2N2222',
+    '2N2222-1.sym'
+    );
+
+CALL AddSymbol(
+    'TRANSFORMER',
+    'transformer-2.sym'
+    );
+
+CALL AddSymbol(
+    '4069UB',
+    '4069-3.sym'
+    );
+
+CALL AddSymbol(
+    '40162',
+    '40162-1.sym'
+    );
+
+CALL AddSymbol(
+    '74194',
+    '74194-1.sym'
+    );
+
+CALL AddSymbol(
+    'HEADER50',
+    'header50-3.sym'
+    );
+
+CALL AddSymbol(
+    '7474',
+    '7474-3.sym'
+    );
+
+CALL AddSymbol(
+    'DIN41617C15',
+    'DIN41617C15-1.sym'
+    );
+
+CALL AddSymbol(
+    '74688',
+    '74688-1.sym'
+    );
+
+CALL AddSymbol(
+    '4015',
+    '4015-1.sym'
+    );
+
+CALL AddSymbol(
+    'Atmega64',
+    'ATmega64-1.sym'
+    );
+
+CALL AddSymbol(
+    'PWRJACK',
+    'pwrjack-1.sym'
+    );
+
+CALL AddSymbol(
+    'PAL20X8',
+    'PAL20X8-1.sym'
+    );
+
+CALL AddSymbol(
+    '4582',
+    '4582-1.sym'
+    );
+
+CALL AddSymbol(
+    'IPS3310',
+    'ips3310-1.sym'
+    );
+
+CALL AddSymbol(
+    'Si9986',
+    'Si9986.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_7',
+    'connector7-2.sym'
+    );
+
+CALL AddSymbol(
+    '4522',
+    '4522-1.sym'
+    );
+
+CALL AddSymbol(
+    'LM2902',
+    'lm2902-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_10',
+    'connector10-2.sym'
+    );
+
+CALL AddSymbol(
+    '40105',
+    '40105-1.sym'
+    );
+
+CALL AddSymbol(
+    'PMOS_TRANSISTOR',
+    'asic-pmmv-1.sym'
+    );
+
+CALL AddSymbol(
+    '74299',
+    '74299-1.sym'
+    );
+
+CALL AddSymbol(
+    '74151',
+    '74151-1.sym'
+    );
+
+CALL AddSymbol(
+    'AD633JN',
+    'ad633JN-2.sym'
+    );
+
+CALL AddSymbol(
+    'MAX664',
+    'max664-1.sym'
+    );
+
+CALL AddSymbol(
+    'ULN2801A',
+    'ULN2801A-1.sym'
+    );
+
+CALL AddSymbol(
+    'DIN41612C96',
+    'DIN41612C96-2.sym'
+    );
+
+CALL AddSymbol(
+    '4068',
+    '4068-1.sym'
+    );
+
+CALL AddSymbol(
+    'Atmega128',
+    'ATmega128-3.sym'
+    );
+
+CALL AddSymbol(
+    'BATTERY',
+    'battery-2.sym'
+    );
+
+CALL AddSymbol(
+    '4528',
+    '4528-1.sym'
+    );
+
+CALL AddSymbol(
+    'XC2S30-5PQ208C',
+    'XC2S30-5PQ208C.sym'
+    );
+
+CALL AddSymbol(
+    '4030',
+    '4030-1.sym'
+    );
+
+CALL AddSymbol(
+    'INDUCTOR',
+    'inductor-dot-1.sym'
+    );
+
+CALL AddSymbol(
+    'or',
+    'or4-2.sym'
+    );
+
+CALL AddSymbol(
+    'SPICE-nullor',
+    'nullor-1.sym'
+    );
+
+CALL AddSymbol(
+    'MAX122',
+    'max122-1.sym'
+    );
+
+CALL AddSymbol(
+    'RESISTORPACK_4',
+    'resistorpack4-1.sym'
+    );
+
+CALL AddSymbol(
+    'CONNECTOR_13',
+    'connector13-2.sym'
+    );
+
+CALL AddSymbol(
+    '2N3906',
+    '2N3906-1.sym'
+    );
+
+CALL AddSymbol(
+    'CAPACITOR',
+    'asic-cap-2.sym'
     );
 
 CALL AddSymbol(
     'LOW',
-    'sym/verilog/low-1.sym'
+    'low-1.sym'
     );
 
 CALL AddSymbol(
     'HIP4081A',
-    'sym/misc/HIP4081A-1.sym'
+    'HIP4081A-1.sym'
     );
 
 CALL AddSymbol(
     '4099',
-    'sym/4000/4099-1.sym'
+    '4099-1.sym'
     );
 
 CALL AddSymbolDetail(
@@ -10640,6 +10640,11 @@ CALL AddSymbolDetail(
     );
 
 CALL AddSymbolDetail(
+    'sym/4000/4078-2.sym',
+    "/Q is not available on all devices"
+    );
+
+CALL AddSymbolDetail(
     'sym/spice/vpwl-1.sym',
     "syntax: pwl t1 v1 t2 v2 ..."
     );
@@ -10660,8 +10665,18 @@ CALL AddSymbolDetail(
     );
 
 CALL AddSymbolDetail(
+    'sym/4000/4053-1.sym',
+    "dont_use this symbol: pin 6 (EN) ist missing; for safety I've enabled the device"
+    );
+
+CALL AddSymbolDetail(
     'sym/74/74147-1.sym',
     "At some devices A0 is not connected"
+    );
+
+CALL AddSymbolDetail(
+    'sym/4000/4078-1.sym',
+    "/Q is not available on all devices"
     );
 
 CALL AddSymbolDetail(
@@ -10672,21 +10687,6 @@ CALL AddSymbolDetail(
 CALL AddSymbolDetail(
     'sym/maxim/max233-1.sym',
     "SO package only: Pins 8,10-14 different on DIP"
-    );
-
-CALL AddSymbolDetail(
-    'sym/4000/4053-1.sym',
-    "dont_use this symbol: pin 6 (EN) ist missing; for safety I've enabled the device"
-    );
-
-CALL AddSymbolDetail(
-    'sym/4000/4078-2.sym',
-    "/Q is not available on all devices"
-    );
-
-CALL AddSymbolDetail(
-    'sym/4000/4078-1.sym',
-    "/Q is not available on all devices"
     );
 
 CALL AddSymbolDetail(

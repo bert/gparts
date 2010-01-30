@@ -31,10 +31,14 @@
 #include "sch-drafter.h"
 #include "sch-drawing.h"
 
+#include "sch-loader.h"
+
 #include "schgui-cairo-drafter.h"
 #include "schgui-drawing-view.h"
 
 #include "gsymview-main.h"
+
+#include "scmcfg-config.h"
 
 #define GSYMVIEW_GET_PRIVATE(object) G_TYPE_INSTANCE_GET_PRIVATE(object, GSYMVIEW_TYPE, GSymViewPrivate)
 
@@ -163,7 +167,10 @@ gsymview_selection_changed_cb(GtkFileChooser *chooser, gpointer user_data)
 
         if (filename != NULL)
         {
-            drawing = load2(filename, NULL);
+            SchLoader *loader = sch_loader_get_default();
+
+            drawing = sch_loader_load_drawing(loader, filename, NULL);
+
             g_free(filename);
         }
 
@@ -229,9 +236,12 @@ int main(int argc, char* argv[])
     g_type_init();
     gtk_init(&argc, &argv);
 
-    gsymview = gsymview_new();
+    scmcfg_config_init();
+    scmcfg_config_load();
 
-    gtk_main();
+//    gsymview = gsymview_new();
+
+//    gtk_main();
 
     return 0;
 }

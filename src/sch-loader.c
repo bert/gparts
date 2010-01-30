@@ -1,9 +1,36 @@
+/* gEDA - GPL Electronic Design Automation
+ * gparts - gEDA Parts Manager
+ * Copyright (C) 2009 Edward C. Hennessy
+ * Copyright (C) 2009 gEDA Contributors (see ChangeLog for details)
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
+ */
+
+/*! \file sch-loader.c
+ */
+
+#include <errno.h>
 #include <stdio.h>
 #include <string.h>
+
 #include <glib.h>
 #include <glib-object.h>
 
 #include "geom.h"
+
+#include "misc-object.h"
 
 #include "sch-multiline.h"
 #include "sch-shape.h"
@@ -20,60 +47,378 @@
 
 #include "sch-component.h"
 
-static const char *directories[] =
+#include "sch-loader.h"
+
+#define SCH_LOADER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_LOADER,SchLoaderPrivate))
+
+enum
 {
-    "",
-    "/home/ehennes/geda/share/gEDA",
-    "/home/ehennes/geda/share/gEDA/sym/4000",
-    "/home/ehennes/geda/share/gEDA/sym/74",
-    "/home/ehennes/geda/share/gEDA/sym/allegro",
-    "/home/ehennes/geda/share/gEDA/sym/altera",
-    "/home/ehennes/geda/share/gEDA/sym/amphenol",
-    "/home/ehennes/geda/share/gEDA/sym/analog",
-    "/home/ehennes/geda/share/gEDA/sym/apex",
-    "/home/ehennes/geda/share/gEDA/sym/asic",
-    "/home/ehennes/geda/share/gEDA/sym/asicpads",
-    "/home/ehennes/geda/share/gEDA/sym/bus",
-    "/home/ehennes/geda/share/gEDA/sym/cascade",
-    "/home/ehennes/geda/share/gEDA/sym/connector",
-    "/home/ehennes/geda/share/gEDA/sym/dec",
-    "/home/ehennes/geda/share/gEDA/sym/diode",
-    "/home/ehennes/geda/share/gEDA/sym/ecl",
-    "/home/ehennes/geda/share/gEDA/sym/font",
-    "/home/ehennes/geda/share/gEDA/sym/gnetman",
-    "/home/ehennes/geda/share/gEDA/sym/idt",
-    "/home/ehennes/geda/share/gEDA/sym/IEC417",
-    "/home/ehennes/geda/share/gEDA/sym/io",
-    "/home/ehennes/geda/share/gEDA/sym/irf",
-    "/home/ehennes/geda/share/gEDA/sym/lattice",
-    "/home/ehennes/geda/share/gEDA/sym/linear",
-    "/home/ehennes/geda/share/gEDA/sym/local",
-    "/home/ehennes/geda/share/gEDA/sym/maxim",
-    "/home/ehennes/geda/share/gEDA/sym/memory",
-    "/home/ehennes/geda/share/gEDA/sym/micro",
-    "/home/ehennes/geda/share/gEDA/sym/minicircuits",
-    "/home/ehennes/geda/share/gEDA/sym/misc",
-    "/home/ehennes/geda/share/gEDA/sym/national",
-    "/home/ehennes/geda/share/gEDA/sym/opto",
-    "/home/ehennes/geda/share/gEDA/sym/philips",
-    "/home/ehennes/geda/share/gEDA/sym/pla",
-    "/home/ehennes/geda/share/gEDA/sym/power",
-    "/home/ehennes/geda/share/gEDA/sym/radio",
-    "/home/ehennes/geda/share/gEDA/sym/relay",
-    "/home/ehennes/geda/share/gEDA/sym/rf",
-    "/home/ehennes/geda/share/gEDA/sym/spice",
-    "/home/ehennes/geda/share/gEDA/sym/st",
-    "/home/ehennes/geda/share/gEDA/sym/supervisor",
-    "/home/ehennes/geda/share/gEDA/sym/switcap",
-    "/home/ehennes/geda/share/gEDA/sym/switch",
-    "/home/ehennes/geda/share/gEDA/sym/titleblock",
-    "/home/ehennes/geda/share/gEDA/sym/transistor",
-    "/home/ehennes/geda/share/gEDA/sym/tube",
-    "/home/ehennes/geda/share/gEDA/sym/verilog",
-    "/home/ehennes/geda/share/gEDA/sym/vhdl",
-    "/home/ehennes/geda/share/gEDA/sym/xilinx",
-    NULL
+    SCH_LOADER_COMPONENT_LIBRARIES = 1
 };
+
+typedef struct _SchLoaderPrivate SchLoaderPrivate;
+
+struct _SchLoaderPrivate
+{
+    GArray *component_libraries;
+};
+
+
+static void
+sch_loader_class_init(gpointer g_class, gpointer g_class_data);
+
+static void
+sch_loader_dispose(GObject *object);
+
+static void
+sch_loader_finalize(GObject *object);
+
+static void
+sch_loader_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
+
+static void
+sch_loader_init(GTypeInstance *instance, gpointer g_class);
+
+static void
+sch_loader_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
+
+static FILE*
+open_drawing(SchLoader *loader, const char *filename);
+
+static GObject*
+process_arc(FILE *file, gchar **tokens);
+
+static void
+process_attributes(FILE *file, gchar **tokens);
+
+static GObject*
+process_box(FILE *file, gchar **tokens);
+
+static GObject*
+process_bus(FILE *file, gchar **tokens);
+
+static GObject*
+process_circle(FILE *file, gchar **tokens);
+
+static GObject*
+process_component(FILE *file, gchar **tokens);
+
+static void
+process_embedded(FILE *file, SchDrawing *drawing);
+
+static GObject*
+process_line(FILE *file, gchar **tokens);
+
+static GObject*
+process_net(FILE *file, gchar **tokens);
+
+static GObject*
+process_object(FILE *file, gchar **tokens);
+
+static GObject*
+process_path(FILE *file, gchar **tokens);
+
+static GObject*
+process_picture(FILE *file, gchar **tokens);
+
+static GObject*
+process_pin(FILE *file, gchar **tokens);
+
+static GObject*
+process_text(FILE *file, gchar **tokens);
+
+static void
+process_version(FILE *file, gchar **tokens);
+
+static void
+read_file(SchDrawing *drawing, FILE *file, GError **error);
+
+static gchar*
+read_line(FILE *file);
+
+
+
+
+void
+sch_loader_add_component_library(SchLoader *loader, gchar *library)
+{
+    SchLoaderPrivate *privat = SCH_LOADER_GET_PRIVATE(loader);
+
+    if (privat != NULL)
+    {
+        char *name = g_strdup(library);
+
+        g_array_append_val(privat->component_libraries, name);
+    }
+}
+
+static void
+sch_loader_class_init(gpointer g_class, gpointer g_class_data)
+{
+    GObjectClass *klasse = G_OBJECT_CLASS(g_class);
+
+    g_type_class_add_private(klasse, sizeof(SchLoaderPrivate));
+
+    klasse->dispose  = sch_loader_dispose;
+    klasse->finalize = sch_loader_finalize;
+
+    klasse->get_property = sch_loader_get_property;
+    klasse->set_property = sch_loader_set_property;
+
+    g_object_class_install_property(
+        klasse,
+        SCH_LOADER_COMPONENT_LIBRARIES,
+        g_param_spec_boxed(
+            "component-libraries",
+            "component-libraries",
+            "component-libraries",
+            G_TYPE_STRV,
+            G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
+            )
+        );
+}
+
+static void
+sch_loader_dispose(GObject *object)
+{
+    misc_object_chain_dispose(object);
+}
+
+static void
+sch_loader_finalize(GObject *object)
+{
+    SchLoaderPrivate *privat = SCH_LOADER_GET_PRIVATE(object);
+
+    if (privat != NULL)
+    {
+    }
+
+    misc_object_chain_finalize(object);
+}
+
+SchLoader*
+sch_loader_get_default(void)
+{
+    static SchLoader *factory = NULL;
+
+    if (factory == NULL)
+    {
+        factory = SCH_LOADER(g_object_new(SCH_TYPE_LOADER, NULL));
+    }
+
+    return factory;
+}
+
+gchar**
+sch_loader_get_component_libraries(GObject *object)
+{
+    char **libraries = NULL;
+    SchLoaderPrivate *privat = SCH_LOADER_GET_PRIVATE(object);
+
+    if (privat != NULL)
+    {
+        libraries = g_strdupv(privat->component_libraries->data);
+    }
+
+    return libraries;
+}
+
+static void
+sch_loader_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
+{
+    SchLoaderPrivate *privat = SCH_LOADER_GET_PRIVATE(object);
+
+    if (privat != NULL)
+    {
+        switch (property_id)
+        {
+            case SCH_LOADER_COMPONENT_LIBRARIES:
+                g_value_take_boxed(value, sch_loader_get_component_libraries(object));
+                break;
+
+            default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+        }
+    }
+}
+
+GType
+sch_loader_get_type(void)
+{
+    static GType type = G_TYPE_INVALID;
+
+    if (type == G_TYPE_INVALID)
+    {
+        static const GTypeInfo tinfo = {
+            sizeof(SchLoaderClass),    /* class_size */
+            NULL,                      /* base_init */
+            NULL,                      /* base_finalize */
+            sch_loader_class_init,     /* class_init */
+            NULL,                      /* class_finalize */
+            NULL,                      /* class_data */
+            sizeof(SchLoader),         /* instance_size */
+            0,                         /* n_preallocs */
+            sch_loader_init,           /* instance_init */
+            NULL                       /* value_table */
+            };
+
+        type = g_type_register_static(
+            G_TYPE_OBJECT,
+            "SchLoader",
+            &tinfo,
+            0
+            );
+    }
+
+    return type;
+}
+
+
+static void
+sch_loader_init(GTypeInstance *instance, gpointer g_class)
+{
+    SchLoaderPrivate *privat = SCH_LOADER_GET_PRIVATE(instance);
+
+    if (privat != NULL)
+    {
+        privat->component_libraries = g_array_new(TRUE, FALSE, sizeof(gchar*));
+    }
+}
+
+SchDrawing*
+sch_loader_load_drawing(SchLoader *loader, const gchar *filename, GError **error)
+{
+    SchDrawing *drawing = NULL;
+    FILE       *file;
+
+    file = fopen(filename, "r");
+
+    if (file != NULL)
+    {
+        drawing = g_object_new(SCH_TYPE_DRAWING, NULL);
+
+        read_file(drawing, file, error);
+
+        fclose(file);
+    }
+    else
+    {
+        //g_set_error(
+        //    error,
+        //    GPARTS_MYSQL_DATABASE_ERROR,
+        //    mysql_errno( private->mysql ),
+        //    "%s",
+        //    mysql_error( private->mysql )
+        //    );
+
+        g_debug("Could not open drawing '%s'", filename);
+    }
+
+    return drawing;
+}
+
+SchDrawing*
+sch_loader_load_symbol(SchLoader *loader, const gchar *filename, GError **error)
+{
+    SchDrawing *drawing = NULL;
+    FILE       *file;
+
+    file = sch_loader_open_symbol_file(loader, filename, "r");
+
+    if (file != NULL)
+    {
+        drawing = g_object_new(SCH_TYPE_DRAWING, NULL);
+
+        read_file(drawing, file, error);
+
+        fclose(file);
+    }
+    else
+    {
+        //g_set_error(
+        //    error,
+        //    GPARTS_MYSQL_DATABASE_ERROR,
+        //    mysql_errno( private->mysql ),
+        //    "%s",
+        //    mysql_error( private->mysql )
+        //    );
+
+        g_debug("Could not open symbol '%s'", filename);
+    }
+
+    return drawing;
+}
+
+FILE*
+sch_loader_open_symbol_file(SchLoader *loader, const char *filename, const char *mode)
+{
+    FILE *file = NULL;
+    SchLoaderPrivate *privat = SCH_LOADER_GET_PRIVATE(loader);
+
+    if (privat != NULL)
+    {
+        const char **dir = privat->component_libraries->data;
+
+        while (*dir != NULL)
+        {
+            gchar *path = g_build_filename(*dir, filename, NULL);
+
+            file = fopen(path, mode);
+            g_free(path);
+
+            if ((file != NULL) || (errno != ENOENT))
+            {
+                break;
+            }
+
+            dir++;
+        }
+    }
+
+    return file;
+}
+
+void
+sch_loader_set_component_libraries(GObject *object, char **libraries)
+{
+    SchLoaderPrivate *privat = SCH_LOADER_GET_PRIVATE(object);
+
+    if (privat != NULL)
+    {
+        char **temp = libraries;
+
+        g_strfreev(g_array_free(privat->component_libraries, FALSE));
+
+        privat->component_libraries = g_array_new(TRUE, FALSE, sizeof(gchar*));
+
+        while (*temp != NULL)
+        {
+            g_array_append_val(privat->component_libraries, *temp);
+
+            temp++;
+        }
+
+    }
+}
+
+static void
+sch_loader_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec)
+{
+    SchLoaderPrivate *privat = SCH_LOADER_GET_PRIVATE(object);
+
+    if (privat != NULL)
+    {
+        switch (property_id)
+        {
+            case SCH_LOADER_COMPONENT_LIBRARIES:
+                sch_loader_set_component_libraries(object, g_value_get_boxed(value));
+                break;
+
+            default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+        }
+    }
+}
 
 struct PARAM
 {
@@ -222,98 +567,8 @@ static const struct PARAM text_params[] =
     { NULL,               0 }
 };
 
-SchDrawing *load2(const gchar *filename, GError **error);
 
 
-static GObject*
-process_arc(FILE *file, gchar **tokens);
-
-static void
-process_attributes(FILE *file, gchar **tokens);
-
-static GObject*
-process_box(FILE *file, gchar **tokens);
-
-static GObject*
-process_bus(FILE *file, gchar **tokens);
-
-static GObject*
-process_circle(FILE *file, gchar **tokens);
-
-static GObject*
-process_component(FILE *file, gchar **tokens);
-
-static void
-process_embedded(FILE *file, SchDrawing *drawing);
-
-static GObject*
-process_line(FILE *file, gchar **tokens);
-
-static GObject*
-process_net(FILE *file, gchar **tokens);
-
-static GObject*
-process_object(FILE *file, gchar **tokens);
-
-static GObject*
-process_path(FILE *file, gchar **tokens);
-
-static GObject*
-process_picture(FILE *file, gchar **tokens);
-
-static GObject*
-process_pin(FILE *file, gchar **tokens);
-
-static GObject*
-process_text(FILE *file, gchar **tokens);
-
-static void
-process_version(FILE *file, gchar **tokens);
-
-static void
-read_file(SchDrawing *drawing, FILE *file, GError **error);
-
-static gchar*
-read_line(FILE *file);
-
-
-
-
-static FILE*
-open_drawing(const char *filename)
-{
-    const char **dir = &directories[0];
-    FILE *file = NULL;
-
-    while (*dir != NULL)
-    {
-        gchar *path;
-
-        path = g_strjoin(NULL, *dir, filename, NULL);
-        g_debug("Trying %s", path);
-        file = fopen(path, "r");
-        g_free(path);
-
-        if (file != NULL)
-        {
-            break;
-        }
-
-        path = g_strjoin("/", *dir, filename, NULL);
-        g_debug("Trying %s", path);
-        file = fopen(path, "r");
-        g_free(path);
-
-        if (file != NULL)
-        {
-            break;
-        }
-
-        dir++;
-    }
-
-    return file;
-}
 
 
 
@@ -463,7 +718,13 @@ process_component(FILE *file, gchar **tokens)
             }
             else
             {
-                SchDrawing *symbol = load2(*(tokens+6), NULL);;
+                SchLoader  *loader = sch_loader_get_default();
+                SchDrawing *symbol = NULL;
+
+                if (loader != NULL)
+                {
+                    symbol = sch_loader_load_symbol(loader, *(tokens+6), NULL);;
+                }
 
                 sch_component_set_drawing(component, symbol);
                 g_object_unref(symbol);
@@ -799,46 +1060,6 @@ read_file(SchDrawing *drawing, FILE *file, GError **error)
     }
 }
 
-
-SchDrawing *load2(const gchar *filename, GError **error)
-{
-    SchDrawing *drawing = NULL;
-    FILE       *file;
-
-    //g_debug("Loader 1");
-
-    file = open_drawing(filename);
-
-    //file = fopen(filename, "r");
-    //g_debug("Loader 2");
-
-    if (file != NULL)
-    {
-        drawing = g_object_new(SCH_TYPE_DRAWING, NULL);
-
-        //g_debug("Loader 3");
-
-        read_file(drawing, file, error);
-
-        //g_debug("Loader 4");
-
-        fclose(file);
-    }
-    else
-    {
-        //g_set_error(
-        //    error,
-        //    GPARTS_MYSQL_DATABASE_ERROR,
-        //    mysql_errno( private->mysql ),
-        //    "%s",
-        //    mysql_error( private->mysql )
-        //    );
-
-        g_debug("Could not open '%s'", filename);
-    }
-
-    return drawing;
-}
 
 
 

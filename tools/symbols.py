@@ -68,7 +68,7 @@ def output_symbols( devices ):
         if 'device' in attributes:
             print "CALL AddSymbol("
             print "    '%s'," % attributes['device'][0]
-            print "    '%s'" % symbol
+            print "    '%s'" % os.path.basename(symbol)
             print "    );"
             print
 

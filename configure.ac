@@ -48,6 +48,15 @@ GTK_LIBS=`$PKG_CONFIG gtk+-2.0 --libs`
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 
+##  Guile
+##
+GUILE_VERSION=`$PKG_CONFIG guile-1.8 --modversion`
+GUILE_CFLAGS=`$PKG_CONFIG guile-1.8 --cflags`
+GUILE_LIBS=`$PKG_CONFIG guile-1.8 --libs`
+AC_SUBST(GUILE_CFLAGS)
+AC_SUBST(GUILE_LIBS)
+
+
 ##  MySQL
 ##
 ##  Building the interface library for MySQL is optional.
@@ -100,6 +109,9 @@ AC_MSG_RESULT([
 
     GTK
         Installed Version        $GTK_VERSION
+
+    Guile
+        Installed Version        $GUILE_VERSION
 
     MySQL
         Installed Version        $MYSQL_VERSION
