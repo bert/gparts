@@ -167,13 +167,37 @@ gparts_database_type_load_module(GPartsDatabaseType *database_type, const gchar 
     GModule *module;
     GPartsDatabaseTypePrivate *privat = GPARTS_DATABASE_TYPE_GET_PRIVATE(database_type);
 
-    module = g_module_open(name, G_MODULE_BIND_LOCAL);
-
-    if (module == NULL)
+    /* find portable way to get the library directories */
+    const gchar *dirs[] =
     {
+        "/usr/local",
+        NULL
+    };
+
+    const gchar *const *temp = dirs;
+
+    while (*temp != NULL)
+    {
+        gchar *path1;
+        gchar *path2;
+
+        path1 = g_build_filename(*temp, "lib", NULL);
+        path2 = g_module_build_path(path1, name);
+        g_free(path1);
+
+        module = g_module_open(path2, G_MODULE_BIND_LOCAL);
+        g_free(path2);
+
+        if (module != NULL)
+        {
+            break;
+        }
+
         g_warning("%s", g_module_error());
+        temp++;
     }
-    else
+
+    if (module != NULL)
     {
         GPartsDatabaseInitFunc init_func;
         gboolean success;
