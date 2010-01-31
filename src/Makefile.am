@@ -11,6 +11,11 @@ BUILT_SOURCES = \
 
 bin_PROGRAMS = gparts gsymview
 
+xmldir = $(pkgdatadir)/xml
+xml_DATA = \
+	gparts.xml \
+	gsymview.xml
+
 gparts_SOURCES = \
 	gparts-category-model.c \
 	gparts-category-controller.c \
@@ -43,6 +48,12 @@ gsymview_CFLAGS = $(AM_CFLAGS) $(GTK_CFLAGS)
 gsymview_LDADD = $(GTK_LIBS) libgeom.la libmisc.la libsch.la libschgui.la libscmcfg.la
 
 
+noinst_LTLIBRARIES = \
+	libgeom.la \
+	libmisc.la \
+	libsch.la \
+	libschgui.la \
+	libscmcfg.la
 
 # TODO libraries in EXTRA_LTLIBRARIES do not seem to work with g_module_open (no .so?)
 # Libraries in lib_LTLIBRARIES must be built.  If conditionally not there, then the
@@ -51,12 +62,7 @@ gsymview_LDADD = $(GTK_LIBS) libgeom.la libmisc.la libsch.la libschgui.la libscm
 # build.
 
 lib_LTLIBRARIES = \
-	libgeom.la \
-	libgparts-mysql.la \
-	libmisc.la \
-	libsch.la \
-	libschgui.la \
-	libscmcfg.la
+	libgparts-mysql.la
 
 EXTRA_LTLIBRARIES = \
 	libgparts-postgresql.la \
@@ -121,7 +127,7 @@ libschgui_la_SOURCES = \
 	schgui-drawing-cfg.c \
 	schgui-drawing-view.c
 libschgui_la_CFLAGS = -Wall $(AM_CFLAGS) $(GTK_CFLAGS)
-libschgui_la_LIBADD = $(GTK_LIBS)
+libschgui_la_LIBADD = $(GTK_LIBS) libsch.la
 
 libgeom_la_SOURCES = \
 	geom-angle.c \
@@ -140,7 +146,8 @@ libmisc_la_CFLAGS = -Wall $(AM_CFLAGS) $(GLIB_CFLAGS)
 libmisc_la_LIBADD = $(GLIB_LIBS)
 
 libscmcfg_la_SOURCES = \
-	scmcfg-config.c
+	scmcfg-config.c \
+	scmcfg-dirs.c
 libscmcfg_la_CFLAGS = -Wall $(AM_CFLAGS) $(GLIB_CFLAGS) $(GUILE_CFLAGS)
-libscmcfg_la_LIBADD = $(GLIB_LIBS) $(GUILE_LIBS)
+libscmcfg_la_LIBADD = $(GLIB_LIBS) $(GUILE_LIBS) libsch.la libschgui.la
 

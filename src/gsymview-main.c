@@ -192,6 +192,9 @@ gsymview_instance_init(GTypeInstance* instance, gpointer g_class)
     guint status;
     GSymViewPrivate *private = GSYMVIEW_GET_PRIVATE(instance);
     SchGUICairoDrafter *drafter;
+    char *datadir = scmcfg_dirs_find_gparts_data();
+    char *path = g_build_filename(datadir, "xml", "gsymview.xml", NULL);
+    g_free(datadir);
 
     SCHGUI_TYPE_DRAWING_VIEW;
 
@@ -199,9 +202,11 @@ gsymview_instance_init(GTypeInstance* instance, gpointer g_class)
 
     status = gtk_builder_add_from_file(
         private->builder,
-        "gsymview.xml",
+        path,
         &error
         );
+
+    g_free(path);
 
     if ( status == 0 )
     {
@@ -239,9 +244,9 @@ int main(int argc, char* argv[])
     scmcfg_config_init();
     scmcfg_config_load();
 
-//    gsymview = gsymview_new();
+    gsymview = gsymview_new();
 
-//    gtk_main();
+    gtk_main();
 
     return 0;
 }

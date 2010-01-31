@@ -866,7 +866,7 @@ process_object(FILE *file, gchar **tokens)
 
             default:
                 object = NULL;
-                g_debug("Unknown object type %c", **tokens);
+                //g_debug("Unknown object type %c", **tokens);
                 break;
         }
     }

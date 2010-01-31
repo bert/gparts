@@ -45,6 +45,8 @@
 #include "sch-factory.h"
 #include "sch-loader.h"
 
+#include "scmcfg-dirs.h"
+
 #define ENABLED "enabled"
 
 static void*
@@ -326,30 +328,26 @@ scmcfg_config_init(void)
 static void*
 scmcfg_config_init_inner(void* data)
 {
-    const char *rcpath = g_getenv("HOME");
-    const char *datapath = g_getenv("GEDADATARC");
+    char *configdir;
+    char *datadir;
 
-    g_debug("rcpath = %s", rcpath);
-    g_debug("datapath = %s", datapath);
+    scm_dynwind_begin(0);
 
-    if (rcpath == NULL)
-    {
-        rcpath = "~/.gEDA";
-    }
+    configdir = scmcfg_dirs_find_geda_config();
+    g_debug("gEDA configdir found %s", configdir);
+    scm_dynwind_unwind_handler(g_free, configdir, SCM_F_WIND_EXPLICITLY);
 
-    if (datapath == NULL)
-    {
-        datapath = "/usr/local/share/gEDA";
-    }
+    datadir = scmcfg_dirs_find_geda_data();
+    g_debug("gEDA datadir found %s", datadir);
+    scm_dynwind_unwind_handler(g_free, datadir, SCM_F_WIND_EXPLICITLY);
 
-    g_debug("rcpath = %s", rcpath);
-    g_debug("datapath = %s", datapath);
-
-    scm_c_define("geda-rc-path", scm_from_locale_string(datapath));
-    scm_c_define("geda-data-path", scm_from_locale_string(datapath));
+    scm_c_define("geda-data-path", scm_from_locale_string(datadir));
+    scm_c_define("geda-rc-path", scm_from_locale_string(configdir));
     scm_c_define("path-sep", scm_from_locale_string(G_DIR_SEPARATOR_S));
 
 #include "scmcfg-config.x"
+
+    scm_dynwind_end();
 
     return NULL;
 }
@@ -415,9 +413,13 @@ scmcfg_config_load_inner(void* data)
 
     loaded = SCM_BOOL_F;
 
+    datapath = scmcfg_dirs_find_gparts_data();
+
     if (datapath != NULL)
     {
         char *pathname = g_build_filename(datapath, "system-gpartsrc", NULL);
+
+        g_free(datapath);
 
         loaded = scm_internal_catch(
             SCM_BOOL_T,
@@ -428,28 +430,6 @@ scmcfg_config_load_inner(void* data)
             );
 
         g_free(pathname);
-    }
-
-    if (loaded == SCM_BOOL_F)
-    {
-        loaded = scm_internal_catch(
-            SCM_BOOL_T,
-            scmcfg_config_load_inner_body,
-            "/usr/local/share/gEDA/system-gpartsrc",
-            scmcfg_config_load_inner_handler,
-            NULL
-            );
-    }
-
-    if (loaded == SCM_BOOL_F)
-    {
-        loaded = scm_internal_catch(
-            SCM_BOOL_T,
-            scmcfg_config_load_inner_body,
-            "/usr/local/gEDA/system-gpartsrc",
-            scmcfg_config_load_inner_handler,
-            NULL
-            );
     }
 
     if (loaded == SCM_BOOL_F)

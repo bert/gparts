@@ -164,6 +164,8 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
     GError* error = NULL;
     guint status;
     GPartsPrivate *private = GPARTS_GET_PRIVATE(instance);
+    char *datadir = scmcfg_dirs_find_gparts_data();
+    char *path;
 
     GPARTS_TYPE_PREVIEW;
     //GPARTS_TYPE_RESULT_TREE;
@@ -174,11 +176,16 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
 
     private->builder = gtk_builder_new();
 
+    path = g_build_filename(datadir, "xml", "gparts.xml", NULL);
+    g_free(datadir);
+
     status = gtk_builder_add_from_file(
         private->builder,
-        "gparts.xml",
+        path,
         &error
         );
+
+    g_free(path);
 
     if ( status == 0 )
     {
