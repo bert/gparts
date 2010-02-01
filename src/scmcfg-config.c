@@ -45,6 +45,8 @@
 #include "sch-factory.h"
 #include "sch-loader.h"
 
+#include "schgui-drawing-cfg.h"
+
 #include "scmcfg-dirs.h"
 
 #define ENABLED "enabled"
@@ -151,44 +153,49 @@ SCM_DEFINE(component_library, "component-library", 1, 1, 0, (SCM a, SCM b), "")
 
 SCM_DEFINE(display_color_map, "display-color-map", 0, 1, 0, (SCM a), "")
 {
-    SCM b;
+    SCM b = SCM_UNDEFINED;
+    SchGUIDrawingCfg *config = schgui_drawing_cfg_get_default_display();
 
-    if (a == SCM_UNDEFINED)
+    if (config != NULL)
     {
-        /* TODO */
+        if (a == SCM_UNDEFINED)
+        {
+            /* TODO */
+
+            b = SCM_BOOL_F;
+        }
+        else
+        {
+            SCM temp = a;
+
+            while (temp != SCM_EOL)
+            {
+                SCM color = scm_cadar(temp);
+                int index = scm_to_int(scm_caar(temp));
+
+                if (color == SCM_BOOL_F)
+                {
+                    g_debug("display %2i none", index);
+                    schgui_drawing_cfg_disable_color(config, index);
+                }
+                else
+                {
+                    char *name = scm_to_locale_string(color);
+
+                    g_debug("display %2i %s", index, name);
+                    schgui_drawing_cfg_set_color_by_name(config, index, name);
+                    free(name);
+                }
+
+                temp = scm_cdr(temp);
+            }
 
         b = SCM_BOOL_F;
-    }
-    else
-    {
-        SCM temp = a;
-
-        while (temp != SCM_EOL)
-        {
-            SCM color = scm_cadar(temp);
-            int index = scm_to_int(scm_caar(temp));
-
-            if (color == SCM_BOOL_F)
-            {
-                g_debug("display %2i none", index);
-            }
-            else
-            {
-                char *name = scm_to_locale_string(color);
-
-                g_debug("display %2i %s", index, name);
-                free(name);
-            }
-
-            temp = scm_cdr(temp);
         }
 
-        b = SCM_BOOL_F;
     }
 
     return b;
-
-    return SCM_BOOL_F;
 }
 
 SCM_DEFINE(display_outline_color_map, "display-outline-color-map", 0, 1, 0, (SCM a), "")
@@ -247,39 +254,46 @@ SCM_DEFINE(postscript_prolog, "postscript-prolog", 1, 0, 0, (SCM a), "")
 
 SCM_DEFINE(print_color_map, "print-color-map", 0, 1, 0, (SCM a), "")
 {
-    SCM b;
+    SCM b = SCM_UNDEFINED;
+    SchGUIDrawingCfg *config = schgui_drawing_cfg_get_default_print();
 
-    if (a == SCM_UNDEFINED)
+    if (config != NULL)
     {
-        /* TODO */
+        if (a == SCM_UNDEFINED)
+        {
+            /* TODO */
+
+            b = SCM_BOOL_F;
+        }
+        else
+        {
+            SCM temp = a;
+
+            while (temp != SCM_EOL)
+            {
+                SCM color = scm_cadar(temp);
+                int index = scm_to_int(scm_caar(temp));
+
+                if (color == SCM_BOOL_F)
+                {
+                    g_debug("print %2i none", index);
+                    schgui_drawing_cfg_disable_color(config, index);
+                }
+                else
+                {
+                    char *name = scm_to_locale_string(color);
+
+                    g_debug("print %2i %s", index, name);
+                    schgui_drawing_cfg_set_color_by_name(config, index, name);
+                    free(name);
+                }
+
+                temp = scm_cdr(temp);
+            }
 
         b = SCM_BOOL_F;
-    }
-    else
-    {
-        SCM temp = a;
-
-        while (temp != SCM_EOL)
-        {
-            SCM color = scm_cadar(temp);
-            int index = scm_to_int(scm_caar(temp));
-
-            if (color == SCM_BOOL_F)
-            {
-                g_debug("print %2i none", index);
-            }
-            else
-            {
-                char *name = scm_to_locale_string(color);
-
-                g_debug("print %2i %s", index, name);
-                free(name);
-            }
-
-            temp = scm_cdr(temp);
         }
 
-        b = SCM_BOOL_F;
     }
 
     return b;

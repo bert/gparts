@@ -33,6 +33,7 @@
 #include "sch-drawing.h"
 #include "sch-line.h"
 
+#include "schgui-drawing-cfg.h"
 #include "schgui-cairo-drafter.h"
 #include "schgui-drawing-view.h"
 
@@ -236,7 +237,11 @@ schgui_drawing_view_init(GTypeInstance *instance, gpointer g_class)
 
     if (privat != NULL)
     {
-        privat->drafter = SCHGUI_CAIRO_DRAFTER(g_object_new(SCHGUI_TYPE_CAIRO_DRAFTER, NULL));
+        privat->drafter = SCHGUI_CAIRO_DRAFTER(g_object_new(
+            SCHGUI_TYPE_CAIRO_DRAFTER,
+            "config", schgui_drawing_cfg_get_default_display(),
+            NULL
+            ));
     }
 
     g_signal_connect(

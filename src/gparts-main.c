@@ -49,6 +49,7 @@
 #include "sch-drafter.h"
 #include "sch-drawing.h"
 
+#include "schgui-drawing-cfg.h"
 #include "schgui-cairo-drafter.h"
 #include "schgui-drawing-view.h"
 

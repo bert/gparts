@@ -41,3 +41,8 @@ schgui_cairo_drafter_text_bounds(SchGUICairoDrafter *drafter, SchText *text, Geo
 void
 schgui_cairo_drafter_draw_grid(SchGUICairoDrafter *drafter);
 
+void
+schgui_cairo_drafter_set_config(SchGUICairoDrafter *drafter, SchGUIDrawingCfg *config);
+
+void
+schgui_cairo_drafter_set_drawing(SchGUICairoDrafter *drafter, SchDrawing *drawing);

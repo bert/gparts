@@ -33,6 +33,7 @@
 
 #include "sch-loader.h"
 
+#include "schgui-drawing-cfg.h"
 #include "schgui-cairo-drafter.h"
 #include "schgui-drawing-view.h"
 

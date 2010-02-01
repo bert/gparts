@@ -30,6 +30,7 @@
 
 typedef struct _SchGUIDrawingCfg SchGUIDrawingCfg;
 typedef struct _SchGUIDrawingCfgClass SchGUIDrawingCfgClass;
+typedef struct _SchGUIDrawingCfgColor SchGUIDrawingCfgColor;
 
 struct _SchGUIDrawingCfg
 {
@@ -41,14 +42,18 @@ struct _SchGUIDrawingCfgClass
     GObjectClass parent;
 };
 
+struct _SchGUIDrawingCfgColor
+{
+    double red;
+    double green;
+    double blue;
+};
+
 GType
 schgui_drawing_cfg_get_type(void);
 
 void
 schgui_drawing_cfg_get_bus_line_width(SchGUIDrawingCfg *cfg, double *width);
-
-void
-schgui_drawing_cfg_get_display_color(SchGUIDrawingCfg *cfg, int index, double *red, double *green, double *blue);
 
 void
 schgui_drawing_cfg_get_net_line_width(SchGUIDrawingCfg *cfg, double *width);
@@ -57,8 +62,55 @@ void
 schgui_drawing_cfg_get_pin_line_width(SchGUIDrawingCfg *cfg, double *width);
 
 void
-schgui_drawing_cfg_get_print_color(SchGUIDrawingCfg *cfg, int index, double *red, double *green, double *blue);
-
-void
 schgui_drawing_cfg_get_output_line_width(SchGUIDrawingCfg *cfg, int shape_width, double *output_width);
+
+/*! \brief Disable a color index used for drawing schematic shapes
+ *
+ *  The color index must be a positive integer.
+ *
+ *  \param [in]  config This configuration
+ *  \param [in]  index  The color index of the shape
+ */
+void
+schgui_drawing_cfg_disable_color(SchGUIDrawingCfg *config, int index);
+
+/*! \brief Get the color used for drawing schematic shapes
+ *
+ *  \param [in]  config This configuration
+ *  \param [in]  index  The color index of the shape
+ *  \param [out] color  The color of the shape, when the return value is TRUE
+ *  \return TRUE  Shapes of this color index are enabled
+ *  \return FALSE Shapes of this color index are disabled
+ */
+int
+schgui_drawing_cfg_get_color(SchGUIDrawingCfg *config, int index, SchGUIDrawingCfgColor *color);
+
+/*! \brief Get the default configuration for display
+ *
+ *  Do not free the returned pointer.
+ *
+ *  return The default configuration for on-screen graphics.
+ */
+SchGUIDrawingCfg*
+schgui_drawing_cfg_get_default_display(void);
+
+/*! \brief Get the default configuration for print
+ *
+ *  Do not free the returned pointer.
+ *
+ *  return The default configuration for printed graphics.
+ */
+SchGUIDrawingCfg*
+schgui_drawing_cfg_get_default_print(void);
+
+/*! \brief Set a color used for drawing schematic shapes
+ *
+ *  The color index must be a positive integer.
+ *
+ *  \param [in]  config This configuration
+ *  \param [in]  index  The color index of the shape
+ *  \param [out] color  The name of the color for the shape
+ */
+void
+schgui_drawing_cfg_set_color_by_name(SchGUIDrawingCfg *config, int index, const char *color);
 

@@ -9,7 +9,12 @@ SUFFIXES = .x
 BUILT_SOURCES = \
 	scmcfg-config.x
 
-bin_PROGRAMS = gparts gsymview
+bin_PROGRAMS = \
+	gparts \
+	gsymview
+
+pkgdata_DATA = \
+	system-gpartsrc
 
 xmldir = $(pkgdatadir)/xml
 xml_DATA = \
