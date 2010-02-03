@@ -27,12 +27,6 @@ GType
 schgui_cairo_drafter_get_type(void);
 
 void
-schgui_cairo_drafter_begin_drawing(SchGUICairoDrafter *drafter, GtkWidget *widget);
-
-void
-schgui_cairo_drafter_end_drawing(SchGUICairoDrafter *drafter);
-
-void
 schgui_cairo_drafter_set_zoom(SchGUICairoDrafter *drafter, double zoom);
 
 int
@@ -42,7 +36,17 @@ void
 schgui_cairo_drafter_draw_grid(SchGUICairoDrafter *drafter);
 
 void
+schgui_cairo_drafter_draw_to_cairo(SchGUICairoDrafter *drafter, cairo_t *cairo);
+
+void
+schgui_cairo_drafter_draw_to_widget(SchGUICairoDrafter *drafter, GtkWidget *widget);
+
+void
 schgui_cairo_drafter_set_config(SchGUICairoDrafter *drafter, SchGUIDrawingCfg *config);
 
 void
 schgui_cairo_drafter_set_drawing(SchGUICairoDrafter *drafter, SchDrawing *drawing);
+
+void
+schgui_cairo_drafter_zoom_extents(SchGUICairoDrafter *drafter, GtkWidget *widget);
+

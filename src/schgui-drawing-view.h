@@ -44,12 +44,29 @@ struct _SchGUIDrawingViewClass
 GType
 schgui_drawing_view_get_type(void);
 
+/*! \brief Set a new drafter fo this widget
+ *
+ *  Drafters know 'how' to draw the contents of the window. Currently, the drafter
+ *  cannot be changed.
+ *
+ *  \param [in] widget This widget.
+ *  \param [in] drafter A new drafter for this widget.
+ */
 void
 schgui_drawing_view_set_drafter(SchGUIDrawingView *widget, SchGUICairoDrafter *drafter);
 
+/*! \brief Set the contents of the window to a new drawing.
+ *
+ *  \param [in] widget This widget.
+ *  \param [in] drawing The new drawing to show in the window. 
+ */
 void
 schgui_drawing_view_set_drawing(SchGUIDrawingView *widget, SchDrawing *drawing);
 
+/*! \brief Enlarges the drawing to fit the widget.
+ *
+ *  \param [in] widget This widget.
+ */
 void
 schgui_drawing_view_zoom_extents(SchGUIDrawingView *widget);
 

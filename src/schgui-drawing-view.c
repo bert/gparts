@@ -27,6 +27,7 @@
 
 #include "geom.h"
 
+#include "sch-color.h"
 #include "sch-multiline.h"
 #include "sch-text.h"
 #include "sch-drafter.h"
@@ -42,19 +43,18 @@
 enum
 {
     SCHGUI_DRAWING_VIEW_DRAFTER = 1,
-    SCHGUI_DRAWING_VIEW_DRAWING
+    SCHGUI_DRAWING_VIEW_DRAWING,
+    SCHGUI_DRAWING_VIEW_EXTENTS
 };
 
 typedef struct _SchGUIDrawingViewPrivate SchGUIDrawingViewPrivate;
 
 struct _SchGUIDrawingViewPrivate
 {
+    SchGUIDrawingCfg   *config;
+    int                extents;
     SchGUICairoDrafter *drafter;
     SchDrawing         *drawing;
-
-    gdouble            zoom;
-    gdouble            tx;
-    gdouble            ty;
 };
 
 static void
@@ -67,7 +67,7 @@ static void
 schgui_drawing_view_init(GTypeInstance *instance, gpointer g_class);
 
 static void
-schgui_drawing_view_schematic_shape_init(gpointer g_iface, gpointer g_iface_data);
+schgui_drawing_view_set_config(SchGUIDrawingView *widget, SchGUIDrawingCfg *config);
 
 static void
 schgui_drawing_view_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
@@ -81,8 +81,7 @@ schgui_drawing_view_expose_event_cb(GtkWidget *widget, GdkEventExpose *event, gp
 static void
 schgui_drawing_view_realize_cb(GtkWidget *widget, gpointer user_data);
 
-static void
-schgui_drawing_view_unrealize_cb(GtkWidget *widget, gpointer user_data);
+
 
 static void
 schgui_drawing_view_class_init(gpointer g_class, gpointer g_class_data)
@@ -117,6 +116,32 @@ schgui_drawing_view_class_init(gpointer g_class, gpointer g_class_data)
             G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
+
+    g_object_class_install_property(
+        object_class,
+        SCHGUI_DRAWING_VIEW_EXTENTS,
+        g_param_spec_boolean(
+            "extents",
+            "Extents",
+            "Extents",
+            TRUE,
+            G_PARAM_LAX_VALIDATION | G_PARAM_READABLE | G_PARAM_STATIC_STRINGS
+            )
+        );
+}
+
+static void
+schgui_drawing_view_configure_event_cb(GtkWidget *widget, GdkEventConfigure *event, gpointer user_data)
+{
+    SchGUIDrawingViewPrivate *privat = SCHGUI_DRAWING_VIEW_GET_PRIVATE(widget);
+
+    if (privat != NULL)
+    {
+        if (privat->extents)
+        {
+            schgui_drawing_view_zoom_extents(SCHGUI_DRAWING_VIEW(widget));
+        }
+    }
 }
 
 static void
@@ -136,6 +161,9 @@ schgui_drawing_view_get_property(GObject *object, guint property_id, GValue *val
                 g_value_set_object(value, privat->drawing);
                 break;
 
+            case SCHGUI_DRAWING_VIEW_EXTENTS:
+                g_value_set_boolean(value, privat->extents);
+
             default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
         }
@@ -145,17 +173,20 @@ schgui_drawing_view_get_property(GObject *object, guint property_id, GValue *val
 static void
 schgui_drawing_view_realize_cb(GtkWidget *widget, gpointer user_data)
 {
-    double   blue;
     GdkColor color;
-    double   green;
-    double   red;
+    SchGUIDrawingViewPrivate *privat = SCHGUI_DRAWING_VIEW_GET_PRIVATE(widget);
 
-    sch_color_get_default(0, &red, &green, &blue);
-
-    color.red   = 65535 * red;
-    color.green = 65535 * green;
-    color.blue  = 65535 * blue;
-   
+    if (privat != NULL)
+    {
+        schgui_drawing_cfg_get_background_as_gdk_color(privat->config, &color);
+    }
+    else
+    {
+        color.red   = 0;
+        color.green = 0;
+        color.blue  = 0;
+    }
+ 
     gtk_widget_modify_bg(widget, GTK_STATE_NORMAL, &color); 
 }
 
@@ -164,30 +195,9 @@ schgui_drawing_view_expose_event_cb(GtkWidget *widget, GdkEventExpose *event, gp
 {
     SchGUIDrawingViewPrivate *privat = SCHGUI_DRAWING_VIEW_GET_PRIVATE(widget);
 
-    if (privat != NULL)
+    if ((privat != NULL) && (privat->drafter != NULL))
     {
-        if (privat->drawing != NULL)
-        {
-            if (privat->drafter != NULL)
-            {
-
-                schgui_cairo_drafter_set_zoom(privat->drafter,1 );
-                schgui_cairo_drafter_set_translate(privat->drafter, 0, 0);
-                schgui_cairo_drafter_begin_drawing(privat->drafter, widget);
-                schgui_drawing_view_zoom_extents(widget);
-                schgui_cairo_drafter_end_drawing(privat->drafter);
-
-                schgui_cairo_drafter_set_zoom(privat->drafter, privat->zoom);
-                schgui_cairo_drafter_set_translate(privat->drafter, privat->tx, privat->ty);
-                schgui_cairo_drafter_begin_drawing(privat->drafter, widget);
-
-                schgui_cairo_drafter_draw_grid(privat->drafter);
-
-                sch_drawing_draw(privat->drawing, SCH_DRAFTER(privat->drafter));
-    
-                schgui_cairo_drafter_end_drawing(privat->drafter);
-            }
-        }
+        schgui_cairo_drafter_draw_to_widget(privat->drafter, widget);
     }
 }
 
@@ -237,12 +247,26 @@ schgui_drawing_view_init(GTypeInstance *instance, gpointer g_class)
 
     if (privat != NULL)
     {
-        privat->drafter = SCHGUI_CAIRO_DRAFTER(g_object_new(
-            SCHGUI_TYPE_CAIRO_DRAFTER,
-            "config", schgui_drawing_cfg_get_default_display(),
-            NULL
-            ));
+        schgui_drawing_view_set_config(
+            instance,
+            schgui_drawing_cfg_get_default_display()
+            );
+
+        privat->drafter = SCHGUI_CAIRO_DRAFTER(
+            g_object_new(
+                SCHGUI_TYPE_CAIRO_DRAFTER,
+                "config", privat->config,
+                NULL
+                )
+            );
     }
+
+    g_signal_connect(
+        G_OBJECT(instance),
+        "configure-event",
+        G_CALLBACK(schgui_drawing_view_configure_event_cb),
+        instance
+        );
 
     g_signal_connect(
         G_OBJECT(instance),
@@ -257,8 +281,31 @@ schgui_drawing_view_init(GTypeInstance *instance, gpointer g_class)
         G_CALLBACK(schgui_drawing_view_realize_cb),
         instance
         );
-
 }
+
+static void
+schgui_drawing_view_set_config(SchGUIDrawingView *widget, SchGUIDrawingCfg *config)
+{
+    SchGUIDrawingViewPrivate *privat = SCHGUI_DRAWING_VIEW_GET_PRIVATE(widget);
+
+    if (privat != NULL)
+    {
+        if (privat->config != NULL)
+        {
+            g_object_unref(privat->config);
+        }
+
+        privat->config = config;
+
+        if (privat->config != NULL)
+        {
+            g_object_ref(privat->config);
+        }
+
+        gtk_widget_queue_draw(GTK_WIDGET(widget));
+    }
+}
+
 
 void
 schgui_drawing_view_set_drafter(SchGUIDrawingView *widget, SchGUICairoDrafter *drafter)
@@ -307,6 +354,13 @@ schgui_drawing_view_set_drawing(SchGUIDrawingView *widget, SchDrawing *drawing)
             /* \todo register signals to update */
         }
 
+        if (privat->drafter != NULL)
+        {
+            schgui_cairo_drafter_set_drawing(privat->drafter, privat->drawing);
+
+            schgui_drawing_view_zoom_extents(widget);
+        }
+
         gtk_widget_queue_draw(GTK_WIDGET(widget));
     }
 }
@@ -316,7 +370,6 @@ schgui_drawing_view_set_property(GObject *object, guint property_id, const GValu
 {
     switch (property_id)
     {
-    
         case SCHGUI_DRAWING_VIEW_DRAFTER:
             schgui_drawing_view_set_drafter(SCHGUI_DRAWING_VIEW(object), g_value_get_object(value));
             break;
@@ -335,92 +388,14 @@ schgui_drawing_view_zoom_extents(SchGUIDrawingView *widget)
 {
     SchGUIDrawingViewPrivate *privat = SCHGUI_DRAWING_VIEW_GET_PRIVATE(widget);
 
-    if (privat != NULL)
+    if ((privat != NULL) && (privat->drafter != NULL))
     {
-        if (privat->drawing != NULL)
-        {
-            if (privat->drafter != NULL)
-            {
-                GeomBounds bounds;
-                int w;
-                int h;
-                double zx;
-                double zy;
+        schgui_cairo_drafter_zoom_extents(privat->drafter, GTK_WIDGET(widget));
 
-               // schgui_cairo_drafter_begin_drawing(privat->drafter, widget);
+        privat->extents = TRUE;
+        g_object_notify(G_OBJECT(widget), "extents"); 
 
-                sch_drawing_bounds(privat->drawing, privat->drafter, &bounds);
-
-                g_debug("Min X = %d", bounds.min_x);
-                g_debug("Min Y = %d", bounds.min_y);
-                g_debug("Max X = %d", bounds.max_x);
-                g_debug("Max Y = %d", bounds.max_y);
-
-               // schgui_cairo_drafter_end_drawing(privat->drafter);
-
-                gdk_drawable_get_size(gtk_widget_get_window(widget), &w, &h);
-
-                zx = 0.9 * (double)w / (bounds.max_x - bounds.min_x);
-                zy = 0.9 * (double)h / (bounds.max_y - bounds.min_y);
-
-                if (zx < zy)
-                {
-                    privat->zoom = zx;
-                }
-                else
-                {
-                    privat->zoom = zy;
-                }
-
-                {
-                    double m;
-                    int    exp;
-                    int    numerator;
-
-                    m = frexp(10/privat->zoom, &exp);
-
-                    //if (m < 0.2)
-                   // {
-                    //    m = 0.1;
-                   // }
-                   // else if (m < 0.5)
-                   // {
-                   //     m = 0.2;
-                   // }
-                   // else if (m < 1.0)
-                   // {
-                   //     m = 0.5;
-                   // }
-                   // else
-                   // {
-                   //     m = 1.0;
-                   // }
-
-                    if (m > 0.5)
-                    {
-                        m = 1.0;
-                    }
-                    else if (m > 0.2)
-                    {
-                        m = 0.5;
-                    }
-                    else if (m > 0.1)
-                    {
-                        m = 0.2;
-                    }
-                    else 
-                    {
-                        m = 0.1;
-                    }
-                    numerator = privat->zoom * ldexp(m, exp);
-
-                    privat->zoom = numerator / ldexp(m, exp);
-                }
-
-                privat->tx = (w - privat->zoom * (bounds.max_x)) / 2   - (privat->zoom * bounds.min_x) / 2;
-                privat->ty =  - h - ((privat->zoom * (bounds.max_y + bounds.min_y) ) - h ) / 2;
-            }
-        }
+        gtk_widget_queue_draw(GTK_WIDGET(widget));
     }
 }
 

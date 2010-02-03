@@ -74,7 +74,15 @@ schgui_drawing_cfg_get_output_line_width(SchGUIDrawingCfg *cfg, int shape_width,
 void
 schgui_drawing_cfg_disable_color(SchGUIDrawingCfg *config, int index);
 
-/*! \brief Get the color used for drawing schematic shapes
+/*! \brief Get the configured background color 
+ *
+ *  \param [in]  object This configuration
+ *  \param [out] color  The color of the background 
+ */
+void
+schgui_drawing_cfg_get_background_as_gdk_color(GObject *object, GdkColor *color);
+
+/*! \brief Get a color used for drawing schematic shapes
  *
  *  \param [in]  config This configuration
  *  \param [in]  index  The color index of the shape
@@ -85,11 +93,22 @@ schgui_drawing_cfg_disable_color(SchGUIDrawingCfg *config, int index);
 int
 schgui_drawing_cfg_get_color(SchGUIDrawingCfg *config, int index, SchGUIDrawingCfgColor *color);
 
+/*! \brief Get a color used for drawing schematic shapes
+ *
+ *  \param [in]  config This configuration
+ *  \param [in]  index  The color index of the shape
+ *  \param [out] color  The color of the shape, when the return value is TRUE
+ *  \return TRUE  Shapes of this color index are enabled
+ *  \return FALSE Shapes of this color index are disabled
+ */
+int
+schgui_drawing_cfg_get_color_as_gdk_color(SchGUIDrawingCfg *config, int index, GdkColor *color);
+
 /*! \brief Get the default configuration for display
  *
  *  Do not free the returned pointer.
  *
- *  return The default configuration for on-screen graphics.
+ *  \return The default configuration for on-screen graphics.
  */
 SchGUIDrawingCfg*
 schgui_drawing_cfg_get_default_display(void);
@@ -98,10 +117,21 @@ schgui_drawing_cfg_get_default_display(void);
  *
  *  Do not free the returned pointer.
  *
- *  return The default configuration for printed graphics.
+ *  \return The default configuration for printed graphics.
  */
 SchGUIDrawingCfg*
 schgui_drawing_cfg_get_default_print(void);
+
+/*! \brief Set a color used for drawing schematic shapes
+ *
+ *  The color index must be a positive integer.
+ *
+ *  \param [in]  config This configuration
+ *  \param [in]  index  The color index of the shape
+ *  \param [out] color  The color for the shape
+ */
+void
+schgui_drawing_cfg_set_color_by_gdk_color(SchGUIDrawingCfg *config, int index, const GdkColor *color);
 
 /*! \brief Set a color used for drawing schematic shapes
  *

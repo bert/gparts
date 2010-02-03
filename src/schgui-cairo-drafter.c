@@ -126,59 +126,6 @@ static void
 schgui_cairo_drafter_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
 
 
-void
-schgui_cairo_drafter_begin_drawing(SchGUICairoDrafter *drafter, GtkWidget *widget)
-{
-    SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
-
-    if (privat != NULL)
-    {
-        if (privat->cairo != NULL)
-        {
-            cairo_destroy(privat->cairo);
-            privat->cairo = NULL;
-        }
-
-        //privat->cairo = gdk_cairo_create(gtk_widget_get_window(private->widget));
-        privat->cairo = gdk_cairo_create(widget->window);
-
-#if 0
-        if (privat->cairo != NULL)
-        {
-            if (privat->pango != NULL)
-            {
-            }
-            else
-            {
-                privat->pango = pango_cairo_create_context(privat->cairo);
-            }
-        }
-        else
-        {
-            if (privat->pango != NULL)
-            {
-            }
-            else
-            {
-            }
-        }
-#endif
-
-        //cairo_scale(privat->cairo, privat->zoom, -privat->zoom);
-
-        cairo_identity_matrix(privat->cairo);
-
-        //cairo_translate(privat->cairo, 0, 480);
-        cairo_scale(privat->cairo, 1, -1);
-        cairo_translate(privat->cairo, privat->tx, privat->ty);
-        cairo_scale(privat->cairo, privat->zoom, privat->zoom);
-
-
-
-        cairo_set_line_width(privat->cairo, 20);
-    }
-}
-
 static void
 schgui_cairo_drafter_class_init(gpointer g_class, gpointer g_class_data)
 {
@@ -918,17 +865,33 @@ schgui_cairo_drafter_draw_text(SchGUICairoDrafter *drafter, const struct _SchTex
 }
 
 void
-schgui_cairo_drafter_end_drawing(SchGUICairoDrafter *drafter)
+schgui_cairo_drafter_draw_to_widget(SchGUICairoDrafter *drafter, GtkWidget *widget)
 {
     SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
 
     if (privat != NULL)
     {
-        if (privat->cairo != NULL)
-        {
-            cairo_destroy(privat->cairo);
-            privat->cairo = NULL;
-        }
+        //schgui_cairo_drafter_set_zoom(drafter,1 );
+        //schgui_cairo_drafter_set_translate(drafter, 0, 0);
+
+        //schgui_cairo_drafter_set_zoom(drafter, privat->zoom);
+        //schgui_cairo_drafter_set_translate(privat->drafter, privat->tx, privat->ty);
+
+        privat->cairo = gdk_cairo_create(widget->window);
+        // cairo_scale(privat->cairo, privat->zoom, -privat->zoom);
+        cairo_identity_matrix(privat->cairo);
+        //cairo_translate(privat->cairo, 0, 480);
+        cairo_scale(privat->cairo, 1, -1);
+        cairo_translate(privat->cairo, privat->tx, privat->ty);
+        cairo_scale(privat->cairo, privat->zoom, privat->zoom);
+        cairo_set_line_width(privat->cairo, 20);
+
+            //    schgui_cairo_drafter_draw_grid(privat->drafter);
+
+        sch_drawing_draw(privat->drawing, SCH_DRAFTER(drafter));
+        
+        cairo_destroy(privat->cairo);
+        privat->cairo = NULL;
     }
 }
 
@@ -1106,6 +1069,96 @@ schgui_cairo_drafter_set_property(GObject *object, guint property_id, const GVal
 
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+    }
+}
+
+void
+schgui_cairo_drafter_zoom_extents(SchGUICairoDrafter *drafter, GtkWidget *widget)
+{
+    SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
+
+    if (privat != NULL)
+    {
+        if (privat->drawing != NULL)
+        {
+            GeomBounds bounds;
+            int w;
+            int h;
+            double zx;
+            double zy;
+
+           // schgui_cairo_drafter_begin_drawing(privat->drafter, widget);
+
+            sch_drawing_bounds(privat->drawing, drafter, &bounds);
+
+            g_debug("Min X = %d", bounds.min_x);
+            g_debug("Min Y = %d", bounds.min_y);
+            g_debug("Max X = %d", bounds.max_x);
+            g_debug("Max Y = %d", bounds.max_y);
+
+           // schgui_cairo_drafter_end_drawing(privat->drafter);
+
+            gdk_drawable_get_size(gtk_widget_get_window(widget), &w, &h);
+
+            zx = 0.9 * (double)w / (bounds.max_x - bounds.min_x);
+            zy = 0.9 * (double)h / (bounds.max_y - bounds.min_y);
+
+            if (zx < zy)
+            {
+                privat->zoom = zx;
+            }
+            else
+            {
+                privat->zoom = zy;
+            }
+
+            {
+                double m;
+                int    exp;
+                int    numerator;
+
+                m = frexp(10/privat->zoom, &exp);
+
+                                   // {
+                    //    m = 0.1;
+                   // }
+                   // else if (m < 0.5)
+                   // {
+                   //     m = 0.2;
+                   // }
+                   // else if (m < 1.0)
+                   // {
+                   //     m = 0.5;
+                   // }
+                   // else
+                   // {
+                   //     m = 1.0;
+                   // }
+
+                if (m > 0.5)
+                {
+                    m = 1.0;
+                }
+                else if (m > 0.2)
+                {
+                    m = 0.5;
+                }
+                else if (m > 0.1)
+                {
+                    m = 0.2;
+                }
+                else 
+                {
+                        m = 0.1;
+                }
+                numerator = privat->zoom * ldexp(m, exp);
+
+                privat->zoom = numerator / ldexp(m, exp);
+            }
+
+            privat->tx = (w - privat->zoom * (bounds.max_x)) / 2   - (privat->zoom * bounds.min_x) / 2;
+            privat->ty =  - h - ((privat->zoom * (bounds.max_y + bounds.min_y) ) - h ) / 2;
+        }
     }
 }
 

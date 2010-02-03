@@ -24,6 +24,7 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <libguile.h>
+#include <gdk/gdk.h>
 
 #include "geom.h"
 

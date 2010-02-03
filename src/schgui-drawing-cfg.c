@@ -33,9 +33,10 @@
 
 #define SCHGUI_DRAWING_CFG_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCHGUI_TYPE_DRAWING_CFG,SchGUIDrawingCfgPrivate))
 
-//enum
-//{
-//};
+enum
+{
+    SCHGUI_DRAWING_CFG_BACKGROUND = 1
+};
 
 typedef struct _SchGUIDrawingCfgPrivate SchGUIDrawingCfgPrivate;
 
@@ -52,6 +53,9 @@ schgui_drawing_cfg_dispose(GObject *object);
 
 static void
 schgui_drawing_cfg_finalize(GObject *object);
+
+static void
+schgui_drawing_cfg_get_background(GObject *object, GValue *value);
 
 static void
 schgui_drawing_cfg_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
@@ -77,6 +81,18 @@ schgui_drawing_cfg_class_init(gpointer g_class, gpointer g_class_data)
 
     object_class->get_property = schgui_drawing_cfg_get_property;
     object_class->set_property = schgui_drawing_cfg_set_property;
+
+    g_object_class_install_property(
+        object_class,
+        SCHGUI_DRAWING_CFG_BACKGROUND,
+        g_param_spec_boxed(
+            "background",
+            "Background",
+            "Background",
+            GDK_TYPE_COLOR,
+            G_PARAM_LAX_VALIDATION | G_PARAM_READABLE | G_PARAM_STATIC_STRINGS
+            )
+        );
 }
 
 static void
@@ -102,6 +118,47 @@ schgui_drawing_cfg_finalize(GObject *object)
 }
 
 static void
+schgui_drawing_cfg_get_background(GObject *object, GValue *value)
+{
+    if (value != NULL)
+    {
+        GdkColor color;
+        int      enabled = FALSE;
+
+        if (object != NULL)
+        {
+            enabled = schgui_drawing_cfg_get_color_as_gdk_color(object, 0, &color);
+        }
+
+        if (!enabled)
+        {
+            color.red   = 0;
+            color.green = 0;
+            color.blue  = 0;
+        }
+
+        g_value_set_boxed(value, &color);
+    }
+}
+
+void
+schgui_drawing_cfg_get_background_as_gdk_color(GObject *object, GdkColor *color)
+{
+    int enabled = FALSE;
+
+    if (object != NULL)
+    {
+        enabled = schgui_drawing_cfg_get_color_as_gdk_color(object, 0, color);
+    }
+
+    if (!enabled)
+    {
+        color->red   = 0;
+        color->green = 0;
+        color->blue  = 0;
+    }
+}
+static void
 schgui_drawing_cfg_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
 {
     SchGUIDrawingCfgPrivate *privat = SCHGUI_DRAWING_CFG_GET_PRIVATE(object);
@@ -110,6 +167,10 @@ schgui_drawing_cfg_get_property(GObject *object, guint property_id, GValue *valu
     {
         switch (property_id)
         {
+            case SCHGUI_DRAWING_CFG_BACKGROUND:
+                schgui_drawing_cfg_get_background(object, value);
+                break;
+
             default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
         }
@@ -156,6 +217,10 @@ schgui_drawing_cfg_set_property(GObject *object, guint property_id, const GValue
     {
         switch (property_id)
         {
+            case SCHGUI_DRAWING_CFG_BACKGROUND:
+                schgui_drawing_cfg_set_color_by_gdk_color(SCHGUI_DRAWING_CFG(object), 0, g_value_get_boxed(value));
+                break;
+
             default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
         }
@@ -211,6 +276,11 @@ schgui_drawing_cfg_disable_color(SchGUIDrawingCfg *config, int index)
     if ((privat != NULL) && (privat->colors != NULL))
     {
         g_hash_table_remove(privat->colors, GINT_TO_POINTER(index));
+
+        if (index == 0)
+        {
+            g_object_notify(G_OBJECT(config), "background");
+        }
     }
 }
 
@@ -230,6 +300,36 @@ schgui_drawing_cfg_get_color(SchGUIDrawingCfg *config, int index, SchGUIDrawingC
             if (value != NULL)
             {
                 *color = *value;
+                enabled = TRUE;
+            }
+        }
+    }
+
+    return enabled;
+}
+
+int
+schgui_drawing_cfg_get_color_as_gdk_color(SchGUIDrawingCfg *config, int index, GdkColor *color)
+{
+    int enabled = FALSE;
+
+    if (index >= 0)
+    {
+        SchGUIDrawingCfgPrivate *privat = SCHGUI_DRAWING_CFG_GET_PRIVATE(config);
+
+        if ((privat != NULL) && (privat->colors != NULL))
+        {
+            SchGUIDrawingCfgColor *value = g_hash_table_lookup(privat->colors, GINT_TO_POINTER(index));
+
+            if (value != NULL)
+            {
+                if (color != NULL)
+                {
+                    color->red   = (guint16) (65535.0 * value->red);
+                    color->green = (guint16) (65535.0 * value->green);
+                    color->blue  = (guint16) (65535.0 * value->blue);
+                }
+
                 enabled = TRUE;
             }
         }
@@ -282,28 +382,47 @@ schgui_drawing_cfg_init(GTypeInstance *instance, gpointer g_class)
 }
 
 void
+schgui_drawing_cfg_set_color_by_gdk_color(SchGUIDrawingCfg *config, int index, const GdkColor *color)
+{
+    if ((index >= 0) && (color != NULL))
+    {
+        SchGUIDrawingCfgPrivate *privat = SCHGUI_DRAWING_CFG_GET_PRIVATE(config);
+
+        if ((privat != NULL) && (privat->colors != NULL))
+        {
+            SchGUIDrawingCfgColor *value = g_new(SchGUIDrawingCfgColor, 1);
+
+            value->red   = (double) color->red   / 65535.0;
+            value->green = (double) color->green / 65535.0;
+            value->blue  = (double) color->blue  / 65535.0;
+
+            g_hash_table_replace(privat->colors, GINT_TO_POINTER(index), value);
+
+            if (index == 0)
+            {
+                g_object_notify(G_OBJECT(config), "background");
+            }
+        }
+    }
+}
+
+void
 schgui_drawing_cfg_set_color_by_name(SchGUIDrawingCfg *config, int index, const char *color)
 {
-    if (index >= 0)
+    if ((index >= 0) && (color != NULL))
     {
         SchGUIDrawingCfgPrivate *privat = SCHGUI_DRAWING_CFG_GET_PRIVATE(config);
 
         if ((privat != NULL) && (privat->colors != NULL))
         {
             int      success;
-            GdkColor value1;
+            GdkColor value;
 
-            success = gdk_color_parse(color, &value1);
+            success = gdk_color_parse(color, &value);
 
             if (success)
             {
-                SchGUIDrawingCfgColor *value2 = g_new(SchGUIDrawingCfgColor, 1);
-
-                value2->red   = (double) value1.red   / 65535.0;
-                value2->green = (double) value1.green / 65535.0;
-                value2->blue  = (double) value1.blue  / 65535.0;
-
-                g_hash_table_replace(privat->colors, GINT_TO_POINTER(index), value2);
+                schgui_drawing_cfg_set_color_by_gdk_color(config, index, &value);
             }
         }
     }
