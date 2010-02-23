@@ -50,12 +50,12 @@ AC_SUBST(GTK_LIBS)
 
 ##  Guile
 ##
-GUILE_VERSION=`$PKG_CONFIG guile-1.8 --modversion`
-GUILE_CFLAGS=`$PKG_CONFIG guile-1.8 --cflags`
-GUILE_LIBS=`$PKG_CONFIG guile-1.8 --libs`
-AC_SUBST(GUILE_CFLAGS)
-AC_SUBST(GUILE_LIBS)
+AX_CHECK_GUILE([1.8.0])
 
+AC_PATH_PROG([GUILE_SNARF], [guile-snarf], [notfound])
+if test "X$GUILE_SNARF" = "Xnotfound" ; then
+	AC_MSG_ERROR([Unable to locate guile-snarf.  Make sure guile is installed and guile-snarf is in the path])
+fi
 
 ##  MySQL
 ##
