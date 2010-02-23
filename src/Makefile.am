@@ -2,9 +2,14 @@
 #
 #
 
+# we have a bit of a "chicken and egg" problem.  scmcfg-config.c includes
+# scmcfg-config.x and so guile-snarf will fail to run and create scmcfg-config.x
+# The solution is to ensure that there is at least some file there so if
+# the .x file doesn't exist, then create a dummy one.
 SUFFIXES = .x
 .c.x:
-	guile-snarf -o $@ $< $(AM_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS)
+	test -f $@ || touch $@
+	$(GUILE_SNARF) -o $@ $< $(AM_CFLAGS) $(GLIB_CFLAGS) $(GTK_CFLAGS) -I.
 
 BUILT_SOURCES = \
 	scmcfg-config.x
