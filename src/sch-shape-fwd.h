@@ -18,35 +18,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file sch-net.h
+/*! \file sch-shape-fwd.h
+ *
+ *  \brief Forward declarations.
  */
 
-#define SCH_TYPE_NET (sch_net_get_type())
-#define SCH_NET(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),SCH_TYPE_NET,SchNet))
-#define SCH_NET_CLASS(cls) (G_TYPE_CHECK_CLASS_CAST((cls),SCH_TYPE_NET,SchNetClass))
-#define SCH_IS_NET(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj),SCH_TYPE_NET))
-#define SCH_IS_NET_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCH_TYPE_NET))
-#define SCH_NET_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCH_TYPE_NET,SchNetClass))
+#define SCH_TYPE_SHAPE (sch_shape_get_type())
+#define SCH_SHAPE(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),SCH_TYPE_SHAPE,SchShape))
+#define SCH_SHAPE_CLASS(cls) (G_TYPE_CHECK_CLASS_CAST((cls),SCH_TYPE_SHAPE,SchShapeClass))
+#define SCH_IS_SHAPE(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj),SCH_TYPE_SHAPE))
+#define SCH_IS_SHAPE_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCH_TYPE_SHAPE))
+#define SCH_SHAPE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCH_TYPE_SHAPE,SchShapeClass))
 
-typedef struct _SchNet SchNet;
-typedef struct _SchNetClass SchNetClass;
-
-struct _SchNet
-{
-    SchShape parent;
-};
-
-struct _SchNetClass
-{
-    SchShapeClass parent;
-};
-
-GType
-sch_net_get_type(void);
-
-void
-sch_net_get_color(const SchNet *shape, int *index);
-
-void
-sch_net_get_line(const SchNet *shape, GeomLine *line);
+typedef struct _SchShape SchShape;
+typedef struct _SchShapeClass SchShapeClass;
 

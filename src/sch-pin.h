@@ -33,12 +33,12 @@ typedef struct _SchPinClass SchPinClass;
 
 struct _SchPin
 {
-    GObject parent;
+    SchShape parent;
 };
 
 struct _SchPinClass
 {
-    GObjectClass parent;
+    SchShapeClass parent;
 };
 
 GType
@@ -49,4 +49,25 @@ sch_pin_get_color(const SchPin *shape, int *index);
 
 void
 sch_pin_get_line(const SchPin *shape, GeomLine *line);
+
+int
+sch_pin_get_x1(const SchPin *shape);
+
+int
+sch_pin_get_y1(const SchPin *shape);
+
+int
+sch_pin_get_x2(const SchPin *shape);
+
+int
+sch_pin_get_y2(const SchPin *shape);
+
+int
+sch_pin_get_color_(const SchPin *shape);
+
+int
+sch_pin_get_type_(const SchPin *shape);
+
+int
+sch_pin_get_end(const SchPin *shape);
 

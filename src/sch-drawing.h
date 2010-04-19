@@ -44,3 +44,6 @@ sch_drawing_transform(SchDrawing *drawing, const struct _GeomTransform *transfor
 void
 sch_drawing_translate(SchDrawing *drawing, int dx, int dy);
 
+void
+sch_drawing_write(const SchDrawing *drawing, SchOutputStream *stream);
+

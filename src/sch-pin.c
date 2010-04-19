@@ -6,13 +6,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include "geom.h"
+#include "sch.h"
 
-#include "sch-multiline.h"
-#include "sch-shape.h"
-#include "sch-pin.h"
-#include "sch-text.h"
-#include "sch-drafter.h"
 
 #define SCH_PIN_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_PIN,SchPinPrivate))
 
@@ -50,9 +45,6 @@ static void
 sch_pin_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
 
 static void
-sch_pin_schematic_shape_init(gpointer g_iface, gpointer g_iface_data);
-
-static void
 sch_pin_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
 
 static void
@@ -64,6 +56,8 @@ sch_pin_transform(SchShape *shape, const struct _GeomTransform *transform);
 static void
 sch_pin_translate(SchShape *shape, int dx, int dy);
 
+static void
+sch_pin_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error);
 
 
 static gboolean
@@ -91,11 +85,19 @@ static void
 sch_pin_class_init(gpointer g_class, gpointer g_class_data)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(g_class);
+    SchPinClass *klasse = SCH_PIN_CLASS(g_class);
 
     g_type_class_add_private(object_class, sizeof(SchPinPrivate));
 
     object_class->get_property = sch_pin_get_property;
     object_class->set_property = sch_pin_set_property;
+
+    klasse->parent.bounds    = sch_pin_bounds;
+    klasse->parent.draw      = sch_pin_draw;
+    klasse->parent.rotate    = sch_pin_rotate;
+    klasse->parent.transform = sch_pin_transform;
+    klasse->parent.translate = sch_pin_translate;
+    klasse->parent.write     = sch_pin_write;
 
     g_object_class_install_property(
         object_class,
@@ -251,46 +253,26 @@ sch_pin_get_type(void)
     {
         static const GTypeInfo tinfo = {
             sizeof(SchPinClass),    /* class_size */
-            NULL,                             /* base_init */
-            NULL,                             /* base_finalize */
-            sch_pin_class_init,    /* class_init */
-            NULL,                             /* class_finalize */
-            NULL,                             /* class_data */
+            NULL,                   /* base_init */
+            NULL,                   /* base_finalize */
+            sch_pin_class_init,     /* class_init */
+            NULL,                   /* class_finalize */
+            NULL,                   /* class_data */
             sizeof(SchPin),         /* instance_size */
-            0,                                /* n_preallocs */
-            NULL,                             /* instance_init */
-            NULL                              /* value_table */
-            };
-
-        static const GInterfaceInfo iinfo = {
-            sch_pin_schematic_shape_init,    /* interface_init */
-            NULL,                                       /* interface_finalize */
-            NULL                                        /* interface_data */
+            0,                      /* n_preallocs */
+            NULL,                   /* instance_init */
+            NULL                    /* value_table */
             };
 
         type = g_type_register_static(
-            G_TYPE_OBJECT,
+            SCH_TYPE_SHAPE,
             "SchPin",
             &tinfo,
             0
             );
-
-        g_type_add_interface_static(type, SCH_TYPE_SHAPE, &iinfo);
     }
 
     return type;
-}
-
-static void
-sch_pin_schematic_shape_init(gpointer g_iface, gpointer g_iface_data)
-{
-    SchShapeInterface *iface = (SchShapeInterface*) g_iface;
-
-    iface->bounds    = sch_pin_bounds;
-    iface->draw      = sch_pin_draw;
-    iface->rotate    = sch_pin_rotate;
-    iface->transform = sch_pin_transform;
-    iface->translate = sch_pin_translate;
 }
 
 static void
@@ -398,4 +380,9 @@ sch_pin_translate(SchShape *shape, int dx, int dy)
     }
 }
 
+static void
+sch_pin_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error)
+{
+    sch_file_format_2_write_pin(format, stream, SCH_PIN(shape), error);
+}
 

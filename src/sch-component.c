@@ -5,20 +5,9 @@
 
 #include <glib.h>
 #include <glib-object.h>
+#include <gio/gio.h>
 
-#include "geom.h"
-
-#include "sch-multiline.h"
-#include "sch-shape.h"
-#include "sch-box.h"
-#include "sch-text.h"
-#include "sch-drafter.h"
-#include "sch-drawing.h"
-
-#include "sch-fill-style.h"
-#include "sch-line-style.h"
-
-#include "sch-component.h"
+#include "sch.h"
 
 #define SCH_COMPONENT_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_COMPONENT,SchComponentPrivate))
 
@@ -60,9 +49,6 @@ static void
 sch_component_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
 
 static void
-sch_component_schematic_shape_init(gpointer g_iface, gpointer g_iface_data);
-
-static void
 sch_component_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
 
 
@@ -78,11 +64,15 @@ static void
 sch_component_class_init(gpointer g_class, gpointer g_class_data)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(g_class);
+    SchComponentClass *klasse = SCH_COMPONENT_CLASS(g_class);
 
     g_type_class_add_private(object_class, sizeof(SchComponentPrivate));
 
     object_class->get_property = sch_component_get_property;
     object_class->set_property = sch_component_set_property;
+
+    klasse->parent.bounds = sch_component_bounds;
+    klasse->parent.draw   = sch_component_draw;
 
     g_object_class_install_property(
         object_class,
@@ -233,43 +223,26 @@ sch_component_get_type(void)
     {
         static const GTypeInfo tinfo = {
             sizeof(SchComponentClass),    /* class_size */
-            NULL,                            /* base_init */
-            NULL,                            /* base_finalize */
-            sch_component_class_init,    /* class_init */
-            NULL,                            /* class_finalize */
-            NULL,                            /* class_data */
+            NULL,                         /* base_init */
+            NULL,                         /* base_finalize */
+            sch_component_class_init,     /* class_init */
+            NULL,                         /* class_finalize */
+            NULL,                         /* class_data */
             sizeof(SchComponent),         /* instance_size */
-            0,                               /* n_preallocs */
-            NULL,                            /* instance_init */
-            NULL                             /* value_table */
-            };
-
-        static const GInterfaceInfo iinfo = {
-            sch_component_schematic_shape_init,    /* interface_init */
-            NULL,                                      /* interface_finalize */
-            NULL                                       /* interface_data */
+            0,                            /* n_preallocs */
+            NULL,                         /* instance_init */
+            NULL                          /* value_table */
             };
 
         type = g_type_register_static(
-            G_TYPE_OBJECT,
+            SCH_TYPE_SHAPE,
             "SchComponent",
             &tinfo,
             0
             );
-
-        g_type_add_interface_static(type, SCH_TYPE_SHAPE, &iinfo);
     }
 
     return type;
-}
-
-static void
-sch_component_schematic_shape_init(gpointer g_iface, gpointer g_iface_data)
-{
-    SchShapeInterface *iface = (SchShapeInterface*) g_iface;
-
-    iface->bounds = sch_component_bounds;
-    iface->draw = sch_component_draw;
 }
 
 static void

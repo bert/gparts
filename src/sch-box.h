@@ -36,12 +36,12 @@ typedef struct _SchBoxClass SchBoxClass;
 
 struct _SchBox
 {
-    GObject parent;
+    SchShape parent;
 };
 
 struct _SchBoxClass
 {
-    GObjectClass parent;
+    SchShapeClass parent;
 };
 
 GType

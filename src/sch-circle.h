@@ -36,12 +36,12 @@ typedef struct _SchCircleClass SchCircleClass;
 
 struct _SchCircle
 {
-    GObject parent;
+    SchShape parent;
 };
 
 struct _SchCircleClass
 {
-    GObjectClass parent;
+    SchShapeClass parent;
 };
 
 GType

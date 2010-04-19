@@ -35,12 +35,12 @@ typedef struct _SchLineClass SchLineClass;
 
 struct _SchLine
 {
-    GObject parent;
+    SchShape parent;
 };
 
 struct _SchLineClass
 {
-    GObjectClass parent;
+    SchShapeClass parent;
 };
 
 GType

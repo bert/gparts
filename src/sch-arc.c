@@ -24,13 +24,9 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include "geom.h"
+#include "sch.h"
 
-#include "sch-multiline.h"
-#include "sch-shape.h"
-#include "sch-arc.h"
-#include "sch-text.h"
-#include "sch-drafter.h"
+
 
 #define SCH_ARC_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_ARC,SchArcPrivate))
 
@@ -75,9 +71,6 @@ static void
 sch_arc_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
 
 static void
-sch_arc_schematic_shape_init(gpointer g_iface, gpointer g_iface_data);
-
-static void
 sch_arc_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
 
 static void
@@ -85,6 +78,9 @@ sch_arc_transform(SchShape *shape, const struct _GeomTransform *transform);
 
 void
 sch_arc_translate(SchShape *shape, int dx, int dy);
+
+static void
+sch_arc_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error);
 
 
 
@@ -112,11 +108,18 @@ static void
 sch_arc_class_init(gpointer g_class, gpointer g_class_data)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(g_class);
+    SchArcClass *klasse = SCH_ARC_CLASS(g_class);
 
     g_type_class_add_private(object_class, sizeof(SchArcPrivate));
 
     object_class->get_property = sch_arc_get_property;
     object_class->set_property = sch_arc_set_property;
+
+    klasse->parent.bounds    = sch_arc_bounds;
+    klasse->parent.draw      = sch_arc_draw;
+    klasse->parent.transform = sch_arc_transform;
+    klasse->parent.translate = sch_arc_translate;
+    klasse->parent.write     = sch_arc_write;
 
     g_object_class_install_property(
         object_class,
@@ -345,45 +348,26 @@ sch_arc_get_type(void)
     {
         static const GTypeInfo tinfo = {
             sizeof(SchArcClass),    /* class_size */
-            NULL,                             /* base_init */
-            NULL,                             /* base_finalize */
-            sch_arc_class_init,    /* class_init */
-            NULL,                             /* class_finalize */
-            NULL,                             /* class_data */
+            NULL,                   /* base_init */
+            NULL,                   /* base_finalize */
+            sch_arc_class_init,     /* class_init */
+            NULL,                   /* class_finalize */
+            NULL,                   /* class_data */
             sizeof(SchArc),         /* instance_size */
-            0,                                /* n_preallocs */
-            NULL,                             /* instance_init */
-            NULL                              /* value_table */
-            };
-
-        static const GInterfaceInfo iinfo = {
-            sch_arc_schematic_shape_init,    /* interface_init */
-            NULL,                                       /* interface_finalize */
-            NULL                                        /* interface_data */
+            0,                      /* n_preallocs */
+            NULL,                   /* instance_init */
+            NULL                    /* value_table */
             };
 
         type = g_type_register_static(
-            G_TYPE_OBJECT,
+            SCH_TYPE_SHAPE,
             "SchArc",
             &tinfo,
             0
             );
-
-        g_type_add_interface_static(type, SCH_TYPE_SHAPE, &iinfo);
     }
 
     return type;
-}
-
-static void
-sch_arc_schematic_shape_init(gpointer g_iface, gpointer g_iface_data)
-{
-    SchShapeInterface *iface = (SchShapeInterface*) g_iface;
-
-    iface->bounds = sch_arc_bounds;
-    iface->draw = sch_arc_draw;
-    iface->transform = sch_arc_transform;
-    iface->translate = sch_arc_translate;
 }
 
 static void
@@ -507,3 +491,11 @@ sch_arc_translate(SchShape *shape, int dx, int dy)
         geom_arc_translate(&(privat->arc), dx, dy);
     }
 }
+
+
+static void
+sch_arc_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error)
+{
+    sch_file_format_2_write_arc(format, stream, SCH_ARC(shape), error);
+}
+

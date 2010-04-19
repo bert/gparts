@@ -26,25 +26,7 @@
 #include <libguile.h>
 #include <gdk/gdk.h>
 
-#include "geom.h"
-
-#include "sch-multiline.h"
-#include "sch-shape.h"
-#include "sch-arc.h"
-#include "sch-box.h"
-#include "sch-bus.h"
-#include "sch-circle.h"
-#include "sch-line.h"
-#include "sch-net.h"
-#include "sch-pin.h"
-#include "sch-text.h"
-#include "sch-drafter.h"
-#include "sch-drawing.h"
-
-#include "sch-component.h"
-
-#include "sch-factory.h"
-#include "sch-loader.h"
+#include "sch.h"
 
 #include "schgui-drawing-cfg.h"
 

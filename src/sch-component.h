@@ -33,12 +33,12 @@ typedef struct _SchComponentClass SchComponentClass;
 
 struct _SchComponent
 {
-    GObject parent;
+    SchShape parent;
 };
 
 struct _SchComponentClass
 {
-    GObjectClass parent;
+    SchShapeClass parent;
 };
 
 GType

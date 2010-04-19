@@ -24,15 +24,7 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include "geom.h"
-
-#include "sch-multiline.h"
-#include "sch-shape.h"
-#include "sch-line.h"
-#include "sch-text.h"
-#include "sch-drafter.h"
-
-#include "sch-line-style.h"
+#include "sch.h"
 
 #define SCH_LINE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_LINE,SchLinePrivate))
 
@@ -75,9 +67,6 @@ static void
 sch_line_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
 
 static void
-sch_line_shape_init(gpointer g_iface, gpointer g_iface_data);
-
-static void
 sch_line_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
 
 static void
@@ -89,6 +78,8 @@ sch_line_transform(SchShape *shape, const struct _GeomTransform *transform);
 static void
 sch_line_translate(SchShape *shape, int dx, int dy);
 
+static void
+sch_line_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error);
 
 
 static gboolean
@@ -116,11 +107,19 @@ static void
 sch_line_class_init(gpointer g_class, gpointer g_class_data)
 {
     GObjectClass *klasse = G_OBJECT_CLASS(g_class);
+    SchLineClass *klasse1 = SCH_LINE_CLASS(g_class);
 
     g_type_class_add_private(klasse, sizeof(SchLinePrivate));
 
     klasse->get_property = sch_line_get_property;
     klasse->set_property = sch_line_set_property;
+
+    klasse1->parent.bounds    = sch_line_bounds;
+    klasse1->parent.draw      = sch_line_draw;
+    klasse1->parent.rotate    = sch_line_rotate;
+    klasse1->parent.transform = sch_line_transform;
+    klasse1->parent.translate = sch_line_translate;
+    klasse1->parent.write     = sch_line_write;
 
     g_object_class_install_property(
         klasse,
@@ -344,38 +343,15 @@ sch_line_get_type(void)
             NULL                     /* value_table */
             };
 
-        static const GInterfaceInfo iinfo = {
-            sch_line_shape_init,     /* interface_init */
-            NULL,                    /* interface_finalize */
-            NULL                     /* interface_data */
-            };
-
         type = g_type_register_static(
-            G_TYPE_OBJECT,
+            SCH_TYPE_SHAPE,
             "SchLine",
             &tinfo,
             0
             );
-
-        g_type_add_interface_static(type, SCH_TYPE_SHAPE, &iinfo);
     }
 
     return type;
-}
-
-static void
-sch_line_shape_init(gpointer g_iface, gpointer g_iface_data)
-{
-    SchShapeInterface *iface = (SchShapeInterface*) g_iface;
-
-    if (iface != NULL)
-    {
-        iface->bounds = sch_line_bounds;
-        iface->draw = sch_line_draw;
-        iface->rotate = sch_line_rotate;
-        iface->transform = sch_line_transform;
-        iface->translate = sch_line_translate;
-    }
 }
 
 static void
@@ -530,4 +506,9 @@ sch_line_translate(SchShape *shape, int dx, int dy)
     }
 }
 
+static void
+sch_line_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error)
+{
+    sch_file_format_2_write_line(format, stream, SCH_LINE(shape), error);
+}
 

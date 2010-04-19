@@ -6,13 +6,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include "geom.h"
+#include "sch.h"
 
-#include "sch-multiline.h"
-#include "sch-shape.h"
-#include "sch-bus.h"
-#include "sch-text.h"
-#include "sch-drafter.h"
 
 #define SCH_BUS_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_BUS,SchBusPrivate))
 
@@ -39,9 +34,6 @@ struct _SchBusPrivate
 
 static gboolean
 sch_bus_bounds(SchShape *shape, SchDrafter *drafter, GeomBounds *bounds);
-
-static void
-sch_bus_class_init(gpointer g_class, gpointer g_class_data);
 
 static void
 sch_bus_draw(SchShape *shape, SchDrafter *drafter);
@@ -80,11 +72,15 @@ static void
 sch_bus_class_init(gpointer g_class, gpointer g_class_data)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(g_class);
+    SchBusClass *klasse = SCH_BUS_CLASS(g_class);
 
     g_type_class_add_private(object_class, sizeof(SchBusPrivate));
 
     object_class->get_property = sch_bus_get_property;
     object_class->set_property = sch_bus_set_property;
+
+    klasse->parent.bounds = sch_bus_bounds;
+    klasse->parent.draw   = sch_bus_draw;
 
     g_object_class_install_property(
         object_class,
@@ -240,43 +236,26 @@ sch_bus_get_type(void)
     {
         static const GTypeInfo tinfo = {
             sizeof(SchBusClass),    /* class_size */
-            NULL,                             /* base_init */
-            NULL,                             /* base_finalize */
-            sch_bus_class_init,    /* class_init */
-            NULL,                             /* class_finalize */
-            NULL,                             /* class_data */
+            NULL,                   /* base_init */
+            NULL,                   /* base_finalize */
+            sch_bus_class_init,     /* class_init */
+            NULL,                   /* class_finalize */
+            NULL,                   /* class_data */
             sizeof(SchBus),         /* instance_size */
-            0,                                /* n_preallocs */
-            NULL,                             /* instance_init */
-            NULL                              /* value_table */
-            };
-
-        static const GInterfaceInfo iinfo = {
-            sch_bus_schematic_shape_init,    /* interface_init */
-            NULL,                                       /* interface_finalize */
-            NULL                                        /* interface_data */
+            0,                      /* n_preallocs */
+            NULL,                   /* instance_init */
+            NULL                    /* value_table */
             };
 
         type = g_type_register_static(
-            G_TYPE_OBJECT,
+            SCH_TYPE_SHAPE,
             "SchBus",
             &tinfo,
             0
             );
-
-        g_type_add_interface_static(type, SCH_TYPE_SHAPE, &iinfo);
     }
 
     return type;
-}
-
-static void
-sch_bus_schematic_shape_init(gpointer g_iface, gpointer g_iface_data)
-{
-    SchShapeInterface *iface = (SchShapeInterface*) g_iface;
-
-    iface->bounds = sch_bus_bounds;
-    iface->draw = sch_bus_draw;
 }
 
 static void
@@ -347,4 +326,9 @@ sch_bus_get_line(const SchBus *shape, GeomLine *line)
     /* FIXME initialize line to some value in else */
 }
 
+static void
+sch_bus_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error)
+{
+    sch_file_format_2_write_bus(format, stream, SCH_BUS(shape), error);
+}
 

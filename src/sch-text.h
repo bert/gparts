@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file xxx_schematic_text.h
+/*! \file sch_schematic_text.h
  */
 
 #define SCH_TYPE_TEXT (sch_text_get_type())
@@ -33,12 +33,12 @@ typedef struct _SchTextClass SchTextClass;
 
 struct _SchText
 {
-    GObject parent;
+    SchShape parent;
 };
 
 struct _SchTextClass
 {
-    GObjectClass parent;
+    SchShapeClass parent;
 };
 
 GType

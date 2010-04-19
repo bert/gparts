@@ -20,6 +20,15 @@ if test $PKG_CONFIG; then :; else
     AC_MSG_ERROR([Unable to locate pkg-config.  Make sure pkg-config is installed and in the path.])
 fi
 
+##  GIO
+##
+GIO_VERSION=`$PKG_CONFIG gio-2.0 --modversion`
+GIO_CFLAGS=`$PKG_CONFIG gio-2.0 --cflags`
+GIO_LIBS=`$PKG_CONFIG gio-2.0 --libs`
+AC_SUBST(GIO_CFLAGS)
+AC_SUBST(GIO_LIBS)
+
+
 ##  GLIB
 ##
 ##  GTK's CFLAGS and LIBS includes GLib's, so including them is redundant.
@@ -100,6 +109,9 @@ AC_OUTPUT
 
 AC_MSG_RESULT([
 ****************** SUMMARY FOR gparts CONFIGURATION ******************
+
+    GIO
+        Installed Version        $GIO_VERSION
 
     GLib
         Installed Version        $GLIB_VERSION

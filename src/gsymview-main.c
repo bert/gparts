@@ -22,20 +22,13 @@
 
 #include "misc-object.h"
 
-#include "geom.h"
-
-#include "sch-multiline.h"
-#include "sch-shape.h"
-#include "sch-line.h"
-#include "sch-text.h"
-#include "sch-drafter.h"
-#include "sch-drawing.h"
-
-#include "sch-loader.h"
+#include "sch.h"
 
 #include "schgui-drawing-cfg.h"
 #include "schgui-cairo-drafter.h"
 #include "schgui-drawing-view.h"
+
+#include "schgui-clipboard.h"
 
 #include "gsymview-main.h"
 
@@ -47,7 +40,12 @@ typedef struct _GSymViewPrivate GSymViewPrivate;
 
 struct _GSymViewPrivate
 {
-    GtkBuilder *builder;
+    GtkBuilder        *builder;
+
+    SchDrawing        *drawing;
+
+    SchGUIClipboard   *clipboard;
+    SchGUIDrawingView *drawing_view;
 };
 
 /**** Static methods ****/
@@ -143,7 +141,18 @@ GSymView *gsymview_new(void)
     return g_object_new(GSYMVIEW_TYPE, NULL);
 }
 
+static void
+gsymview_copy_cb(GtkWidget* widget, gpointer data)
+{
+    GSymViewPrivate *privat = GSYMVIEW_GET_PRIVATE(data);
 
+    if ((privat != NULL) && (privat->clipboard != NULL) && (privat->drawing != NULL))
+    {
+        g_debug("Edit copy");
+        
+        schgui_clipboard_copy_drawing(privat->clipboard, privat->drawing);
+    }
+}
 
 static void
 gsymview_destroy_cb(GtkWidget* widget, gpointer data)
@@ -156,10 +165,18 @@ gsymview_destroy_cb(GtkWidget* widget, gpointer data)
 static void
 gsymview_selection_changed_cb(GtkFileChooser *chooser, gpointer user_data)
 {
-    if (user_data != NULL)
+    GSymViewPrivate *privat = GSYMVIEW_GET_PRIVATE(user_data);
+
+    if (privat != NULL)
     {
-        SchDrawing *drawing = NULL;
-        gchar      *filename = NULL;
+        gchar *filename = NULL;
+
+        if (privat->drawing != NULL)
+        {
+            g_object_unref(privat->drawing);
+
+            privat->drawing = NULL;
+        }
 
         if (chooser != NULL)
         {
@@ -170,17 +187,12 @@ gsymview_selection_changed_cb(GtkFileChooser *chooser, gpointer user_data)
         {
             SchLoader *loader = sch_loader_get_default();
 
-            drawing = sch_loader_load_drawing(loader, filename, NULL);
+            privat->drawing = sch_loader_load_drawing(loader, filename, NULL);
 
             g_free(filename);
         }
 
-        schgui_drawing_view_set_drawing(SCHGUI_DRAWING_VIEW(user_data), drawing);
-
-        if (drawing != NULL)
-        {
-            g_object_unref(drawing);
-        }
+        schgui_drawing_view_set_drawing(privat->drawing_view, privat->drawing);
     }
 }
 
@@ -200,6 +212,8 @@ gsymview_instance_init(GTypeInstance* instance, gpointer g_class)
     SCHGUI_TYPE_DRAWING_VIEW;
 
     private->builder = gtk_builder_new();
+    private->clipboard = schgui_clipboard_new();
+
 
     status = gtk_builder_add_from_file(
         private->builder,
@@ -216,13 +230,23 @@ gsymview_instance_init(GTypeInstance* instance, gpointer g_class)
 
     gtk_builder_connect_signals(private->builder, NULL);
 
+    private->drawing_view = G_OBJECT(gtk_builder_get_object(private->builder, "preview-view"));
+
+
     GtkWidget *widget = GTK_WIDGET(gtk_builder_get_object(private->builder, "main"));
 
     g_signal_connect(
         G_OBJECT(gtk_builder_get_object(private->builder, "preview-file")),
         "selection-changed",
         G_CALLBACK(gsymview_selection_changed_cb),
-        G_OBJECT(gtk_builder_get_object(private->builder, "preview-view"))
+        instance
+        );
+
+    g_signal_connect(
+        G_OBJECT(gtk_builder_get_object(private->builder, "edit-copy")),
+        "activate",
+        G_CALLBACK(gsymview_copy_cb),
+        instance
         );
 
     g_signal_connect(

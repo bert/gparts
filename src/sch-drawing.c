@@ -5,14 +5,9 @@
 
 #include <glib.h>
 #include <glib-object.h>
+#include <gio/gio.h>
 
-#include "geom.h"
-
-#include "sch-multiline.h"
-#include "sch-shape.h"
-#include "sch-text.h"
-#include "sch-drafter.h"
-#include "sch-drawing.h"
+#include "sch.h"
 
 #define SCH_DRAWING_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_DRAWING,SchDrawingPrivate))
 
@@ -25,7 +20,8 @@ typedef struct _SchDrawingPrivate SchDrawingPrivate;
 
 struct _SchDrawingPrivate
 {
-    GSList *shapes;
+    SchFileFormat2 *file_format;
+    GSList         *shapes;
 };
 
 static gboolean
@@ -169,7 +165,9 @@ sch_drawing_init(GTypeInstance *instance, gpointer g_class)
 
     if (privat != NULL)
     {
-//        privat->shapes = g_slist_alloc();
+        privat->file_format = (SchFileFormat2*) g_object_new(SCH_TYPE_FILE_FORMAT_2, NULL);
+
+        g_debug("Assign file format");
     }
 }
 
@@ -225,5 +223,25 @@ sch_drawing_translate(SchDrawing *drawing, int dx, int dy)
             node = g_slist_next(node);
         }
     }
+}
+
+void
+sch_drawing_write(const SchDrawing *drawing, SchOutputStream *stream)
+{
+    SchDrawingPrivate *privat = SCH_DRAWING_GET_PRIVATE(drawing);
+
+    if (privat != NULL)
+    {
+        GSList *node = privat->shapes;
+
+        sch_file_format_2_write_version(privat->file_format, stream, NULL);
+
+        while (node != NULL)
+        {
+            sch_shape_write(SCH_SHAPE(node->data), privat->file_format, stream, NULL);
+
+            node = g_slist_next(node);
+        }
+   }
 }
 

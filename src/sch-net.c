@@ -6,13 +6,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include "geom.h"
+#include "sch.h"
 
-#include "sch-multiline.h"
-#include "sch-shape.h"
-#include "sch-net.h"
-#include "sch-text.h"
-#include "sch-drafter.h"
 
 #define SCH_NET_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_NET,SchNetPrivate))
 
@@ -50,10 +45,10 @@ static void
 sch_net_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
 
 static void
-sch_net_schematic_shape_init(gpointer g_iface, gpointer g_iface_data);
+sch_net_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
 
 static void
-sch_net_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
+sch_net_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error);
 
 static gboolean
 sch_net_bounds(SchShape *shape, SchDrafter *drafter, GeomBounds *bounds)
@@ -80,11 +75,16 @@ static void
 sch_net_class_init(gpointer g_class, gpointer g_class_data)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(g_class);
+    SchNetClass *klasse = SCH_NET_CLASS(g_class);
 
     g_type_class_add_private(object_class, sizeof(SchNetPrivate));
 
     object_class->get_property = sch_net_get_property;
     object_class->set_property = sch_net_set_property;
+
+    klasse->parent.bounds = sch_net_bounds;
+    klasse->parent.draw   = sch_net_draw;
+    klasse->parent.write  = sch_net_write;
 
     g_object_class_install_property(
         object_class,
@@ -240,43 +240,26 @@ sch_net_get_type(void)
     {
         static const GTypeInfo tinfo = {
             sizeof(SchNetClass),    /* class_size */
-            NULL,                             /* base_init */
-            NULL,                             /* base_finalize */
-            sch_net_class_init,    /* class_init */
-            NULL,                             /* class_finalize */
-            NULL,                             /* class_data */
+            NULL,                   /* base_init */
+            NULL,                   /* base_finalize */
+            sch_net_class_init,     /* class_init */
+            NULL,                   /* class_finalize */
+            NULL,                   /* class_data */
             sizeof(SchNet),         /* instance_size */
-            0,                                /* n_preallocs */
-            NULL,                             /* instance_init */
-            NULL                              /* value_table */
-            };
-
-        static const GInterfaceInfo iinfo = {
-            sch_net_schematic_shape_init,    /* interface_init */
-            NULL,                                       /* interface_finalize */
-            NULL                                        /* interface_data */
+            0,                      /* n_preallocs */
+            NULL,                   /* instance_init */
+            NULL                    /* value_table */
             };
 
         type = g_type_register_static(
-            G_TYPE_OBJECT,
+            SCH_TYPE_SHAPE,
             "SchNet",
             &tinfo,
             0
             );
-
-        g_type_add_interface_static(type, SCH_TYPE_SHAPE, &iinfo);
     }
 
     return type;
-}
-
-static void
-sch_net_schematic_shape_init(gpointer g_iface, gpointer g_iface_data)
-{
-    SchShapeInterface *iface = (SchShapeInterface*) g_iface;
-
-    iface->bounds = sch_net_bounds;
-    iface->draw = sch_net_draw;
 }
 
 static void
@@ -347,4 +330,9 @@ sch_net_get_line(const SchNet *shape, GeomLine *line)
     /* FIXME initialize line to some value in else */
 }
 
+static void
+sch_net_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error)
+{
+    sch_file_format_2_write_net(format, stream, SCH_NET(shape), error);
+}
 

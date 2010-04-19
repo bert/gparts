@@ -18,35 +18,46 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file sch-net.h
+/*! \file sch.h
  */
 
-#define SCH_TYPE_NET (sch_net_get_type())
-#define SCH_NET(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),SCH_TYPE_NET,SchNet))
-#define SCH_NET_CLASS(cls) (G_TYPE_CHECK_CLASS_CAST((cls),SCH_TYPE_NET,SchNetClass))
-#define SCH_IS_NET(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj),SCH_TYPE_NET))
-#define SCH_IS_NET_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCH_TYPE_NET))
-#define SCH_NET_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCH_TYPE_NET,SchNetClass))
+#include <stdio.h>
 
-typedef struct _SchNet SchNet;
-typedef struct _SchNetClass SchNetClass;
+#include <gio/gio.h>
 
-struct _SchNet
-{
-    SchShape parent;
-};
+#include "geom.h"
 
-struct _SchNetClass
-{
-    SchShapeClass parent;
-};
+#include "sch-file-format-fwd.h"
+#include "sch-output-stream-fwd.h"
+#include "sch-shape-fwd.h"
 
-GType
-sch_net_get_type(void);
+#include "sch-attributes.h"
+#include "sch-multiline.h"
 
-void
-sch_net_get_color(const SchNet *shape, int *index);
+#include "sch-shape.h"
 
-void
-sch_net_get_line(const SchNet *shape, GeomLine *line);
+#include "sch-arc.h"
+#include "sch-box.h"
+#include "sch-bus.h"
+#include "sch-circle.h"
+#include "sch-line.h"
+#include "sch-net.h"
+#include "sch-picture.h"
+#include "sch-pin.h"
+#include "sch-text.h"
+
+
+#include "sch-drafter.h"
+#include "sch-drawing.h"
+
+#include "sch-component.h"
+
+#include "sch-fill-style.h"
+#include "sch-line-style.h"
+
+#include "sch-factory.h"
+#include "sch-loader.h"
+
+#include "sch-file-format-2.h"
+#include "sch-output-stream.h"
 

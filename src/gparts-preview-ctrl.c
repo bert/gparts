@@ -26,16 +26,7 @@
 #include "gparts-database.h"
 #include "gparts-preview-ctrl.h"
 
-#include "geom.h"
-
-#include "sch-multiline.h"
-#include "sch-shape.h"
-#include "sch-line.h"
-#include "sch-text.h"
-#include "sch-drafter.h"
-#include "sch-drawing.h"
-
-#include "sch-loader.h"
+#include "sch.h"
 
 #include "schgui-drawing-cfg.h"
 #include "schgui-cairo-drafter.h"

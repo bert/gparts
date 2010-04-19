@@ -27,10 +27,19 @@
 
 #include <glib.h>
 #include <glib-object.h>
+#include <gio/gio.h>
 
+#include "sch.h"
+
+#if 0
 #include "geom.h"
 
 #include "misc-object.h"
+
+#include "sch-output-stream-fwd.h"
+#include "sch-shape-fwd.h"
+
+#include "sch-attributes.h"
 
 #include "sch-multiline.h"
 #include "sch-shape.h"
@@ -42,12 +51,16 @@
 #include "sch-net.h"
 #include "sch-pin.h"
 #include "sch-text.h"
+
+#include "sch-output-stream.h"
+
 #include "sch-drafter.h"
 #include "sch-drawing.h"
 
 #include "sch-component.h"
 
 #include "sch-loader.h"
+#endif
 
 #define SCH_LOADER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_LOADER,SchLoaderPrivate))
 
@@ -89,7 +102,7 @@ static GObject*
 process_arc(FILE *file, gchar **tokens);
 
 static void
-process_attributes(FILE *file, gchar **tokens);
+process_attributes(FILE *file, gchar **tokens, GObject *object);
 
 static GObject*
 process_box(FILE *file, gchar **tokens);
@@ -591,14 +604,18 @@ process_arc(FILE *file, gchar **tokens)
 }
 
 static void
-process_attributes(FILE *file, gchar **tokens)
+process_attributes(FILE *file, gchar **tokens, GObject *object)
 {
+    SchAttributes *attrs = sch_shape_get_attributes(object);
+
     gchar *line = read_line(file);
 
-    //g_debug("Process attributes (begin)");
+    g_debug("Process attributes (begin)");
+    g_debug("%p", object);
 
     while (line != NULL)
     {
+        GObject *attribute;
         gchar **token = g_strsplit_set(line, " \t", 0);
 
         g_free(line);
@@ -616,7 +633,13 @@ process_attributes(FILE *file, gchar **tokens)
                     break;
 
                 default:
-                    g_object_unref(process_object(file, token));
+                    attribute = process_object(file, token);
+                    if (attrs != NULL)
+                    {
+                        g_debug("**** HERE ****");
+                        sch_attributes_append(attrs, attribute);
+                    }
+                    g_object_unref(attribute);
                     line = read_line(file);
             }
         }
@@ -624,7 +647,12 @@ process_attributes(FILE *file, gchar **tokens)
         g_strfreev(token);
     }
 
-    //g_debug("Process attributes (end)");
+    if (attrs != NULL)
+    {
+        g_object_unref(attrs);
+    }
+
+    g_debug("Process attributes (end)");
 }
 
 static  GObject*
@@ -755,7 +783,7 @@ process_embedded(FILE *file, SchDrawing *drawing)
                 switch (**token)
                 {
                     case '{':
-                        process_attributes(file, token);
+                        process_attributes(file, token, NULL);
                         break;
 
                     default:
@@ -1017,6 +1045,7 @@ static void
 read_file(SchDrawing *drawing, FILE *file, GError **error)
 {
     gchar *line = read_line(file);
+    GObject *object = NULL;
 
     while (line != NULL)
     {
@@ -1027,7 +1056,6 @@ read_file(SchDrawing *drawing, FILE *file, GError **error)
 
         if (*token != NULL)
         {
-            GObject *object;
 
             switch (**token)
             {
@@ -1036,7 +1064,7 @@ read_file(SchDrawing *drawing, FILE *file, GError **error)
                     break;
 
                 case '{':
-                    process_attributes(file, token);
+                    process_attributes(file, token, object);
                     break;
 
                 case '}':
@@ -1045,11 +1073,14 @@ read_file(SchDrawing *drawing, FILE *file, GError **error)
 
                 default:
                     //g_debug("Process object (begin)");
+                    if (object != NULL)
+                    {
+                        g_object_unref(object);
+                    }
                     object = process_object(file, token);
                     if (object != NULL)
                     {
                         sch_drawing_add_shape(drawing, object);
-                        g_object_unref(object);
                     }
                     //g_debug("Process object (end)");
             }
@@ -1057,6 +1088,11 @@ read_file(SchDrawing *drawing, FILE *file, GError **error)
 
         g_strfreev(token);
         line = read_line(file);
+    }
+
+    if (object != NULL)
+    {
+        g_object_unref(object);
     }
 }
 

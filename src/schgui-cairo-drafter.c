@@ -25,28 +25,12 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
  
-#include "geom.h"
+#include "sch.h"
 
 #include "misc-object.h"
 
-#include "sch-arc.h"
-#include "sch-box.h"
-#include "sch-bus.h"
-#include "sch-circle.h"
-#include "sch-multiline.h"
-#include "sch-line.h"
-#include "sch-text.h"
-#include "sch-pin.h"
-#include "sch-drafter.h"
-#include "sch-drawing.h"
-
-#include "sch-component.h"
-
 #include "schgui-drawing-cfg.h"
 #include "schgui-cairo-drafter.h"
-
-#include "sch-fill-style.h"
-#include "sch-line-style.h"
 
 #define SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCHGUI_TYPE_CAIRO_DRAFTER,SchGUICairoDrafterPrivate))
 

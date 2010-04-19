@@ -24,16 +24,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include "geom.h"
+#include "sch.h"
 
-#include "sch-multiline.h"
-#include "sch-shape.h"
-#include "sch-circle.h"
-#include "sch-text.h"
-#include "sch-drafter.h"
-
-#include "sch-fill-style.h"
-#include "sch-line-style.h"
 
 #define SCH_CIRCLE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_CIRCLE,SchCirclePrivate))
 
@@ -80,9 +72,6 @@ static void
 sch_circle_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
 
 static void
-sch_circle_schematic_shape_init(gpointer g_iface, gpointer g_iface_data);
-
-static void
 sch_circle_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
  
 static void
@@ -94,6 +83,8 @@ sch_circle_transform(SchShape *shape, const struct _GeomTransform *transform);
 void
 sch_circle_translate(SchCircle *circle, int dx, int dy);
 
+static void
+sch_circle_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error);
 
 
 static gboolean
@@ -120,11 +111,19 @@ static void
 sch_circle_class_init(gpointer g_class, gpointer g_class_data)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(g_class);
+    SchCircleClass *klasse = SCH_CIRCLE_CLASS(g_class);
 
     g_type_class_add_private(object_class, sizeof(SchCirclePrivate));
 
     object_class->get_property = sch_circle_get_property;
     object_class->set_property = sch_circle_set_property;
+
+    klasse->parent.bounds    = sch_circle_bounds;
+    klasse->parent.draw      = sch_circle_draw;
+    klasse->parent.rotate    = sch_circle_rotate;
+    klasse->parent.transform = sch_circle_transform;
+    klasse->parent.translate = sch_circle_translate;
+    klasse->parent.write     = sch_circle_write;
 
     g_object_class_install_property(
         object_class,
@@ -424,46 +423,26 @@ sch_circle_get_type(void)
     {
         static const GTypeInfo tinfo = {
             sizeof(SchCircleClass),    /* class_size */
-            NULL,                            /* base_init */
-            NULL,                            /* base_finalize */
-            sch_circle_class_init,    /* class_init */
-            NULL,                            /* class_finalize */
-            NULL,                            /* class_data */
+            NULL,                      /* base_init */
+            NULL,                      /* base_finalize */
+            sch_circle_class_init,     /* class_init */
+            NULL,                      /* class_finalize */
+            NULL,                      /* class_data */
             sizeof(SchCircle),         /* instance_size */
-            0,                               /* n_preallocs */
-            NULL,                            /* instance_init */
-            NULL                             /* value_table */
-            };
-
-        static const GInterfaceInfo iinfo = {
-            sch_circle_schematic_shape_init,    /* interface_init */
-            NULL,                                      /* interface_finalize */
-            NULL                                       /* interface_data */
+            0,                         /* n_preallocs */
+            NULL,                      /* instance_init */
+            NULL                       /* value_table */
             };
 
         type = g_type_register_static(
-            G_TYPE_OBJECT,
+            SCH_TYPE_SHAPE,
             "SchCircle",
             &tinfo,
             0
             );
-
-        g_type_add_interface_static(type, SCH_TYPE_SHAPE, &iinfo);
     }
 
     return type;
-}
-
-static void
-sch_circle_schematic_shape_init(gpointer g_iface, gpointer g_iface_data)
-{
-    SchShapeInterface *iface = (SchShapeInterface*) g_iface;
-
-    iface->bounds    = sch_circle_bounds;
-    iface->draw      = sch_circle_draw;
-    iface->rotate    = sch_circle_rotate;
-    iface->transform = sch_circle_transform;
-    iface->translate = sch_circle_translate;
 }
 
 static void
@@ -650,3 +629,10 @@ sch_circle_translate(SchCircle *shape, int dx, int dy)
         geom_circle_translate(&(privat->circle), dx, dy);
     }
 }
+
+static void
+sch_circle_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error)
+{
+    sch_file_format_2_write_circle(format, stream, SCH_CIRCLE(shape), error);
+}
+

@@ -33,12 +33,12 @@ typedef struct _SchArcClass SchArcClass;
 
 struct _SchArc
 {
-    GObject parent;
+    SchShape parent;
 };
 
 struct _SchArcClass
 {
-    GObjectClass parent;
+    SchShapeClass parent;
 };
 
 GType

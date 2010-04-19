@@ -112,6 +112,7 @@ MAINTAINERCLEANFILES = core *~ Makefile.in
 
 libsch_la_SOURCES = \
 	sch-arc.c \
+	sch-attributes.c \
 	sch-box.c \
 	sch-bus.c \
 	sch-circle.c \
@@ -120,20 +121,23 @@ libsch_la_SOURCES = \
 	sch-drafter.c \
 	sch-drawing.c \
 	sch-factory.c \
+	sch-file-format-2.c \
 	sch-fill-style.c \
 	sch-line.c \
 	sch-line-style.c \
 	sch-loader.c \
 	sch-multiline.c \
 	sch-net.c \
+	sch-output-stream.c \
 	sch-pin.c \
         sch-shape.c \
 	sch-text.c
-libsch_la_CFLAGS = -Wall $(AM_CFLAGS) $(GLIB_CFLAGS)
+libsch_la_CFLAGS = -Wall $(AM_CFLAGS) $(GIO_CFLAGS) $(GLIB_CFLAGS)
 libsch_la_LIBADD = $(GLIB_LIBS) libgeom.la libmisc.la
 
 libschgui_la_SOURCES = \
 	schgui-cairo-drafter.c \
+	schgui-clipboard.c \
 	schgui-drawing-cfg.c \
 	schgui-drawing-view.c
 libschgui_la_CFLAGS = -Wall $(AM_CFLAGS) $(GTK_CFLAGS)

@@ -6,14 +6,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include <math.h>
+#include "sch.h"
 
-#include "geom.h"
-
-#include "sch-multiline.h"
-#include "sch-shape.h"
-#include "sch-text.h"
-#include "sch-drafter.h"
 
 #define SCH_TEXT_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_TEXT,SchTextPrivate))
 
@@ -74,6 +68,8 @@ sch_text_transform(SchShape *shape, const struct _GeomTransform *transform);
 void
 sch_text_translate(SchShape *shape, int dx, int dy);
 
+static void
+sch_text_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error);
 
 static gboolean
 sch_text_bounds(SchShape *shape, SchDrafter *drafter, GeomBounds *bounds)
@@ -87,11 +83,19 @@ static void
 sch_text_class_init(gpointer g_class, gpointer g_class_data)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(g_class);
+    SchTextClass *klasse = SCH_TEXT_CLASS(g_class);
 
     g_type_class_add_private(object_class, sizeof(SchTextPrivate));
 
     object_class->get_property = sch_text_get_property;
     object_class->set_property = sch_text_set_property;
+
+    klasse->parent.bounds    = sch_text_bounds;
+    klasse->parent.draw      = sch_text_draw;
+    klasse->parent.rotate    = sch_text_rotate;
+    klasse->parent.transform = sch_text_transform;
+    klasse->parent.translate = sch_text_translate;
+    klasse->parent.write     = sch_text_write;
 
     g_object_class_install_property(
         object_class,
@@ -259,6 +263,10 @@ sch_text_get_property(GObject *object, guint property_id, GValue *value, GParamS
             g_value_set_int(value, privat->alignment);
             break;
 
+        case SCH_TEXT_NUM_LINES:
+            g_value_set_int(value, sch_multiline_lines(privat->multiline));
+            break;
+
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
     }
@@ -273,31 +281,23 @@ sch_text_get_type(void)
     {
         static const GTypeInfo tinfo = {
             sizeof(SchTextClass),    /* class_size */
-            NULL,                             /* base_init */
-            NULL,                             /* base_finalize */
-            sch_text_class_init,    /* class_init */
-            NULL,                             /* class_finalize */
-            NULL,                             /* class_data */
+            NULL,                    /* base_init */
+            NULL,                    /* base_finalize */
+            sch_text_class_init,     /* class_init */
+            NULL,                    /* class_finalize */
+            NULL,                    /* class_data */
             sizeof(SchText),         /* instance_size */
-            0,                                /* n_preallocs */
-            NULL,                             /* instance_init */
-            NULL                              /* value_table */
-            };
-
-        static const GInterfaceInfo iinfo = {
-            sch_text_schematic_shape_init,    /* interface_init */
-            NULL,                                       /* interface_finalize */
-            NULL                                        /* interface_data */
+            0,                       /* n_preallocs */
+            NULL,                    /* instance_init */
+            NULL                     /* value_table */
             };
 
         type = g_type_register_static(
-            G_TYPE_OBJECT,
+            SCH_TYPE_SHAPE,
             "SchText",
             &tinfo,
             0
             );
-
-        g_type_add_interface_static(type, SCH_TYPE_SHAPE, &iinfo);
     }
 
     return type;
@@ -337,18 +337,6 @@ sch_text_draw(SchShape *shape, SchDrafter *drafter)
 //    SchTextPrivate *privat = SCH_TEXT_GET_PRIVATE(shape);
 
     sch_drafter_draw_text(drafter, SCH_TEXT(shape));
-}
-
-static void
-sch_text_schematic_shape_init(gpointer g_iface, gpointer g_iface_data)
-{
-    SchShapeInterface *iface = (SchShapeInterface*) g_iface;
-
-    iface->bounds    = sch_text_bounds;
-    iface->draw      = sch_text_draw;
-    iface->rotate    = sch_text_rotate;
-    iface->transform = sch_text_transform;
-    iface->translate = sch_text_translate;
 }
 
 static void
@@ -554,5 +542,11 @@ sch_text_translate(SchShape *shape, int dx, int dy)
         privat->x += dx;
         privat->y += dy;
     }
+}
+
+static void
+sch_text_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error)
+{
+    sch_file_format_2_write_text(format, stream, SCH_TEXT(shape), error);
 }
 

@@ -16,6 +16,19 @@
                         <property name="stock-id">gtk-quit</property>
                     </object>
                 </child>
+                <child>
+                    <object class="GtkAction" id="edit">
+                        <property name="name">edit</property>
+                        <property name="label">_Edit</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="edit-copy">
+                        <property name="name">edit-copy</property>
+                        <property name="label">Copy</property>
+                        <property name="stock-id">gtk-copy</property>
+                    </object>
+                </child>
             </object>
         </child>
  
@@ -24,7 +37,13 @@
                 <menu action="file">
                     <menuitem action="file-quit"/>
                 </menu>
+                <menu action="edit">
+                    <menuitem action="edit-copy"/>
+                </menu>
             </menubar>
+            <toolbar name="main-toolbar">
+                <toolitem action="edit-copy"/>
+            </toolbar>
         </ui>
    </object>
 
@@ -37,6 +56,15 @@
                 <property name="visible">TRUE</property>
                 <child>
                     <object class="GtkMenuBar" constructor="uimanager" id="main-menu">
+                        <property name="visible">TRUE</property>
+                    </object>
+                    <packing>
+                        <property name="expand">FALSE</property>
+                        <property name="fill">FALSE</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkToolbar" constructor="uimanager" id="main-toolbar">
                         <property name="visible">TRUE</property>
                     </object>
                     <packing>
