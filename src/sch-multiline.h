@@ -19,8 +19,6 @@
  */
 
 /*! \file sch_multiline.h
- *
- *  \brief A wrapper for gschem's line.
  */
 
 #define SCH_TYPE_MULTILINE (sch_multiline_get_type())

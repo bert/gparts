@@ -19,8 +19,6 @@
  */
 
 /*! \file sch_multiline.c
- *
- *  \brief A wrapper for gschem's line.
  */
 
 #include <glib.h>

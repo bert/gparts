@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file sch-circle.h
+/*! \file sch-circle.c
  */
 
 #include <glib.h>
