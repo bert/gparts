@@ -18,6 +18,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
+/*! \file gparts-mysql-database.h
+ */
+
 #define GPARTS_TYPE_MYSQL_DATABASE (gparts_mysql_database_get_type())
 #define GPARTS_MYSQL_DATABASE(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),GPARTS_TYPE_MYSQL_DATABASE,GPartsMySQLDatabase))
 #define GPARTS_MYSQL_DATABASE_CLASS(cls) (G_TYPE_CHECK_CLASS_CAST((cls),GPARTS_TYPE_MYSQL_DATABASE,GPartsMySQLDatabaseClass))

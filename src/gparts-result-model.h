@@ -18,6 +18,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
+/*! \file gparts-result-model.h
+ */
+
 #define GPARTS_TYPE_RESULT_MODEL (gparts_result_model_get_type())
 #define GPARTS_RESULT_MODEL(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),GPARTS_TYPE_RESULT_MODEL,GPartsResultModel))
 #define GPARTS_RESULT_MODEL_CLASS(cls) (G_TYPE_CHECK_CLASS_CAST((cls),GPARTS_TYPE_RESULT_MODEL,GPartsResultModelClass))

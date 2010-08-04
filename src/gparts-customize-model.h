@@ -18,6 +18,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
+/*! \file gparts-customize-model.h
+ */
+
 #define GPARTS_TYPE_CUSTOMIZE_MODEL (gparts_customize_model_get_type())
 #define GPARTS_CUSTOMIZE_MODEL(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),GPARTS_TYPE_CUSTOMIZE_MODEL,GPartsCustomizeModel))
 #define GPARTS_CUSTOMIZE_MODEL_CLASS(cls) (G_TYPE_CHECK_CLASS_CAST((cls),GPARTS_TYPE_CUSTOMIZE_MODEL,GPartsCustomizeModelClass))

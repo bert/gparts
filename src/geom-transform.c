@@ -18,6 +18,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
+/*! \file geom-transform.h
+ */
+
 #include <math.h>
 #include <glib.h>
 #include "geom-transform.h"

@@ -18,6 +18,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
+/*! \file gparts-mysql-result.h
+ */
+
 #define GPARTS_TYPE_MYSQL_RESULT (gparts_mysql_result_get_type())
 #define GPARTS_MYSQL_RESULT(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),GPARTS_TYPE_MYSQL_RESULT,GPARTSMySQLResult))
 #define GPARTS_MYSQL_RESULT_CLASS(cls) (G_TYPE_CHECK_CLASS_CAST((cls),GPARTS_TYPE_MYSQL_RESULT,GPARTSMySQLResultClass))

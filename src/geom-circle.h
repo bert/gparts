@@ -18,6 +18,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
+/*! \file geom-circle.h
+ */
+
 typedef struct _GeomCircle GeomCircle;
 
 struct _GeomCircle

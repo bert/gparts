@@ -18,7 +18,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \brief An interface to abstract database implementations.
+/*! \file gparts-database.h
+ *
+ *! \brief An interface to abstract database implementations.
  *
  *  This interface abstracts database implementations, allowing the application
  *  to use different databases such as MySQL, PostreSQL, and SQLite.

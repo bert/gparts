@@ -18,6 +18,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
+/*! \file geom.h
+ */
+
 #include "geom-bounds.h"
 
 #include "geom-angle.h"

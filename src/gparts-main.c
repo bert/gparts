@@ -18,6 +18,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
+/*! \file gparts-main.c 
+ */
+
 #include <gtk/gtk.h>
 
 #include "misc-object.h"
