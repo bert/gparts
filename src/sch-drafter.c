@@ -23,7 +23,7 @@
 
 #include <glib-object.h>
 
-#include "sch-drafter.h"
+#include "sch.h"
 
 void
 sch_drafter_component_bounds(SchDrafter *drafter, const struct _SchComponent *shape, struct _GeomBounds *bounds)
@@ -177,6 +177,7 @@ sch_drafter_draw_net(SchDrafter *drafter, const struct _SchNet *shape)
     }
 }
 
+/*
 void
 sch_drafter_draw_path(SchDrafter *drafter, const struct _SchPath *shape)
 {
@@ -195,6 +196,7 @@ sch_drafter_draw_path(SchDrafter *drafter, const struct _SchPath *shape)
         iface->draw_path(drafter, shape);
     }
 }
+*/
 
 void
 sch_drafter_draw_picture(SchDrafter *drafter, const struct _SchPicture *shape)

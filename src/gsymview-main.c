@@ -190,6 +190,11 @@ gsymview_selection_changed_cb(GtkFileChooser *chooser, gpointer user_data)
         {
             SchLoader *loader = sch_loader_get_default();
 
+            if (privat->drawing != NULL)
+            {
+                g_object_unref(privat->drawing);
+            }
+
             privat->drawing = sch_loader_load_drawing(loader, filename, NULL);
 
             g_free(filename);

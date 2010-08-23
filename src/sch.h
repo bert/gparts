@@ -27,6 +27,7 @@
 
 #include "geom.h"
 
+#include "sch-drafter-fwd.h"
 #include "sch-file-format-fwd.h"
 #include "sch-output-stream-fwd.h"
 #include "sch-shape-fwd.h"
@@ -36,21 +37,20 @@
 
 #include "sch-shape.h"
 
+#include "sch-drawing.h"
+
 #include "sch-arc.h"
 #include "sch-box.h"
 #include "sch-bus.h"
 #include "sch-circle.h"
+#include "sch-component.h"
 #include "sch-line.h"
 #include "sch-net.h"
 #include "sch-picture.h"
 #include "sch-pin.h"
 #include "sch-text.h"
 
-
 #include "sch-drafter.h"
-#include "sch-drawing.h"
-
-#include "sch-component.h"
 
 #include "sch-fill-style.h"
 #include "sch-line-style.h"

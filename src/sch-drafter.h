@@ -21,42 +21,21 @@
 /*! \file sch-drafter.h
  */
 
-#define SCH_TYPE_DRAFTER (sch_drafter_get_type())
-#define SCH_DRAFTER(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),SCH_TYPE_DRAFTER,SchDrafter))
-#define SCH_IS_DRAFTER(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj),SCH_TYPE_DRAFTER))
-#define SCH_DRAFTER_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE((obj),SCH_TYPE_DRAFTER,SchDrafterInterface))
-
-struct _GeomBounds;
-struct _SchArc;
-struct _SchBox;
-struct _SchBus;
-struct _SchCircle;
-struct _SchComponent;
-struct _SchLine;
-struct _SchNet;
-struct _SchPath;
-struct _SchPicture;
-struct _SchPin;
-struct _SchText;
-
-typedef struct _SchDrafter SchDrafter;
-typedef struct _SchDrafterInterface SchDrafterInterface;
-
 struct _SchDrafterInterface
 {
     GTypeInterface parent;
 
-    void (*draw_arc)(SchDrafter *drafter, const struct _SchArc *shape);
-    void (*draw_box)(SchDrafter *drafter, const struct _SchBox *shape);
-    void (*draw_bus)(SchDrafter *drafter, const struct _SchBus *shape);
-    void (*draw_circle)(SchDrafter *drafter, const struct _SchCircle *shape);
-    void (*draw_component)(SchDrafter *drafter, const struct _SchComponent *shape);
-    void (*draw_line)(SchDrafter *drafter, const struct _SchLine *shape);
-    void (*draw_net)(SchDrafter *drafter, const struct _SchNet *shape);
-    void (*draw_path)(SchDrafter *drafter, const struct _SchPath *shape);
-    void (*draw_picture)(SchDrafter *drafter, const struct _SchPicture *shape);
-    void (*draw_pin)(SchDrafter *drafter, const struct _SchPin *shape);
-    void (*draw_text)(SchDrafter *drafter, const struct _SchText *shape);
+    void (*draw_arc)(SchDrafter *drafter, const SchArc *shape);
+    void (*draw_box)(SchDrafter *drafter, const SchBox *shape);
+    void (*draw_bus)(SchDrafter *drafter, const SchBus *shape);
+    void (*draw_circle)(SchDrafter *drafter, const SchCircle *shape);
+    void (*draw_component)(SchDrafter *drafter, const SchComponent *shape);
+    void (*draw_line)(SchDrafter *drafter, const SchLine *shape);
+    void (*draw_net)(SchDrafter *drafter, const SchNet *shape);
+    /* void (*draw_path)(SchDrafter *drafter, const SchPath *shape); */
+    void (*draw_picture)(SchDrafter *drafter, const SchPicture *shape);
+    void (*draw_pin)(SchDrafter *drafter, const SchPin *shape);
+    void (*draw_text)(SchDrafter *drafter, const SchText *shape);
 
     void (*component_bounds)(SchDrafter *drafter, const struct _SchComponent *shape, struct _GeomBounds *bounds);
     void (*text_bounds)(SchDrafter *drafter, const struct _SchText *shape, struct _GeomBounds *bounds);
@@ -67,37 +46,39 @@ sch_drafter_get_type(void);
 
 
 void
-sch_drafter_draw_arc(SchDrafter *drafter, const struct _SchArc *shape);
+sch_drafter_draw_arc(SchDrafter *drafter, const SchArc *shape);
 
 void
-sch_drafter_draw_box(SchDrafter *drafter, const struct _SchBox *shape);
+sch_drafter_draw_box(SchDrafter *drafter, const SchBox *shape);
 
 void
-sch_drafter_draw_bus(SchDrafter *drafter, const struct _SchBus *shape);
+sch_drafter_draw_bus(SchDrafter *drafter, const SchBus *shape);
 
 void
-sch_drafter_draw_circle(SchDrafter *drafter, const struct _SchCircle *shape);
+sch_drafter_draw_circle(SchDrafter *drafter, const SchCircle *shape);
 
 void
-sch_drafter_draw_component(SchDrafter *drafter, const struct _SchComponent *shape);
+sch_drafter_draw_component(SchDrafter *drafter, const SchComponent *shape);
 
 void
-sch_drafter_draw_line(SchDrafter *drafter, const struct _SchLine *shape);
+sch_drafter_draw_line(SchDrafter *drafter, const SchLine *shape);
 
 void
-sch_drafter_draw_net(SchDrafter *drafter, const struct _SchNet *shape);
+sch_drafter_draw_net(SchDrafter *drafter, const SchNet *shape);
+
+/*
+void
+sch_drafter_draw_path(SchDrafter *drafter, const SchPath *shape);
+*/
 
 void
-sch_drafter_draw_path(SchDrafter *drafter, const struct _SchPath *shape);
+sch_drafter_draw_picture(SchDrafter *drafter, const SchPicture *shape);
 
 void
-sch_drafter_draw_picture(SchDrafter *drafter, const struct _SchPicture *shape);
+sch_drafter_draw_pin(SchDrafter *drafter, const SchPin *shape);
 
 void
-sch_drafter_draw_pin(SchDrafter *drafter, const struct _SchPin *shape);
-
-void
-sch_drafter_draw_text(SchDrafter *drafter, const struct _SchText *shape);
+sch_drafter_draw_text(SchDrafter *drafter, const SchText *shape);
 
 void
 sch_drafter_component_bounds(SchDrafter *drafter, const struct _SchComponent *shape, struct _GeomBounds *bounds);

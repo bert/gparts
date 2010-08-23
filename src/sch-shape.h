@@ -42,7 +42,7 @@ struct _SchShapeClass
     void (*rotate)(SchShape *shape, int angle);
     void (*transform)(SchShape *shape, const struct _GeomTransform *transform);
     void (*translate)(SchShape *shape, int dx, int dy);
-    void (*write)(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError *error);
+    void (*write)(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error);
 };
 
 GType
@@ -111,5 +111,5 @@ sch_shape_set_attributes(SchShape *shape, SchAttributes *attributes);
  *  \param [out] error  The error, if any, using the GError protocol.
  */
 void
-sch_shape_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError *error);
+sch_shape_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error);
 

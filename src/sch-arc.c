@@ -49,13 +49,10 @@ typedef struct _SchArcPrivate SchArcPrivate;
 
 struct _SchArcPrivate
 {
-    GeomArc arc;
-    gint    color;
-    gint    line_width;
-    gint    line_cap_style;
-    gint    line_dash_style;
-    gint    line_dash_length;
-    gint    line_dash_space;
+    GeomArc      arc;
+    gint         color;
+    gint         line_width;
+    SchLineStyle line_style;
 };
 
 static gboolean
@@ -319,19 +316,19 @@ sch_arc_get_property(GObject *object, guint property_id, GValue *value, GParamSp
             break;
 
         case SCH_ARC_CAP_STYLE:
-            g_value_set_int(value, privat->line_cap_style);
+            g_value_set_int(value, privat->line_style.cap_style);
             break;
 
         case SCH_ARC_DASH_STYLE:
-            g_value_set_int(value, privat->line_dash_style);
+            g_value_set_int(value, privat->line_style.dash_style);
             break;
 
         case SCH_ARC_DASH_LENGTH:
-            g_value_set_int(value, privat->line_dash_length);
+            g_value_set_int(value, privat->line_style.dash_length);
             break;
 
         case SCH_ARC_DASH_SPACE:
-            g_value_set_int(value, privat->line_dash_space);
+            g_value_set_int(value, privat->line_style.dash_space);
             break;
 
         default:
@@ -406,19 +403,19 @@ sch_arc_set_property(GObject *object, guint property_id, const GValue *value, GP
             break;
 
         case SCH_ARC_CAP_STYLE:
-            privat->line_cap_style = g_value_get_int(value);
+            privat->line_style.cap_style = g_value_get_int(value);
             break;
 
         case SCH_ARC_DASH_STYLE:
-            privat->line_dash_style = g_value_get_int(value);
+            privat->line_style.dash_style = g_value_get_int(value);
             break;
 
         case SCH_ARC_DASH_LENGTH:
-            privat->line_dash_length = g_value_get_int(value);
+            privat->line_style.dash_length = g_value_get_int(value);
             break;
 
         case SCH_ARC_DASH_SPACE:
-            privat->line_dash_space = g_value_get_int(value);
+            privat->line_style.dash_space = g_value_get_int(value);
             break;
 
         default:

@@ -25,6 +25,8 @@
 
 #include <glib-object.h>
 
+#include "misc-object.h"
+
 #include "sch.h"
 
 
@@ -45,6 +47,9 @@ struct _SchShapePrivate
 
 static void
 sch_shape_class_init(gpointer g_class, gpointer g_class_data);
+
+static void
+sch_shape_dispose(GObject *object);
 
 static void
 sch_shape_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
@@ -79,9 +84,12 @@ sch_shape_bounds(SchShape *shape, SchDrafter *drafter, GeomBounds *bounds)
 static void
 sch_shape_class_init(gpointer g_class, gpointer g_class_data)
 {
+    GObjectClass *object_class = G_OBJECT_CLASS(g_class);
     SchShapeClass *klasse = SCH_SHAPE_CLASS(g_class);
 
     g_type_class_add_private(klasse, sizeof(SchShapePrivate));
+
+    object_class->dispose = sch_shape_dispose;
 
     klasse->parent.get_property = sch_shape_get_property;
     klasse->parent.set_property = sch_shape_set_property;
@@ -99,14 +107,30 @@ sch_shape_class_init(gpointer g_class, gpointer g_class_data)
         );
 }
 
+
+static void
+sch_shape_dispose(GObject *object)
+{
+    sch_shape_set_attributes(SCH_SHAPE(object), NULL);
+
+    misc_object_chain_dispose(object);
+}
+
+
 void
 sch_shape_draw(SchShape *shape, SchDrafter *drafter)
 {
-    SchShapeClass *klasse = SCH_SHAPE_GET_CLASS(shape);
+    SchShapeClass   *klasse = SCH_SHAPE_GET_CLASS(shape);
+    SchShapePrivate *privat = SCH_SHAPE_GET_PRIVATE(shape);
 
     if ((klasse != NULL) && (klasse->draw != NULL))
     {
         klasse->draw(shape, drafter);
+    }
+
+    if ((privat != NULL) && (privat->attributes != NULL))
+    {
+        sch_attributes_draw(privat->attributes, drafter);
     }
 }
 
@@ -272,7 +296,7 @@ sch_shape_set_attributes(SchShape *shape, SchAttributes *attributes)
 }
 
 void
-sch_shape_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError *error)
+sch_shape_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error)
 {
     SchShapeClass *klasse = SCH_SHAPE_GET_CLASS(shape);
 
