@@ -117,6 +117,7 @@ libsch_la_SOURCES = \
 	sch-bus.c \
 	sch-circle.c \
 	sch-color.c \
+	sch-config.c \
 	sch-component.c \
 	sch-drafter.c \
 	sch-drawing.c \

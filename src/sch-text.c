@@ -81,7 +81,7 @@ void
 sch_text_rotate(SchShape *shape, int angle);
 
 static void
-sch_text_transform(SchShape *shape, const struct _GeomTransform *transform);
+sch_text_transform(SchShape *shape, const GeomTransform *transform);
 
 void
 sch_text_translate(SchShape *shape, int dx, int dy);
@@ -521,6 +521,16 @@ sch_text_get_visible(const SchText *shape, int *visible)
     }
 }
 
+SchText*
+sch_text_new(const SchConfig *config)
+{
+    return SCH_TEXT(g_object_new(
+        SCH_TYPE_TEXT,
+        "color", sch_config_get_text_color(config),
+        NULL
+        ));
+}
+
 void
 sch_text_rotate(SchShape *shape, int angle)
 {
@@ -540,7 +550,7 @@ sch_text_rotate(SchShape *shape, int angle)
 }
 
 static void
-sch_text_transform(SchShape *shape, const struct _GeomTransform *transform)
+sch_text_transform(SchShape *shape, const GeomTransform *transform)
 {
     SchTextPrivate *privat = SCH_TEXT_GET_PRIVATE(shape);
 

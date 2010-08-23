@@ -50,3 +50,11 @@ sch_net_get_color(const SchNet *shape, int *index);
 void
 sch_net_get_line(const SchNet *shape, GeomLine *line);
 
+/*! \brief Create a net
+ *
+ *  \param [in] config The configuration
+ *  \return The net
+ */
+SchNet*
+sch_net_new(const SchConfig *config);
+

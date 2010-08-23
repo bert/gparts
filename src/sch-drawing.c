@@ -25,6 +25,8 @@
 #include <glib-object.h>
 #include <gio/gio.h>
 
+#include "misc-object.h"
+
 #include "sch.h"
 
 #define SCH_DRAWING_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_DRAWING,SchDrawingPrivate))
@@ -42,11 +44,11 @@ struct _SchDrawingPrivate
     GSList         *shapes;
 };
 
-static gboolean
-sch_drawing_calculate_bounds(SchDrawing *drawing, SchDrafter *drafter, GeomBounds *bounds);
-
 static void
 sch_drawing_class_init(gpointer g_class, gpointer g_class_data);
+
+static void
+sch_drawing_dispose(GObject *object);
 
 static void
 sch_drawing_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
@@ -108,6 +110,36 @@ sch_drawing_class_init(gpointer g_class, gpointer g_class_data)
 
     object_class->get_property = sch_drawing_get_property;
     object_class->set_property = sch_drawing_set_property;
+
+    object_class->dispose = sch_drawing_dispose;
+}
+
+static void
+sch_drawing_dispose(GObject *object)
+{
+    SchDrawingPrivate *privat = SCH_DRAWING_GET_PRIVATE(object);
+
+    if (privat != NULL)
+    {
+        GSList *node = privat->shapes;
+
+        while (node != NULL)
+        {
+            g_object_unref(node->data);
+            node = g_slist_next(node);
+        }
+
+        g_slist_free(privat->shapes);
+        privat->shapes = NULL;
+
+        if (privat->file_format != NULL)
+        {
+            g_object_unref(privat->file_format);
+            privat->file_format = NULL;
+        }
+    }
+
+    misc_object_chain_dispose(object);
 }
 
 void
@@ -117,7 +149,14 @@ sch_drawing_draw(SchDrawing *drawing, SchDrafter *drafter)
 
     if (privat != NULL)
     {
-        g_slist_foreach(privat->shapes, sch_shape_draw, drafter);
+        GSList *node = privat->shapes;
+
+        while (node != NULL)
+        {
+            sch_shape_draw(SCH_SHAPE(node->data), drafter);
+
+            node = g_slist_next(node);
+        }
     }
 }
 
@@ -184,8 +223,6 @@ sch_drawing_init(GTypeInstance *instance, gpointer g_class)
     if (privat != NULL)
     {
         privat->file_format = (SchFileFormat2*) g_object_new(SCH_TYPE_FILE_FORMAT_2, NULL);
-
-        g_debug("Assign file format");
     }
 }
 
@@ -200,7 +237,7 @@ sch_drawing_rotate(SchDrawing *drawing, int angle)
 
         while (node != NULL)
         {
-            sch_shape_rotate((SchShape*) node->data, angle);
+            sch_shape_rotate(SCH_SHAPE(node->data), angle);
 
             node = g_slist_next(node);
         }
@@ -208,7 +245,7 @@ sch_drawing_rotate(SchDrawing *drawing, int angle)
 }
 
 void
-sch_drawing_transform(SchDrawing *drawing, const struct _GeomTransform *transform)
+sch_drawing_transform(SchDrawing *drawing, const GeomTransform *transform)
 {
     SchDrawingPrivate *privat = SCH_DRAWING_GET_PRIVATE(drawing);
 
@@ -218,7 +255,7 @@ sch_drawing_transform(SchDrawing *drawing, const struct _GeomTransform *transfor
 
         while (node != NULL)
         {
-            sch_shape_transform((SchShape*) node->data, transform);
+            sch_shape_transform(SCH_SHAPE(node->data), transform);
 
             node = g_slist_next(node);
         }
@@ -236,7 +273,7 @@ sch_drawing_translate(SchDrawing *drawing, int dx, int dy)
 
         while (node != NULL)
         {
-            sch_shape_translate((SchShape*) node->data, dx, dy);
+            sch_shape_translate(SCH_SHAPE(node->data), dx, dy);
 
             node = g_slist_next(node);
         }

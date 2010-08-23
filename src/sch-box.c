@@ -27,6 +27,8 @@
 #include "sch.h"
 
 
+#define SCH_BOX_DEFAULT_COLOR 3
+
 #define SCH_BOX_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_BOX,SchBoxPrivate))
 
 enum
@@ -82,13 +84,14 @@ static void
 sch_box_rotate(SchShape *shape, int rotate);
 
 static void
-sch_box_transform(SchShape *shape, const struct _GeomTransform *transform);
+sch_box_transform(SchShape *shape, const GeomTransform *transform);
 
 static void
 sch_box_translate(SchShape *shape, int dx, int dy);
 
 static void
 sch_box_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error);
+
 
 
 static gboolean
@@ -192,9 +195,9 @@ sch_box_class_init(gpointer g_class, gpointer g_class_data)
             "color",
             "Color",
             "Color",
-            0, /*COLOR_MIN,*/
-            31, /*COLOR_MAX,*/
-            3, /*COLOR_GRAPHIC,*/
+            0,
+            G_MAXINT,
+            SCH_BOX_DEFAULT_COLOR,
             G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
@@ -365,74 +368,77 @@ sch_box_get_property(GObject *object, guint property_id, GValue *value, GParamSp
 {
     SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(object);
 
-    switch (property_id)
+    if (privat != NULL)
     {
-        case SCH_BOX_X:
-            g_value_set_int(value, privat->box.corner_x);
-            break;
+        switch (property_id)
+        {
+            case SCH_BOX_X:
+                g_value_set_int(value, privat->box.corner_x);
+                break;
 
-        case SCH_BOX_Y:
-            g_value_set_int(value, privat->box.corner_y);
-            break;
+            case SCH_BOX_Y:
+                g_value_set_int(value, privat->box.corner_y);
+                break;
 
-        case SCH_BOX_WIDTH:
-            g_value_set_int(value, privat->box.width);
-            break;
+            case SCH_BOX_WIDTH:
+                g_value_set_int(value, privat->box.width);
+                break;
 
-        case SCH_BOX_HEIGHT:
-            g_value_set_int(value, privat->box.height);
-            break;
+            case SCH_BOX_HEIGHT:
+                g_value_set_int(value, privat->box.height);
+                break;
 
-        case SCH_BOX_COLOR:
-            g_value_set_int(value, privat->color);
-            break;
+            case SCH_BOX_COLOR:
+                g_value_set_int(value, privat->color);
+                break;
 
-        case SCH_BOX_LINE_WIDTH:
-            g_value_set_int(value, privat->line_width);
-            break;
+            case SCH_BOX_LINE_WIDTH:
+                g_value_set_int(value, privat->line_width);
+                break;
 
-        case SCH_BOX_CAP_STYLE:
-            g_value_set_int(value, privat->line_style.cap_style);
-            break;
+            case SCH_BOX_CAP_STYLE:
+                g_value_set_int(value, privat->line_style.cap_style);
+                break;
 
-        case SCH_BOX_DASH_STYLE:
-            g_value_set_int(value, privat->line_style.dash_style);
-            break;
+            case SCH_BOX_DASH_STYLE:
+                g_value_set_int(value, privat->line_style.dash_style);
+                break;
 
-        case SCH_BOX_DASH_LENGTH:
-            g_value_set_int(value, privat->line_style.dash_length);
-            break;
+            case SCH_BOX_DASH_LENGTH:
+                g_value_set_int(value, privat->line_style.dash_length);
+                break;
 
-        case SCH_BOX_DASH_SPACE:
-            g_value_set_int(value, privat->line_style.dash_space);
-            break;
+            case SCH_BOX_DASH_SPACE:
+                g_value_set_int(value, privat->line_style.dash_space);
+                break;
 
-        case SCH_BOX_FILL_TYPE:
-            g_value_set_int(value, privat->fill_style.type);
-            break;
+            case SCH_BOX_FILL_TYPE:
+                g_value_set_int(value, privat->fill_style.type);
+                break;
 
-        case SCH_BOX_FILL_WIDTH:
-            g_value_set_int(value, privat->fill_style.width);
-            break;
+            case SCH_BOX_FILL_WIDTH:
+                g_value_set_int(value, privat->fill_style.width);
+                break;
 
-        case SCH_BOX_FILL_ANGLE1:
-            g_value_set_int(value, privat->fill_style.angle1);
-            break;
+            case SCH_BOX_FILL_ANGLE1:
+                g_value_set_int(value, privat->fill_style.angle1);
+                break;
 
-        case SCH_BOX_FILL_PITCH1:
-            g_value_set_int(value, privat->fill_style.pitch1);
-            break;
+            case SCH_BOX_FILL_PITCH1:
+                g_value_set_int(value, privat->fill_style.pitch1);
+                break;
 
-        case SCH_BOX_FILL_ANGLE2:
-            g_value_set_int(value, privat->fill_style.angle2);
-            break;
+            case SCH_BOX_FILL_ANGLE2:
+                g_value_set_int(value, privat->fill_style.angle2);
+                break;
 
-        case SCH_BOX_FILL_PITCH2:
-            g_value_set_int(value, privat->fill_style.pitch2);
-            break;
+            case SCH_BOX_FILL_PITCH2:
+                g_value_set_int(value, privat->fill_style.pitch2);
+                break;
 
-        default:
-            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+            default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+        }
     }
 }
 
@@ -472,122 +478,131 @@ sch_box_set_property(GObject *object, guint property_id, const GValue *value, GP
 {
     SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(object);
 
-    switch (property_id)
+    if (privat != NULL)
     {
-        case SCH_BOX_X:
-            privat->box.corner_x = g_value_get_int(value);
-            break;
+        switch (property_id)
+        {
+            case SCH_BOX_X:
+                privat->box.corner_x = g_value_get_int(value);
+                break;
 
-        case SCH_BOX_Y:
-            privat->box.corner_y = g_value_get_int(value);
-            break;
+            case SCH_BOX_Y:
+                privat->box.corner_y = g_value_get_int(value);
+                break;
 
-        case SCH_BOX_WIDTH:
-            privat->box.width = g_value_get_int(value);
-            break;
+            case SCH_BOX_WIDTH:
+                privat->box.width = g_value_get_int(value);
+                break;
 
-        case SCH_BOX_HEIGHT:
-            privat->box.height = g_value_get_int(value);
-            break;
+            case SCH_BOX_HEIGHT:
+                privat->box.height = g_value_get_int(value);
+                break;
 
-        case SCH_BOX_COLOR:
-            privat->color = g_value_get_int(value);
-            break;
+            case SCH_BOX_COLOR:
+                privat->color = g_value_get_int(value);
+                break;
 
-        case SCH_BOX_LINE_WIDTH:
-            privat->line_width = g_value_get_int(value);
-            break;
+            case SCH_BOX_LINE_WIDTH:
+                privat->line_width = g_value_get_int(value);
+                break;
 
-        case SCH_BOX_CAP_STYLE:
-            privat->line_style.cap_style = g_value_get_int(value);
-            break;
+            case SCH_BOX_CAP_STYLE:
+                privat->line_style.cap_style = g_value_get_int(value);
+                break;
 
-        case SCH_BOX_DASH_STYLE:
-            privat->line_style.dash_style = g_value_get_int(value);
-            break;
+            case SCH_BOX_DASH_STYLE:
+                privat->line_style.dash_style = g_value_get_int(value);
+                break;
 
-        case SCH_BOX_DASH_LENGTH:
-            privat->line_style.dash_length = g_value_get_int(value);
-            break;
+            case SCH_BOX_DASH_LENGTH:
+                privat->line_style.dash_length = g_value_get_int(value);
+                break;
 
-        case SCH_BOX_DASH_SPACE:
-            privat->line_style.dash_space = g_value_get_int(value);
-            break;
+            case SCH_BOX_DASH_SPACE:
+                privat->line_style.dash_space = g_value_get_int(value);
+                break;
 
-        case SCH_BOX_FILL_TYPE:
-            privat->fill_style.type = g_value_get_int(value);
-            break;
+            case SCH_BOX_FILL_TYPE:
+                privat->fill_style.type = g_value_get_int(value);
+                break;
 
-        case SCH_BOX_FILL_WIDTH:
-            privat->fill_style.width = g_value_get_int(value);
-            break;
+            case SCH_BOX_FILL_WIDTH:
+                privat->fill_style.width = g_value_get_int(value);
+                break;
 
-        case SCH_BOX_FILL_ANGLE1:
-            privat->fill_style.angle1 = g_value_get_int(value);
-            break;
+            case SCH_BOX_FILL_ANGLE1:
+                privat->fill_style.angle1 = g_value_get_int(value);
+                break;
 
-        case SCH_BOX_FILL_PITCH1:
-            privat->fill_style.pitch1 = g_value_get_int(value);
-            break;
+            case SCH_BOX_FILL_PITCH1:
+                privat->fill_style.pitch1 = g_value_get_int(value);
+                break;
 
-        case SCH_BOX_FILL_ANGLE2:
-            privat->fill_style.angle2 = g_value_get_int(value);
-            break;
+            case SCH_BOX_FILL_ANGLE2:
+                privat->fill_style.angle2 = g_value_get_int(value);
+                break;
 
-        case SCH_BOX_FILL_PITCH2:
-            privat->fill_style.pitch2 = g_value_get_int(value);
-            break;
+            case SCH_BOX_FILL_PITCH2:
+                privat->fill_style.pitch2 = g_value_get_int(value);
+                break;
 
-        default:
-            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+            default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+        }
     }
 }
 
 void
 sch_box_get_color(const SchBox *shape, int *index)
 {
-    SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
+    if (index != NULL)
+    {
+        SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
 
-    if (privat != NULL)
-    {
-        *index = privat->color;
-    }
-    else
-    {
-        *index = 0; /* FIXME use line default */
+        *index = SCH_BOX_DEFAULT_COLOR;
+
+        if (privat != NULL)
+        {
+            *index = privat->color;
+        }
     }
 }
 
 void
 sch_box_get_box(const SchBox *shape, GeomBox *box)
 {
-    SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
-
-    if (privat != NULL)
+    if (box != NULL)
     {
-        *box = privat->box;
-    }
+        SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
 
-    /* FIXME initialize line to some value in else */
+        if (privat != NULL)
+        {
+            *box = privat->box;
+        }
+
+        /* FIXME initialize line to some value in else */
+
+    }
 }
 
 void
 sch_box_get_line_width(const SchBox *shape, int *width)
 {
-    SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
+    if (width != NULL)
+    {
+        SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
 
-    if (privat != NULL)
-    {
-        *width = privat->line_width;
-    }
-    else
-    {
         *width = 0; /* FIXME use line default */
+
+        if (privat != NULL)
+        {
+            *width = privat->line_width;
+        }
     }
 }
 
 void
-sch_box_get_fill_style(const SchBox *shape, struct _SchFillStyle *style)
+sch_box_get_fill_style(const SchBox *shape, SchFillStyle *style)
 {
     if (style != NULL)
     {
@@ -605,7 +620,7 @@ sch_box_get_fill_style(const SchBox *shape, struct _SchFillStyle *style)
 }
 
 void
-sch_box_get_line_style(const SchBox *shape, struct _SchLineStyle *style)
+sch_box_get_line_style(const SchBox *shape, SchLineStyle *style)
 {
     if (style != NULL)
     {
@@ -622,6 +637,17 @@ sch_box_get_line_style(const SchBox *shape, struct _SchLineStyle *style)
     }
 }
 
+SchBox*
+sch_box_new(const SchConfig *config)
+{
+    return SCH_BOX(g_object_new(
+        SCH_TYPE_BOX,
+        "color", sch_config_get_graphic_color(config),
+        NULL
+        ));
+}
+
+
 static void
 sch_box_translate(SchShape *shape, int dx, int dy)
 {
@@ -634,7 +660,7 @@ sch_box_translate(SchShape *shape, int dx, int dy)
 }
 
 static void
-sch_box_transform(SchShape *shape, const struct _GeomTransform *transform)
+sch_box_transform(SchShape *shape, const GeomTransform *transform)
 {
     SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
 

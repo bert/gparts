@@ -39,6 +39,9 @@ struct _GeomLine
 void
 geom_line_bounds(const GeomLine *line, GeomBounds *bounds);
 
+void
+geom_line_init(GeomLine *line);
+
 /*! \brief Calculate the length of the given line.
  *
  * \param [in] line

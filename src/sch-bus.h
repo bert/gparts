@@ -50,3 +50,11 @@ sch_bus_get_color(const SchBus *shape, int *index);
 void
 sch_bus_get_line(const SchBus *shape, GeomLine *line);
 
+/*! \brief Create an instance of a bus
+ *
+ *  \param [in] config The configuration
+ *  \return A pointer to a bus
+ */
+SchBus*
+sch_bus_new(const SchConfig *config);
+

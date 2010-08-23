@@ -27,6 +27,11 @@
 
 #include "geom.h"
 
+#include "sch-config.h"
+
+#include "sch-fill-style.h"
+#include "sch-line-style.h"
+
 #include "sch-drafter-fwd.h"
 #include "sch-file-format-fwd.h"
 #include "sch-output-stream-fwd.h"
@@ -52,8 +57,6 @@
 
 #include "sch-drafter.h"
 
-#include "sch-fill-style.h"
-#include "sch-line-style.h"
 
 #include "sch-factory.h"
 #include "sch-loader.h"

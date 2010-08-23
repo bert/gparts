@@ -18,14 +18,19 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file geom-line.h
+/*! \file geom-line.c
  */
 
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
+
+#include <glib.h>
+
 #include "geom-angle.h"
 #include "geom-bounds.h"
 #include "geom-line.h"
+#include "geom-transform.h"
 
 void
 geom_line_bounds(const GeomLine *line, GeomBounds *bounds)
@@ -34,6 +39,12 @@ geom_line_bounds(const GeomLine *line, GeomBounds *bounds)
     {
         geom_bounds_include(bounds, line->x, line->y, 2);
     }
+}
+
+void
+geom_line_init(GeomLine *line)
+{
+    memset(line, 0, sizeof(GeomLine));
 }
 
 double

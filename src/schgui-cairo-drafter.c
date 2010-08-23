@@ -170,36 +170,49 @@ schgui_cairo_drafter_drafter_init(gpointer g_iface, gpointer g_iface_data)
 static int
 schgui_cairo_drafter_component_bounds(SchGUICairoDrafter *drafter, SchComponent *shape, GeomBounds *bounds)
 {
-    int        angle;
     SchDrawing *drawing;
-    int        mirror;
-    int        x;
-    int        y;
+    gboolean success = FALSE;
 
     sch_component_get_drawing(shape, &drawing);
-    sch_drawing_bounds(drawing, drafter, bounds);
 
-    sch_component_get_orientation(shape, &angle, &mirror);
-
-    if (mirror)
+    if (drawing != NULL)
     {
-        GeomBounds temp = *bounds;
+        int        angle;
+        int        mirror;
+        int        x;
+        int        y;
+        sch_drawing_bounds(drawing, drafter, bounds);
 
-        bounds->min_x = -temp.max_x;
-        bounds->max_x = -temp.min_x;
+        sch_component_get_orientation(shape, &angle, &mirror);
+
+        if (mirror)
+        {
+            GeomBounds temp = *bounds;
+
+            bounds->min_x = -temp.max_x;
+            bounds->max_x = -temp.min_x;
+        }
+
+        if (angle == 90 || angle == 270)
+        {
+            GeomBounds temp = *bounds;
+
+            bounds->min_y = -temp.max_y;
+            bounds->max_y = -temp.min_y;
+        }
+
+
+        sch_component_get_insertion_point(shape, &x, &y);
+        geom_bounds_translate(bounds, x, y);
+
+        success = TRUE;
+    }
+    else
+    {
+        geom_bounds_init(bounds);
     }
 
-    if (angle == 90 || angle == 270)
-    {
-        GeomBounds temp = *bounds;
-
-        bounds->min_y = -temp.max_y;
-        bounds->max_y = -temp.min_y;
-    }
-
-
-    sch_component_get_insertion_point(shape, &x, &y);
-    geom_bounds_translate(bounds, x, y);
+    return success;
 }
 
 static void
@@ -1075,10 +1088,10 @@ schgui_cairo_drafter_zoom_extents(SchGUICairoDrafter *drafter, GtkWidget *widget
 
             sch_drawing_bounds(privat->drawing, drafter, &bounds);
 
-            g_debug("Min X = %d", bounds.min_x);
-            g_debug("Min Y = %d", bounds.min_y);
-            g_debug("Max X = %d", bounds.max_x);
-            g_debug("Max Y = %d", bounds.max_y);
+            //g_debug("Min X = %d", bounds.min_x);
+            //g_debug("Min Y = %d", bounds.min_y);
+            //g_debug("Max X = %d", bounds.max_x);
+            //g_debug("Max Y = %d", bounds.max_y);
 
            // schgui_cairo_drafter_end_drawing(privat->drafter);
 

@@ -71,3 +71,11 @@ sch_pin_get_type_(const SchPin *shape);
 int
 sch_pin_get_end(const SchPin *shape);
 
+/*! \brief Create a pin
+ *
+ *  \param [in] config The configuration
+ *  \return The pin
+ */
+SchPin*
+sch_pin_new(const SchConfig *config);
+

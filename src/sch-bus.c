@@ -26,6 +26,7 @@
 
 #include "sch.h"
 
+#define SCH_BUS_DEFAULT_COLOR (SCH_CONFIG_DEFAULT_BUS_COLOR)
 
 #define SCH_BUS_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_BUS,SchBusPrivate))
 
@@ -36,8 +37,7 @@ enum
     SCH_BUS_X2,
     SCH_BUS_Y2,
     SCH_BUS_COLOR,
-    SCH_BUS_BUS_TYPE,
-    SCH_BUS_BUS_END
+    SCH_BUS_RIPPER_DIR
 };
 
 typedef struct _SchBusPrivate SchBusPrivate;
@@ -46,8 +46,7 @@ struct _SchBusPrivate
 {
     GeomLine line;
     gint     color;
-    gint     bus_type;
-    gint     bus_end;
+    gint     ripper_dir;
 };
 
 static gboolean
@@ -60,10 +59,12 @@ static void
 sch_bus_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
 
 static void
-sch_bus_schematic_shape_init(gpointer g_iface, gpointer g_iface_data);
+sch_bus_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
 
 static void
-sch_bus_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
+sch_bus_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error);
+
+
 
 static gboolean
 sch_bus_bounds(SchShape *shape, SchDrafter *drafter, GeomBounds *bounds)
@@ -99,6 +100,7 @@ sch_bus_class_init(gpointer g_class, gpointer g_class_data)
 
     klasse->parent.bounds = sch_bus_bounds;
     klasse->parent.draw   = sch_bus_draw;
+    klasse->parent.write  = sch_bus_write;
 
     g_object_class_install_property(
         object_class,
@@ -163,36 +165,22 @@ sch_bus_class_init(gpointer g_class, gpointer g_class_data)
             "color",
             "Color",
             "Color",
-            0, /*COLOR_MIN,*/
-            31, /*COLOR_MAX,*/
-            3, /*COLOR_GRAPHIC,*/
-            G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
-            )
-        );
-
-    g_object_class_install_property(
-        object_class,
-        SCH_BUS_BUS_TYPE,
-        g_param_spec_int(
-            "bus-type",
-            "Bus Type",
-            "Bus Type",
             0,
             G_MAXINT,
-            0,
+            SCH_BUS_DEFAULT_COLOR,
             G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
 
     g_object_class_install_property(
         object_class,
-        SCH_BUS_BUS_END,
+        SCH_BUS_RIPPER_DIR,
         g_param_spec_int(
-            "bus-end",
-            "Bus End",
-            "Bus End",
+            "ripper-dir",
+            "Ripper Direction",
+            "Ripper Direction",
             0,
-            2,
+            G_MAXINT,
             0,
             G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
@@ -210,38 +198,37 @@ sch_bus_get_property(GObject *object, guint property_id, GValue *value, GParamSp
 {
     SchBusPrivate *privat = SCH_BUS_GET_PRIVATE(object);
 
-    switch (property_id)
+    if (privat != NULL)
     {
-        case SCH_BUS_X1:
-            g_value_set_int(value, privat->line.x[0]);
-            break;
+        switch (property_id)
+        {
+            case SCH_BUS_X1:
+                g_value_set_int(value, privat->line.x[0]);
+                break;
 
-        case SCH_BUS_Y1:
-            g_value_set_int(value, privat->line.y[0]);
-            break;
+            case SCH_BUS_Y1:
+                g_value_set_int(value, privat->line.y[0]);
+                break;
 
-        case SCH_BUS_X2:
-            g_value_set_int(value, privat->line.x[1]);
-            break;
+            case SCH_BUS_X2:
+                g_value_set_int(value, privat->line.x[1]);
+                break;
 
-        case SCH_BUS_Y2:
-            g_value_set_int(value, privat->line.y[1]);
-            break;
+            case SCH_BUS_Y2:
+                g_value_set_int(value, privat->line.y[1]);
+                break;
 
-        case SCH_BUS_COLOR:
-            g_value_set_int(value, privat->color);
-            break;
+            case SCH_BUS_COLOR:
+                g_value_set_int(value, privat->color);
+                break;
 
-        case SCH_BUS_BUS_TYPE:
-            g_value_set_int(value, privat->bus_type);
-            break;
+            case SCH_BUS_RIPPER_DIR:
+                g_value_set_int(value, privat->ripper_dir);
+                break;
 
-        case SCH_BUS_BUS_END:
-            g_value_set_int(value, privat->bus_end);
-            break;
-
-        default:
-            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+            default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+        }
     }
 }
 
@@ -281,67 +268,82 @@ sch_bus_set_property(GObject *object, guint property_id, const GValue *value, GP
 {
     SchBusPrivate *privat = SCH_BUS_GET_PRIVATE(object);
 
-    switch (property_id)
+    if (privat != NULL)
     {
-        case SCH_BUS_X1:
-            privat->line.x[0] = g_value_get_int(value);
-            break;
+        switch (property_id)
+        {
+            case SCH_BUS_X1:
+                privat->line.x[0] = g_value_get_int(value);
+                break;
 
-        case SCH_BUS_Y1:
-            privat->line.y[0] = g_value_get_int(value);
-            break;
+            case SCH_BUS_Y1:
+                privat->line.y[0] = g_value_get_int(value);
+                break;
 
-        case SCH_BUS_X2:
-            privat->line.x[1] = g_value_get_int(value);
-            break;
+            case SCH_BUS_X2:
+                privat->line.x[1] = g_value_get_int(value);
+                break;
 
-        case SCH_BUS_Y2:
-            privat->line.y[1] = g_value_get_int(value);
-            break;
+            case SCH_BUS_Y2:
+                privat->line.y[1] = g_value_get_int(value);
+                break;
 
-        case SCH_BUS_COLOR:
-            privat->color = g_value_get_int(value);
-            break;
+            case SCH_BUS_COLOR:
+                privat->color = g_value_get_int(value);
+                break;
 
-        case SCH_BUS_BUS_TYPE:
-            privat->bus_type = g_value_get_int(value);
-            break;
+            case SCH_BUS_RIPPER_DIR:
+                privat->ripper_dir = g_value_get_int(value);
+                break;
 
-        case SCH_BUS_BUS_END:
-            privat->bus_end = g_value_get_int(value);
-            break;
-
-        default:
-            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+            default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+        }
     }
 }
 
 void
 sch_bus_get_color(const SchBus *shape, int *index)
 {
-    SchBusPrivate *privat = SCH_BUS_GET_PRIVATE(shape);
+    if (index != NULL)
+    {
+        SchBusPrivate *privat = SCH_BUS_GET_PRIVATE(shape);
 
-    if (privat != NULL)
-    {
-        *index = privat->color;
-    }
-    else
-    {
-        *index = 0; /* FIXME use line default */
+        *index = SCH_BUS_DEFAULT_COLOR;
+
+        if (privat != NULL)
+        {
+            *index = privat->color;
+        }
     }
 }
 
 void
 sch_bus_get_line(const SchBus *shape, GeomLine *line)
 {
-    SchBusPrivate *privat = SCH_BUS_GET_PRIVATE(shape);
-
-    if (privat != NULL)
+    if (line != NULL)
     {
-        *line = privat->line;
-    }
+        SchBusPrivate *privat = SCH_BUS_GET_PRIVATE(shape);
 
-    /* FIXME initialize line to some value in else */
+        if (privat != NULL)
+        {
+            *line = privat->line;
+        }
+        else
+        {
+            geom_line_init(line);
+        }
+    }
+}
+
+SchBus*
+sch_bus_new(const SchConfig *config)
+{
+    return SCH_BUS(g_object_new(
+        SCH_TYPE_BUS,
+        "color", sch_config_get_bus_color(config),
+        NULL
+        ));
 }
 
 static void

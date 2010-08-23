@@ -54,11 +54,19 @@ void
 sch_box_get_color(const SchBox *shape, int *index);
 
 void
-sch_box_get_fill_style(const SchBox *shape, struct _SchFillStyle *style);
+sch_box_get_fill_style(const SchBox *shape, SchFillStyle *style);
 
 void
 sch_box_get_line_width(const SchBox *shape, int *width);
 
 void
-sch_box_get_line_style(const SchBox *shape, struct _SchLineStyle *style);
+sch_box_get_line_style(const SchBox *shape, SchLineStyle *style);
+
+/*! \brief Create an instance of a box
+ *
+ *  \param [in] config The configuration
+ *  \return A pointer to a box
+ */
+SchBox*
+sch_box_new(const SchConfig *config);
 

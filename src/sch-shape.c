@@ -189,16 +189,12 @@ sch_shape_init(GTypeInstance *instance, gpointer g_class)
 {
     SchShapePrivate *privat;
 
-    g_debug("Shape Constructor 1");
-
     privat = SCH_SHAPE_GET_PRIVATE(instance);
 
     if (privat != NULL)
     {
         privat->attributes = g_object_new(SCH_TYPE_ATTRIBUTES, NULL);
     }
-
-    g_debug("Shape Constructor 2");
 }
 
 void
@@ -232,7 +228,7 @@ sch_shape_set_property(GObject *object, guint property_id, const GValue *value, 
 }
  
 void
-sch_shape_transform(SchShape *shape, const struct _GeomTransform *transform)
+sch_shape_transform(SchShape *shape, const GeomTransform *transform)
 {
     SchShapeClass *klasse = SCH_SHAPE_GET_CLASS(shape);
 

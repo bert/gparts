@@ -53,3 +53,6 @@ sch_arc_get_color(const SchArc *shape, int *index);
 void
 sch_arc_get_line_width(const SchArc *shape, int *width);
 
+SchArc*
+sch_arc_new(const SchConfig *config);
+

@@ -58,3 +58,11 @@ sch_line_get_line_style(const SchLine *line, struct _SchLineStyle *style);
 void
 sch_line_get_line_width(const SchLine *line, int *width);
 
+/*! \brief Create a line
+ *
+ *  \param [in] config The configuration
+ *  \return The line
+ */
+SchLine*
+sch_line_new(const SchConfig *config);
+

@@ -48,8 +48,6 @@ sch_attributes_append(SchAttributes *attributes, SchShape *shape)
             g_object_ref(shape);
 
             privat->shapes = g_slist_append(privat->shapes, shape);
-
-            g_debug("**** APPENDED ATTRIBUTE ****");
         }
     }
 }
@@ -107,7 +105,7 @@ sch_attributes_rotate(SchAttributes *attributes, int angle)
 }
 
 void
-sch_attributes_transform(SchAttributes *attributes, const struct _GeomTransform *transform)
+sch_attributes_transform(SchAttributes *attributes, const GeomTransform *transform)
 {
 }
 

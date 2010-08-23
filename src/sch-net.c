@@ -27,6 +27,8 @@
 #include "sch.h"
 
 
+#define SCH_NET_DEFAULT_COLOR (SCH_CONFIG_DEFAULT_NET_COLOR)
+
 #define SCH_NET_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_NET,SchNetPrivate))
 
 enum
@@ -167,9 +169,9 @@ sch_net_class_init(gpointer g_class, gpointer g_class_data)
             "color",
             "Color",
             "Color",
-            0, /*COLOR_MIN,*/
-            31, /*COLOR_MAX,*/
-            3, /*COLOR_GRAPHIC,*/
+            0,
+            G_MAXINT,
+            SCH_NET_DEFAULT_COLOR,
             G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
@@ -214,38 +216,41 @@ sch_net_get_property(GObject *object, guint property_id, GValue *value, GParamSp
 {
     SchNetPrivate *privat = SCH_NET_GET_PRIVATE(object);
 
-    switch (property_id)
+    if (privat != NULL)
     {
-        case SCH_NET_X1:
-            g_value_set_int(value, privat->line.x[0]);
-            break;
+        switch (property_id)
+        {
+            case SCH_NET_X1:
+                g_value_set_int(value, privat->line.x[0]);
+                break;
 
-        case SCH_NET_Y1:
-            g_value_set_int(value, privat->line.y[0]);
-            break;
+            case SCH_NET_Y1:
+                g_value_set_int(value, privat->line.y[0]);
+                break;
 
-        case SCH_NET_X2:
-            g_value_set_int(value, privat->line.x[1]);
-            break;
+            case SCH_NET_X2:
+                g_value_set_int(value, privat->line.x[1]);
+                break;
 
-        case SCH_NET_Y2:
-            g_value_set_int(value, privat->line.y[1]);
-            break;
+            case SCH_NET_Y2:
+                g_value_set_int(value, privat->line.y[1]);
+                break;
 
-        case SCH_NET_COLOR:
-            g_value_set_int(value, privat->color);
-            break;
+            case SCH_NET_COLOR:
+                g_value_set_int(value, privat->color);
+                break;
 
-        case SCH_NET_NET_TYPE:
-            g_value_set_int(value, privat->net_type);
-            break;
+            case SCH_NET_NET_TYPE:
+                g_value_set_int(value, privat->net_type);
+                break;
 
-        case SCH_NET_NET_END:
-            g_value_set_int(value, privat->net_end);
-            break;
+            case SCH_NET_NET_END:
+                g_value_set_int(value, privat->net_end);
+                break;
 
-        default:
-            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+            default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+        }
     }
 }
 
@@ -285,67 +290,86 @@ sch_net_set_property(GObject *object, guint property_id, const GValue *value, GP
 {
     SchNetPrivate *privat = SCH_NET_GET_PRIVATE(object);
 
-    switch (property_id)
+    if (privat != NULL)
     {
-        case SCH_NET_X1:
-            privat->line.x[0] = g_value_get_int(value);
-            break;
+        switch (property_id)
+        {
+            case SCH_NET_X1:
+                privat->line.x[0] = g_value_get_int(value);
+                break;
 
-        case SCH_NET_Y1:
-            privat->line.y[0] = g_value_get_int(value);
-            break;
+            case SCH_NET_Y1:
+                privat->line.y[0] = g_value_get_int(value);
+                break;
 
-        case SCH_NET_X2:
-            privat->line.x[1] = g_value_get_int(value);
-            break;
+            case SCH_NET_X2:
+                privat->line.x[1] = g_value_get_int(value);
+                break;
 
-        case SCH_NET_Y2:
-            privat->line.y[1] = g_value_get_int(value);
-            break;
+            case SCH_NET_Y2:
+                privat->line.y[1] = g_value_get_int(value);
+                break;
 
-        case SCH_NET_COLOR:
-            privat->color = g_value_get_int(value);
-            break;
+            case SCH_NET_COLOR:
+                privat->color = g_value_get_int(value);
+                break;
 
-        case SCH_NET_NET_TYPE:
-            privat->net_type = g_value_get_int(value);
-            break;
+            case SCH_NET_NET_TYPE:
+                privat->net_type = g_value_get_int(value);
+                break;
 
-        case SCH_NET_NET_END:
-            privat->net_end = g_value_get_int(value);
-            break;
+            case SCH_NET_NET_END:
+                privat->net_end = g_value_get_int(value);
+                break;
 
-        default:
-            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+            default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+        }
     }
 }
 
 void
 sch_net_get_color(const SchNet *shape, int *index)
 {
-    SchNetPrivate *privat = SCH_NET_GET_PRIVATE(shape);
+    if (index != NULL)
+    {
+        SchNetPrivate *privat = SCH_NET_GET_PRIVATE(shape);
 
-    if (privat != NULL)
-    {
-        *index = privat->color;
-    }
-    else
-    {
-        *index = 0; /* FIXME use line default */
+        *index = SCH_NET_DEFAULT_COLOR;
+
+        if (privat != NULL)
+        {
+            *index = privat->color;
+        }
     }
 }
 
 void
 sch_net_get_line(const SchNet *shape, GeomLine *line)
 {
-    SchNetPrivate *privat = SCH_NET_GET_PRIVATE(shape);
-
-    if (privat != NULL)
+    if (line != NULL)
     {
-        *line = privat->line;
-    }
+        SchNetPrivate *privat = SCH_NET_GET_PRIVATE(shape);
 
-    /* FIXME initialize line to some value in else */
+        if (privat != NULL)
+        {
+            *line = privat->line;
+        }
+        else
+        {
+            geom_line_init(line);
+        }
+    }
+}
+
+SchNet*
+sch_net_new(const SchConfig *config)
+{
+    return SCH_NET(g_object_new(
+        SCH_TYPE_NET,
+        "color", sch_config_get_net_color(config),
+        NULL
+        ));
 }
 
 static void

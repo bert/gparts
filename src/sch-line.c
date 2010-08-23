@@ -26,6 +26,8 @@
 
 #include "sch.h"
 
+#define SCH_LINE_DEFAULT_COLOR 3
+
 #define SCH_LINE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_LINE,SchLinePrivate))
 
 enum
@@ -73,7 +75,7 @@ static void
 sch_line_rotate(SchShape *shape, int angle);
 
 static void
-sch_line_transform(SchShape *shape, const struct _GeomTransform *transform);
+sch_line_transform(SchShape *shape, const GeomTransform *transform);
 
 static void
 sch_line_translate(SchShape *shape, int dx, int dy);
@@ -184,9 +186,9 @@ sch_line_class_init(gpointer g_class, gpointer g_class_data)
             "color",
             "Color",
             "Color",
-            0, /*COLOR_MIN,*/
-            31, /*COLOR_MAX,*/
-            3, /*COLOR_GRAPHIC,*/
+            0,
+            G_MAXINT,
+            SCH_LINE_DEFAULT_COLOR,
             G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
@@ -412,59 +414,79 @@ sch_line_set_property(GObject *object, guint property_id, const GValue *value, G
 void
 sch_line_get_color(const SchLine *line, int *index)
 {
-    SchLinePrivate *privat = SCH_LINE_GET_PRIVATE(line);
+    if (index != NULL)
+    {
+        SchLinePrivate *privat = SCH_LINE_GET_PRIVATE(line);
 
-    if (privat != NULL)
-    {
-        *index = privat->color;
-    }
-    else
-    {
-        *index = 0; /* FIXME use line default */
+        *index = SCH_LINE_DEFAULT_COLOR;
+
+        if (privat != NULL)
+        {
+            *index = privat->color;
+        }
     }
 }
 
 void
-sch_line_get_line(const SchLine *sline, GeomLine *gline)
+sch_line_get_line(const SchLine *shape, GeomLine *line)
 {
-    SchLinePrivate *privat = SCH_LINE_GET_PRIVATE(sline);
-
-    if (privat != NULL)
+    if (line != NULL)
     {
-        *gline = privat->line;
-    }
+        SchLinePrivate *privat = SCH_LINE_GET_PRIVATE(shape);
 
-    /* FIXME initialize line to some value in else */
+        if (privat != NULL)
+        {
+            *line = privat->line;
+        }
+        else
+        {
+            geom_line_init(line);
+        }
+    }
 }
 
 void
-sch_line_get_line_style(const SchLine *line, struct _SchLineStyle *style)
+sch_line_get_line_style(const SchLine *shape, SchLineStyle *style)
 {
-    SchLinePrivate *privat = SCH_LINE_GET_PRIVATE(line);
+    if (style != NULL)
+    {
+        SchLinePrivate *privat = SCH_LINE_GET_PRIVATE(shape);
 
-    if (privat != NULL)
-    {
-        *style = privat->line_style;
-    }
-    else
-    {
-        sch_line_style_init(style);
+        if (privat != NULL)
+        {
+            *style = privat->line_style;
+        }
+        else
+        {
+            sch_line_style_init(style);
+        }
     }
 }
 
 void
 sch_line_get_line_width(const SchLine *line, int *width)
 {
-    SchLinePrivate *privat = SCH_LINE_GET_PRIVATE(line);
+    if (width != NULL)
+    {
+        SchLinePrivate *privat = SCH_LINE_GET_PRIVATE(line);
 
-    if (privat != NULL)
-    {
-        *width = privat->line_width;
-    }
-    else
-    {
         *width = 0; /* FIXME use line default */
+
+        if (privat != NULL)
+        {
+            *width = privat->line_width;
+        }
     }
+}
+
+SchLine*
+sch_line_new(const SchConfig *config)
+{
+    return SCH_LINE(g_object_new(
+        SCH_TYPE_LINE,
+        "color", sch_config_get_graphic_color(config),
+        NULL
+        ));
 }
 
 static void
@@ -480,7 +502,7 @@ sch_line_rotate(SchShape *shape, int angle)
 
 
 static void
-sch_line_transform(SchShape *shape, const struct _GeomTransform *transform)
+sch_line_transform(SchShape *shape, const GeomTransform *transform)
 {
     if (transform != NULL)
     {

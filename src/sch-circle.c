@@ -27,6 +27,8 @@
 #include "sch.h"
 
 
+#define SCH_CIRCLE_DEFAULT_COLOR 3
+
 #define SCH_CIRCLE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_CIRCLE,SchCirclePrivate))
 
 enum
@@ -78,7 +80,7 @@ static void
 sch_circle_rotate(SchShape *shape, int angle);
 
 static void
-sch_circle_transform(SchShape *shape, const struct _GeomTransform *transform);
+sch_circle_transform(SchShape *shape, const GeomTransform *transform);
 
 void
 sch_circle_translate(SchCircle *circle, int dx, int dy);
@@ -174,9 +176,9 @@ sch_circle_class_init(gpointer g_class, gpointer g_class_data)
             "color",
             "Color",
             "Color",
-            0, /*COLOR_MIN,*/
-            31, /*COLOR_MAX,*/
-            3, /*COLOR_GRAPHIC,*/
+            0,
+            G_MAXINT,
+            SCH_CIRCLE_DEFAULT_COLOR,
             G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
@@ -347,70 +349,73 @@ sch_circle_get_property(GObject *object, guint property_id, GValue *value, GPara
 {
     SchCirclePrivate *privat = SCH_CIRCLE_GET_PRIVATE(object);
 
-    switch (property_id)
+    if (privat != NULL)
     {
-        case SCH_CIRCLE_X:
-            g_value_set_int(value, privat->circle.center_x);
-            break;
+        switch (property_id)
+        {
+            case SCH_CIRCLE_X:
+                g_value_set_int(value, privat->circle.center_x);
+                break;
 
-        case SCH_CIRCLE_Y:
-            g_value_set_int(value, privat->circle.center_y);
-            break;
+            case SCH_CIRCLE_Y:
+                g_value_set_int(value, privat->circle.center_y);
+                break;
 
-        case SCH_CIRCLE_RADIUS:
-            g_value_set_int(value, privat->circle.radius);
-            break;
+            case SCH_CIRCLE_RADIUS:
+                g_value_set_int(value, privat->circle.radius);
+                break;
 
-        case SCH_CIRCLE_COLOR:
-            g_value_set_int(value, privat->color);
-            break;
+            case SCH_CIRCLE_COLOR:
+                g_value_set_int(value, privat->color);
+                break;
 
-        case SCH_CIRCLE_LINE_WIDTH:
-            g_value_set_int(value, privat->line_width);
-            break;
+            case SCH_CIRCLE_LINE_WIDTH:
+                g_value_set_int(value, privat->line_width);
+                break;
 
-        case SCH_CIRCLE_CAP_STYLE:
-            g_value_set_int(value, privat->line_style.cap_style);
-            break;
+            case SCH_CIRCLE_CAP_STYLE:
+                g_value_set_int(value, privat->line_style.cap_style);
+                break;
 
-        case SCH_CIRCLE_DASH_STYLE:
-            g_value_set_int(value, privat->line_style.dash_style);
-            break;
+            case SCH_CIRCLE_DASH_STYLE:
+                g_value_set_int(value, privat->line_style.dash_style);
+                break;
 
-        case SCH_CIRCLE_DASH_LENGTH:
-            g_value_set_int(value, privat->line_style.dash_length);
-            break;
+            case SCH_CIRCLE_DASH_LENGTH:
+                g_value_set_int(value, privat->line_style.dash_length);
+                break;
 
-        case SCH_CIRCLE_DASH_SPACE:
-            g_value_set_int(value, privat->line_style.dash_space);
-            break;
+            case SCH_CIRCLE_DASH_SPACE:
+                g_value_set_int(value, privat->line_style.dash_space);
+                break;
 
-        case SCH_CIRCLE_FILL_TYPE:
-            g_value_set_int(value, privat->fill_style.type);
-            break;
+            case SCH_CIRCLE_FILL_TYPE:
+                g_value_set_int(value, privat->fill_style.type);
+                break;
 
-        case SCH_CIRCLE_FILL_WIDTH:
-            g_value_set_int(value, privat->fill_style.width);
-            break;
+            case SCH_CIRCLE_FILL_WIDTH:
+                g_value_set_int(value, privat->fill_style.width);
+                break;
 
-        case SCH_CIRCLE_FILL_ANGLE1:
-            g_value_set_int(value, privat->fill_style.angle1);
-            break;
+            case SCH_CIRCLE_FILL_ANGLE1:
+                g_value_set_int(value, privat->fill_style.angle1);
+                break;
 
-        case SCH_CIRCLE_FILL_PITCH1:
-            g_value_set_int(value, privat->fill_style.pitch1);
-            break;
+            case SCH_CIRCLE_FILL_PITCH1:
+                g_value_set_int(value, privat->fill_style.pitch1);
+                break;
 
-        case SCH_CIRCLE_FILL_ANGLE2:
-            g_value_set_int(value, privat->fill_style.angle2);
-            break;
+            case SCH_CIRCLE_FILL_ANGLE2:
+                g_value_set_int(value, privat->fill_style.angle2);
+                break;
 
-        case SCH_CIRCLE_FILL_PITCH2:
-            g_value_set_int(value, privat->fill_style.pitch2);
-            break;
+            case SCH_CIRCLE_FILL_PITCH2:
+                g_value_set_int(value, privat->fill_style.pitch2);
+                break;
 
-        default:
-            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+            default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+        }
     }
 }
 
@@ -450,113 +455,121 @@ sch_circle_set_property(GObject *object, guint property_id, const GValue *value,
 {
     SchCirclePrivate *privat = SCH_CIRCLE_GET_PRIVATE(object);
 
-    switch (property_id)
+    if (privat != NULL)
     {
-        case SCH_CIRCLE_X:
-            privat->circle.center_x = g_value_get_int(value);
-            break;
+        switch (property_id)
+        {
+            case SCH_CIRCLE_X:
+                privat->circle.center_x = g_value_get_int(value);
+                break;
 
-        case SCH_CIRCLE_Y:
-            privat->circle.center_y = g_value_get_int(value);
-            break;
+            case SCH_CIRCLE_Y:
+                privat->circle.center_y = g_value_get_int(value);
+                break;
 
-        case SCH_CIRCLE_RADIUS:
-            privat->circle.radius = g_value_get_int(value);
-            break;
+            case SCH_CIRCLE_RADIUS:
+                privat->circle.radius = g_value_get_int(value);
+                break;
 
-        case SCH_CIRCLE_COLOR:
-            privat->color = g_value_get_int(value);
-            break;
+            case SCH_CIRCLE_COLOR:
+                privat->color = g_value_get_int(value);
+                break;
 
-        case SCH_CIRCLE_LINE_WIDTH:
-            privat->line_width = g_value_get_int(value);
-            break;
+            case SCH_CIRCLE_LINE_WIDTH:
+                privat->line_width = g_value_get_int(value);
+                break;
 
-        case SCH_CIRCLE_CAP_STYLE:
-            privat->line_style.cap_style = g_value_get_int(value);
-            break;
+            case SCH_CIRCLE_CAP_STYLE:
+                privat->line_style.cap_style = g_value_get_int(value);
+                break;
 
-        case SCH_CIRCLE_DASH_STYLE:
-            privat->line_style.dash_style = g_value_get_int(value);
-            break;
+            case SCH_CIRCLE_DASH_STYLE:
+                privat->line_style.dash_style = g_value_get_int(value);
+                break;
 
-        case SCH_CIRCLE_DASH_LENGTH:
-            privat->line_style.dash_length = g_value_get_int(value);
-            break;
+           case SCH_CIRCLE_DASH_LENGTH:
+                privat->line_style.dash_length = g_value_get_int(value);
+                break;
 
-        case SCH_CIRCLE_DASH_SPACE:
-            privat->line_style.dash_space = g_value_get_int(value);
-            break;
+            case SCH_CIRCLE_DASH_SPACE:
+                privat->line_style.dash_space = g_value_get_int(value);
+                break;
 
-        case SCH_CIRCLE_FILL_TYPE:
-            privat->fill_style.type = g_value_get_int(value);
-            break;
+            case SCH_CIRCLE_FILL_TYPE:
+                privat->fill_style.type = g_value_get_int(value);
+                break;
 
-        case SCH_CIRCLE_FILL_WIDTH:
-            privat->fill_style.width = g_value_get_int(value);
-            break;
+            case SCH_CIRCLE_FILL_WIDTH:
+                privat->fill_style.width = g_value_get_int(value);
+                break;
 
-        case SCH_CIRCLE_FILL_ANGLE1:
-            privat->fill_style.angle1 = g_value_get_int(value);
-            break;
+            case SCH_CIRCLE_FILL_ANGLE1:
+                privat->fill_style.angle1 = g_value_get_int(value);
+                break;
 
-        case SCH_CIRCLE_FILL_PITCH1:
-            privat->fill_style.pitch1 = g_value_get_int(value);
-            break;
+            case SCH_CIRCLE_FILL_PITCH1:
+                privat->fill_style.pitch1 = g_value_get_int(value);
+                break;
 
-        case SCH_CIRCLE_FILL_ANGLE2:
-            privat->fill_style.angle2 = g_value_get_int(value);
-            break;
+            case SCH_CIRCLE_FILL_ANGLE2:
+                privat->fill_style.angle2 = g_value_get_int(value);
+                break;
 
-        case SCH_CIRCLE_FILL_PITCH2:
-            privat->fill_style.pitch2 = g_value_get_int(value);
-            break;
+            case SCH_CIRCLE_FILL_PITCH2:
+                privat->fill_style.pitch2 = g_value_get_int(value);
+                break;
 
-        default:
-            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+            default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+        }
     }
 }
 
 void
 sch_circle_get_color(const SchCircle *shape, int *index)
 {
-    SchCirclePrivate *privat = SCH_CIRCLE_GET_PRIVATE(shape);
+    if (index != NULL)
+    {
+        SchCirclePrivate *privat = SCH_CIRCLE_GET_PRIVATE(shape);
 
-    if (privat != NULL)
-    {
-        *index = privat->color;
-    }
-    else
-    {
-        *index = 0; /* FIXME use line default */
+        *index = SCH_CIRCLE_DEFAULT_COLOR;
+
+        if (privat != NULL)
+        {
+            *index = privat->color;
+        }
     }
 }
 
 void
 sch_circle_get_circle(const SchCircle *shape, GeomCircle *circle)
 {
-    SchCirclePrivate *privat = SCH_CIRCLE_GET_PRIVATE(shape);
-
-    if (privat != NULL)
+    if (circle != NULL)
     {
-        *circle = privat->circle;
-    }
+        SchCirclePrivate *privat = SCH_CIRCLE_GET_PRIVATE(shape);
 
-    /* FIXME initialize line to some value in else */
+        if (privat != NULL)
+        {
+            *circle = privat->circle;
+        }
+
+        /* FIXME initialize line to some value in else */
+    }
 }
 
 void
 sch_circle_get_line_width(const SchCircle *shape, int *width)
 {
-    SchCirclePrivate *privat = SCH_CIRCLE_GET_PRIVATE(shape);
+    if (width != NULL)
+    {
+        SchCirclePrivate *privat = SCH_CIRCLE_GET_PRIVATE(shape);
 
-    if (privat != NULL)
-    {
-        *width = privat->line_width;
-    }
-    else
-    {
         *width = 0; /* FIXME use line default */
+
+        if (privat != NULL)
+        {
+            *width = privat->line_width;
+        }
     }
 }
 
@@ -596,6 +609,16 @@ sch_circle_get_line_style(const SchCircle *shape, struct _SchLineStyle *style)
     }
 }
 
+SchCircle*
+sch_circle_new(const SchConfig *config)
+{
+    return SCH_CIRCLE(g_object_new(
+        SCH_TYPE_CIRCLE,
+        "color", sch_config_get_graphic_color(config),
+        NULL
+        ));
+}
+
 static void
 sch_circle_rotate(SchShape *shape, int angle)
 {
@@ -608,13 +631,12 @@ sch_circle_rotate(SchShape *shape, int angle)
 }
 
 static void
-sch_circle_transform(SchShape *shape, const struct _GeomTransform *transform)
+sch_circle_transform(SchShape *shape, const GeomTransform *transform)
 {
     SchCirclePrivate *privat = SCH_CIRCLE_GET_PRIVATE(shape);
 
     if (privat != NULL)
     {
-        g_debug("Inside circle");
         geom_transform_point(transform, &(privat->circle.center_x), &(privat->circle.center_y));
     }
 }

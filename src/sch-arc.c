@@ -27,6 +27,8 @@
 #include "sch.h"
 
 
+#define SCH_ARC_DEFAULT_COLOR (SCH_CONFIG_DEFAULT_GRAPHIC_COLOR) 
+
 
 #define SCH_ARC_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_ARC,SchArcPrivate))
 
@@ -71,7 +73,7 @@ static void
 sch_arc_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
 
 static void
-sch_arc_transform(SchShape *shape, const struct _GeomTransform *transform);
+sch_arc_transform(SchShape *shape, const GeomTransform *transform);
 
 void
 sch_arc_translate(SchShape *shape, int dx, int dy);
@@ -196,9 +198,9 @@ sch_arc_class_init(gpointer g_class, gpointer g_class_data)
             "color",
             "Color",
             "Color",
-            0, /*COLOR_MIN,*/
-            31, /*COLOR_MAX,*/
-            3, /*COLOR_GRAPHIC,*/
+            0,
+            G_MAXINT,
+            SCH_ARC_DEFAULT_COLOR,
             G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
@@ -285,54 +287,57 @@ sch_arc_get_property(GObject *object, guint property_id, GValue *value, GParamSp
 {
     SchArcPrivate *privat = SCH_ARC_GET_PRIVATE(object);
 
-    switch (property_id)
+    if (privat != NULL)
     {
-        case SCH_ARC_CENTER_X:
-            g_value_set_int(value, privat->arc.center_x);
-            break;
+        switch (property_id)
+        {
+            case SCH_ARC_CENTER_X:
+                g_value_set_int(value, privat->arc.center_x);
+                break;
 
-        case SCH_ARC_CENTER_Y:
-            g_value_set_int(value, privat->arc.center_y);
-            break;
+            case SCH_ARC_CENTER_Y:
+                g_value_set_int(value, privat->arc.center_y);
+                break;
 
-        case SCH_ARC_RADIUS:
-            g_value_set_int(value, privat->arc.radius);
-            break;
+            case SCH_ARC_RADIUS:
+                g_value_set_int(value, privat->arc.radius);
+                break;
 
-        case SCH_ARC_START:
-            g_value_set_int(value, privat->arc.start);
-            break;
+            case SCH_ARC_START:
+                g_value_set_int(value, privat->arc.start);
+                break;
 
-        case SCH_ARC_SWEEP:
-            g_value_set_int(value, privat->arc.sweep);
-            break;
+            case SCH_ARC_SWEEP:
+                g_value_set_int(value, privat->arc.sweep);
+                break;
 
-        case SCH_ARC_COLOR:
-            g_value_set_int(value, privat->color);
-            break;
+            case SCH_ARC_COLOR:
+                g_value_set_int(value, privat->color);
+                break;
 
-        case SCH_ARC_WIDTH:
-            g_value_set_int(value, privat->line_width);
-            break;
+            case SCH_ARC_WIDTH:
+                g_value_set_int(value, privat->line_width);
+                break;
 
-        case SCH_ARC_CAP_STYLE:
-            g_value_set_int(value, privat->line_style.cap_style);
-            break;
+            case SCH_ARC_CAP_STYLE:
+                g_value_set_int(value, privat->line_style.cap_style);
+                break;
 
-        case SCH_ARC_DASH_STYLE:
-            g_value_set_int(value, privat->line_style.dash_style);
-            break;
+            case SCH_ARC_DASH_STYLE:
+                g_value_set_int(value, privat->line_style.dash_style);
+                break;
 
-        case SCH_ARC_DASH_LENGTH:
-            g_value_set_int(value, privat->line_style.dash_length);
-            break;
+            case SCH_ARC_DASH_LENGTH:
+                g_value_set_int(value, privat->line_style.dash_length);
+                break;
 
-        case SCH_ARC_DASH_SPACE:
-            g_value_set_int(value, privat->line_style.dash_space);
-            break;
+            case SCH_ARC_DASH_SPACE:
+                g_value_set_int(value, privat->line_style.dash_space);
+                break;
 
-        default:
-            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+            default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+        }
     }
 }
 
@@ -372,102 +377,120 @@ sch_arc_set_property(GObject *object, guint property_id, const GValue *value, GP
 {
     SchArcPrivate *privat = SCH_ARC_GET_PRIVATE(object);
 
-    switch (property_id)
+    if (privat != NULL)
     {
-        case SCH_ARC_CENTER_X:
-            privat->arc.center_x = g_value_get_int(value);
-            break;
+        switch (property_id)
+        {
+            case SCH_ARC_CENTER_X:
+                privat->arc.center_x = g_value_get_int(value);
+                break;
 
-        case SCH_ARC_CENTER_Y:
-            privat->arc.center_y = g_value_get_int(value);
-            break;
+            case SCH_ARC_CENTER_Y:
+                privat->arc.center_y = g_value_get_int(value);
+                break;
 
-        case SCH_ARC_RADIUS:
-            privat->arc.radius = g_value_get_int(value);
-            break;
+            case SCH_ARC_RADIUS:
+                privat->arc.radius = g_value_get_int(value);
+                break;
 
-        case SCH_ARC_START:
-            privat->arc.start = g_value_get_int(value);
-            break;
+            case SCH_ARC_START:
+                privat->arc.start = g_value_get_int(value);
+                break;
 
-        case SCH_ARC_SWEEP:
-            privat->arc.sweep = g_value_get_int(value);
-            break;
+            case SCH_ARC_SWEEP:
+                privat->arc.sweep = g_value_get_int(value);
+                break;
 
-        case SCH_ARC_COLOR:
-            privat->color = g_value_get_int(value);
-            break;
+            case SCH_ARC_COLOR:
+                privat->color = g_value_get_int(value);
+                break;
 
-        case SCH_ARC_WIDTH:
-            privat->line_width = g_value_get_int(value);
-            break;
+            case SCH_ARC_WIDTH:
+                privat->line_width = g_value_get_int(value);
+                break;
 
-        case SCH_ARC_CAP_STYLE:
-            privat->line_style.cap_style = g_value_get_int(value);
-            break;
+            case SCH_ARC_CAP_STYLE:
+                privat->line_style.cap_style = g_value_get_int(value);
+                break;
 
-        case SCH_ARC_DASH_STYLE:
-            privat->line_style.dash_style = g_value_get_int(value);
-            break;
+            case SCH_ARC_DASH_STYLE:
+                privat->line_style.dash_style = g_value_get_int(value);
+                break;
 
-        case SCH_ARC_DASH_LENGTH:
-            privat->line_style.dash_length = g_value_get_int(value);
-            break;
+            case SCH_ARC_DASH_LENGTH:
+                privat->line_style.dash_length = g_value_get_int(value);
+                break;
 
-        case SCH_ARC_DASH_SPACE:
-            privat->line_style.dash_space = g_value_get_int(value);
-            break;
+            case SCH_ARC_DASH_SPACE:
+                privat->line_style.dash_space = g_value_get_int(value);
+                break;
 
-        default:
-            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+            default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+        }
     }
 }
 
 void
 sch_arc_get_color(const SchArc *shape, int *index)
 {
-    SchArcPrivate *privat = SCH_ARC_GET_PRIVATE(shape);
+    if (index != NULL)
+    {
+        SchArcPrivate *privat = SCH_ARC_GET_PRIVATE(shape);
 
-    if (privat != NULL)
-    {
-        *index = privat->color;
-    }
-    else
-    {
-        *index = 0; /* FIXME use line default */
+        *index = SCH_ARC_DEFAULT_COLOR;
+
+        if (privat != NULL)
+        {
+            *index = privat->color;
+        }
     }
 }
 
 void
 sch_arc_get_arc(const SchArc *shape, GeomArc *arc)
 {
-    SchArcPrivate *privat = SCH_ARC_GET_PRIVATE(shape);
-
-    if (privat != NULL)
+    if (arc != NULL)
     {
-        *arc = privat->arc;
-    }
+        SchArcPrivate *privat = SCH_ARC_GET_PRIVATE(shape);
 
-    /* FIXME initialize line to some value in else */
+        if (privat != NULL)
+        {
+            *arc = privat->arc;
+        }
+
+        /* FIXME initialize line to some value in else */
+    }
 }
 
 void
 sch_arc_get_line_width(const SchArc *shape, int *width)
 {
-    SchArcPrivate *privat = SCH_ARC_GET_PRIVATE(shape);
+    if (width != NULL)
+    {
+        SchArcPrivate *privat = SCH_ARC_GET_PRIVATE(shape);
 
-    if (privat != NULL)
-    {
-        *width = privat->line_width;
-    }
-    else
-    {
         *width = 0; /* FIXME use line default */
+
+        if (privat != NULL)
+        {
+            *width = privat->line_width;
+        }
     }
 }
 
+SchArc*
+sch_arc_new(const SchConfig *config)
+{
+    return SCH_ARC(g_object_new(
+        SCH_TYPE_ARC,
+        "color", sch_config_get_graphic_color(config),
+        NULL
+        ));
+}
+
 static void
-sch_arc_transform(SchShape *shape, const struct _GeomTransform *transform)
+sch_arc_transform(SchShape *shape, const GeomTransform *transform)
 {
     SchArcPrivate *privat = SCH_ARC_GET_PRIVATE(shape);
 

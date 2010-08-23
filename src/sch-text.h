@@ -74,3 +74,11 @@ sch_text_get_show(const SchText *shape, int *show);
 void
 sch_text_get_visible(const SchText *shape, int *visible);
 
+/*! \brief Create a text object
+ *
+ *  \param [in] config The configuration
+ *  \return The text object
+ */
+SchText*
+sch_text_new(const SchConfig *config);
+

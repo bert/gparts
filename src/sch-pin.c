@@ -27,6 +27,8 @@
 #include "sch.h"
 
 
+#define SCH_PIN_DEFAULT_COLOR 1
+
 #define SCH_PIN_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_PIN,SchPinPrivate))
 
 enum
@@ -69,13 +71,14 @@ static void
 sch_pin_rotate(SchShape *shape, int angle);
 
 static void
-sch_pin_transform(SchShape *shape, const struct _GeomTransform *transform);
+sch_pin_transform(SchShape *shape, const GeomTransform *transform);
 
 static void
 sch_pin_translate(SchShape *shape, int dx, int dy);
 
 static void
 sch_pin_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error);
+
 
 
 static gboolean
@@ -180,9 +183,9 @@ sch_pin_class_init(gpointer g_class, gpointer g_class_data)
             "color",
             "Color",
             "Color",
-            0, /*COLOR_MIN,*/
-            31, /*COLOR_MAX,*/
-            3, /*COLOR_GRAPHIC,*/
+            0,
+            G_MAXINT,
+            SCH_PIN_DEFAULT_COLOR,
             G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
@@ -227,38 +230,41 @@ sch_pin_get_property(GObject *object, guint property_id, GValue *value, GParamSp
 {
     SchPinPrivate *privat = SCH_PIN_GET_PRIVATE(object);
 
-    switch (property_id)
+    if (privat != NULL)
     {
-        case SCH_PIN_X1:
-            g_value_set_int(value, privat->line.x[0]);
-            break;
+        switch (property_id)
+        {
+            case SCH_PIN_X1:
+                g_value_set_int(value, privat->line.x[0]);
+                break;
 
-        case SCH_PIN_Y1:
-            g_value_set_int(value, privat->line.y[0]);
-            break;
+            case SCH_PIN_Y1:
+                g_value_set_int(value, privat->line.y[0]);
+                break;
 
-        case SCH_PIN_X2:
-            g_value_set_int(value, privat->line.x[1]);
-            break;
+            case SCH_PIN_X2:
+                g_value_set_int(value, privat->line.x[1]);
+                break;
 
-        case SCH_PIN_Y2:
-            g_value_set_int(value, privat->line.y[1]);
-            break;
+            case SCH_PIN_Y2:
+                g_value_set_int(value, privat->line.y[1]);
+                break;
 
-        case SCH_PIN_COLOR:
-            g_value_set_int(value, privat->color);
-            break;
+            case SCH_PIN_COLOR:
+                g_value_set_int(value, privat->color);
+                break;
 
-        case SCH_PIN_PIN_TYPE:
-            g_value_set_int(value, privat->pin_type);
-            break;
+            case SCH_PIN_PIN_TYPE:
+                g_value_set_int(value, privat->pin_type);
+                break;
 
-        case SCH_PIN_PIN_END:
-            g_value_set_int(value, privat->pin_end);
-            break;
+            case SCH_PIN_PIN_END:
+                g_value_set_int(value, privat->pin_end);
+                break;
 
-        default:
-            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+            default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+        }
     }
 }
 
@@ -298,67 +304,82 @@ sch_pin_set_property(GObject *object, guint property_id, const GValue *value, GP
 {
     SchPinPrivate *privat = SCH_PIN_GET_PRIVATE(object);
 
-    switch (property_id)
+    if (privat != NULL)
     {
-        case SCH_PIN_X1:
-            privat->line.x[0] = g_value_get_int(value);
-            break;
+        switch (property_id)
+        {
+            case SCH_PIN_X1:
+                privat->line.x[0] = g_value_get_int(value);
+                break;
 
-        case SCH_PIN_Y1:
-            privat->line.y[0] = g_value_get_int(value);
-            break;
+            case SCH_PIN_Y1:
+                privat->line.y[0] = g_value_get_int(value);
+                break;
 
-        case SCH_PIN_X2:
-            privat->line.x[1] = g_value_get_int(value);
-            break;
+            case SCH_PIN_X2:
+                privat->line.x[1] = g_value_get_int(value);
+                break;
 
-        case SCH_PIN_Y2:
-            privat->line.y[1] = g_value_get_int(value);
-            break;
+            case SCH_PIN_Y2:
+                privat->line.y[1] = g_value_get_int(value);
+                break;
 
-        case SCH_PIN_COLOR:
-            privat->color = g_value_get_int(value);
-            break;
+            case SCH_PIN_COLOR:
+                privat->color = g_value_get_int(value);
+                break;
 
-        case SCH_PIN_PIN_TYPE:
-            privat->pin_type = g_value_get_int(value);
-            break;
+            case SCH_PIN_PIN_TYPE:
+                privat->pin_type = g_value_get_int(value);
+                break;
 
-        case SCH_PIN_PIN_END:
-            privat->pin_end = g_value_get_int(value);
-            break;
+            case SCH_PIN_PIN_END:
+                privat->pin_end = g_value_get_int(value);
+                break;
 
-        default:
-            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+            default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+        }
     }
 }
 
 void
 sch_pin_get_color(const SchPin *shape, int *index)
 {
-    SchPinPrivate *privat = SCH_PIN_GET_PRIVATE(shape);
+    if (index != NULL)
+    {
+        SchPinPrivate *privat = SCH_PIN_GET_PRIVATE(shape);
 
-    if (privat != NULL)
-    {
-        *index = privat->color;
-    }
-    else
-    {
-        *index = 0; /* FIXME use line default */
+        *index = SCH_PIN_DEFAULT_COLOR;
+
+        if (privat != NULL)
+        {
+            *index = privat->color;
+        }
     }
 }
 
 void
 sch_pin_get_line(const SchPin *shape, GeomLine *line)
 {
-    SchPinPrivate *privat = SCH_PIN_GET_PRIVATE(shape);
-
-    if (privat != NULL)
+    if (line != NULL)
     {
-        *line = privat->line;
-    }
+        SchPinPrivate *privat = SCH_PIN_GET_PRIVATE(shape);
 
-    /* FIXME initialize line to some value in else */
+        if (privat != NULL)
+        {
+            *line = privat->line;
+        }
+        else
+        {
+            geom_line_init(line);
+        }
+    }
+}
+
+SchPin*
+sch_pin_new(const SchConfig *config)
+{
+    return SCH_PIN(g_object_new(SCH_TYPE_PIN, NULL));
 }
 
 static void
@@ -373,7 +394,7 @@ sch_pin_rotate(SchShape *shape, int angle)
 }
 
 static void
-sch_pin_transform(SchShape *shape, const struct _GeomTransform *transform)
+sch_pin_transform(SchShape *shape, const GeomTransform *transform)
 {
     if (transform != NULL)
     {

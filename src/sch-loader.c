@@ -31,37 +31,6 @@
 
 #include "sch.h"
 
-#if 0
-#include "geom.h"
-
-#include "misc-object.h"
-
-#include "sch-output-stream-fwd.h"
-#include "sch-shape-fwd.h"
-
-#include "sch-attributes.h"
-
-#include "sch-multiline.h"
-#include "sch-shape.h"
-#include "sch-arc.h"
-#include "sch-box.h"
-#include "sch-bus.h"
-#include "sch-circle.h"
-#include "sch-line.h"
-#include "sch-net.h"
-#include "sch-pin.h"
-#include "sch-text.h"
-
-#include "sch-output-stream.h"
-
-#include "sch-drafter.h"
-#include "sch-drawing.h"
-
-#include "sch-component.h"
-
-#include "sch-loader.h"
-#endif
-
 #define SCH_LOADER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_LOADER,SchLoaderPrivate))
 
 enum
@@ -596,7 +565,7 @@ process_arc(FILE *file, gchar **tokens)
 
     //g_debug("Process arc");
 
-    arc = g_object_new(SCH_TYPE_ARC, NULL);
+    arc = sch_arc_new(NULL);
 
     process_params(G_OBJECT(arc), tokens, arc_params, 13);
 
@@ -609,9 +578,6 @@ process_attributes(FILE *file, gchar **tokens, GObject *object)
     SchAttributes *attrs = sch_shape_get_attributes(object);
 
     gchar *line = read_line(file);
-
-    g_debug("Process attributes (begin)");
-    g_debug("%p", object);
 
     while (line != NULL)
     {
@@ -636,7 +602,6 @@ process_attributes(FILE *file, gchar **tokens, GObject *object)
                     attribute = process_object(file, token);
                     if (attrs != NULL)
                     {
-                        g_debug("**** HERE ****");
                         sch_attributes_append(attrs, attribute);
                     }
                     g_object_unref(attribute);
@@ -651,8 +616,6 @@ process_attributes(FILE *file, gchar **tokens, GObject *object)
     {
         g_object_unref(attrs);
     }
-
-    g_debug("Process attributes (end)");
 }
 
 static  GObject*
@@ -662,7 +625,7 @@ process_box(FILE *file, gchar **tokens)
 
     //g_debug("Process box");
 
-    box = g_object_new(SCH_TYPE_BOX, NULL);
+    box = sch_box_new(NULL);
 
     process_params(G_OBJECT(box), tokens, box_params, 19);
 
@@ -672,15 +635,15 @@ process_box(FILE *file, gchar **tokens)
 static GObject*
 process_bus(FILE *file, gchar **tokens)
 {
-    SchBus *net;
+    SchBus *bus;
 
     //g_debug("Process net");
 
-    net = g_object_new(SCH_TYPE_BUS, NULL);
+    bus = sch_bus_new(NULL);
 
-    process_params(G_OBJECT(net), tokens, bus_params, 8);
+    process_params(G_OBJECT(bus), tokens, bus_params, 8);
 
-    return G_OBJECT(net);
+    return G_OBJECT(bus);
 
 }
 
@@ -691,7 +654,7 @@ process_circle(FILE *file, gchar **tokens)
 
     //g_debug("Process circle");
 
-    circle = g_object_new(SCH_TYPE_CIRCLE, NULL);
+    circle = sch_circle_new(NULL);
 
     process_params(G_OBJECT(circle), tokens, circle_params, 17);
 
@@ -714,7 +677,7 @@ process_component(FILE *file, gchar **tokens)
        
         if (g_strv_length(tokens) > 6)
         {
-            g_debug( *(tokens + 6) );
+            //g_debug( *(tokens + 6) );
 
             if (strncmp(*(tokens+6), "EMBEDDED", 8) == 0)
             {
@@ -817,7 +780,7 @@ process_line(FILE *file, gchar **tokens)
 
     //g_debug("Process line");
 
-    line = g_object_new(SCH_TYPE_LINE, NULL);
+    line = sch_line_new(NULL);
 
     process_params(G_OBJECT(line), tokens, line_params, 12);
 
@@ -831,7 +794,7 @@ process_net(FILE *file, gchar **tokens)
 
     //g_debug("Process net");
 
-    net = g_object_new(SCH_TYPE_NET, NULL);
+    net = sch_net_new(NULL);
 
     process_params(G_OBJECT(net), tokens, net_params, 7);
 
@@ -952,7 +915,7 @@ process_pin(FILE *file, gchar **tokens)
 
     //g_debug("Process pin");
 
-    pin = g_object_new(SCH_TYPE_PIN, NULL);
+    pin = sch_pin_new(NULL);
 
     process_params(G_OBJECT(pin), tokens, pin_params, 9);
 
@@ -966,7 +929,7 @@ process_text(FILE *file, gchar **tokens)
 
     //g_debug("Process text");
 
-    text = g_object_new(SCH_TYPE_TEXT, NULL);
+    text = sch_text_new(NULL);
 
     process_params(G_OBJECT(text), tokens, text_params, 10);
 
