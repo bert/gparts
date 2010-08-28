@@ -32,6 +32,7 @@ enum
 {
     SCH_CONFIG_BUS_COLOR = 1,
     SCH_CONFIG_GRAPHIC_COLOR,
+    SCH_CONFIG_LINE_WIDTH,
     SCH_CONFIG_NET_COLOR,
     SCH_CONFIG_PIN_COLOR,
     SCH_CONFIG_TEXT_COLOR
@@ -43,6 +44,7 @@ struct _SchConfigPrivate
 {
     gint bus_color;
     gint graphic_color;
+    gint line_width;
     gint net_color;
     gint pin_color;
     gint text_color;
@@ -95,6 +97,20 @@ sch_config_class_init(gpointer g_class, gpointer g_class_data)
             0,
             G_MAXINT,
             SCH_CONFIG_DEFAULT_GRAPHIC_COLOR,
+            G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
+            )
+        );
+
+    g_object_class_install_property(
+        klasse,
+        SCH_CONFIG_LINE_WIDTH,
+        g_param_spec_int(
+            "line-width",
+            "Line Width",
+            "Line Width",
+            0,
+            G_MAXINT,
+            SCH_CONFIG_DEFAULT_LINE_WIDTH,
             G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
@@ -169,6 +185,22 @@ sch_config_get_graphic_color(const SchConfig *config)
     if (privat != NULL)
     {
         color = privat->graphic_color;
+    }
+
+    return color;
+}
+
+
+
+gint
+sch_config_get_line_width(const SchConfig *config)
+{
+    gint color = SCH_CONFIG_DEFAULT_LINE_WIDTH;
+    SchConfigPrivate *privat = SCH_CONFIG_GET_PRIVATE(config);
+
+    if (privat != NULL)
+    {
+        color = privat->line_width;
     }
 
     return color;

@@ -20,6 +20,8 @@
 
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
+
 #include "geom-angle.h"
 #include "geom-bounds.h"
 #include "geom-arc.h"
@@ -91,6 +93,12 @@ geom_arc_bounds(const GeomArc *arc, GeomBounds *bounds)
     {
         bounds->max_x = arc->center_x + arc->radius;
     }
+}
+
+void
+geom_arc_init(GeomArc *arc)
+{
+    memset(arc, 0, sizeof(GeomArc));
 }
 
 void

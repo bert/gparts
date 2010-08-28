@@ -40,5 +40,8 @@ void
 geom_box_bounds(const GeomBox *box, GeomBounds *bounds);
 
 void
+geom_box_init(GeomBox *box);
+
+void
 geom_box_translate(GeomBox *box, int dx, int dy);
 

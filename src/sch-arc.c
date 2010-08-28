@@ -27,7 +27,8 @@
 #include "sch.h"
 
 
-#define SCH_ARC_DEFAULT_COLOR (SCH_CONFIG_DEFAULT_GRAPHIC_COLOR) 
+#define SCH_ARC_DEFAULT_COLOR       (SCH_CONFIG_DEFAULT_GRAPHIC_COLOR)
+#define SCH_ARC_DEFAULT_LINE_WIDTH  (SCH_CONFIG_DEFAULT_LINE_WIDTH)
 
 
 #define SCH_ARC_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_ARC,SchArcPrivate))
@@ -458,8 +459,10 @@ sch_arc_get_arc(const SchArc *shape, GeomArc *arc)
         {
             *arc = privat->arc;
         }
-
-        /* FIXME initialize line to some value in else */
+        else
+        {
+            geom_arc_init(arc);
+        }
     }
 }
 
@@ -470,7 +473,7 @@ sch_arc_get_line_width(const SchArc *shape, int *width)
     {
         SchArcPrivate *privat = SCH_ARC_GET_PRIVATE(shape);
 
-        *width = 0; /* FIXME use line default */
+        *width = SCH_ARC_DEFAULT_LINE_WIDTH;
 
         if (privat != NULL)
         {
@@ -485,6 +488,7 @@ sch_arc_new(const SchConfig *config)
     return SCH_ARC(g_object_new(
         SCH_TYPE_ARC,
         "color", sch_config_get_graphic_color(config),
+        "width", sch_config_get_line_width(config),
         NULL
         ));
 }

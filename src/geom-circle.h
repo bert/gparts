@@ -39,6 +39,9 @@ void
 geom_circle_bounds(const GeomCircle *circle, GeomBounds *bounds);
 
 void
+geom_circle_init(GeomCircle *circle);
+
+void
 geom_circle_rotate(GeomCircle *circle, int angle);
 
 void

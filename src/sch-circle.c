@@ -27,7 +27,8 @@
 #include "sch.h"
 
 
-#define SCH_CIRCLE_DEFAULT_COLOR 3
+#define SCH_CIRCLE_DEFAULT_COLOR      (SCH_CONFIG_DEFAULT_GRAPHIC_COLOR)
+#define SCH_CIRCLE_DEFAULT_LINE_WIDTH (SCH_CONFIG_DEFAULT_LINE_WIDTH)
 
 #define SCH_CIRCLE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_CIRCLE,SchCirclePrivate))
 
@@ -192,7 +193,7 @@ sch_circle_class_init(gpointer g_class, gpointer g_class_data)
             "Line Width",
             0,
             G_MAXINT,
-            0,
+            SCH_CIRCLE_DEFAULT_LINE_WIDTH,
             G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
@@ -552,8 +553,10 @@ sch_circle_get_circle(const SchCircle *shape, GeomCircle *circle)
         {
             *circle = privat->circle;
         }
-
-        /* FIXME initialize line to some value in else */
+        else
+        {
+            geom_circle_init(circle);
+        }
     }
 }
 
@@ -564,7 +567,7 @@ sch_circle_get_line_width(const SchCircle *shape, int *width)
     {
         SchCirclePrivate *privat = SCH_CIRCLE_GET_PRIVATE(shape);
 
-        *width = 0; /* FIXME use line default */
+        *width = SCH_CIRCLE_DEFAULT_LINE_WIDTH;
 
         if (privat != NULL)
         {
@@ -614,7 +617,8 @@ sch_circle_new(const SchConfig *config)
 {
     return SCH_CIRCLE(g_object_new(
         SCH_TYPE_CIRCLE,
-        "color", sch_config_get_graphic_color(config),
+        "color",      sch_config_get_graphic_color(config),
+        "line-width", sch_config_get_line_width(config),
         NULL
         ));
 }

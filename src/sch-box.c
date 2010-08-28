@@ -27,7 +27,8 @@
 #include "sch.h"
 
 
-#define SCH_BOX_DEFAULT_COLOR 3
+#define SCH_BOX_DEFAULT_COLOR      (SCH_CONFIG_DEFAULT_GRAPHIC_COLOR)
+#define SCH_BOX_DEFAULT_LINE_WIDTH (SCH_CONFIG_DEFAULT_LINE_WIDTH)
 
 #define SCH_BOX_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_BOX,SchBoxPrivate))
 
@@ -211,7 +212,7 @@ sch_box_class_init(gpointer g_class, gpointer g_class_data)
             "Line Width",
             0,
             G_MAXINT,
-            0,
+            SCH_BOX_DEFAULT_LINE_WIDTH,
             G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
@@ -579,9 +580,10 @@ sch_box_get_box(const SchBox *shape, GeomBox *box)
         {
             *box = privat->box;
         }
-
-        /* FIXME initialize line to some value in else */
-
+        else
+        {
+            geom_box_init(box);
+        }
     }
 }
 
@@ -592,7 +594,7 @@ sch_box_get_line_width(const SchBox *shape, int *width)
     {
         SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
 
-        *width = 0; /* FIXME use line default */
+        *width = SCH_BOX_DEFAULT_LINE_WIDTH;
 
         if (privat != NULL)
         {
@@ -642,7 +644,8 @@ sch_box_new(const SchConfig *config)
 {
     return SCH_BOX(g_object_new(
         SCH_TYPE_BOX,
-        "color", sch_config_get_graphic_color(config),
+        "color",      sch_config_get_graphic_color(config),
+        "line-width", sch_config_get_line_width(config),
         NULL
         ));
 }

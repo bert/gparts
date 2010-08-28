@@ -40,6 +40,13 @@ struct _GeomArc
 void
 geom_arc_bounds(const GeomArc *arc, GeomBounds *bounds);
 
+/*! \brief Initialize an arc
+ *
+ *  \param [out] The arc to initialize
+ */
+void
+geom_arc_init(GeomArc *arc);
+
 /*! \brief Translate the arc by the given vector.
  *
  *  \param [in,out] arc

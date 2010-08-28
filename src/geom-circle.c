@@ -18,14 +18,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file geom-circle.h
+/*! \file geom-circle.c
  */
 
 #include <math.h>
 #include <stdlib.h>
-#include <geom-angle.h>
-#include <geom-bounds.h>
-#include <geom-circle.h>
+#include <string.h>
+
+#include "geom-angle.h"
+#include "geom-bounds.h"
+#include "geom-circle.h"
 
 /*! \brief Calculate the bounding rectangle of the given circle.
  *
@@ -49,6 +51,12 @@ geom_circle_bounds(const GeomCircle *circle, GeomBounds *bounds)
             geom_bounds_init(bounds);
         }
     }
+}
+
+void
+geom_circle_init(GeomCircle *circle)
+{
+    memset(circle, 0, sizeof(GeomCircle));
 }
 
 void

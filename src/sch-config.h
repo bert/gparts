@@ -27,6 +27,8 @@
 #define SCH_CONFIG_DEFAULT_PIN_COLOR         1
 #define SCH_CONFIG_DEFAULT_TEXT_COLOR        9
 
+#define SCH_CONFIG_DEFAULT_LINE_WIDTH        0
+
 #define SCH_TYPE_CONFIG (sch_config_get_type())
 #define SCH_CONFIG(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),SCH_TYPE_CONFIG,SchConfig))
 #define SCH_CONFIG_CLASS(cls) (G_TYPE_CHECK_CLASS_CAST((cls),SCH_TYPE_CONFIG,SchConfigClass))
@@ -65,6 +67,14 @@ sch_config_get_bus_color(const SchConfig *config);
  */
 gint
 sch_config_get_graphic_color(const SchConfig *config);
+
+/*! \brief Get the default net color index
+ *
+ *  \param [in] config The configuration
+ *  \return The default color index for net objects
+ */
+gint
+sch_config_get_line_width(const SchConfig *config);
 
 /*! \brief Get the default net color index
  *

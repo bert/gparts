@@ -22,6 +22,7 @@
  */
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "geom-bounds.h"
 #include "geom-box.h"
@@ -84,6 +85,12 @@ geom_box_bounds(const GeomBox *box, GeomBounds *bounds)
             }
         }
     }
+}
+
+void
+geom_box_init(GeomBox *box)
+{
+    memset(box, 0, sizeof(GeomBox));
 }
 
 void
