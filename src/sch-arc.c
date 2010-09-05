@@ -58,14 +58,8 @@ struct _SchArcPrivate
     SchLineStyle line_style;
 };
 
-static gboolean
-sch_arc_bounds(SchShape *shape, SchDrafter *drafter, GeomBounds *bounds);
-
 static void
 sch_arc_class_init(gpointer g_class, gpointer g_class_data);
-
-static void
-sch_arc_draw(SchShape *shape, SchDrafter *drafter);
 
 static void
 sch_arc_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
@@ -84,26 +78,6 @@ sch_arc_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, 
 
 
 
-static gboolean
-sch_arc_bounds(SchShape *shape, SchDrafter *drafter, GeomBounds *bounds)
-{
-    SchArcPrivate *privat = SCH_ARC_GET_PRIVATE(shape);
-
-    if (privat != NULL)
-    {
-        int border = (privat->line_width + 1) / 2;
-
-        geom_arc_bounds(&(privat->arc), bounds);
-        geom_bounds_expand(bounds, bounds, border);
-    }
-    else
-    {
-        geom_bounds_init(bounds);
-    }
-
-    return TRUE;
-}
-
 static void
 sch_arc_class_init(gpointer g_class, gpointer g_class_data)
 {
@@ -115,8 +89,6 @@ sch_arc_class_init(gpointer g_class, gpointer g_class_data)
     object_class->get_property = sch_arc_get_property;
     object_class->set_property = sch_arc_set_property;
 
-    klasse->parent.bounds    = sch_arc_bounds;
-    klasse->parent.draw      = sch_arc_draw;
     klasse->parent.transform = sch_arc_transform;
     klasse->parent.translate = sch_arc_translate;
     klasse->parent.write     = sch_arc_write;
@@ -275,12 +247,6 @@ sch_arc_class_init(gpointer g_class, gpointer g_class_data)
             G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
-}
-
-static void
-sch_arc_draw(SchShape *shape, SchDrafter *drafter)
-{
-    sch_drafter_draw_arc(drafter, SCH_ARC(shape));
 }
 
 static void
@@ -487,8 +453,8 @@ sch_arc_new(const SchConfig *config)
 {
     return SCH_ARC(g_object_new(
         SCH_TYPE_ARC,
-        "color", sch_config_get_graphic_color(config),
-        "width", sch_config_get_line_width(config),
+        "color",      sch_config_get_graphic_color(config),
+        "line-width", sch_config_get_line_width(config),
         NULL
         ));
 }

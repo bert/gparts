@@ -244,7 +244,7 @@ SCM_DEFINE(print_color_map, "print-color-map", 0, 1, 0, (SCM a), "")
     {
         if (a == SCM_UNDEFINED)
         {
-            /* TODO */
+            /*! \todo */
 
             b = SCM_BOOL_F;
         }
@@ -355,8 +355,8 @@ scmcfg_config_load(void)
     scm_with_guile(scmcfg_config_load_inner, NULL);
 }
 
-/* TODO Refactor this function */
-/* TODO Make exception handler only catch file not found */
+/*! \todo Refactor this function */
+/*! \todo Make exception handler only catch file not found */
 
 static void*
 scmcfg_config_load_inner(void* data)

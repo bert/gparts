@@ -52,14 +52,8 @@ struct _SchPinPrivate
     gint     pin_end;
 };
 
-static gboolean
-sch_pin_bounds(SchShape *shape, SchDrafter *drafter, GeomBounds *bounds);
-
 static void
 sch_pin_class_init(gpointer g_class, gpointer g_class_data);
-
-static void
-sch_pin_draw(SchShape *shape, SchDrafter *drafter);
 
 static void
 sch_pin_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
@@ -81,27 +75,6 @@ sch_pin_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, 
 
 
 
-static gboolean
-sch_pin_bounds(SchShape *shape, SchDrafter *drafter, GeomBounds *bounds)
-{
-    SchPinPrivate *privat = SCH_PIN_GET_PRIVATE(shape);
-    gboolean success = FALSE;
-
-    if (privat != NULL)
-    {
-        GeomBounds line_bounds;
-
-        geom_bounds_init(&line_bounds);
-        geom_line_bounds(&(privat->line), &line_bounds);
-        geom_bounds_expand(&line_bounds, &line_bounds, 10);
-        geom_bounds_union(bounds, bounds, &line_bounds);
-
-        success = TRUE;
-    }
-
-    return success;
-}
-
 static void
 sch_pin_class_init(gpointer g_class, gpointer g_class_data)
 {
@@ -113,8 +86,6 @@ sch_pin_class_init(gpointer g_class, gpointer g_class_data)
     object_class->get_property = sch_pin_get_property;
     object_class->set_property = sch_pin_set_property;
 
-    klasse->parent.bounds    = sch_pin_bounds;
-    klasse->parent.draw      = sch_pin_draw;
     klasse->parent.rotate    = sch_pin_rotate;
     klasse->parent.transform = sch_pin_transform;
     klasse->parent.translate = sch_pin_translate;
@@ -217,12 +188,6 @@ sch_pin_class_init(gpointer g_class, gpointer g_class_data)
             G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
-}
-
-static void
-sch_pin_draw(SchShape *shape, SchDrafter *drafter)
-{
-    sch_drafter_draw_pin(drafter, SCH_PIN(shape));
 }
 
 static void

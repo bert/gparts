@@ -30,6 +30,15 @@
 #include "misc-object.h"
 
 #include "schgui-drawing-cfg.h"
+
+#include "schgui-cairo-draw-item.h"
+
+#include "schgui-cairo-arc.h"
+#include "schgui-cairo-box.h"
+#include "schgui-cairo-circle.h"
+#include "schgui-cairo-line.h"
+
+#include "schgui-cairo-factory.h"
 #include "schgui-cairo-drafter.h"
 
 #define SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCHGUI_TYPE_CAIRO_DRAFTER,SchGUICairoDrafterPrivate))
@@ -75,31 +84,6 @@ schgui_cairo_drafter_dispose(GObject *object);
 static void
 schgui_cairo_drafter_draw_arc(SchGUICairoDrafter *drafter, const struct _SchArc *shape);
 
-
-static void
-schgui_cairo_drafter_draw_box(SchGUICairoDrafter *drafter, const struct _SchBox *shape);
-
-static void
-schgui_cairo_drafter_draw_bus(SchGUICairoDrafter *drafter, const struct _SchBus *shape);
-
-static void
-schgui_cairo_drafter_draw_circle(SchGUICairoDrafter *drafter, const struct _SchCircle *shape);
-
-static void
-schgui_cairo_drafter_draw_component(SchGUICairoDrafter *drafter, const struct _SchComponent *shape);
-
-static void
-schgui_cairo_drafter_draw_line(SchGUICairoDrafter *drafter, const struct _SchLine *shape);
-
-static void
-schgui_cairo_drafter_draw_net(SchGUICairoDrafter *drafter, const struct _SchNet *shape);
-
-static void
-schgui_cairo_drafter_draw_pin(SchGUICairoDrafter *drafter, const struct _SchPin *shape);
-
-static void
-schgui_cairo_drafter_draw_text(SchGUICairoDrafter *drafter, const struct _SchText *shape);
-
 static void
 schgui_cairo_drafter_finalize(GObject *object);
 
@@ -108,6 +92,60 @@ schgui_cairo_drafter_get_property(GObject *object, guint property_id, GValue *va
 
 static void
 schgui_cairo_drafter_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
+
+static void 
+schgui_cairo_drafter_shape_bounds1(SchDrafter *drafter, SchShape *shape, GeomBounds *bounds);
+
+static void
+schgui_cairo_drafter_draw_shape(SchShape *shape, SchGUICairoDrafter *drafter);
+
+    struct user_data
+    {
+        SchDrafter *drafter;
+        GeomBounds *bounds;
+    };
+
+
+static void
+adapter(SchShape *shape, struct user_data *user_data)
+{
+    schgui_cairo_drafter_shape_bounds1(user_data->drafter, shape, user_data->bounds);
+}
+
+static void 
+schgui_cairo_drafter_drawing_bounds1(SchDrafter *drafter, SchDrawing *drawing, GeomBounds *bounds)
+{
+    struct user_data user_data;
+
+    user_data.drafter = drafter;
+    user_data.bounds  = bounds;
+
+    geom_bounds_init(bounds);
+
+    sch_drawing_foreach(drawing, adapter, &user_data);
+}
+
+
+static void 
+schgui_cairo_drafter_shape_bounds1(SchDrafter *drafter, SchShape *shape, GeomBounds *bounds)
+{
+    SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
+
+    if (privat != NULL)
+    {
+        SchGUICairoDrawItem *item = schgui_cairo_factory_create_item(NULL, shape, privat->config);
+
+        if (item != NULL)
+        {
+            schgui_cairo_draw_item_bounds(item, privat->cairo, bounds);
+
+            g_object_unref(item);
+        }
+    }
+}
+
+
+
 
 
 static void
@@ -153,15 +191,15 @@ schgui_cairo_drafter_drafter_init(gpointer g_iface, gpointer g_iface_data)
 {
     SchDrafterInterface *iface = (SchDrafterInterface*) g_iface;
 
-    iface->draw_arc       = schgui_cairo_drafter_draw_arc;
-    iface->draw_box       = schgui_cairo_drafter_draw_box;
-    iface->draw_bus       = schgui_cairo_drafter_draw_bus;  
-    iface->draw_circle    = schgui_cairo_drafter_draw_circle;
-    iface->draw_component = schgui_cairo_drafter_draw_component;
-    iface->draw_line      = schgui_cairo_drafter_draw_line;
-    iface->draw_net       = schgui_cairo_drafter_draw_net; 
-    iface->draw_pin       = schgui_cairo_drafter_draw_pin; 
-    iface->draw_text      = schgui_cairo_drafter_draw_text;
+//    iface->draw_arc       = schgui_cairo_drafter_draw_arc;
+//    iface->draw_box       = schgui_cairo_drafter_draw_box;
+//    iface->draw_bus       = schgui_cairo_drafter_draw_bus;  
+//    iface->draw_circle    = schgui_cairo_drafter_draw_circle;
+//    iface->draw_component = schgui_cairo_drafter_draw_component;
+//    iface->draw_line      = schgui_cairo_drafter_draw_line;
+//    iface->draw_net       = schgui_cairo_drafter_draw_net; 
+//    iface->draw_pin       = schgui_cairo_drafter_draw_pin; 
+//    iface->draw_text      = schgui_cairo_drafter_draw_text;
 
     iface->component_bounds = schgui_cairo_drafter_component_bounds;
     iface->text_bounds      = schgui_cairo_drafter_text_bounds;
@@ -181,7 +219,8 @@ schgui_cairo_drafter_component_bounds(SchGUICairoDrafter *drafter, SchComponent 
         int        mirror;
         int        x;
         int        y;
-        sch_drawing_bounds(drawing, drafter, bounds);
+
+        schgui_cairo_drafter_drawing_bounds1(drafter, drawing, bounds);
 
         sch_component_get_orientation(shape, &angle, &mirror);
 
@@ -224,224 +263,6 @@ schgui_cairo_drafter_dispose(GObject *object)
     misc_object_chain_dispose(object);
 }
 
-static void
-schgui_cairo_drafter_draw_arc(SchGUICairoDrafter *drafter, const struct _SchArc *shape)
-{
-    SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
-
-    if ((privat != NULL) && (privat->cairo != NULL) && (shape != NULL))
-    {
-        GeomArc arc;
-        int     index;
-        int     shape_width;
-        double  output_width;
-        int     enabled;
-        SchGUIDrawingCfgColor color;
-
-        sch_arc_get_color(shape, &index);
-
-        enabled = schgui_drawing_cfg_get_color(privat->config, index, &color);
-
-        if (enabled)
-        {
-            cairo_set_source_rgb(privat->cairo, color.red, color.green, color.blue);
-
-            sch_arc_get_line_width(shape, &shape_width);
-            schgui_drawing_cfg_get_output_line_width(privat->config, shape_width, &output_width);
-            cairo_set_line_width(privat->cairo, output_width);
-
-            sch_arc_get_arc(shape, &arc);
-
-            cairo_new_sub_path(privat->cairo);
-
-            if (arc.sweep >= 0)
-            {
-                cairo_arc(privat->cairo, arc.center_x, arc.center_y, arc.radius, M_PI*arc.start/180, M_PI*(arc.start+arc.sweep)/180);
-            }
-            else
-            {
-                cairo_arc_negative(privat->cairo, arc.center_x, arc.center_y, arc.radius, M_PI*arc.start/180, M_PI*(arc.start+arc.sweep)/180);
-            }
-
-            cairo_stroke(privat->cairo);
-        }
-    }
-}
-
-static void
-schgui_cairo_drafter_draw_box(SchGUICairoDrafter *drafter, const struct _SchBox *shape)
-{
-    SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
-
-    if ((privat != NULL) && (privat->cairo != NULL) && (shape != NULL))
-    {
-        GeomBox      box;
-        int          index;
-        int          shape_width;
-        double       output_width;
-        SchLineStyle line_style;
-        SchFillStyle fill_style;
-        SchGUIDrawingCfgColor color;
-        int          enabled;
-
-        sch_box_get_color(shape, &index);
-
-        enabled = schgui_drawing_cfg_get_color(privat->config, index, &color);
-
-        if (enabled)
-        {
-            cairo_set_source_rgb(privat->cairo, color.red, color.green, color.blue);
-
-            sch_box_get_fill_style(shape, &fill_style);
-
-            sch_box_get_line_width(shape, &shape_width);
-            schgui_drawing_cfg_get_output_line_width(privat->config, shape_width, &output_width);
-            cairo_set_line_width(privat->cairo, output_width);
-
-            sch_box_get_box(shape, &box);
-
-            cairo_move_to(privat->cairo, box.corner_x, box.corner_y);
-            cairo_line_to(privat->cairo, box.corner_x + box.width, box.corner_y);
-            cairo_line_to(privat->cairo, box.corner_x + box.width, box.corner_y + box.height);
-            cairo_line_to(privat->cairo, box.corner_x, box.corner_y + box.height);
-            cairo_close_path(privat->cairo);
-
-            if (fill_style.type == SCH_FILL_STYLE_FILL_TYPE_SOLID)
-            {
-                cairo_fill_preserve(privat->cairo);
-            }
-
-            cairo_stroke(privat->cairo);
-        }
-    }
-}
-
-static void
-schgui_cairo_drafter_draw_bus(SchGUICairoDrafter *drafter, const struct _SchBus *shape)
-{
-    SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
-
-    if ((privat != NULL) && (privat->cairo != NULL) && (shape != NULL))
-    {
-        GeomLine line;
-        double   width;
-        SchGUIDrawingCfgColor color;
-        int          enabled;
-
-        enabled = schgui_drawing_cfg_get_color(privat->config, 10, &color);
-
-        if (enabled)
-        {
-            cairo_set_source_rgb(privat->cairo, color.red, color.green, color.blue);
-
-            schgui_drawing_cfg_get_bus_line_width(privat->config, &width);
-            cairo_set_line_width(privat->cairo, width);
-
-            sch_bus_get_line(shape, &line);
-
-            cairo_move_to(privat->cairo, line.x[0], line.y[0]);
-            cairo_line_to(privat->cairo, line.x[1], line.y[1]);
-            cairo_stroke(privat->cairo);
-        }
-    }
-}
-
-static void
-schgui_cairo_drafter_draw_circle(SchGUICairoDrafter *drafter, const struct _SchCircle *shape)
-{
-    SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
-
-    if ((privat != NULL) && (privat->cairo != NULL) && (shape != NULL))
-    {
-        GeomCircle   circle;
-        SchFillStyle fill_style;
-        int          index;
-        double       output_width;
-        int          shape_width;
-        SchGUIDrawingCfgColor color;
-        int          enabled;
-
-        sch_circle_get_color(shape, &index);
-
-        enabled = schgui_drawing_cfg_get_color(privat->config, index, &color);
-
-        if (enabled)
-        {
-            cairo_set_source_rgb(privat->cairo, color.red, color.green, color.blue);
-
-            sch_circle_get_fill_style(shape, &fill_style);
-
-            sch_circle_get_line_width(shape, &shape_width);
-            schgui_drawing_cfg_get_output_line_width(privat->config, shape_width, &output_width);
-            cairo_set_line_width(privat->cairo, output_width);
-
-            sch_circle_get_circle(shape, &circle);
-
-            cairo_new_sub_path(privat->cairo);
-            cairo_arc(privat->cairo, circle.center_x, circle.center_y, circle.radius, 0, 2 * M_PI);
-
-            if (fill_style.type == SCH_FILL_STYLE_FILL_TYPE_SOLID)
-            {
-                cairo_fill_preserve(privat->cairo);
-            }
-
-            cairo_stroke(privat->cairo);
-        }
-    }
-}
-
-static void
-schgui_cairo_drafter_draw_component(SchGUICairoDrafter *drafter, const struct _SchComponent *shape)
-{
-    SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
-
-    if ((privat != NULL) && (privat->cairo != NULL) && (shape != NULL))
-    {
-        SchDrawing *drawing;
-
-        sch_component_get_drawing(shape, &drawing);
-
-        if (drawing != NULL)
-        {
-            int angle;
-            int mirror;
-            int x;
-            int y;
-
-            GeomBounds bounds;
-
-            schgui_cairo_drafter_component_bounds(drafter, shape, &bounds);
-
-            cairo_set_source_rgb(privat->cairo, 1.0, 1.0, 0.0);
-            cairo_move_to(privat->cairo, bounds.min_x, bounds.min_y);
-            cairo_line_to(privat->cairo, bounds.max_x, bounds.min_y);
-            cairo_line_to(privat->cairo, bounds.max_x, bounds.max_y);
-            cairo_line_to(privat->cairo, bounds.min_x, bounds.max_y);
-            cairo_close_path(privat->cairo);
-            cairo_stroke(privat->cairo);
-            
-
-
-            cairo_save(privat->cairo);
-
-
-            sch_component_get_insertion_point(shape, &x, &y);
-            cairo_translate(privat->cairo, x, y);
-
-            sch_component_get_orientation(shape, &angle, &mirror);
-            cairo_rotate(privat->cairo, angle * M_PI / 180);
-            if (mirror)
-            {
-                cairo_scale(privat->cairo, -1, 1);
-            }
-
-            sch_drawing_draw(drawing, drafter);
-
-            cairo_restore(privat->cairo);
-        }
-    }
-}
- 
 void
 schgui_cairo_drafter_draw_grid(SchGUICairoDrafter *drafter)
 {
@@ -486,101 +307,6 @@ schgui_cairo_drafter_draw_grid(SchGUICairoDrafter *drafter)
         }
     }
 #endif
-}
-
-static void
-schgui_cairo_drafter_draw_line(SchGUICairoDrafter *drafter, const struct _SchLine *shape)
-{
-    SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
-
-    if ((privat != NULL) && (privat->cairo != NULL) && (shape != NULL))
-    {
-        int      index;
-        GeomLine line;
-        int     shape_width;
-        double  output_width;
-        SchGUIDrawingCfgColor color;
-        int          enabled;
-
-        sch_line_get_color(shape, &index);
-
-        enabled = schgui_drawing_cfg_get_color(privat->config, index, &color);
-
-        if (enabled)
-        {
-            cairo_set_source_rgb(privat->cairo, color.red, color.green, color.blue);
-
-            sch_line_get_line_width(shape, &shape_width);
-            schgui_drawing_cfg_get_output_line_width(privat->config, shape_width, &output_width);
-            cairo_set_line_width(privat->cairo, output_width);
-
-            sch_line_get_line(shape, &line);
-
-            cairo_move_to(privat->cairo, line.x[0], line.y[0]);
-            cairo_line_to(privat->cairo, line.x[1], line.y[1]);
-            cairo_stroke(privat->cairo);
-        }
-    }
-}
-
-static void
-schgui_cairo_drafter_draw_net(SchGUICairoDrafter *drafter, const struct _SchNet *shape)
-{
-    SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
-
-    if ((privat != NULL) && (privat->cairo != NULL) && (shape != NULL))
-    {
-        SchGUIDrawingCfgColor color;
-        int                   enabled;
-        GeomLine line;
-        double   width;
-
-        enabled = schgui_drawing_cfg_get_color(privat->config, 4, &color);
-
-        if (enabled)
-        {
-            cairo_set_source_rgb(privat->cairo, color.red, color.green, color.blue);
-
-            schgui_drawing_cfg_get_net_line_width(privat->config, &width);
-            cairo_set_line_width(privat->cairo, width);
-
-            sch_net_get_line(shape, &line);
-
-            cairo_move_to(privat->cairo, line.x[0], line.y[0]);
-            cairo_line_to(privat->cairo, line.x[1], line.y[1]);
-            cairo_stroke(privat->cairo);
-        }
-    }
-}
-
-static void
-schgui_cairo_drafter_draw_pin(SchGUICairoDrafter *drafter, const struct _SchPin *shape)
-{
-    SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
-
-    if ((privat != NULL) && (privat->cairo != NULL) && (shape != NULL))
-    {
-        SchGUIDrawingCfgColor color;
-        int                   enabled;
-        GeomLine              line;
-        double                width;
-
-        enabled = schgui_drawing_cfg_get_color(privat->config, 1, &color);
-
-        if (enabled)
-        {
-            cairo_set_source_rgb(privat->cairo, color.red, color.green, color.blue);
-
-            schgui_drawing_cfg_get_pin_line_width(privat->config, &width);
-            cairo_set_line_width(privat->cairo, width);
-
-            sch_pin_get_line(shape, &line);
-
-            cairo_move_to(privat->cairo, line.x[0], line.y[0]);
-            cairo_line_to(privat->cairo, line.x[1], line.y[1]);
-            cairo_stroke(privat->cairo);
-        }
-    }
 }
 
 
@@ -664,27 +390,6 @@ schgui_cairo_drafter_text_bounds(SchGUICairoDrafter *drafter, SchText *text, Geo
 
 }
 
-
-#if 0
-static void
-schgui_cairo_drafter_draw_pin(SchGUICairoDrafter *drafter, const struct _SchPin *shape)
-{
-    SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
-
-    if ((privat != NULL) && (privat->cairo != NULL) && (shape != NULL))
-    {
-        GeomLine line;
-
-        cairo_set_line_width(privat->cairo, 10);  /* FIXME make pin width configurable */
-
-        sch_pin_get_line(shape, &line);
-
-        cairo_move_to(privat->cairo, line.x[0], line.y[0]);
-        cairo_line_to(privat->cairo, line.x[1], line.y[1]);
-        cairo_stroke(privat->cairo);
-    }
-}
-#endif
 
 
 static void
@@ -861,6 +566,28 @@ schgui_cairo_drafter_draw_text(SchGUICairoDrafter *drafter, const struct _SchTex
  
 }
 
+
+
+static void
+schgui_cairo_drafter_draw_shape(SchShape *shape, SchGUICairoDrafter *drafter)
+{
+    SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
+
+    if (privat != NULL)
+    {
+        SchGUICairoDrawItem *item = schgui_cairo_factory_create_item(NULL, shape, privat->config);
+
+        if (item != NULL)
+        {
+            schgui_cairo_draw_item_draw(item, privat->cairo);
+
+            g_object_unref(item);
+        }
+    }
+
+}
+
+
 void
 schgui_cairo_drafter_draw_to_widget(SchGUICairoDrafter *drafter, GtkWidget *widget)
 {
@@ -885,7 +612,8 @@ schgui_cairo_drafter_draw_to_widget(SchGUICairoDrafter *drafter, GtkWidget *widg
 
             //    schgui_cairo_drafter_draw_grid(privat->drafter);
 
-        sch_drawing_draw(privat->drawing, SCH_DRAFTER(drafter));
+        //sch_drawing_draw(privat->drawing, SCH_DRAFTER(drafter));
+        sch_drawing_foreach(privat->drawing, schgui_cairo_drafter_draw_shape, drafter);
         
         cairo_destroy(privat->cairo);
         privat->cairo = NULL;
@@ -1010,7 +738,7 @@ schgui_cairo_drafter_set_config(SchGUICairoDrafter *drafter, SchGUIDrawingCfg *c
     {
         if (privat->config != NULL)
         {
-            /* \todo unregister signals to update */
+            /*! \todo unregister signals to update */
 
             g_object_unref(privat->config);
         }
@@ -1021,7 +749,7 @@ schgui_cairo_drafter_set_config(SchGUICairoDrafter *drafter, SchGUIDrawingCfg *c
         {
             g_object_ref(privat->config);
 
-            /* \todo register signals to update */
+            /*! \todo register signals to update */
         }
     }
 }
@@ -1035,7 +763,7 @@ schgui_cairo_drafter_set_drawing(SchGUICairoDrafter *drafter, SchDrawing *drawin
     {
         if (privat->drawing != NULL)
         {
-            /* \todo unregister signals to update */
+            /*! \todo unregister signals to update */
 
             g_object_unref(privat->drawing);
         }
@@ -1046,7 +774,7 @@ schgui_cairo_drafter_set_drawing(SchGUICairoDrafter *drafter, SchDrawing *drawin
         {
             g_object_ref(privat->drawing);
 
-            /* \todo register signals to update */
+            /*! \todo register signals to update */
         }
     }
 }
@@ -1086,7 +814,7 @@ schgui_cairo_drafter_zoom_extents(SchGUICairoDrafter *drafter, GtkWidget *widget
 
            // schgui_cairo_drafter_begin_drawing(privat->drafter, widget);
 
-            sch_drawing_bounds(privat->drawing, drafter, &bounds);
+            schgui_cairo_drafter_drawing_bounds1(drafter, privat->drawing, &bounds);
 
             //g_debug("Min X = %d", bounds.min_x);
             //g_debug("Min Y = %d", bounds.min_y);

@@ -21,6 +21,11 @@
 /*! \file sch-drafter.h
  */
 
+#define SCH_TYPE_DRAFTER (sch_drafter_get_type())
+#define SCH_DRAFTER(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),SCH_TYPE_DRAFTER,SchDrafter))
+#define SCH_IS_DRAFTER(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj),SCH_TYPE_DRAFTER))
+#define SCH_DRAFTER_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE((obj),SCH_TYPE_DRAFTER,SchDrafterInterface))
+
 struct _SchDrafterInterface
 {
     GTypeInterface parent;

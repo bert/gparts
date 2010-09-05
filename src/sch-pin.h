@@ -28,9 +28,6 @@
 #define SCH_IS_PIN_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCH_TYPE_PIN))
 #define SCH_PIN_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCH_TYPE_PIN,SchPinClass))
 
-typedef struct _SchPin SchPin;
-typedef struct _SchPinClass SchPinClass;
-
 struct _SchPin
 {
     SchShape parent;

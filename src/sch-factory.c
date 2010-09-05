@@ -26,7 +26,7 @@
 
 #include "misc-object.h"
 
-#include "sch-factory.h"
+#include "sch.h"
 
 #define SCH_FACTORY_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_FACTORY,SchFactoryPrivate))
 

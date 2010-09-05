@@ -52,14 +52,8 @@ struct _SchNetPrivate
     gint     net_end;
 };
 
-static gboolean
-sch_net_bounds(SchShape *shape, SchDrafter *drafter, GeomBounds *bounds);
-
 static void
 sch_net_class_init(gpointer g_class, gpointer g_class_data);
-
-static void
-sch_net_draw(SchShape *shape, SchDrafter *drafter);
 
 static void
 sch_net_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
@@ -70,26 +64,7 @@ sch_net_set_property(GObject *object, guint property_id, const GValue *value, GP
 static void
 sch_net_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error);
 
-static gboolean
-sch_net_bounds(SchShape *shape, SchDrafter *drafter, GeomBounds *bounds)
-{
-    SchNetPrivate *privat = SCH_NET_GET_PRIVATE(shape);
-    gboolean success = FALSE;
 
-    if (privat != NULL)
-    {
-        GeomBounds line_bounds;
-
-        geom_bounds_init(&line_bounds);
-        geom_line_bounds(&(privat->line), &line_bounds);
-        geom_bounds_expand(&line_bounds, &line_bounds, 10);
-        geom_bounds_union(bounds, bounds, &line_bounds);
-
-        success = TRUE;
-    }
-
-    return success;
-}
 
 static void
 sch_net_class_init(gpointer g_class, gpointer g_class_data)
@@ -102,8 +77,6 @@ sch_net_class_init(gpointer g_class, gpointer g_class_data)
     object_class->get_property = sch_net_get_property;
     object_class->set_property = sch_net_set_property;
 
-    klasse->parent.bounds = sch_net_bounds;
-    klasse->parent.draw   = sch_net_draw;
     klasse->parent.write  = sch_net_write;
 
     g_object_class_install_property(
@@ -203,12 +176,6 @@ sch_net_class_init(gpointer g_class, gpointer g_class_data)
             G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
-}
-
-static void
-sch_net_draw(SchShape *shape, SchDrafter *drafter)
-{
-    sch_drafter_draw_net(drafter, SCH_NET(shape));
 }
 
 static void

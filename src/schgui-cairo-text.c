@@ -1,0 +1,259 @@
+/* gEDA - GPL Electronic Design Automation
+ * gparts - gEDA Parts Manager
+ * Copyright (C) 2010 Edward C. Hennessy
+ * Copyright (C) 2010 gEDA Contributors (see ChangeLog for details)
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
+ */
+
+/*! \file schgui-cairo-arc.c
+ */
+
+#include <math.h>
+
+#include <glib.h>
+#include <glib-object.h>
+#include <gtk/gtk.h>
+ 
+#include "sch.h"
+
+#include "schgui-drawing-cfg.h"
+
+#include "schgui-cairo-draw-item.h"
+
+#include "schgui-cairo-text.h"
+
+#define SCHGUI_CAIRO_TEXT_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCHGUI_TYPE_CAIRO_TEXT,SchGUICairoTextPrivate))
+
+typedef struct _SchGUICairoTextPrivate SchGUICairoTextPrivate;
+
+struct _SchGUICairoTextPrivate
+{
+    double red;
+    double green;
+    double blue;
+    double alpha;
+
+    double x;
+    double y;
+
+    double angle;
+
+    char   *markup;
+
+    PangoFontDescription *font_desc;
+
+        int alignment;
+
+    int    visible;
+};
+
+static void
+schgui_cairo_text_bounds(SchGUICairoDrawItem *item, cairo_t *cairo, GeomBounds *bounds);
+
+static void
+schgui_cairo_text_class_init(gpointer g_class, gpointer g_class_data);
+
+static void
+schgui_cairo_text_draw(SchGUICairoText *shape, cairo_t *cairo);
+
+
+
+static void
+schgui_cairo_text_bounds(SchGUICairoDrawItem *item, cairo_t *cairo, GeomBounds *bounds)
+{
+    if (bounds != NULL)
+    {
+        SchGUICairoTextPrivate *privat = SCHGUI_CAIRO_TEXT_GET_PRIVATE(item);
+
+        if (privat != NULL)
+        {
+        }
+    }
+
+}
+
+static void
+schgui_cairo_text_class_init(gpointer g_class, gpointer g_class_data)
+{
+    SchGUICairoTextClass *klasse = SCHGUI_CAIRO_TEXT_CLASS(g_class);
+
+    g_type_class_add_private(G_OBJECT_CLASS(g_class), sizeof(SchGUICairoTextPrivate));
+
+    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->bounds = schgui_cairo_text_bounds;
+    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->draw   = schgui_cairo_text_draw;
+}
+
+static void
+schgui_cairo_text_draw(SchGUICairoText *shape, cairo_t *cairo)
+{
+    if (cairo != NULL)
+    {
+        SchGUICairoTextPrivate *privat = SCHGUI_CAIRO_TEXT_GET_PRIVATE(shape);
+
+        if (privat != NULL)
+        {
+            PangoFontMetrics *metrics;
+            PangoLayout *layout = pango_cairo_create_layout(cairo);
+
+            if (layout != NULL)
+            {
+        PangoLayoutIter *iter;
+                cairo_save(cairo);
+
+                cairo_set_source_rgba(cairo, privat->red, privat->green, privat->blue, privat->alpha);
+
+
+                pango_cairo_context_set_resolution(pango_layout_get_context(layout), 936);
+                pango_layout_set_spacing(layout, 40000);
+                pango_layout_set_font_description(layout, privat->font_desc);
+
+            PangoFontMetrics *metrics = pango_context_get_metrics(
+                pango_layout_get_context(layout),
+                privat->font_desc,
+                NULL
+                );
+
+
+                pango_layout_set_markup(layout, privat->markup, -1);
+
+            cairo_rotate(cairo, privat->angle);
+                cairo_move_to(cairo, privat->x, privat->y);
+                cairo_scale(cairo, 1, -1);
+
+#if 1
+            switch (privat->alignment)
+            {
+                case 2:
+                case 5:
+                case 8: 
+                /* upper */
+                //cairo_rel_move_to(privat->cairo, 0, -pango_font_metrics_get_ascent(metrics)/(privat->zoom * PANGO_SCALE));
+                //cairo_rel_move_to(privat->cairo, 0, height);
+                break;
+
+                case 1:
+                case 4:
+                case 7:
+                    /* center */
+                    //cairo_rel_move_to(privat->cairo, 0, -pango_font_metrics_get_ascent(metrics)/(privat->zoom * PANGO_SCALE));
+                    //cairo_rel_move_to(privat->cairo, 0, height);
+                    //cairo_rel_move_to(privat->cairo, 0, -pango_font_metrics_get_ascent(metrics) * sch_multiline_lines(multiline)/(2 * privat->zoom * PANGO_SCALE));
+                    //cairo_rel_move_to(privat->cairo, 0, -pango_font_metrics_get_descent(metrics) * (sch_multiline_lines(multiline) - 1)/(2 * privat->zoom * PANGO_SCALE));
+                    break;
+
+                case 0:
+                case 3:
+                case 6:
+                default:
+                    /* lower */
+                    //cairo_rel_move_to(privat->cairo, 0, -pango_font_metrics_get_ascent(metrics) * sch_multiline_lines(multiline)/(privat->zoom * PANGO_SCALE));
+                    //cairo_rel_move_to(privat->cairo, 0, -pango_font_metrics_get_descent(metrics) * (sch_multiline_lines(multiline)-1)/(privat->zoom * PANGO_SCALE));
+                    //cairo_rel_move_to(privat->cairo, 0, -pango_layout_get_spacing(layout) * (sch_multiline_lines(multiline)-1)/ PANGO_SCALE);
+                    iter = pango_layout_get_iter(layout);
+                    while (!pango_layout_iter_at_last_line(iter))
+                    {
+                        pango_layout_iter_next_line(iter);
+                    }
+                    cairo_rel_move_to(cairo, 0, -pango_layout_iter_get_baseline(iter) / PANGO_SCALE);
+                    pango_layout_iter_free(iter);
+            }
+#endif
+
+            pango_font_metrics_unref(metrics);
+
+                pango_cairo_show_layout(cairo, layout);
+
+                cairo_restore(cairo);
+
+                g_object_unref(layout);
+            }
+        }
+    }
+}
+
+GType
+schgui_cairo_text_get_type(void)
+{
+    static GType type = G_TYPE_INVALID;
+
+    if (type == G_TYPE_INVALID)
+    {
+        static const GTypeInfo tinfo = {
+            sizeof(SchGUICairoTextClass),    /* class_size */
+            NULL,                            /* base_init */
+            NULL,                            /* base_finalize */
+            schgui_cairo_text_class_init,    /* class_init */
+            NULL,                            /* class_finalize */
+            NULL,                            /* class_data */
+            sizeof(SchGUICairoText),         /* instance_size */
+            0,                               /* n_preallocs */
+            NULL,                            /* instance_init */
+            NULL                             /* value_table */
+            };
+
+        type = g_type_register_static(
+            SCHGUI_TYPE_CAIRO_DRAW_ITEM,
+            "SchGUICairoText",
+            &tinfo,
+            0
+            );
+    }
+
+    return type;
+}
+
+SchGUICairoText*
+schgui_cairo_text_new(const SchText *shape, SchGUIDrawingCfg *config)
+{
+    SchGUICairoText *item = SCHGUI_CAIRO_TEXT(g_object_new(SCHGUI_TYPE_CAIRO_TEXT, NULL));
+
+    SchGUICairoTextPrivate *privat = SCHGUI_CAIRO_TEXT_GET_PRIVATE(item);
+
+    if (privat != NULL)
+    {
+        SchGUIDrawingCfgColor color;
+        int                   index;
+        SchMultiline *multiline = sch_text_get_multiline(shape);
+        int                   show;
+
+        sch_text_get_color(shape, &index);
+
+        privat->visible = schgui_drawing_cfg_get_color(config, index, &color);
+
+        privat->red   = color.red;
+        privat->green = color.green;
+        privat->blue  = color.blue;
+        privat->alpha = privat->visible ? 1.0 : 0.0;
+
+        privat->x = sch_text_get_x(shape);
+        privat->y = sch_text_get_y(shape);
+
+        privat->font_desc = pango_font_description_from_string("Sans");
+
+        pango_font_description_set_size(privat->font_desc, PANGO_SCALE * sch_text_get_size(shape));
+
+        sch_text_get_show(shape, &show);
+        privat->markup = strdup(sch_multiline_peek_markup(multiline, show));
+
+
+        privat->alignment = sch_text_get_alignment(shape);
+
+        privat->angle = geom_angle_radians(sch_text_get_angle(shape));
+    }
+
+    return item;
+}
+

@@ -23,7 +23,7 @@
 
 /*! \brief Normalize an angle to the range of [0,360)
  *
- * \param [in] The angle in degrees
+ * \param [in] angle The angle in degrees
  * \return The normalized angle in the range of [0,360) degrees
  */
 int
@@ -31,7 +31,7 @@ geom_angle_normalize(int angle);
 
 /*! \brief Convert an angle from degrees to radians
  *
- * \param [in] The angle in degrees
+ * \param [in] angle The angle in degrees
  * \return The angle in radians 
  */
 double

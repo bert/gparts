@@ -754,7 +754,7 @@ process_embedded(FILE *file, SchDrawing *drawing)
                         object = process_object(file, token);
                         if (object != NULL)
                         {
-                            sch_drawing_add_shape(drawing, object);
+                            sch_drawing_append_shape(drawing, object);
                             g_object_unref(object);
                         }
                         //g_debug("Process object (end)");
@@ -1043,7 +1043,7 @@ read_file(SchDrawing *drawing, FILE *file, GError **error)
                     object = process_object(file, token);
                     if (object != NULL)
                     {
-                        sch_drawing_add_shape(drawing, object);
+                        sch_drawing_append_shape(drawing, object);
                     }
                     //g_debug("Process object (end)");
             }

@@ -36,9 +36,6 @@
 #define SCH_IS_CONFIG_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCH_TYPE_CONFIG))
 #define SCH_CONFIG_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCH_TYPE_CONFIG,SchConfigClass))
 
-typedef struct _SchConfig SchConfig;
-typedef struct _SchConfigClass SchConfigClass;
-
 struct _SchConfig
 {
     GObject parent;

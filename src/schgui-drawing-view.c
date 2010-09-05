@@ -74,6 +74,28 @@ schgui_drawing_view_expose_event_cb(GtkWidget *widget, GdkEventExpose *event, gp
 static void
 schgui_drawing_view_realize_cb(GtkWidget *widget, gpointer user_data);
 
+/**** Signal Handlers ****/
+
+static void
+schgui_drawing_view_bind_drawing(SchDrawing *drawing, SchGUIDrawingView *view);
+
+static void
+schgui_drawing_view_bind_shape(SchShape *shape, SchGUIDrawingView *view);
+
+static void
+schgui_drawing_view_unbind_drawing(SchDrawing *drawing, SchGUIDrawingView *view);
+
+static void
+schgui_drawing_view_unbind_shape(SchShape *shape, SchGUIDrawingView *view);
+
+
+
+static void
+schgui_drawing_view_append_shape(SchDrawing *drawing, SchShape *shape, SchGUIDrawingView *view)
+{
+//    g_debug("schgui_drawing_view_append_shape");
+}
+
 
 
 static void
@@ -121,6 +143,25 @@ schgui_drawing_view_class_init(gpointer g_class, gpointer g_class_data)
             G_PARAM_LAX_VALIDATION | G_PARAM_READABLE | G_PARAM_STATIC_STRINGS
             )
         );
+}
+
+
+
+static void
+schgui_drawing_view_bind_drawing(SchDrawing *drawing, SchGUIDrawingView *view)
+{
+//    g_debug("schgui_drawing_view_bind_drawing");
+
+    if (drawing != NULL)
+    {
+        sch_drawing_foreach(drawing, schgui_drawing_view_bind_shape, view);
+    }
+}
+
+static void
+schgui_drawing_view_bind_shape(SchShape *shape, SchGUIDrawingView *view)
+{
+//    g_debug("schgui_drawing_view_bind_shape");
 }
 
 static void
@@ -183,6 +224,13 @@ schgui_drawing_view_realize_cb(GtkWidget *widget, gpointer user_data)
     gtk_widget_modify_bg(widget, GTK_STATE_NORMAL, &color); 
 }
 
+/*! \brief
+ *
+ *
+ *
+ *
+ *
+ */
 static void
 schgui_drawing_view_expose_event_cb(GtkWidget *widget, GdkEventExpose *event, gpointer user_data)
 {
@@ -333,7 +381,7 @@ schgui_drawing_view_set_drawing(SchGUIDrawingView *widget, SchDrawing *drawing)
     {
         if (privat->drawing != NULL)
         {
-            /* \todo unregister signals to update */
+            schgui_drawing_view_unbind_drawing(drawing, widget);
 
             g_object_unref(privat->drawing);
         }
@@ -344,7 +392,7 @@ schgui_drawing_view_set_drawing(SchGUIDrawingView *widget, SchDrawing *drawing)
         {
             g_object_ref(privat->drawing);
 
-            /* \todo register signals to update */
+            schgui_drawing_view_bind_drawing(drawing, widget);
         }
 
         if (privat->drafter != NULL)
@@ -375,6 +423,24 @@ schgui_drawing_view_set_property(GObject *object, guint property_id, const GValu
             G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
     }
 }
+
+static void
+schgui_drawing_view_unbind_drawing(SchDrawing *drawing, SchGUIDrawingView *view)
+{
+//    g_debug("schgui_drawing_view_unbind_drawing");
+
+    if (drawing != NULL)
+    {
+        sch_drawing_foreach(drawing, schgui_drawing_view_unbind_shape, view);
+    }
+}
+
+static void
+schgui_drawing_view_unbind_shape(SchShape *shape, SchGUIDrawingView *view)
+{
+//    g_debug("schgui_drawing_view_unbind_shape");
+}
+
 
 void
 schgui_drawing_view_zoom_extents(SchGUIDrawingView *widget)

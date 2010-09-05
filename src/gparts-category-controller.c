@@ -81,7 +81,7 @@ gparts_category_controller_changed_cb(GtkTreeSelection *selection, GPartsCategor
 static void
 gparts_category_controller_database_controller_notify_cb(GPartsLoginCtrl *database, GParamSpec *pspec, GPartsCategoryController *controller);
 
-/* TODO Support this function */
+/* \todo Support this function */
 static void
 gparts_category_controller_show_cb(GtkWidget *widget, GPartsCategoryController *controller);
 

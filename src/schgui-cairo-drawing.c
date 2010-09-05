@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file sch-drawing.c
+/*! \file schgui-cairo-drawing.c
  */
 
 #include <glib.h>
@@ -27,49 +27,48 @@
 
 #include "misc-object.h"
 
-#include "sch.h"
+#include "schgui.h"
 
-#define SCH_DRAWING_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_DRAWING,SchDrawingPrivate))
+#define SCHGUI_CAIRO_DRAWING_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_DRAWING,SchGUIDrawingPrivate))
 
 enum
 {
-    SCH_DRAWING_FILE_FORMAT = 1,
+    SCHGUI_CAIRO_DRAWING_FILE_FORMAT = 1,
 };
 
-typedef struct _SchDrawingPrivate SchDrawingPrivate;
+typedef struct _SchGUIDrawingPrivate SchGUIDrawingPrivate;
 
-struct _SchDrawingPrivate
+struct _SchGUIDrawingPrivate
 {
-    SchFileFormat2 *file_format;
-    GSList         *shapes;
+    GSList *shapes;
 };
 
 static void
-sch_drawing_class_init(gpointer g_class, gpointer g_class_data);
+schgui_cairo_drawing_class_init(gpointer g_class, gpointer g_class_data);
 
 static void
-sch_drawing_dispose(GObject *object);
+schgui_cairo_drawing_dispose(GObject *object);
 
 static void
-sch_drawing_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
+schgui_cairo_drawing_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
 
 static void
-sch_drawing_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
+schgui_cairo_drawing_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
 
 static void
-sch_drawing_init(GTypeInstance *instance, gpointer g_class);
+schgui_cairo_drawing_init(GTypeInstance *instance, gpointer g_class);
 
 
 void
-sch_drawing_append_shape(SchDrawing *drawing, SchShape *shape)
+schgui_cairo_drawing_append_shape(SchGUIDrawing *drawing, SchShape *shape)
 {
     if (shape != NULL)
     {
-        SchDrawingPrivate *privat = SCH_DRAWING_GET_PRIVATE(drawing);
+        SchGUIDrawingPrivate *privat = SCHGUI_CAIRO_DRAWING_GET_PRIVATE(drawing);
 
         if (privat != NULL)
         {
-            SchDrawingClass *klasse = SCH_DRAWING_GET_CLASS(drawing);
+            SchGUIDrawingClass *klasse = SCHGUI_CAIRO_DRAWING_GET_CLASS(drawing);
 
             g_object_ref(shape);
 
@@ -79,7 +78,7 @@ sch_drawing_append_shape(SchDrawing *drawing, SchShape *shape)
             {
                 g_signal_emit(
                     drawing,
-                    klasse->signal_id[SCH_DRAWING_SIGNAL_APPEND],
+                    klasse->signal_id[SCHGUI_CAIRO_DRAWING_SIGNAL_APPEND],
                     0,
                     shape
                     );
@@ -88,22 +87,51 @@ sch_drawing_append_shape(SchDrawing *drawing, SchShape *shape)
     }
 }
 
+gboolean
+schgui_cairo_drawing_bounds(SchGUIDrawing *drawing, SchDrafter *drafter, GeomBounds *bounds)
+{
+    SchGUIDrawingPrivate *privat = SCHGUI_CAIRO_DRAWING_GET_PRIVATE(drawing);
+    gboolean success = FALSE;
+
+    if (privat != NULL)
+    {
+        GSList *node = privat->shapes;
+
+        success = TRUE;
+        geom_bounds_init(bounds);
+
+        while (node != NULL)
+        {
+            GeomBounds temp;
+
+            geom_bounds_init(&temp);
+            sch_shape_bounds((SchShape*) node->data, drafter, &temp);
+
+            geom_bounds_union(bounds, bounds, &temp);
+
+            node = g_slist_next(node);
+        }
+    }
+
+    return success;
+}
+
 static void
-sch_drawing_class_init(gpointer g_class, gpointer g_class_data)
+schgui_cairo_drawing_class_init(gpointer g_class, gpointer g_class_data)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(g_class);
-    SchDrawingClass *klasse = SCH_DRAWING_CLASS(g_class);
+    SchGUIDrawingClass *klasse = SCHGUI_CAIRO_DRAWING_CLASS(g_class);
 
-    g_type_class_add_private(g_class, sizeof(SchDrawingPrivate));
+    g_type_class_add_private(g_class, sizeof(SchGUIDrawingPrivate));
 
-    object_class->get_property = sch_drawing_get_property;
-    object_class->set_property = sch_drawing_set_property;
+    object_class->get_property = schgui_cairo_drawing_get_property;
+    object_class->set_property = schgui_cairo_drawing_set_property;
 
-    object_class->dispose = sch_drawing_dispose;
+    object_class->dispose = schgui_cairo_drawing_dispose;
 
     g_object_class_install_property(
         object_class,
-        SCH_DRAWING_FILE_FORMAT,
+        SCHGUI_CAIRO_DRAWING_FILE_FORMAT,
         g_param_spec_object(
             "file-format",
             "File Format",
@@ -113,7 +141,7 @@ sch_drawing_class_init(gpointer g_class, gpointer g_class_data)
             )
         );
 
-    klasse->signal_id[SCH_DRAWING_SIGNAL_APPEND] = g_signal_new(
+    klasse->signal_id[SCHGUI_CAIRO_DRAWING_SIGNAL_APPEND] = g_signal_new(
         "append",
         SCH_TYPE_DRAWING,
         G_SIGNAL_RUN_LAST,
@@ -126,7 +154,7 @@ sch_drawing_class_init(gpointer g_class, gpointer g_class_data)
         SCH_TYPE_SHAPE
         );
 
-    klasse->signal_id[SCH_DRAWING_SIGNAL_PREPEND] = g_signal_new(
+    klasse->signal_id[SCHGUI_CAIRO_DRAWING_SIGNAL_PREPEND] = g_signal_new(
         "prepend",
         SCH_TYPE_DRAWING,
         G_SIGNAL_RUN_LAST,
@@ -142,9 +170,9 @@ sch_drawing_class_init(gpointer g_class, gpointer g_class_data)
 }
 
 static void
-sch_drawing_dispose(GObject *object)
+schgui_cairo_drawing_dispose(GObject *object)
 {
-    SchDrawingPrivate *privat = SCH_DRAWING_GET_PRIVATE(object);
+    SchGUIDrawingPrivate *privat = SCHGUI_CAIRO_DRAWING_GET_PRIVATE(object);
 
     if (privat != NULL)
     {
@@ -170,11 +198,29 @@ sch_drawing_dispose(GObject *object)
 }
 
 void
-sch_drawing_foreach(SchDrawing *drawing, GFunc func, gpointer user_data)
+schgui_cairo_drawing_draw(SchGUIDrawing *drawing, SchDrafter *drafter)
+{
+    SchGUIDrawingPrivate *privat = SCHGUI_CAIRO_DRAWING_GET_PRIVATE(drawing);
+
+    if (privat != NULL)
+    {
+        GSList *node = privat->shapes;
+
+        while (node != NULL)
+        {
+            sch_shape_draw(SCH_SHAPE(node->data), drafter);
+
+            node = g_slist_next(node);
+        }
+    }
+}
+
+void
+schgui_cairo_drawing_foreach(SchGUIDrawing *drawing, GFunc func, gpointer user_data)
 {
     if (func != NULL)
     {
-        SchDrawingPrivate *privat = SCH_DRAWING_GET_PRIVATE(drawing);
+        SchGUIDrawingPrivate *privat = SCHGUI_CAIRO_DRAWING_GET_PRIVATE(drawing);
 
         if (privat != NULL)
         {
@@ -184,15 +230,15 @@ sch_drawing_foreach(SchDrawing *drawing, GFunc func, gpointer user_data)
 }
 
 void
-sch_drawing_prepend_shape(SchDrawing *drawing, SchShape *shape)
+schgui_cairo_drawing_prepend_shape(SchGUIDrawing *drawing, SchShape *shape)
 {
     if (shape != NULL)
     {
-        SchDrawingPrivate *privat = SCH_DRAWING_GET_PRIVATE(drawing);
+        SchGUIDrawingPrivate *privat = SCHGUI_CAIRO_DRAWING_GET_PRIVATE(drawing);
 
         if (privat != NULL)
         {
-            SchDrawingClass *klasse = SCH_DRAWING_GET_CLASS(drawing);
+            SchGUIDrawingClass *klasse = SCHGUI_CAIRO_DRAWING_GET_CLASS(drawing);
 
             g_object_ref(shape);
 
@@ -202,7 +248,7 @@ sch_drawing_prepend_shape(SchDrawing *drawing, SchShape *shape)
             {
                 g_signal_emit(
                     drawing,
-                    klasse->signal_id[SCH_DRAWING_SIGNAL_PREPEND],
+                    klasse->signal_id[SCHGUI_CAIRO_DRAWING_SIGNAL_PREPEND],
                     0,
                     shape
                     );
@@ -212,15 +258,15 @@ sch_drawing_prepend_shape(SchDrawing *drawing, SchShape *shape)
 }
 
 static void
-sch_drawing_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
+schgui_cairo_drawing_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
 {
-    SchDrawingPrivate *privat = SCH_DRAWING_GET_PRIVATE(object);
+    SchGUIDrawingPrivate *privat = SCHGUI_CAIRO_DRAWING_GET_PRIVATE(object);
 
     if (privat != NULL)
     {
         switch (property_id)
         {
-            case SCH_DRAWING_FILE_FORMAT:
+            case SCHGUI_CAIRO_DRAWING_FILE_FORMAT:
                 g_value_set_object(value, privat->file_format);
                 break;
 
@@ -231,28 +277,28 @@ sch_drawing_get_property(GObject *object, guint property_id, GValue *value, GPar
 }
 
 GType
-sch_drawing_get_type(void)
+schgui_cairo_drawing_get_type(void)
 {
     static GType type = G_TYPE_INVALID;
 
     if (type == G_TYPE_INVALID)
     {
         static const GTypeInfo tinfo = {
-            sizeof(SchDrawingClass),    /* class_size */
+            sizeof(SchGUIDrawingClass),    /* class_size */
             NULL,                       /* base_init */
             NULL,                       /* base_finalize */
-            sch_drawing_class_init,     /* class_init */
+            schgui_cairo_drawing_class_init,     /* class_init */
             NULL,                       /* class_finalize */
             NULL,                       /* class_data */
-            sizeof(SchDrawing),         /* instance_size */
+            sizeof(SchGUIDrawing),         /* instance_size */
             0,                          /* n_preallocs */
-            sch_drawing_init,           /* instance_init */
+            schgui_cairo_drawing_init,           /* instance_init */
             NULL                        /* value_table */
             };
 
         type = g_type_register_static(
             G_TYPE_OBJECT,
-            "SchDrawing",
+            "SchGUIDrawing",
             &tinfo,
             0
             );
@@ -262,9 +308,9 @@ sch_drawing_get_type(void)
 }
 
 void
-sch_drawing_set_file_format(SchDrawing *drawing, SchFileFormat2 *format)
+schgui_cairo_drawing_set_file_format(SchGUIDrawing *drawing, SchFileFormat2 *format)
 {
-    SchDrawingPrivate *privat = SCH_DRAWING_GET_PRIVATE(drawing);
+    SchGUIDrawingPrivate *privat = SCHGUI_CAIRO_DRAWING_GET_PRIVATE(drawing);
 
     if (privat != NULL)
     {
@@ -283,12 +329,12 @@ sch_drawing_set_file_format(SchDrawing *drawing, SchFileFormat2 *format)
 }
 
 static void
-sch_drawing_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec)
+schgui_cairo_drawing_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec)
 {
     switch (property_id)
     {
-        case SCH_DRAWING_FILE_FORMAT:
-            sch_drawing_set_file_format(SCH_DRAWING(object), SCH_FILE_FORMAT_2(g_value_get_object(value)));
+        case SCHGUI_CAIRO_DRAWING_FILE_FORMAT:
+            schgui_cairo_drawing_set_file_format(SCHGUI_CAIRO_DRAWING(object), SCH_FILE_FORMAT_2(g_value_get_object(value)));
             break; 
 
         default:
@@ -297,87 +343,7 @@ sch_drawing_set_property(GObject *object, guint property_id, const GValue *value
 }
 
 static void
-sch_drawing_init(GTypeInstance *instance, gpointer g_class)
+schgui_cairo_drawing_init(GTypeInstance *instance, gpointer g_class)
 {
-    SchDrawingPrivate *privat = SCH_DRAWING_GET_PRIVATE(instance);
-
-    if (privat != NULL)
-    {
-        privat->file_format = (SchFileFormat2*) g_object_new(SCH_TYPE_FILE_FORMAT_2, NULL);
-    }
-}
-
-void
-sch_drawing_rotate(SchDrawing *drawing, int angle)
-{
-    SchDrawingPrivate *privat = SCH_DRAWING_GET_PRIVATE(drawing);
-
-    if (privat != NULL)
-    {
-        GSList *node = privat->shapes;
-
-        while (node != NULL)
-        {
-            sch_shape_rotate(SCH_SHAPE(node->data), angle);
-
-            node = g_slist_next(node);
-        }
-    }
-}
-
-void
-sch_drawing_transform(SchDrawing *drawing, const GeomTransform *transform)
-{
-    SchDrawingPrivate *privat = SCH_DRAWING_GET_PRIVATE(drawing);
-
-    if (privat != NULL)
-    {
-        GSList *node = privat->shapes;
-
-        while (node != NULL)
-        {
-            sch_shape_transform(SCH_SHAPE(node->data), transform);
-
-            node = g_slist_next(node);
-        }
-    }
-}
-
-void
-sch_drawing_translate(SchDrawing *drawing, int dx, int dy)
-{
-    SchDrawingPrivate *privat = SCH_DRAWING_GET_PRIVATE(drawing);
-
-    if (privat != NULL)
-    {
-        GSList *node = privat->shapes;
-
-        while (node != NULL)
-        {
-            sch_shape_translate(SCH_SHAPE(node->data), dx, dy);
-
-            node = g_slist_next(node);
-        }
-    }
-}
-
-void
-sch_drawing_write(const SchDrawing *drawing, SchOutputStream *stream)
-{
-    SchDrawingPrivate *privat = SCH_DRAWING_GET_PRIVATE(drawing);
-
-    if (privat != NULL)
-    {
-        GSList *node = privat->shapes;
-
-        sch_file_format_2_write_version(privat->file_format, stream, NULL);
-
-        while (node != NULL)
-        {
-            sch_shape_write(SCH_SHAPE(node->data), privat->file_format, stream, NULL);
-
-            node = g_slist_next(node);
-        }
-   }
 }
 

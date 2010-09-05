@@ -47,6 +47,7 @@ struct _SchGUIDrawingCfgColor
     double red;
     double green;
     double blue;
+    double alpha;
 };
 
 GType

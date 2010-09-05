@@ -27,15 +27,12 @@
 
 #include "geom.h"
 
+#include "sch-forward.h"
+
 #include "sch-config.h"
 
 #include "sch-fill-style.h"
 #include "sch-line-style.h"
-
-#include "sch-drafter-fwd.h"
-#include "sch-file-format-fwd.h"
-#include "sch-output-stream-fwd.h"
-#include "sch-shape-fwd.h"
 
 #include "sch-attributes.h"
 #include "sch-multiline.h"

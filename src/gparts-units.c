@@ -259,7 +259,7 @@ gparts_units_cell_format_generic(GtkTreeViewColumn *column, GtkCellRenderer *cel
  *  \param [in] iter   A GtkTreeIter for the row being formatted.
  *  \param [in] data   The resitor value's zero based column index, cast into a pointer.
  *
- *  TODO Use the resistor's tolerance (the next column) to determine the number
+ *  \todo Use the resistor's tolerance (the next column) to determine the number
  *  of digits to show.
  */
 static void
@@ -304,7 +304,7 @@ gparts_units_cell_format_resistor(GtkTreeViewColumn *column, GtkCellRenderer *ce
  *  \param [in] iter   A GtkTreeIter for the row being formatted.
  *  \param [in] data   The model's zero based column index, cast into a pointer.
  *
- *  FIXME With a fractional percent, this function will only display the most
+ *  \todo FIXME With a fractional percent, this function will only display the most
  *  significant digit.  So, "0.15%" becomes "0.1%."  This function should make
  *  an attempt to display all digits, without displaying additional trailing
  *  zeros.
@@ -369,7 +369,7 @@ gparts_units_find_cell_data_func(const gchar *name)
     return func;
 }
 
-/* TODO Get rid of this function by using math functions to calculate the format.
+/* \todo Get rid of this function by using math functions to calculate the format.
  */
 static const gchar*
 gparts_units_find_format(gdouble value)

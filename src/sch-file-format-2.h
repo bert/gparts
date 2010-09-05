@@ -20,6 +20,13 @@
 
 /*! \file sch-file-format-2.h
  */
+#define SCH_TYPE_FILE_FORMAT_2 (sch_file_format_2_get_type())
+#define SCH_FILE_FORMAT_2(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),SCH_TYPE_FILE_FORMAT_2,SchFileFormat2))
+#define SCH_FILE_FORMAT_2_CLASS(cls) (G_TYPE_CHECK_CLASS_CAST((cls),SCH_TYPE_FILE_FORMAT_2,SchFileFormat2Class))
+#define SCH_IS_FILE_FORMAT_2(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj),SCH_TYPE_FILE_FORMAT_2))
+#define SCH_IS_FILE_FORMAT_2_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCH_TYPE_FILE_FORMAT_2))
+#define SCH_FILE_FORMAT_2_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCH_TYPE_FILE_FORMAT_2,SchFileFormat2Class))
+
 
 struct _SchFileFormat2
 {

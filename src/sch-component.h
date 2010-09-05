@@ -28,9 +28,6 @@
 #define SCH_IS_COMPONENT_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCH_TYPE_COMPONENT))
 #define SCH_COMPONENT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCH_TYPE_COMPONENT,SchComponentClass))
 
-typedef struct _SchComponent SchComponent;
-typedef struct _SchComponentClass SchComponentClass;
-
 struct _SchComponent
 {
     SchShape parent;

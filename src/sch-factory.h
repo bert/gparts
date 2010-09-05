@@ -30,9 +30,6 @@
 
 struct _SchFactoryStyle;
 
-typedef struct _SchFactory SchFactory;
-typedef struct _SchFactoryClass SchFactoryClass;
-
 struct _SchFactory
 {
     GObject parent;

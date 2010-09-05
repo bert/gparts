@@ -23,10 +23,14 @@
  *  \brief An abstract base class for schematic shapes.
  */
 
-/* typedefs in sch-shape-fwd.h */
+#define SCH_TYPE_SHAPE (sch_shape_get_type())
+#define SCH_SHAPE(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),SCH_TYPE_SHAPE,SchShape))
+#define SCH_SHAPE_CLASS(cls) (G_TYPE_CHECK_CLASS_CAST((cls),SCH_TYPE_SHAPE,SchShapeClass))
+#define SCH_IS_SHAPE(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj),SCH_TYPE_SHAPE))
+#define SCH_IS_SHAPE_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCH_TYPE_SHAPE))
+#define SCH_SHAPE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCH_TYPE_SHAPE,SchShapeClass))
 
-struct _SchDrafter;
-struct _GeomTransform;
+/* typedefs in sch-forward.h */
 
 struct _SchShape
 {
@@ -37,43 +41,14 @@ struct _SchShapeClass
 {
     GObjectClass parent;
 
-    gboolean (*bounds)(SchShape *shape, struct _SchDrafter *drafter, GeomBounds *bounds);
-    void (*draw)(SchShape *shape, struct _SchDrafter *drafter);
     void (*rotate)(SchShape *shape, int angle);
-    void (*transform)(SchShape *shape, const struct _GeomTransform *transform);
+    void (*transform)(SchShape *shape, const GeomTransform *transform);
     void (*translate)(SchShape *shape, int dx, int dy);
     void (*write)(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error);
 };
 
 GType
 sch_shape_get_type(void);
-
-/*! \brief Append an attribute to a shape
- *
- *  \param [in] shape     The shape to receive the attribute.
- *  \param [in] attribute The attribute to append.
- */
-void
-sch_shape_append_attribute(SchShape *shape, SchShape *attribute);
-
-/*! \brief Calculate the bounds of a schematic shape
- *
- *  \param [in] shape The shape for the bounds calculation.
- *  \param [in] drafter Context specific data for the calcualtion.
- *  \param [out] bounds If successful, the bounds of the shape.
- *  \retval FALSE The function was unable to calculate the bounds.
- *  \retval TRUE The function calcualted the bounds successfully.
- */
-gboolean
-sch_shape_bounds(SchShape *shape, struct _SchDrafter *drafter, GeomBounds *bounds);
-
-/*! \brief Draws the shape.
- *
- *  \param [in] shape The shape to draw.
- *  \param [in] drafter The strategy to draw the shape.
- */
-void
-sch_shape_draw(SchShape *shape, struct _SchDrafter *drafter);
 
 void
 sch_shape_rotate(SchShape *shape, int angle);

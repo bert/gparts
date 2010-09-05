@@ -54,14 +54,8 @@ struct _SchComponentPrivate
 };
 
 
-static gboolean
-sch_component_calculate_bounds(SchShape *shape, SchDrafter *drafter, GeomBounds *bounds);
-
 static void
 sch_component_class_init(gpointer g_class, gpointer g_class_data);
-
-static void
-sch_component_draw(SchShape *shape, SchDrafter *drafter);
 
 static void
 sch_component_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
@@ -70,13 +64,6 @@ static void
 sch_component_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
 
 
-
-
-static gboolean
-sch_component_bounds(SchShape *shape, SchDrafter *drafter, GeomBounds *bounds)
-{
-    sch_drafter_component_bounds(drafter, SCH_COMPONENT(shape), bounds);
-}
 
 static void
 sch_component_class_init(gpointer g_class, gpointer g_class_data)
@@ -88,9 +75,6 @@ sch_component_class_init(gpointer g_class, gpointer g_class_data)
 
     object_class->get_property = sch_component_get_property;
     object_class->set_property = sch_component_set_property;
-
-    klasse->parent.bounds = sch_component_bounds;
-    klasse->parent.draw   = sch_component_draw;
 
     g_object_class_install_property(
         object_class,
@@ -185,12 +169,6 @@ sch_component_class_init(gpointer g_class, gpointer g_class_data)
             G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
-}
-
-static void
-sch_component_draw(SchShape *shape, SchDrafter *drafter)
-{
-    sch_drafter_draw_component(drafter, SCH_COMPONENT(shape));
 }
 
 static void

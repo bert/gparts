@@ -63,14 +63,8 @@ struct _SchBoxPrivate
     SchFillStyle fill_style;
 };
 
-static gboolean
-sch_box_calculate_bounds(SchShape *shape, SchDrafter *drafter, GeomBounds *bounds);
-
 static void
 sch_box_class_init(gpointer g_class, gpointer g_class_data);
-
-static void
-sch_box_draw(SchShape *shape, SchDrafter *drafter);
 
 static void
 sch_box_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
@@ -95,26 +89,6 @@ sch_box_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, 
 
 
 
-static gboolean
-sch_box_bounds(SchShape *shape, SchDrafter *drafter, GeomBounds *bounds)
-{
-    SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
-
-    if (privat != NULL)
-    {
-        int border = (privat->line_width + 1) / 2;
-
-        geom_box_bounds(&(privat->box), bounds);
-        geom_bounds_expand(bounds, bounds, border);
-    }
-    else
-    {
-        geom_bounds_init(bounds);
-    }
-
-    return TRUE;
-}
-
 static void
 sch_box_class_init(gpointer g_class, gpointer g_class_data)
 {
@@ -126,8 +100,6 @@ sch_box_class_init(gpointer g_class, gpointer g_class_data)
     object_class->get_property = sch_box_get_property;
     object_class->set_property = sch_box_set_property;
 
-    klasse->parent.bounds    = sch_box_bounds;
-    klasse->parent.draw      = sch_box_draw;
     klasse->parent.rotate    = sch_box_rotate;
     klasse->parent.transform = sch_box_transform;
     klasse->parent.translate = sch_box_translate;
@@ -356,12 +328,6 @@ sch_box_class_init(gpointer g_class, gpointer g_class_data)
             G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
-}
-
-static void
-sch_box_draw(SchShape *shape, SchDrafter *drafter)
-{
-    sch_drafter_draw_box(drafter, SCH_BOX(shape));
 }
 
 static void

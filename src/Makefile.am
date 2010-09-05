@@ -137,7 +137,17 @@ libsch_la_CFLAGS = -Wall $(AM_CFLAGS) $(GIO_CFLAGS) $(GLIB_CFLAGS)
 libsch_la_LIBADD = $(GLIB_LIBS) libgeom.la libmisc.la
 
 libschgui_la_SOURCES = \
+	schgui-cairo-arc.c \
+	schgui-cairo-box.c \
+	schgui-cairo-bus.c \
+	schgui-cairo-circle.c \
 	schgui-cairo-drafter.c \
+	schgui-cairo-draw-item.c \
+	schgui-cairo-factory.c \
+	schgui-cairo-line.c \
+	schgui-cairo-net.c \
+	schgui-cairo-pin.c \
+	schgui-cairo-text.c \
 	schgui-clipboard.c \
 	schgui-drawing-cfg.c \
 	schgui-drawing-view.c

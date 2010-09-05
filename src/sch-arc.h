@@ -28,9 +28,6 @@
 #define SCH_IS_ARC_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCH_TYPE_ARC))
 #define SCH_ARC_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCH_TYPE_ARC,SchArcClass))
 
-typedef struct _SchArc SchArc;
-typedef struct _SchArcClass SchArcClass;
-
 struct _SchArc
 {
     SchShape parent;

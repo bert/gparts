@@ -29,6 +29,13 @@
  *  names end with 2 until support for format 1 gets added.
  */
 
+#define SCH_TYPE_OUTPUT_STREAM (sch_output_stream_get_type())
+#define SCH_OUTPUT_STREAM(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),SCH_TYPE_OUTPUT_STREAM,SchOutputStream))
+#define SCH_OUTPUT_STREAM_CLASS(cls) (G_TYPE_CHECK_CLASS_CAST((cls),SCH_TYPE_OUTPUT_STREAM,SchOutputStreamClass))
+#define SCH_IS_OUTPUT_STREAM(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj),SCH_TYPE_OUTPUT_STREAM))
+#define SCH_IS_OUTPUT_STREAM_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCH_TYPE_OUTPUT_STREAM))
+#define SCH_OUTPUT_STREAM_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCH_TYPE_OUTPUT_STREAM,SchOutputStreamClass))
+
 struct _SchOutputStream
 {
     GObject parent;

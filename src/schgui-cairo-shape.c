@@ -18,9 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file sch_shape.c
- *
- *  \brief An abstract base class for schematic shapes.
+/*! \file sch-cairo-shape.c
  */
 
 #include <glib-object.h>
@@ -30,54 +28,54 @@
 #include "sch.h"
 
 
-#define SCH_SHAPE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_SHAPE,SchShapePrivate))
+#define SCH_CAIRO_SHAPE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCH_TYPE_CAIRO_SHAPE,SchCairoShapePrivate))
 
 enum
 {
-    SCH_SHAPE_ATTRIBUTES = 1,
+    SCH_CAIRO_SHAPE_ATTRIBUTES = 1,
 };
 
-typedef struct _SchShapePrivate SchShapePrivate;
+typedef struct _SchCairoShapePrivate SchCairoShapePrivate;
 
-struct _SchShapePrivate
+struct _SchCairoShapePrivate
 {
     SchAttributes *attributes;
 };
 
 
 static void
-sch_shape_class_init(gpointer g_class, gpointer g_class_data);
+sch_cairo_shape_class_init(gpointer g_class, gpointer g_class_data);
 
 static void
-sch_shape_dispose(GObject *object);
+sch_cairo_shape_dispose(GObject *object);
 
 static void
-sch_shape_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
+sch_cairo_shape_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
 
 static void
-sch_shape_init(GTypeInstance *instance, gpointer g_class);
+sch_cairo_shape_init(GTypeInstance *instance, gpointer g_class);
 
 static void
-sch_shape_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
+sch_cairo_shape_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
 
 
 
 static void
-sch_shape_class_init(gpointer g_class, gpointer g_class_data)
+sch_cairo_shape_class_init(gpointer g_class, gpointer g_class_data)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(g_class);
-    SchShapeClass *klasse = SCH_SHAPE_CLASS(g_class);
+    SchCairoShapeClass *klasse = SCH_CAIRO_SHAPE_CLASS(g_class);
 
-    g_type_class_add_private(klasse, sizeof(SchShapePrivate));
+    g_type_class_add_private(klasse, sizeof(SchCairoShapePrivate));
 
-    object_class->dispose = sch_shape_dispose;
+    object_class->dispose = sch_cairo_shape_dispose;
 
-    klasse->parent.get_property = sch_shape_get_property;
-    klasse->parent.set_property = sch_shape_set_property;
+    klasse->parent.get_property = sch_cairo_shape_get_property;
+    klasse->parent.set_property = sch_cairo_shape_set_property;
 
     g_object_class_install_property(
         G_OBJECT_CLASS(klasse),
-        SCH_SHAPE_ATTRIBUTES,
+        SCH_CAIRO_SHAPE_ATTRIBUTES,
         g_param_spec_object(
             "attributes",
             "Attributes",
@@ -89,24 +87,33 @@ sch_shape_class_init(gpointer g_class, gpointer g_class_data)
 }
 
 
-static void
-sch_shape_dispose(GObject *object)
+void
+sch_cairo_shape_draw(SchCairoShape *shape, cairo_t *cairo)
 {
-    sch_shape_set_attributes(SCH_SHAPE(object), NULL);
+    SchCairoShapeClass   *klasse = SCH_CAIRO_SHAPE_GET_CLASS(shape);
+    SchCairoShapePrivate *privat = SCH_CAIRO_SHAPE_GET_PRIVATE(shape);
 
-    misc_object_chain_dispose(object);
+    if ((klasse != NULL) && (klasse->draw != NULL))
+    {
+        klasse->draw(shape, drafter);
+    }
+
+    if ((privat != NULL) && (privat->attributes != NULL))
+    {
+        sch_attributes_draw(privat->attributes, drafter);
+    }
 }
 
 static void
-sch_shape_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
+sch_cairo_shape_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
 {
-    SchShapePrivate *privat = SCH_SHAPE_GET_PRIVATE(object);
+    SchCairoShapePrivate *privat = SCH_CAIRO_SHAPE_GET_PRIVATE(object);
 
     if (privat != NULL)
     {
         switch (property_id)
         {
-            case SCH_SHAPE_ATTRIBUTES:
+            case SCH_CAIRO_SHAPE_ATTRIBUTES:
                 g_value_set_object(value, privat->attributes);
                 break;
 
@@ -117,28 +124,28 @@ sch_shape_get_property(GObject *object, guint property_id, GValue *value, GParam
 }
 
 GType
-sch_shape_get_type(void)
+sch_cairo_shape_get_type(void)
 {
     static GType type = G_TYPE_INVALID;
 
     if (type == G_TYPE_INVALID)
     {
         static const GTypeInfo tinfo = {
-            sizeof(SchShapeClass),    /* class_size */
+            sizeof(SchCairoShapeClass),    /* class_size */
             NULL,                     /* base_init */
             NULL,                     /* base_finalize */
-            sch_shape_class_init,     /* class_init */
+            sch_cairo_shape_class_init,     /* class_init */
             NULL,                     /* class_finalize */
             NULL,                     /* class_data */
-            sizeof(SchShape),         /* instance_size */
+            sizeof(SchCairoShape),         /* instance_size */
             0,                        /* n_preallocs */
-            sch_shape_init,           /* instance_init */
+            sch_cairo_shape_init,           /* instance_init */
             NULL                      /* value_table */
             };
 
         type = g_type_register_static(
             G_TYPE_OBJECT,
-            "SchShape",
+            "SchCairoShape",
             &tinfo,
             G_TYPE_FLAG_ABSTRACT
             );
@@ -148,11 +155,11 @@ sch_shape_get_type(void)
 }
 
 static void
-sch_shape_init(GTypeInstance *instance, gpointer g_class)
+sch_cairo_shape_init(GTypeInstance *instance, gpointer g_class)
 {
-    SchShapePrivate *privat;
+    SchCairoShapePrivate *privat;
 
-    privat = SCH_SHAPE_GET_PRIVATE(instance);
+    privat = SCH_CAIRO_SHAPE_GET_PRIVATE(instance);
 
     if (privat != NULL)
     {
@@ -161,9 +168,9 @@ sch_shape_init(GTypeInstance *instance, gpointer g_class)
 }
 
 void
-sch_shape_rotate(SchShape *shape, int angle)
+sch_cairo_shape_rotate(SchCairoShape *shape, int angle)
 {
-    SchShapeClass *klasse = SCH_SHAPE_GET_CLASS(shape);
+    SchCairoShapeClass *klasse = SCH_CAIRO_SHAPE_GET_CLASS(shape);
 
     if ((klasse != NULL) && (klasse->rotate != NULL))
     {
@@ -172,16 +179,16 @@ sch_shape_rotate(SchShape *shape, int angle)
 }
 
 static void
-sch_shape_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec)
+sch_cairo_shape_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec)
 {
-    SchShapePrivate *privat = SCH_SHAPE_GET_PRIVATE(object);
+    SchCairoShapePrivate *privat = SCH_CAIRO_SHAPE_GET_PRIVATE(object);
 
     if (privat != NULL)
     {
         switch (property_id)
         {
-            case SCH_SHAPE_ATTRIBUTES:
-                sch_shape_set_attributes(SCH_SHAPE(object), g_value_get_object(value));
+            case SCH_CAIRO_SHAPE_ATTRIBUTES:
+                sch_cairo_shape_set_attributes(SCH_CAIRO_SHAPE(object), g_value_get_object(value));
                 break;
 
             default:
@@ -191,9 +198,9 @@ sch_shape_set_property(GObject *object, guint property_id, const GValue *value, 
 }
  
 void
-sch_shape_transform(SchShape *shape, const GeomTransform *transform)
+sch_cairo_shape_transform(SchCairoShape *shape, const GeomTransform *transform)
 {
-    SchShapeClass *klasse = SCH_SHAPE_GET_CLASS(shape);
+    SchCairoShapeClass *klasse = SCH_CAIRO_SHAPE_GET_CLASS(shape);
 
     if ((klasse != NULL) && (klasse->transform != NULL))
     {
@@ -202,9 +209,9 @@ sch_shape_transform(SchShape *shape, const GeomTransform *transform)
 }
 
 void
-sch_shape_translate(SchShape *shape, int dx, int dy)
+sch_cairo_shape_translate(SchCairoShape *shape, int dx, int dy)
 {
-    SchShapeClass *klasse = SCH_SHAPE_GET_CLASS(shape);
+    SchCairoShapeClass *klasse = SCH_CAIRO_SHAPE_GET_CLASS(shape);
 
     if ((klasse != NULL) && (klasse->translate != NULL))
     {
@@ -213,10 +220,10 @@ sch_shape_translate(SchShape *shape, int dx, int dy)
 }
 
 SchAttributes*
-sch_shape_get_attributes(SchShape *shape)
+sch_cairo_shape_get_attributes(SchCairoShape *shape)
 {
     SchAttributes   *attributes = NULL;
-    SchShapePrivate *privat = SCH_SHAPE_GET_PRIVATE(shape);
+    SchCairoShapePrivate *privat = SCH_CAIRO_SHAPE_GET_PRIVATE(shape);
 
     if (privat != NULL)
     {
@@ -232,9 +239,9 @@ sch_shape_get_attributes(SchShape *shape)
 }
 
 void
-sch_shape_set_attributes(SchShape *shape, SchAttributes *attributes)
+sch_cairo_shape_set_attributes(SchCairoShape *shape, SchAttributes *attributes)
 {
-    SchShapePrivate *privat = SCH_SHAPE_GET_PRIVATE(shape);
+    SchCairoShapePrivate *privat = SCH_CAIRO_SHAPE_GET_PRIVATE(shape);
 
     if (privat != NULL)
     {
@@ -255,9 +262,9 @@ sch_shape_set_attributes(SchShape *shape, SchAttributes *attributes)
 }
 
 void
-sch_shape_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error)
+sch_cairo_shape_write(SchCairoShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error)
 {
-    SchShapeClass *klasse = SCH_SHAPE_GET_CLASS(shape);
+    SchCairoShapeClass *klasse = SCH_CAIRO_SHAPE_GET_CLASS(shape);
 
     if ((klasse != NULL) && (klasse->write != NULL))
     {

@@ -30,9 +30,6 @@
 
 struct _SchLineStyle;
 
-typedef struct _SchLine SchLine;
-typedef struct _SchLineClass SchLineClass;
-
 struct _SchLine
 {
     SchShape parent;

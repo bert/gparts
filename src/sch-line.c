@@ -57,14 +57,8 @@ struct _SchLinePrivate
 
 
 
-static gboolean
-sch_line_bounds(SchShape *shape, SchDrafter *drafter, GeomBounds *bounds);
-
 static void
 sch_line_class_init(gpointer g_class, gpointer g_class_data);
-
-static void
-sch_line_draw(SchShape *shape, SchDrafter *drafter);
 
 static void
 sch_line_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
@@ -85,27 +79,6 @@ static void
 sch_line_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error);
 
 
-static gboolean
-sch_line_bounds(SchShape *shape, SchDrafter *drafter, GeomBounds *bounds)
-{
-    SchLinePrivate *privat = SCH_LINE_GET_PRIVATE(shape);
-    gboolean success = FALSE;
-
-    if (privat != NULL)
-    {
-        GeomBounds line_bounds;
-
-        geom_bounds_init(&line_bounds);
-        geom_line_bounds(&(privat->line), &line_bounds);
-        geom_bounds_expand(&line_bounds, &line_bounds, privat->line_width);
-        geom_bounds_union(bounds, bounds, &line_bounds);
-
-        success = TRUE;
-    }
-
-    return success;
-}
-
 static void
 sch_line_class_init(gpointer g_class, gpointer g_class_data)
 {
@@ -117,8 +90,6 @@ sch_line_class_init(gpointer g_class, gpointer g_class_data)
     klasse->get_property = sch_line_get_property;
     klasse->set_property = sch_line_set_property;
 
-    klasse1->parent.bounds    = sch_line_bounds;
-    klasse1->parent.draw      = sch_line_draw;
     klasse1->parent.rotate    = sch_line_rotate;
     klasse1->parent.transform = sch_line_transform;
     klasse1->parent.translate = sch_line_translate;
@@ -263,12 +234,6 @@ sch_line_class_init(gpointer g_class, gpointer g_class_data)
             G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
-}
-
-static void
-sch_line_draw(SchShape *shape, SchDrafter *drafter)
-{
-    sch_drafter_draw_line(drafter, SCH_LINE(shape));
 }
 
 static void

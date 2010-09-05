@@ -59,14 +59,8 @@ struct _SchTextPrivate
     SchMultiline *multiline;
 };
 
-static gboolean
-sch_text_bounds(SchShape *shape, SchDrafter *drafter, GeomBounds *bounds);
-
 static void
 sch_text_class_init(gpointer g_class, gpointer g_class_data);
-
-static void
-sch_text_draw(SchShape *shape, SchDrafter *drafter);
 
 static void
 sch_text_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
@@ -89,14 +83,6 @@ sch_text_translate(SchShape *shape, int dx, int dy);
 static void
 sch_text_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error);
 
-static gboolean
-sch_text_bounds(SchShape *shape, SchDrafter *drafter, GeomBounds *bounds)
-{
-    sch_drafter_text_bounds(drafter, SCH_TEXT(shape), bounds);
-
-    return FALSE;
-}
-
 static void
 sch_text_class_init(gpointer g_class, gpointer g_class_data)
 {
@@ -108,8 +94,6 @@ sch_text_class_init(gpointer g_class, gpointer g_class_data)
     object_class->get_property = sch_text_get_property;
     object_class->set_property = sch_text_set_property;
 
-    klasse->parent.bounds    = sch_text_bounds;
-    klasse->parent.draw      = sch_text_draw;
     klasse->parent.rotate    = sch_text_rotate;
     klasse->parent.transform = sch_text_transform;
     klasse->parent.translate = sch_text_translate;
@@ -347,14 +331,6 @@ sch_text_get_y(SchText *text)
     }
 
     return y;
-}
-
-static void
-sch_text_draw(SchShape *shape, SchDrafter *drafter)
-{
-//    SchTextPrivate *privat = SCH_TEXT_GET_PRIVATE(shape);
-
-    sch_drafter_draw_text(drafter, SCH_TEXT(shape));
 }
 
 static void

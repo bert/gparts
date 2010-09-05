@@ -30,9 +30,6 @@
 #define SCH_IS_ATTRIBUTES_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCH_TYPE_ATTRIBUTES))
 #define SCH_ATTRIBUTES_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCH_TYPE_ATTRIBUTES,SchAttributesClass))
 
-typedef struct _SchAttributes SchAttributes;
-typedef struct _SchAttributesClass SchAttributesClass;
-
 struct _SchAttributes
 {
     GObject parent;

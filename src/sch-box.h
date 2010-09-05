@@ -31,9 +31,6 @@
 struct _SchFillStyle;
 struct _SchLineStyle;
 
-typedef struct _SchBox SchBox;
-typedef struct _SchBoxClass SchBoxClass;
-
 struct _SchBox
 {
     SchShape parent;
