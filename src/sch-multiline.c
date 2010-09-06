@@ -129,7 +129,12 @@ sch_multiline_peek_markup(SchMultiline *multiline, int show)
     {
         if (privat->markup == NULL)
         {
-            privat->markup = g_markup_escape_text(sch_multiline_peek_plain(multiline, show), -1);
+            const char *temp = sch_multiline_peek_plain(multiline, show);
+
+            if (temp != NULL)
+            {
+                privat->markup = g_markup_escape_text(temp, -1);
+            }
         }
 
         string = privat->markup;

@@ -230,6 +230,11 @@ SCM_DEFINE(net_style, "net-style", 1, 0, 0, (SCM a), "")
     return SCM_BOOL_F;
 }
 
+SCM_DEFINE(pin_style, "pin-style", 1, 0, 0, (SCM a), "")
+{
+    return SCM_BOOL_F;
+}
+
 SCM_DEFINE(postscript_prolog, "postscript-prolog", 1, 0, 0, (SCM a), "")
 {
     return SCM_BOOL_F;
@@ -442,8 +447,6 @@ scmcfg_config_load_inner(void* data)
 static SCM
 scmcfg_config_load_inner_body(void *data)
 {
-    g_debug("%s", data);
-
     scm_c_primitive_load((char*) data);
 
     return SCM_BOOL_T;
@@ -452,6 +455,11 @@ scmcfg_config_load_inner_body(void *data)
 static SCM
 scmcfg_config_load_inner_handler(void *data, SCM key, SCM args)
 {
+    scm_write_line(
+        args,
+        scm_current_output_port()
+        );
+
     return SCM_BOOL_F;
 }
 

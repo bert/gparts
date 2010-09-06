@@ -51,6 +51,8 @@ sch_config_get_type(void);
 
 /*! \brief Get the default bus color index
  *
+ *  If config is NULL, this function will return a default value.
+ *
  *  \param [in] config The configuration
  *  \return The default color index for bus objects
  */
@@ -58,6 +60,8 @@ gint
 sch_config_get_bus_color(const SchConfig *config);
 
 /*! \brief Get the default graphic color index
+ *
+ *  If config is NULL, this function will return a default value.
  *
  *  \param [in] config The configuration
  *  \return The default color index for graphic objects
@@ -67,6 +71,8 @@ sch_config_get_graphic_color(const SchConfig *config);
 
 /*! \brief Get the default net color index
  *
+ *  If config is NULL, this function will return a default value.
+ *
  *  \param [in] config The configuration
  *  \return The default color index for net objects
  */
@@ -74,6 +80,8 @@ gint
 sch_config_get_line_width(const SchConfig *config);
 
 /*! \brief Get the default net color index
+ *
+ *  If config is NULL, this function will return a default value.
  *
  *  \param [in] config The configuration
  *  \return The default color index for net objects
@@ -83,6 +91,8 @@ sch_config_get_net_color(const SchConfig *config);
 
 /*! \brief Get the default pin color index
  *
+ *  If config is NULL, this function will return a default value.
+ *
  *  \param [in] config The configuration
  *  \return The default color index for pin objects
  */
@@ -90,6 +100,8 @@ gint
 sch_config_get_pin_color(const SchConfig *config);
 
 /*! \brief Get the default text color index
+ *
+ *  If config is NULL, this function will return a default value.
  *
  *  \param [in] config The configuration
  *  \return The default color index for text objects
