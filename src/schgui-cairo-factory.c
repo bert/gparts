@@ -32,6 +32,7 @@
 #include "schgui-drawing-cfg.h"
 
 #include "schgui-cairo-draw-item.h"
+#include "schgui-cairo-draw-list.h"
 
 #include "schgui-cairo-arc.h"
 #include "schgui-cairo-box.h"
@@ -52,15 +53,58 @@
 //    double red;
 //};
 
+
+struct _temp_context
+{
+    SchGUICairoFactory  *factory;
+    SchGUIDrawingCfg    *config;
+    SchGUICairoDrawList *draw_list;
+};
+
 static void
 schgui_cairo_factory_class_init(gpointer g_class, gpointer g_class_data);
 
+static void
+schgui_cairo_factory_create_from_drawing_proc(SchShape *shape, gpointer user_data);
 
 
 static void
 schgui_cairo_factory_class_init(gpointer g_class, gpointer g_class_data)
 {
     SchGUICairoFactoryClass *klasse = SCHGUI_CAIRO_FACTORY_CLASS(g_class);
+}
+
+SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_drawing(SchGUICairoFactory *factory, SchDrawing *drawing, SchGUIDrawingCfg *config)
+{
+    struct _temp_context user_data;
+
+    user_data.factory   = factory;
+    user_data.config    = config;
+    user_data.draw_list = NULL;
+
+    sch_drawing_foreach(drawing, schgui_cairo_factory_create_from_drawing_proc, &user_data);
+
+    return SCHGUI_CAIRO_DRAW_ITEM(user_data.draw_list);
+}
+
+static void
+schgui_cairo_factory_create_from_drawing_proc(SchShape *shape, gpointer user_data)
+{
+    struct _temp_context *data = (struct _temp_context*) user_data;
+    SchGUICairoDrawItem  *item;
+
+    item = schgui_cairo_factory_create_item(data->factory, shape, data->config);
+
+    if (item != NULL)
+    {
+        if (data->draw_list == NULL)
+        {
+            data->draw_list = SCHGUI_CAIRO_DRAW_LIST(g_object_new(SCHGUI_TYPE_CAIRO_DRAW_LIST, NULL));
+        }
+
+        schgui_cairo_draw_list_append(data->draw_list, item);
+    }
 }
 
 GType

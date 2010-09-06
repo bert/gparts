@@ -48,5 +48,8 @@ SchGUICairoFactory*
 schgui_cairo_factory_new();
 
 SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_drawing(SchGUICairoFactory *factory, SchDrawing *drawing, SchGUIDrawingCfg *config);
+
+SchGUICairoDrawItem*
 schgui_cairo_factory_create_item(SchGUICairoFactory *factory, SchShape *shape, SchGUIDrawingCfg *config);
 

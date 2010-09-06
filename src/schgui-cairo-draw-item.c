@@ -44,11 +44,14 @@ schgui_cairo_draw_item_bounds(SchGUICairoDrawItem *item, cairo_t *cairo, GeomBou
 void
 schgui_cairo_draw_item_draw(SchGUICairoDrawItem *item, cairo_t *cairo)
 {
-    SchGUICairoDrawItemClass *klasse = SCHGUI_CAIRO_DRAW_ITEM_GET_CLASS(item);
-
-    if ((klasse != NULL) && (klasse->draw != NULL))
+    if (item != NULL)
     {
-        klasse->draw(item, cairo);
+        SchGUICairoDrawItemClass *klasse = SCHGUI_CAIRO_DRAW_ITEM_GET_CLASS(item);
+
+        if ((klasse != NULL) && (klasse->draw != NULL))
+        {
+            klasse->draw(item, cairo);
+        }
     }
 }
 

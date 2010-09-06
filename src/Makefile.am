@@ -143,6 +143,7 @@ libschgui_la_SOURCES = \
 	schgui-cairo-circle.c \
 	schgui-cairo-drafter.c \
 	schgui-cairo-draw-item.c \
+	schgui-cairo-draw-list.c \
 	schgui-cairo-factory.c \
 	schgui-cairo-line.c \
 	schgui-cairo-net.c \

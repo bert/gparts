@@ -32,6 +32,7 @@
 #include "schgui-drawing-cfg.h"
 
 #include "schgui-cairo-draw-item.h"
+#include "schgui-cairo-draw-list.h"
 
 #include "schgui-cairo-arc.h"
 #include "schgui-cairo-box.h"
@@ -63,6 +64,8 @@ struct _SchGUICairoDrafterPrivate
 
     SchGUIDrawingCfg *config;
     SchDrawing       *drawing;
+
+    SchGUICairoDrawItem *draw_list;
 };
 
 static void
@@ -80,9 +83,6 @@ schgui_cairo_drafter_component_bounds(SchGUICairoDrafter *drafter, SchComponent 
 
 static void
 schgui_cairo_drafter_dispose(GObject *object);
-
-static void
-schgui_cairo_drafter_draw_arc(SchGUICairoDrafter *drafter, const struct _SchArc *shape);
 
 static void
 schgui_cairo_drafter_finalize(GObject *object);
@@ -392,181 +392,6 @@ schgui_cairo_drafter_text_bounds(SchGUICairoDrafter *drafter, SchText *text, Geo
 
 
 
-static void
-schgui_cairo_drafter_draw_text(SchGUICairoDrafter *drafter, const struct _SchText *text)
-{
-    if (text != NULL)
-    {
-        int visible;
-
-        sch_text_get_visible(text, &visible);
-
-        if (visible)
-        {
-
-    SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
-
-    if (privat->cairo != NULL)
-    {
-        PangoLayout *layout;
-        SchMultiline *multiline = sch_text_get_multiline(text);
-        int point_size = sch_text_get_size(text);
-        float height;
-        int alignment;
-        cairo_font_options_t *options;
-        PangoContext *context;
-        int baseline;
-        PangoLayoutIter *iter;
-        int index;
-        int show;
-        SchGUIDrawingCfgColor color;
-        int          enabled;
-
-        sch_text_get_color(text, &index);
-
-        enabled = schgui_drawing_cfg_get_color(privat->config, index, &color);
-
-        if (enabled)
-        {
-            if (0) /* show ink rect */
-            {
-                GeomBounds bounds;
-                int        success;
-
-                success = schgui_cairo_drafter_text_bounds(drafter, text, &bounds);
-
-                if (success)
-                {
-                    cairo_set_source_rgb(privat->cairo, 1.0, 0, 0);
-                
-                    cairo_move_to(privat->cairo, bounds.min_x, bounds.min_y);
-                    cairo_line_to(privat->cairo, bounds.max_x, bounds.min_y);
-                
-                    cairo_stroke(privat->cairo);
-
-                    cairo_set_source_rgb(privat->cairo, 0.75, 0, 0);
-                
-                    cairo_move_to(privat->cairo, bounds.max_x, bounds.min_y);
-                    cairo_line_to(privat->cairo, bounds.max_x, bounds.max_y);
-                    cairo_line_to(privat->cairo, bounds.min_x, bounds.max_y);
-                    cairo_line_to(privat->cairo, bounds.min_x, bounds.min_y);
-                    //cairo_close_path(privat->cairo);
-
-                    cairo_stroke(privat->cairo);
-                
-                    cairo_set_source_rgb(privat->cairo, 0, 0, 0);
-                }
-
-                cairo_set_source_rgb(privat->cairo, 0, 0, 1.0);
-                cairo_new_sub_path(privat->cairo);
-                cairo_arc(privat->cairo, sch_text_get_x(text), sch_text_get_y(text), 10, 0, 2 * M_PI);
-                cairo_stroke(privat->cairo);
-                cairo_set_source_rgb(privat->cairo, 0, 0, 0);
-            }
-
-            cairo_save(privat->cairo);
-   
-            height = 1000 * point_size / 72;
-
-            layout = pango_cairo_create_layout(privat->cairo);
-            pango_cairo_context_set_resolution(pango_layout_get_context(layout), 936);
-
-//  context = pango_layout_get_context(layout);
-//  options = cairo_font_options_create ();
-//  cairo_font_options_set_hint_metrics (options, CAIRO_HINT_METRICS_OFF);
-//  cairo_font_options_set_hint_style (options, CAIRO_HINT_STYLE_MEDIUM);
-//  pango_cairo_context_set_font_options (context, options);
-//  cairo_font_options_destroy (options);
-
-
-            cairo_set_source_rgb(privat->cairo, color.red, color.green, color.blue);
-
-
-            pango_font_description_set_size(privat->desc, point_size * PANGO_SCALE );
-            pango_layout_set_spacing(layout, 40000);
-        
-            pango_layout_set_font_description(layout, privat->desc);
-
-            sch_text_get_show(text, &show);
-            pango_layout_set_markup(layout, sch_multiline_peek_markup(multiline, show), -1);
-
-
-            PangoFontMetrics *metrics = pango_context_get_metrics(
-                pango_layout_get_context(layout),
-                privat->desc,
-                NULL
-                );
-
-        
-            cairo_move_to(privat->cairo, sch_text_get_x(text), sch_text_get_y(text));
-        
-            cairo_rotate(privat->cairo, M_PI * sch_text_get_angle(text) / 180);
-
-            cairo_scale(privat->cairo, 1, -1);
-
-            baseline = pango_layout_get_baseline(layout); 
-
-            alignment = sch_text_get_alignment(text);
-#if 1
-            switch (alignment)
-            {
-                case 2:
-                case 5:
-                case 8: 
-                /* upper */
-                //cairo_rel_move_to(privat->cairo, 0, -pango_font_metrics_get_ascent(metrics)/(privat->zoom * PANGO_SCALE));
-                //cairo_rel_move_to(privat->cairo, 0, height);
-                break;
-
-                case 1:
-                case 4:
-                case 7:
-                    /* center */
-                    cairo_rel_move_to(privat->cairo, 0, -pango_font_metrics_get_ascent(metrics)/(privat->zoom * PANGO_SCALE));
-                    cairo_rel_move_to(privat->cairo, 0, height);
-                    cairo_rel_move_to(privat->cairo, 0, -pango_font_metrics_get_ascent(metrics) * sch_multiline_lines(multiline)/(2 * privat->zoom * PANGO_SCALE));
-                    cairo_rel_move_to(privat->cairo, 0, -pango_font_metrics_get_descent(metrics) * (sch_multiline_lines(multiline) - 1)/(2 * privat->zoom * PANGO_SCALE));
-                    break;
-
-                case 0:
-                case 3:
-                case 6:
-                default:
-                    /* lower */
-                    //cairo_rel_move_to(privat->cairo, 0, -pango_font_metrics_get_ascent(metrics) * sch_multiline_lines(multiline)/(privat->zoom * PANGO_SCALE));
-                    //cairo_rel_move_to(privat->cairo, 0, -pango_font_metrics_get_descent(metrics) * (sch_multiline_lines(multiline)-1)/(privat->zoom * PANGO_SCALE));
-                    //cairo_rel_move_to(privat->cairo, 0, -pango_layout_get_spacing(layout) * (sch_multiline_lines(multiline)-1)/ PANGO_SCALE);
-                    iter = pango_layout_get_iter(layout);
-                    while (!pango_layout_iter_at_last_line(iter))
-                    {
-                        pango_layout_iter_next_line(iter);
-                    }
-                    cairo_rel_move_to(privat->cairo, 0, -pango_layout_iter_get_baseline(iter) / PANGO_SCALE);
-                    pango_layout_iter_free(iter);
-            }
-#endif
-
-            //g_debug("Ascent:    %d", pango_font_metrics_get_ascent(metrics));
-            //g_debug("Descent:   %d", pango_font_metrics_get_descent(metrics));
-            //g_debug("Spacing:   %d", pango_layout_get_spacing(layout));
-            //g_debug("Font size: %d", pango_font_description_get_size(privat->desc));
-            //g_debug("Baseline   %d", pango_layout_get_baseline(layout));            
-
-            pango_font_metrics_unref(metrics);
-
-            pango_cairo_show_layout(privat->cairo, layout);
-
-            cairo_restore(privat->cairo);
-
-            g_object_unref(layout);
-        }
-    }
-}
-}
- 
-}
-
-
 
 static void
 schgui_cairo_drafter_draw_shape(SchShape *shape, SchGUICairoDrafter *drafter)
@@ -613,8 +438,11 @@ schgui_cairo_drafter_draw_to_widget(SchGUICairoDrafter *drafter, GtkWidget *widg
             //    schgui_cairo_drafter_draw_grid(privat->drafter);
 
         //sch_drawing_draw(privat->drawing, SCH_DRAFTER(drafter));
-        sch_drawing_foreach(privat->drawing, schgui_cairo_drafter_draw_shape, drafter);
+        //sch_drawing_foreach(privat->drawing, schgui_cairo_drafter_draw_shape, drafter);
         
+
+        schgui_cairo_draw_item_draw(privat->draw_list, privat->cairo);
+
         cairo_destroy(privat->cairo);
         privat->cairo = NULL;
     }
@@ -775,6 +603,18 @@ schgui_cairo_drafter_set_drawing(SchGUICairoDrafter *drafter, SchDrawing *drawin
             g_object_ref(privat->drawing);
 
             /*! \todo register signals to update */
+        }
+
+        if (privat->draw_list != NULL)
+        {
+            g_object_unref(privat->draw_list);
+
+            privat->draw_list = NULL;
+        }
+
+        if ((privat->config != NULL) && (privat->drawing != NULL))
+        {
+            privat->draw_list = schgui_cairo_factory_create_from_drawing(NULL, privat->drawing, privat->config);
         }
     }
 }
