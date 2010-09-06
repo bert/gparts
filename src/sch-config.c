@@ -164,11 +164,15 @@ gint
 sch_config_get_bus_color(const SchConfig *config)
 {
     gint color = SCH_CONFIG_DEFAULT_BUS_COLOR;
-    SchConfigPrivate *privat = SCH_CONFIG_GET_PRIVATE(config);
 
-    if (privat != NULL)
+    if (config != NULL)
     {
-        color = privat->bus_color;
+        SchConfigPrivate *privat = SCH_CONFIG_GET_PRIVATE(config);
+
+        if (privat != NULL)
+        {
+            color = privat->bus_color;
+        }
     }
 
     return color;
@@ -180,11 +184,15 @@ gint
 sch_config_get_graphic_color(const SchConfig *config)
 {
     gint color = SCH_CONFIG_DEFAULT_GRAPHIC_COLOR;
-    SchConfigPrivate *privat = SCH_CONFIG_GET_PRIVATE(config);
 
-    if (privat != NULL)
+    if (config != NULL)
     {
-        color = privat->graphic_color;
+        SchConfigPrivate *privat = SCH_CONFIG_GET_PRIVATE(config);
+
+        if (privat != NULL)
+        {
+            color = privat->graphic_color;
+        }
     }
 
     return color;
@@ -196,11 +204,15 @@ gint
 sch_config_get_line_width(const SchConfig *config)
 {
     gint color = SCH_CONFIG_DEFAULT_LINE_WIDTH;
-    SchConfigPrivate *privat = SCH_CONFIG_GET_PRIVATE(config);
 
-    if (privat != NULL)
+    if (config != NULL)
     {
-        color = privat->line_width;
+        SchConfigPrivate *privat = SCH_CONFIG_GET_PRIVATE(config);
+
+        if (privat != NULL)
+        {
+            color = privat->line_width;
+        }
     }
 
     return color;
@@ -212,11 +224,15 @@ gint
 sch_config_get_net_color(const SchConfig *config)
 {
     gint color = SCH_CONFIG_DEFAULT_NET_COLOR;
-    SchConfigPrivate *privat = SCH_CONFIG_GET_PRIVATE(config);
 
-    if (privat != NULL)
+    if (config != NULL)
     {
-        color = privat->net_color;
+        SchConfigPrivate *privat = SCH_CONFIG_GET_PRIVATE(config);
+
+        if (privat != NULL)
+        {
+            color = privat->net_color;
+        }
     }
 
     return color;
@@ -228,11 +244,15 @@ gint
 sch_config_get_pin_color(const SchConfig *config)
 {
     gint color = SCH_CONFIG_DEFAULT_PIN_COLOR;
-    SchConfigPrivate *privat = SCH_CONFIG_GET_PRIVATE(config);
 
-    if (privat != NULL)
+    if (config != NULL)
     {
-        color = privat->pin_color;
+        SchConfigPrivate *privat = SCH_CONFIG_GET_PRIVATE(config);
+
+        if (privat != NULL)
+        {
+            color = privat->pin_color;
+        }
     }
 
     return color;
@@ -244,11 +264,15 @@ gint
 sch_config_get_text_color(const SchConfig *config)
 {
     gint color = SCH_CONFIG_DEFAULT_TEXT_COLOR;
-    SchConfigPrivate *privat = SCH_CONFIG_GET_PRIVATE(config);
 
-    if (privat != NULL)
+    if (config != NULL)
     {
-        color = privat->text_color;
+        SchConfigPrivate *privat = SCH_CONFIG_GET_PRIVATE(config);
+
+        if (privat != NULL)
+        {
+            color = privat->text_color;
+        }
     }
 
     return color;

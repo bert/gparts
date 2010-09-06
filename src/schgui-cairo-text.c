@@ -246,7 +246,16 @@ schgui_cairo_text_new(const SchText *shape, SchGUIDrawingCfg *config)
         pango_font_description_set_size(privat->font_desc, PANGO_SCALE * sch_text_get_size(shape));
 
         sch_text_get_show(shape, &show);
-        privat->markup = strdup(sch_multiline_peek_markup(multiline, show));
+
+        {
+            char *temp = sch_multiline_peek_markup(multiline, show);
+
+            if (temp == NULL)
+            {
+                temp = "ERROR";
+            }
+            privat->markup = strdup(temp);
+        }
 
 
         privat->alignment = sch_text_get_alignment(shape);

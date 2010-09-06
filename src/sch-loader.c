@@ -600,11 +600,14 @@ process_attributes(FILE *file, gchar **tokens, GObject *object)
 
                 default:
                     attribute = process_object(file, token);
-                    if (attrs != NULL)
+                    if (attribute != NULL)
                     {
-                        sch_attributes_append(attrs, attribute);
+                        if (attrs != NULL)
+                        {
+                            sch_attributes_append(attrs, attribute);
+                        }
+                        g_object_unref(attribute);
                     }
-                    g_object_unref(attribute);
                     line = read_line(file);
             }
         }
@@ -637,7 +640,7 @@ process_bus(FILE *file, gchar **tokens)
 {
     SchBus *bus;
 
-    //g_debug("Process net");
+    //g_debug("Process bus");
 
     bus = sch_bus_new(NULL);
 
