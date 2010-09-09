@@ -69,6 +69,11 @@ schgui_cairo_text_class_init(gpointer g_class, gpointer g_class_data);
 static void
 schgui_cairo_text_draw(SchGUICairoText *shape, cairo_t *cairo);
 
+static void
+schgui_cairo_text_rotate(SchGUICairoText *item, double dt);
+
+static void
+schgui_cairo_text_translate(SchGUICairoText *item, double dx, double dy);
 
 
 static void
@@ -92,8 +97,10 @@ schgui_cairo_text_class_init(gpointer g_class, gpointer g_class_data)
 
     g_type_class_add_private(G_OBJECT_CLASS(g_class), sizeof(SchGUICairoTextPrivate));
 
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->bounds = schgui_cairo_text_bounds;
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->draw   = schgui_cairo_text_draw;
+    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->bounds    = schgui_cairo_text_bounds;
+    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->draw      = schgui_cairo_text_draw;
+    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->rotate    = schgui_cairo_text_rotate;
+    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->translate = schgui_cairo_text_translate;
 }
 
 static void
@@ -218,49 +225,57 @@ schgui_cairo_text_get_type(void)
 SchGUICairoText*
 schgui_cairo_text_new(const SchText *shape, SchGUIDrawingCfg *config)
 {
-    SchGUICairoText *item = SCHGUI_CAIRO_TEXT(g_object_new(SCHGUI_TYPE_CAIRO_TEXT, NULL));
+    SchGUICairoText *item = NULL;
+    int vis;
 
-    SchGUICairoTextPrivate *privat = SCHGUI_CAIRO_TEXT_GET_PRIVATE(item);
+    sch_text_get_visible(shape, &vis);
 
-    if (privat != NULL)
+    if (vis)
     {
-        SchGUIDrawingCfgColor color;
-        int                   index;
-        SchMultiline *multiline = sch_text_get_multiline(shape);
-        int                   show;
+        item = SCHGUI_CAIRO_TEXT(g_object_new(SCHGUI_TYPE_CAIRO_TEXT, NULL));
 
-        sch_text_get_color(shape, &index);
+        SchGUICairoTextPrivate *privat = SCHGUI_CAIRO_TEXT_GET_PRIVATE(item);
 
-        privat->visible = schgui_drawing_cfg_get_color(config, index, &color);
-
-        privat->red   = color.red;
-        privat->green = color.green;
-        privat->blue  = color.blue;
-        privat->alpha = privat->visible ? 1.0 : 0.0;
-
-        privat->x = sch_text_get_x(shape);
-        privat->y = sch_text_get_y(shape);
-
-        privat->font_desc = pango_font_description_from_string("Sans");
-
-        pango_font_description_set_size(privat->font_desc, PANGO_SCALE * sch_text_get_size(shape));
-
-        sch_text_get_show(shape, &show);
-
+        if (privat != NULL)
         {
-            char *temp = sch_multiline_peek_markup(multiline, show);
+            SchGUIDrawingCfgColor color;
+            int                   index;
+            SchMultiline *multiline = sch_text_get_multiline(shape);
+            int                   show;
 
-            if (temp == NULL)
+            sch_text_get_color(shape, &index);
+
+            privat->visible = schgui_drawing_cfg_get_color(config, index, &color);
+
+            privat->red   = color.red;
+            privat->green = color.green;
+            privat->blue  = color.blue;
+            privat->alpha = privat->visible ? 1.0 : 0.0;
+
+            privat->x = sch_text_get_x(shape);
+            privat->y = sch_text_get_y(shape);
+
+            privat->font_desc = pango_font_description_from_string("Sans");
+
+            pango_font_description_set_size(privat->font_desc, PANGO_SCALE * sch_text_get_size(shape));
+
+            sch_text_get_show(shape, &show);
+
             {
-                temp = "ERROR";
+                char *temp = sch_multiline_peek_markup(multiline, show);
+
+                if (temp == NULL)
+                {
+                    temp = "ERROR";
+                }
+                 privat->markup = strdup(temp);
             }
-            privat->markup = strdup(temp);
+
+
+            privat->alignment = sch_text_get_alignment(shape);
+
+             privat->angle = geom_angle_radians(sch_text_get_angle(shape));
         }
-
-
-        privat->alignment = sch_text_get_alignment(shape);
-
-        privat->angle = geom_angle_radians(sch_text_get_angle(shape));
     }
 
     return item;
@@ -441,4 +456,26 @@ schgui_cairo_drafter_draw_text(SchGUICairoDrafter *drafter, const struct _SchTex
  
 }
 #endif
+
+static void
+schgui_cairo_text_rotate(SchGUICairoText *item, double dt)
+{
+    SchGUICairoTextPrivate *privat = SCHGUI_CAIRO_TEXT_GET_PRIVATE(item);
+
+    if (privat != NULL)
+    {
+    }
+}
+
+static void
+schgui_cairo_text_translate(SchGUICairoText *item, double dx, double dy)
+{
+    SchGUICairoTextPrivate *privat = SCHGUI_CAIRO_TEXT_GET_PRIVATE(item);
+
+    if (privat != NULL)
+    {
+        privat->x += dx;
+        privat->y += dy;
+    }
+}
 

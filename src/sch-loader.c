@@ -130,6 +130,8 @@ sch_loader_add_component_library(SchLoader *loader, gchar *library)
     {
         char *name = g_strdup(library);
 
+        g_debug("New library %s", name);
+
         g_array_append_val(privat->component_libraries, name);
     }
 }

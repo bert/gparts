@@ -64,6 +64,12 @@ schgui_cairo_line_class_init(gpointer g_class, gpointer g_class_data);
 static void
 schgui_cairo_line_draw(SchGUICairoLine *shape, cairo_t *cairo);
 
+static void
+schgui_cairo_line_rotate(SchGUICairoLine *item, double dt);
+
+static void
+schgui_cairo_line_translate(SchGUICairoLine *item, double dx, double dy);
+
 
 
 static void
@@ -114,8 +120,10 @@ schgui_cairo_line_class_init(gpointer g_class, gpointer g_class_data)
 
     g_type_class_add_private(G_OBJECT_CLASS(g_class), sizeof(SchGUICairoLinePrivate));
 
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->bounds = schgui_cairo_line_bounds;
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->draw   = schgui_cairo_line_draw;
+    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->bounds    = schgui_cairo_line_bounds;
+    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->draw      = schgui_cairo_line_draw;
+    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->rotate    = schgui_cairo_line_rotate;
+    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->translate = schgui_cairo_line_translate;
 }
 
 static void
@@ -210,5 +218,29 @@ schgui_cairo_line_new(const SchLine *shape, SchGUIDrawingCfg *config)
     }
 
     return item;
+}
+
+static void
+schgui_cairo_line_rotate(SchGUICairoLine *item, double dt)
+{
+    SchGUICairoLinePrivate *privat = SCHGUI_CAIRO_LINE_GET_PRIVATE(item);
+
+    if (privat != NULL)
+    {
+    }
+}
+
+static void
+schgui_cairo_line_translate(SchGUICairoLine *item, double dx, double dy)
+{
+    SchGUICairoLinePrivate *privat = SCHGUI_CAIRO_LINE_GET_PRIVATE(item);
+
+    if (privat != NULL)
+    {
+        privat->x[0] += dx;
+        privat->y[0] += dy;
+        privat->x[1] += dx;
+        privat->y[1] += dy;
+    }
 }
 

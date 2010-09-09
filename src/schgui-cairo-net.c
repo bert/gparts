@@ -64,6 +64,12 @@ schgui_cairo_net_class_init(gpointer g_class, gpointer g_class_data);
 static void
 schgui_cairo_net_draw(SchGUICairoNet *shape, cairo_t *cairo);
 
+static void
+schgui_cairo_net_rotate(SchGUICairoNet *item, double dt);
+
+static void
+schgui_cairo_net_translate(SchGUICairoNet *item, double dx, double dy);
+
 
 
 static void
@@ -114,8 +120,10 @@ schgui_cairo_net_class_init(gpointer g_class, gpointer g_class_data)
 
     g_type_class_add_private(G_OBJECT_CLASS(g_class), sizeof(SchGUICairoNetPrivate));
 
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->bounds = schgui_cairo_net_bounds;
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->draw   = schgui_cairo_net_draw;
+    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->bounds    = schgui_cairo_net_bounds;
+    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->draw      = schgui_cairo_net_draw;
+    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->rotate    = schgui_cairo_net_rotate;
+    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->translate = schgui_cairo_net_translate;
 }
 
 static void
@@ -207,5 +215,29 @@ schgui_cairo_net_new(const SchNet *shape, SchGUIDrawingCfg *config)
     }
 
     return item;
+}
+
+static void
+schgui_cairo_net_rotate(SchGUICairoNet *item, double dt)
+{
+    SchGUICairoNetPrivate *privat = SCHGUI_CAIRO_NET_GET_PRIVATE(item);
+
+    if (privat != NULL)
+    {
+    }
+}
+
+static void
+schgui_cairo_net_translate(SchGUICairoNet *item, double dx, double dy)
+{
+    SchGUICairoNetPrivate *privat = SCHGUI_CAIRO_NET_GET_PRIVATE(item);
+
+    if (privat != NULL)
+    {
+        privat->x[0] += dx;
+        privat->y[0] += dy;
+        privat->x[1] += dx;
+        privat->y[1] += dy;
+    }
 }
 

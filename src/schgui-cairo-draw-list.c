@@ -50,6 +50,11 @@ schgui_cairo_draw_list_dispose(GObject *object);
 static void
 schgui_cairo_draw_list_draw(SchGUICairoDrawItem *item, cairo_t *cairo);
 
+static void
+schgui_cairo_draw_list_rotate(SchGUICairoDrawItem *item, double dt);
+
+static void
+schgui_cairo_draw_list_translate(SchGUICairoDrawItem *item, double dx, double dy);
 
 
 void
@@ -93,8 +98,10 @@ schgui_cairo_draw_list_class_init(gpointer g_class, gpointer g_class_data)
 
     g_type_class_add_private(G_OBJECT_CLASS(g_class), sizeof(SchGUICairoDrawListPrivate));
 
-    item_klasse->bounds = schgui_cairo_draw_list_bounds;
-    item_klasse->draw   = schgui_cairo_draw_list_draw;
+    item_klasse->bounds    = schgui_cairo_draw_list_bounds;
+    item_klasse->draw      = schgui_cairo_draw_list_draw;
+    item_klasse->rotate    = schgui_cairo_draw_list_rotate;
+    item_klasse->translate = schgui_cairo_draw_list_translate;
 }
 
 
@@ -187,3 +194,38 @@ schgui_cairo_draw_list_prepend(SchGUICairoDrawList *list, SchGUICairoDrawItem* i
     }
 }
 
+static void
+schgui_cairo_draw_list_rotate(SchGUICairoDrawItem *item, double dt)
+{
+    SchGUICairoDrawListPrivate *privat = SCHGUI_CAIRO_DRAW_LIST_GET_PRIVATE(item);
+
+    if (privat != NULL)
+    {
+        GSList *node = privat->items;
+
+        while (node != NULL)
+        {
+            schgui_cairo_draw_item_rotate(SCHGUI_CAIRO_DRAW_ITEM(node->data), dt);
+
+            node = g_slist_next(node);
+        }
+    }
+}
+
+static void
+schgui_cairo_draw_list_translate(SchGUICairoDrawItem *item, double dx, double dy)
+{
+    SchGUICairoDrawListPrivate *privat = SCHGUI_CAIRO_DRAW_LIST_GET_PRIVATE(item);
+
+    if (privat != NULL)
+    {
+        GSList *node = privat->items;
+
+        while (node != NULL)
+        {
+            schgui_cairo_draw_item_translate(SCHGUI_CAIRO_DRAW_ITEM(node->data), dx, dy);
+
+            node = g_slist_next(node);
+        }
+    }
+}

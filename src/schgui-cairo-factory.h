@@ -39,17 +39,45 @@ struct _SchGUICairoFactory
 struct _SchGUICairoFactoryClass
 {
     GObjectClass parent;
+
+    GHashTable *table;
 };
 
 GType
 schgui_cairo_factory_get_type(void);
 
+/*! \brief Create a new Cairo item given a schematic drawing.
+ *
+ *  \param [in] factory The Cairo draw item factory
+ *  \param [in] drawing The schematic to build a drawing list from
+ *  \param [in] config  The drawing configuration
+ *  \return The draw item to draw the schematic on a Cairo context.
+ */
+SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_drawing(SchGUICairoFactory *factory, SchDrawing *drawing);
+
+/*! \brief Create a new Cairo draw item given a schematic shape.
+ *
+ *  \param [in] factory The Cairo draw item factory
+ *  \param [in] shape   The schematic shape to build a drawing list from
+ *  \param [in] config  The drawing configuration
+ *  \return The draw item to draw the shape on a Cairo context.
+ */
+SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_shape(SchGUICairoFactory *factory, SchShape *shape);
+
+/*! \brief Create a new Cairo draw item factory
+ *
+ *  \return An instance of a Cairo draw item factory
+ */
 SchGUICairoFactory*
-schgui_cairo_factory_new();
+schgui_cairo_factory_new(SchGUIDrawingCfg *config);
 
-SchGUICairoDrawItem*
-schgui_cairo_factory_create_from_drawing(SchGUICairoFactory *factory, SchDrawing *drawing, SchGUIDrawingCfg *config);
-
-SchGUICairoDrawItem*
-schgui_cairo_factory_create_item(SchGUICairoFactory *factory, SchShape *shape, SchGUIDrawingCfg *config);
+/*! \brief Create a new Cairo draw item factory
+ *
+ *  \param [in] factory The Cairo draw item factory
+ *  \param [in] config  The configuration to use for creating drawing items 
+ */
+void
+schgui_cairo_factory_set_config(SchGUICairoFactory *factory, SchGUIDrawingCfg *config);
 

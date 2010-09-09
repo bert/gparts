@@ -51,6 +51,18 @@ sch_attributes_get_type(void);
 void
 sch_attributes_append(SchAttributes *attributes, SchShape *shape);
 
+/*! \brief Call a function for each shape in the attributes
+ *
+ *  void func(SchShape *shape, gpointer user_data);
+ *
+ *  \param [in] The drawing
+ *  \param [in] The function to call for each shape in the attributes
+ *  \param [in] Additional data to pass to the function
+ */
+void
+sch_attributes_foreach(SchAttributes *attributes, GFunc func, gpointer user_data);
+
+
 /*! \brief Writes schematic attributes to an output stream.
  *
  *  \param [in]  attributes The attributes.

@@ -52,10 +52,6 @@ sch_attributes_append(SchAttributes *attributes, SchShape *shape)
     }
 }
 
-sch_attributes_bounds(SchAttributes *attributes, SchDrafter *drafter, GeomBounds *bounds)
-{
-}
-
 static void
 sch_attributes_class_init(gpointer g_class, gpointer g_class_data)
 {
@@ -64,9 +60,20 @@ sch_attributes_class_init(gpointer g_class, gpointer g_class_data)
     g_type_class_add_private(klasse, sizeof(SchAttributesPrivate));
 }
 
-sch_attributes_draw(SchAttributes *attributes, SchDrafter *drafter)
+void
+sch_attributes_foreach(SchAttributes *attributes, GFunc func, gpointer user_data)
 {
+    if (func != NULL)
+    {
+        SchAttributesPrivate *privat = SCH_ATTRIBUTES_GET_PRIVATE(attributes);
+
+        if (privat != NULL)
+        {
+            g_slist_foreach(privat->shapes, func, user_data);
+        }
+    }
 }
+
 
 GType
 sch_attributes_get_type(void)

@@ -44,6 +44,8 @@ struct _SchGUICairoDrawItemClass
 
     void (*bounds)(SchGUICairoDrawItem *item, cairo_t *cairo, GeomBounds *bounds);
     void (*draw)(SchGUICairoDrawItem *item, cairo_t *cairo);
+    void (*rotate)(SchGUICairoDrawItem *item, double dt);
+    void (*translate)(SchGUICairoDrawItem *item, double dx, double dy);
 };
 
 GType
@@ -68,4 +70,21 @@ schgui_cairo_draw_item_bounds(SchGUICairoDrawItem *item, cairo_t *cairo, GeomBou
  */
 void
 schgui_cairo_draw_item_draw(SchGUICairoDrawItem *item, cairo_t *cairo);
+
+/*! \brief Rotate the drawing item 
+ *
+ *  \param [in] item  The drawing item
+ *  \param [in] dt    The andle to rotate by
+ */
+void
+schgui_cairo_draw_item_rotate(SchGUICairoDrawItem *item, double dt);
+
+/*! \brief Translate the drawing item 
+ *
+ *  \param [in] item The drawing item
+ *  \param [in] dx   The distance to translate on the x axis
+ *  \param [in] dy   The distance to translate on the y axis
+ */
+void
+schgui_cairo_draw_item_translate(SchGUICairoDrawItem *item, double dx, double dy);
 

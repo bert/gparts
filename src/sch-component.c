@@ -291,6 +291,11 @@ sch_component_get_drawing(const SchComponent *shape, SchDrawing **drawing)
         if (privat != NULL)
         {
             *drawing = privat->drawing;
+
+            if (*drawing != NULL)
+            {
+                g_object_ref(*drawing);
+            }
         }
         else
         {

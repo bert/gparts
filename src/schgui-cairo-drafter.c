@@ -54,16 +54,15 @@ typedef struct _SchGUICairoDrafterPrivate SchGUICairoDrafterPrivate;
 
 struct _SchGUICairoDrafterPrivate
 {
-    cairo_t *cairo;
-
     double zoom;
     double tx;
     double ty;
 
     PangoFontDescription *desc;
 
-    SchGUIDrawingCfg *config;
-    SchDrawing       *drawing;
+    SchGUIDrawingCfg   *config;
+    SchDrawing         *drawing;
+    SchGUICairoFactory *factory;
 
     SchGUICairoDrawItem *draw_list;
 };
@@ -72,14 +71,7 @@ static void
 schgui_cairo_drafter_class_init(gpointer g_class, gpointer g_class_data);
 
 static void
-schgui_cairo_drafter_drafter_init(gpointer g_iface, gpointer g_iface_data);
-
-static void
 schgui_cairo_drafter_init(GTypeInstance* instance, gpointer g_class);
-
-
-static int
-schgui_cairo_drafter_component_bounds(SchGUICairoDrafter *drafter, SchComponent *shape, GeomBounds *bounds);
 
 static void
 schgui_cairo_drafter_dispose(GObject *object);
@@ -92,59 +84,6 @@ schgui_cairo_drafter_get_property(GObject *object, guint property_id, GValue *va
 
 static void
 schgui_cairo_drafter_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
-
-static void 
-schgui_cairo_drafter_shape_bounds1(SchDrafter *drafter, SchShape *shape, GeomBounds *bounds);
-
-static void
-schgui_cairo_drafter_draw_shape(SchShape *shape, SchGUICairoDrafter *drafter);
-
-    struct user_data
-    {
-        SchDrafter *drafter;
-        GeomBounds *bounds;
-    };
-
-
-static void
-adapter(SchShape *shape, struct user_data *user_data)
-{
-    schgui_cairo_drafter_shape_bounds1(user_data->drafter, shape, user_data->bounds);
-}
-
-static void 
-schgui_cairo_drafter_drawing_bounds1(SchDrafter *drafter, SchDrawing *drawing, GeomBounds *bounds)
-{
-    struct user_data user_data;
-
-    user_data.drafter = drafter;
-    user_data.bounds  = bounds;
-
-    geom_bounds_init(bounds);
-
-    sch_drawing_foreach(drawing, adapter, &user_data);
-}
-
-
-static void 
-schgui_cairo_drafter_shape_bounds1(SchDrafter *drafter, SchShape *shape, GeomBounds *bounds)
-{
-    SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
-
-    if (privat != NULL)
-    {
-        SchGUICairoDrawItem *item = schgui_cairo_factory_create_item(NULL, shape, privat->config);
-
-        if (item != NULL)
-        {
-            schgui_cairo_draw_item_bounds(item, privat->cairo, bounds);
-
-            g_object_unref(item);
-        }
-    }
-}
-
-
 
 
 
@@ -187,78 +126,10 @@ schgui_cairo_drafter_class_init(gpointer g_class, gpointer g_class_data)
 }
 
 static void
-schgui_cairo_drafter_drafter_init(gpointer g_iface, gpointer g_iface_data)
-{
-    SchDrafterInterface *iface = (SchDrafterInterface*) g_iface;
-
-//    iface->draw_arc       = schgui_cairo_drafter_draw_arc;
-//    iface->draw_box       = schgui_cairo_drafter_draw_box;
-//    iface->draw_bus       = schgui_cairo_drafter_draw_bus;  
-//    iface->draw_circle    = schgui_cairo_drafter_draw_circle;
-//    iface->draw_component = schgui_cairo_drafter_draw_component;
-//    iface->draw_line      = schgui_cairo_drafter_draw_line;
-//    iface->draw_net       = schgui_cairo_drafter_draw_net; 
-//    iface->draw_pin       = schgui_cairo_drafter_draw_pin; 
-//    iface->draw_text      = schgui_cairo_drafter_draw_text;
-
-    iface->component_bounds = schgui_cairo_drafter_component_bounds;
-    iface->text_bounds      = schgui_cairo_drafter_text_bounds;
-}
-
-static int
-schgui_cairo_drafter_component_bounds(SchGUICairoDrafter *drafter, SchComponent *shape, GeomBounds *bounds)
-{
-    SchDrawing *drawing;
-    gboolean success = FALSE;
-
-    sch_component_get_drawing(shape, &drawing);
-
-    if (drawing != NULL)
-    {
-        int        angle;
-        int        mirror;
-        int        x;
-        int        y;
-
-        schgui_cairo_drafter_drawing_bounds1(drafter, drawing, bounds);
-
-        sch_component_get_orientation(shape, &angle, &mirror);
-
-        if (mirror)
-        {
-            GeomBounds temp = *bounds;
-
-            bounds->min_x = -temp.max_x;
-            bounds->max_x = -temp.min_x;
-        }
-
-        if (angle == 90 || angle == 270)
-        {
-            GeomBounds temp = *bounds;
-
-            bounds->min_y = -temp.max_y;
-            bounds->max_y = -temp.min_y;
-        }
-
-
-        sch_component_get_insertion_point(shape, &x, &y);
-        geom_bounds_translate(bounds, x, y);
-
-        success = TRUE;
-    }
-    else
-    {
-        geom_bounds_init(bounds);
-    }
-
-    return success;
-}
-
-static void
 schgui_cairo_drafter_dispose(GObject *object)
 {
-    schgui_cairo_drafter_set_config(object, NULL);
-    schgui_cairo_drafter_set_drawing(object, NULL);
+    schgui_cairo_drafter_set_config(SCHGUI_CAIRO_DRAFTER(object), NULL);
+    schgui_cairo_drafter_set_drawing(SCHGUI_CAIRO_DRAFTER(object), NULL);
 
     misc_object_chain_dispose(object);
 }
@@ -309,109 +180,27 @@ schgui_cairo_drafter_draw_grid(SchGUICairoDrafter *drafter)
 #endif
 }
 
-
-#if 1
-# define FONT_NAME "Arial"
-#else
-# define FONT_NAME "Helvetica"
-#endif
-
-int
-schgui_cairo_drafter_text_bounds(SchGUICairoDrafter *drafter, SchText *text, GeomBounds *bounds)
+void
+schgui_cairo_drafter_draw_to_cairo(SchGUICairoDrafter *drafter, cairo_t *cairo)
 {
-#if 0
-    SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
-
-    if (privat->cairo != NULL)
+    if (cairo != NULL)
     {
-        PangoLayout *layout;
-        SchMultiline *multiline = sch_text_get_multiline(text);
-        PangoRectangle ink_rect, logical_rect;
+        SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
 
-        int point_size = sch_text_get_size(text);
-        float height;
-
-        cairo_save(privat->cairo);
-        
-
-        height = point_size * 1000 / 72;
-
-        layout = pango_cairo_create_layout(privat->cairo);
-        pango_cairo_context_set_resolution(pango_layout_get_context(layout), 1000);
-
-        g_debug("Zoom: %f", privat->zoom);
-        pango_font_description_set_size(privat->desc, point_size * PANGO_SCALE);
-        g_debug("Font size: %d", pango_font_description_get_size(privat->desc) / PANGO_SCALE);
-        
-        pango_layout_set_font_description(layout, privat->desc);
-
-        pango_layout_set_markup(layout, sch_multiline_peek_markup(multiline), -1);
-
-        cairo_scale(privat->cairo, 1, -2);
-
-        pango_layout_get_extents(layout, &ink_rect, &logical_rect);
-
-        //g_debug("X       %d", ink_rect.x / PANGO_SCALE);
-        //g_debug("Y       %d", ink_rect.y / PANGO_SCALE);
-        //g_debug("Width   %d", ink_rect.width / PANGO_SCALE);
-        //g_debug("Height  %d", ink_rect.height / PANGO_SCALE);
-
-
-     PangoFontMetrics *metrics = pango_context_get_metrics(
-            pango_layout_get_context(layout),
-            privat->desc,
-            NULL
-            );
-
-
-        bounds->min_x = sch_text_get_x(text) + ink_rect.x / PANGO_SCALE;
-        bounds->min_y = sch_text_get_y(text) - (ink_rect.y + ink_rect.height) / PANGO_SCALE;
-        bounds->max_x = sch_text_get_x(text) + (ink_rect.x + ink_rect.width) / PANGO_SCALE;
-        bounds->max_y = sch_text_get_y(text) - ink_rect.y / PANGO_SCALE;
-
-        bounds->min_y += pango_font_metrics_get_ascent(metrics)/(privat->zoom * PANGO_SCALE);
-        bounds->max_y += pango_font_metrics_get_ascent(metrics)/(privat->zoom * PANGO_SCALE);
-
-        pango_font_metrics_unref(metrics);
-
-        cairo_restore(privat->cairo);
-
-        g_object_unref(layout);
-
-        return TRUE;
-    }
-#endif
-
-
-    geom_bounds_init(bounds);
-
-    return FALSE; 
-
-
-}
-
-
-
-
-static void
-schgui_cairo_drafter_draw_shape(SchShape *shape, SchGUICairoDrafter *drafter)
-{
-    SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
-
-    if (privat != NULL)
-    {
-        SchGUICairoDrawItem *item = schgui_cairo_factory_create_item(NULL, shape, privat->config);
-
-        if (item != NULL)
+        if (privat != NULL)
         {
-            schgui_cairo_draw_item_draw(item, privat->cairo);
+            cairo_identity_matrix(cairo);
+            cairo_scale(cairo, 1, -1);
+            cairo_translate(cairo, privat->tx, privat->ty);
+            cairo_scale(cairo, privat->zoom, privat->zoom);
+            cairo_set_line_width(cairo, 20);
 
-            g_object_unref(item);
+            //    schgui_cairo_drafter_draw_grid(privat->drafter);
+
+            schgui_cairo_draw_item_draw(privat->draw_list, cairo);
         }
     }
-
 }
-
 
 void
 schgui_cairo_drafter_draw_to_widget(SchGUICairoDrafter *drafter, GtkWidget *widget)
@@ -420,31 +209,14 @@ schgui_cairo_drafter_draw_to_widget(SchGUICairoDrafter *drafter, GtkWidget *widg
 
     if (privat != NULL)
     {
-        //schgui_cairo_drafter_set_zoom(drafter,1 );
-        //schgui_cairo_drafter_set_translate(drafter, 0, 0);
+        cairo_t *cairo = gdk_cairo_create(widget->window);
 
-        //schgui_cairo_drafter_set_zoom(drafter, privat->zoom);
-        //schgui_cairo_drafter_set_translate(privat->drafter, privat->tx, privat->ty);
+        if (cairo != NULL)
+        {
+            schgui_cairo_drafter_draw_to_cairo(drafter, cairo);
 
-        privat->cairo = gdk_cairo_create(widget->window);
-        // cairo_scale(privat->cairo, privat->zoom, -privat->zoom);
-        cairo_identity_matrix(privat->cairo);
-        //cairo_translate(privat->cairo, 0, 480);
-        cairo_scale(privat->cairo, 1, -1);
-        cairo_translate(privat->cairo, privat->tx, privat->ty);
-        cairo_scale(privat->cairo, privat->zoom, privat->zoom);
-        cairo_set_line_width(privat->cairo, 20);
-
-            //    schgui_cairo_drafter_draw_grid(privat->drafter);
-
-        //sch_drawing_draw(privat->drawing, SCH_DRAFTER(drafter));
-        //sch_drawing_foreach(privat->drawing, schgui_cairo_drafter_draw_shape, drafter);
-        
-
-        schgui_cairo_draw_item_draw(privat->draw_list, privat->cairo);
-
-        cairo_destroy(privat->cairo);
-        privat->cairo = NULL;
+            cairo_destroy(cairo);
+        }
     }
 }
 
@@ -477,7 +249,6 @@ schgui_cairo_drafter_get_property(GObject *object, guint property_id, GValue *va
     }
 }
 
-
 GType
 schgui_cairo_drafter_get_type(void)
 {
@@ -504,12 +275,6 @@ schgui_cairo_drafter_get_type(void)
             NULL                                  /* interface_data */
             };
 
-        static const GInterfaceInfo iinfod = {
-            schgui_cairo_drafter_drafter_init,    /* interface_init */
-            NULL,                                 /* interface_finalize */
-            NULL                                  /* interface_data */
-            };
-
         type = g_type_register_static(
             G_TYPE_OBJECT,
             "SchGUICairoDrafter",
@@ -518,32 +283,9 @@ schgui_cairo_drafter_get_type(void)
             );
 
         g_type_add_interface_static(type, GTK_TYPE_BUILDABLE, &iinfob);
-        g_type_add_interface_static(type, SCH_TYPE_DRAFTER, &iinfod);
     }
 
     return type;
-}
-
-void
-schgui_cairo_drafter_set_zoom(SchGUICairoDrafter *drafter, double zoom)
-{
-    SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
-
-    if (privat != NULL)
-    {
-        privat->zoom = zoom;
-    }
-}
-void
-schgui_cairo_drafter_set_translate(SchGUICairoDrafter *drafter, double tx, double ty)
-{
-    SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
-
-    if (privat != NULL)
-    {
-        privat->tx = tx;
-        privat->ty = ty;
-    }
 }
 
 static void
@@ -558,16 +300,50 @@ schgui_cairo_drafter_init(GTypeInstance* instance, gpointer g_class)
 }
 
 void
+schgui_cairo_drafter_set_zoom(SchGUICairoDrafter *drafter, double zoom)
+{
+    SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
+
+    if (privat != NULL)
+    {
+        privat->zoom = zoom;
+    }
+}
+
+void
+schgui_cairo_drafter_set_translate(SchGUICairoDrafter *drafter, double tx, double ty)
+{
+    SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
+
+    if (privat != NULL)
+    {
+        privat->tx = tx;
+        privat->ty = ty;
+    }
+}
+
+void
 schgui_cairo_drafter_set_config(SchGUICairoDrafter *drafter, SchGUIDrawingCfg *config)
 {
     SchGUICairoDrafterPrivate *privat = SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(drafter);
 
     if (privat != NULL)
     {
+        if (privat->draw_list != NULL)
+        {
+            g_object_unref(privat->draw_list);
+            privat->draw_list = NULL;
+        }
+
+        if (privat->factory != NULL)
+        {
+            g_object_unref(privat->factory);
+            privat->factory = NULL;
+        }
+
         if (privat->config != NULL)
         {
             /*! \todo unregister signals to update */
-
             g_object_unref(privat->config);
         }
 
@@ -578,6 +354,13 @@ schgui_cairo_drafter_set_config(SchGUICairoDrafter *drafter, SchGUIDrawingCfg *c
             g_object_ref(privat->config);
 
             /*! \todo register signals to update */
+        }
+
+        privat->factory = schgui_cairo_factory_new(privat->config);
+
+        if ((privat->config != NULL) && (privat->drawing != NULL))
+        {
+            privat->draw_list = schgui_cairo_factory_create_from_drawing(privat->factory, privat->drawing);
         }
     }
 }
@@ -614,7 +397,7 @@ schgui_cairo_drafter_set_drawing(SchGUICairoDrafter *drafter, SchDrawing *drawin
 
         if ((privat->config != NULL) && (privat->drawing != NULL))
         {
-            privat->draw_list = schgui_cairo_factory_create_from_drawing(NULL, privat->drawing, privat->config);
+            privat->draw_list = schgui_cairo_factory_create_from_drawing(privat->factory, privat->drawing);
         }
     }
 }
@@ -644,17 +427,28 @@ schgui_cairo_drafter_zoom_extents(SchGUICairoDrafter *drafter, GtkWidget *widget
 
     if (privat != NULL)
     {
-        if (privat->drawing != NULL)
+        if (privat->draw_list != NULL)
         {
             GeomBounds bounds;
-            int w;
-            int h;
-            double zx;
-            double zy;
+            cairo_t    *cairo;
+            int        w;
+            int        h;
+            double     zx;
+            double     zy;
 
+            cairo = gdk_cairo_create(widget->window);
            // schgui_cairo_drafter_begin_drawing(privat->drafter, widget);
 
-            schgui_cairo_drafter_drawing_bounds1(drafter, privat->drawing, &bounds);
+            //schgui_cairo_drafter_drawing_bounds1(drafter, privat->drawing, &bounds);
+
+            geom_bounds_init(&bounds);
+
+            schgui_cairo_draw_item_bounds(privat->draw_list, cairo, &bounds);
+
+            if (cairo != NULL)
+            {
+                cairo_destroy(cairo);
+            }
 
             //g_debug("Min X = %d", bounds.min_x);
             //g_debug("Min Y = %d", bounds.min_y);

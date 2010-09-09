@@ -86,3 +86,31 @@ schgui_cairo_draw_item_get_type(void)
     return type;
 }
 
+void
+schgui_cairo_draw_item_rotate(SchGUICairoDrawItem *item, double dt)
+{
+    if (item != NULL)
+    {
+        SchGUICairoDrawItemClass *klasse = SCHGUI_CAIRO_DRAW_ITEM_GET_CLASS(item);
+
+        if ((klasse != NULL) && (klasse->rotate != NULL))
+        {
+            klasse->rotate(item, dt);
+        }
+    }
+}
+
+void
+schgui_cairo_draw_item_translate(SchGUICairoDrawItem *item, double dx, double dy)
+{
+    if (item != NULL)
+    {
+        SchGUICairoDrawItemClass *klasse = SCHGUI_CAIRO_DRAW_ITEM_GET_CLASS(item);
+
+        if ((klasse != NULL) && (klasse->translate != NULL))
+        {
+            klasse->translate(item, dx, dy);
+        }
+    }
+}
+

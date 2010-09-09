@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file sch_schematic_text.h
+/*! \file sch-text.h
  */
 
 #define SCH_TYPE_TEXT (sch_text_get_type())

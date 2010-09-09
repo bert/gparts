@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file schgui-cairo-arc.c
+/*! \file schgui-cairo-factory.c
  */
 
 #include <math.h>
@@ -36,6 +36,7 @@
 
 #include "schgui-cairo-arc.h"
 #include "schgui-cairo-box.h"
+#include "schgui-cairo-bus.h"
 #include "schgui-cairo-circle.h"
 #include "schgui-cairo-line.h"
 #include "schgui-cairo-net.h"
@@ -44,57 +45,210 @@
 
 #include "schgui-cairo-factory.h"
 
-//#define SCHGUI_CAIRO_FACTORY_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCHGUI_TYPE_CAIRO_FACTORY,SchGUICairoFactoryPrivate))
+#define SCHGUI_CAIRO_FACTORY_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCHGUI_TYPE_CAIRO_FACTORY,SchGUICairoFactoryPrivate))
 
-//typedef struct _SchGUICairoFactoryPrivate SchGUICairoFactoryPrivate;
+enum
+{
+    SCHGUI_CAIRO_FACTORY_CONFIG = 1,
+};
 
-//struct _SchGUICairoFactoryPrivate
-//{
-//    double red;
-//};
+typedef struct _SchGUICairoFactoryPrivate SchGUICairoFactoryPrivate;
 
+struct _SchGUICairoFactoryPrivate
+{
+    SchGUIDrawingCfg *config;
+};
 
 struct _temp_context
 {
     SchGUICairoFactory  *factory;
-    SchGUIDrawingCfg    *config;
     SchGUICairoDrawList *draw_list;
 };
 
 static void
 schgui_cairo_factory_class_init(gpointer g_class, gpointer g_class_data);
 
+static SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_arc(SchGUICairoFactory *factory, SchArc *arc);
+
+static SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_attributes(SchGUICairoFactory *factory, SchShape *shape);
+
+static void
+schgui_cairo_factory_create_from_attributes_proc(SchShape *shape, gpointer user_data);
+
+static SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_box(SchGUICairoFactory *factory, SchBox *box);
+
+static SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_bus(SchGUICairoFactory *factory, SchBus *bus);
+
+static SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_circle(SchGUICairoFactory *factory, SchCircle *circle);
+
+static SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_component(SchGUICairoFactory *factory, SchComponent *component);
+
 static void
 schgui_cairo_factory_create_from_drawing_proc(SchShape *shape, gpointer user_data);
 
+static SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_line(SchGUICairoFactory *factory, SchLine *line);
+
+static SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_net(SchGUICairoFactory *factory, SchNet *net);
+
+static SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_pin(SchGUICairoFactory *factory, SchPin *pin);
+
+static SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_text(SchGUICairoFactory *factory, SchText *text);
+
+static void
+schgui_cairo_factory_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
+
+static void
+schgui_cairo_factory_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
+
+
+
+static void
+schgui_cairo_factory_base_finalize(gpointer g_class)
+{
+    SchGUICairoFactoryClass *klasse = SCHGUI_CAIRO_FACTORY_CLASS(g_class);
+
+    g_hash_table_destroy(klasse->table);
+    klasse->table = NULL;
+}
+
+static void
+schgui_cairo_factory_base_init(gpointer g_class)
+{
+    SchGUICairoFactoryClass *klasse = SCHGUI_CAIRO_FACTORY_CLASS(g_class);
+
+    klasse->table = g_hash_table_new(
+        g_direct_hash,
+        g_direct_equal
+        );
+
+    g_hash_table_insert(
+        klasse->table,
+        GINT_TO_POINTER(SCH_TYPE_ARC),
+        schgui_cairo_factory_create_from_arc
+        );
+
+    g_hash_table_insert(
+        klasse->table,
+        GINT_TO_POINTER(SCH_TYPE_BOX),
+        schgui_cairo_factory_create_from_box
+        );
+
+    g_hash_table_insert(
+        klasse->table,
+        GINT_TO_POINTER(SCH_TYPE_BUS),
+        schgui_cairo_factory_create_from_bus
+        );
+
+    g_hash_table_insert(
+        klasse->table,
+        GINT_TO_POINTER(SCH_TYPE_CIRCLE),
+        schgui_cairo_factory_create_from_circle
+        );
+
+    g_hash_table_insert(
+        klasse->table,
+        GINT_TO_POINTER(SCH_TYPE_COMPONENT),
+        schgui_cairo_factory_create_from_component
+        );
+
+    g_hash_table_insert(
+        klasse->table,
+        GINT_TO_POINTER(SCH_TYPE_LINE),
+        schgui_cairo_factory_create_from_line
+        );
+
+    g_hash_table_insert(
+        klasse->table,
+        GINT_TO_POINTER(SCH_TYPE_NET),
+        schgui_cairo_factory_create_from_net
+        );
+
+    g_hash_table_insert(
+        klasse->table,
+        GINT_TO_POINTER(SCH_TYPE_PIN),
+        schgui_cairo_factory_create_from_pin
+        );
+
+    g_hash_table_insert(
+        klasse->table,
+        GINT_TO_POINTER(SCH_TYPE_TEXT),
+        schgui_cairo_factory_create_from_text
+        );
+}
 
 static void
 schgui_cairo_factory_class_init(gpointer g_class, gpointer g_class_data)
 {
-    SchGUICairoFactoryClass *klasse = SCHGUI_CAIRO_FACTORY_CLASS(g_class);
+    GObjectClass *klasse  = G_OBJECT_CLASS(g_class);
+
+    g_type_class_add_private(klasse, sizeof(SchGUICairoFactoryPrivate));
+
+    klasse->get_property = schgui_cairo_factory_get_property;
+    klasse->set_property = schgui_cairo_factory_set_property;
+
+    g_object_class_install_property(
+        klasse,
+        SCHGUI_CAIRO_FACTORY_CONFIG,
+        g_param_spec_object(
+            "config",
+            "Configuration",
+            "Configuration",
+            SCHGUI_TYPE_DRAWING_CFG,
+            G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
+            )
+        );
 }
 
-SchGUICairoDrawItem*
-schgui_cairo_factory_create_from_drawing(SchGUICairoFactory *factory, SchDrawing *drawing, SchGUIDrawingCfg *config)
+static SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_arc(SchGUICairoFactory *factory, SchArc *shape)
 {
+    SchGUICairoDrawItem *item = NULL;
+    SchGUICairoFactoryPrivate *privat = SCHGUI_CAIRO_FACTORY_GET_PRIVATE(factory);
+
+    if (privat != NULL)
+    {
+        item = SCHGUI_CAIRO_DRAW_ITEM(schgui_cairo_arc_new(SCH_ARC(shape), privat->config));
+    }
+
+    return item;
+}
+
+static SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_attributes(SchGUICairoFactory *factory, SchShape *shape)
+{
+    SchAttributes *attributes = sch_shape_get_attributes(shape);
     struct _temp_context user_data;
 
     user_data.factory   = factory;
-    user_data.config    = config;
     user_data.draw_list = NULL;
 
-    sch_drawing_foreach(drawing, schgui_cairo_factory_create_from_drawing_proc, &user_data);
+    sch_attributes_foreach(attributes, (GFunc) schgui_cairo_factory_create_from_attributes_proc, &user_data);
+
+    if (attributes != NULL)
+    {
+        g_object_unref(attributes);
+    }
 
     return SCHGUI_CAIRO_DRAW_ITEM(user_data.draw_list);
 }
 
 static void
-schgui_cairo_factory_create_from_drawing_proc(SchShape *shape, gpointer user_data)
+schgui_cairo_factory_create_from_attributes_proc(SchShape *shape, gpointer user_data)
 {
     struct _temp_context *data = (struct _temp_context*) user_data;
     SchGUICairoDrawItem  *item;
 
-    item = schgui_cairo_factory_create_item(data->factory, shape, data->config);
+    item = schgui_cairo_factory_create_from_shape(data->factory, shape);
 
     if (item != NULL)
     {
@@ -107,6 +261,259 @@ schgui_cairo_factory_create_from_drawing_proc(SchShape *shape, gpointer user_dat
     }
 }
 
+
+static SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_box(SchGUICairoFactory *factory, SchBox *shape)
+{
+    SchGUICairoDrawItem *item = NULL;
+    SchGUICairoFactoryPrivate *privat = SCHGUI_CAIRO_FACTORY_GET_PRIVATE(factory);
+
+    if (privat != NULL)
+    {
+        item = SCHGUI_CAIRO_DRAW_ITEM(schgui_cairo_box_new(SCH_BOX(shape), privat->config));
+    }
+
+    return item;
+}
+
+static SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_bus(SchGUICairoFactory *factory, SchBus *shape)
+{
+    SchGUICairoDrawItem *item = NULL;
+    SchGUICairoFactoryPrivate *privat = SCHGUI_CAIRO_FACTORY_GET_PRIVATE(factory);
+
+    if (privat != NULL)
+    {
+        item = SCHGUI_CAIRO_DRAW_ITEM(schgui_cairo_bus_new(SCH_BUS(shape), privat->config));
+    }
+
+    return item;
+}
+
+static SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_circle(SchGUICairoFactory *factory, SchCircle *shape)
+{
+    SchGUICairoDrawItem *item = NULL;
+    SchGUICairoFactoryPrivate *privat = SCHGUI_CAIRO_FACTORY_GET_PRIVATE(factory);
+
+    if (privat != NULL)
+    {
+        item = SCHGUI_CAIRO_DRAW_ITEM(schgui_cairo_circle_new(SCH_CIRCLE(shape), privat->config));
+    }
+
+    return item;
+}
+
+static SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_component(SchGUICairoFactory *factory, SchComponent *component)
+{
+    SchGUICairoDrawList *draw_list = NULL;
+    SchGUICairoFactoryPrivate *privat = SCHGUI_CAIRO_FACTORY_GET_PRIVATE(factory);
+
+    if (privat != NULL)
+    {
+        SchDrawing          *drawing    = NULL;
+        SchGUICairoDrawItem *draw_item;
+        int                 dx;
+        int                 dy;
+
+        sch_component_get_drawing(component, &drawing);
+        sch_component_get_insertion_point(component, &dx, &dy);
+
+        draw_item = schgui_cairo_factory_create_from_drawing(factory, drawing);
+
+        if (drawing != NULL)
+        {
+            g_object_unref(drawing);
+        }
+
+        if (draw_item != NULL)
+        {
+            draw_list = SCHGUI_CAIRO_DRAW_LIST(g_object_new(SCHGUI_TYPE_CAIRO_DRAW_LIST, NULL));
+
+            schgui_cairo_draw_list_append(draw_list, draw_item);
+
+            g_object_unref(draw_item);
+        }
+
+        draw_item = schgui_cairo_factory_create_from_attributes(factory, SCH_SHAPE(component));
+
+        if (draw_item != NULL)
+        {
+            if (draw_list == NULL)
+            {
+                draw_list = SCHGUI_CAIRO_DRAW_LIST(g_object_new(SCHGUI_TYPE_CAIRO_DRAW_LIST, NULL));
+            }
+
+            schgui_cairo_draw_list_append(draw_list, draw_item);
+
+            g_object_unref(draw_item);
+        }
+
+        schgui_cairo_draw_item_translate(SCHGUI_CAIRO_DRAW_ITEM(draw_list), dx, dy);
+    }
+
+    return SCHGUI_CAIRO_DRAW_ITEM(draw_list);
+}
+
+SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_drawing(SchGUICairoFactory *factory, SchDrawing *drawing)
+{
+    struct _temp_context user_data;
+
+    user_data.factory   = factory;
+    user_data.draw_list = NULL;
+
+    sch_drawing_foreach(drawing, (GFunc) schgui_cairo_factory_create_from_drawing_proc, &user_data);
+
+    return SCHGUI_CAIRO_DRAW_ITEM(user_data.draw_list);
+}
+
+static void
+schgui_cairo_factory_create_from_drawing_proc(SchShape *shape, gpointer user_data)
+{
+    struct _temp_context *data = (struct _temp_context*) user_data;
+    SchGUICairoDrawItem  *item;
+
+    item = schgui_cairo_factory_create_from_shape(data->factory, shape);
+
+    if (item != NULL)
+    {
+        if (data->draw_list == NULL)
+        {
+            data->draw_list = SCHGUI_CAIRO_DRAW_LIST(g_object_new(SCHGUI_TYPE_CAIRO_DRAW_LIST, NULL));
+        }
+
+        schgui_cairo_draw_list_append(data->draw_list, item);
+    }
+}
+
+static SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_line(SchGUICairoFactory *factory, SchLine *shape)
+{
+    SchGUICairoDrawItem *item = NULL;
+    SchGUICairoFactoryPrivate *privat = SCHGUI_CAIRO_FACTORY_GET_PRIVATE(factory);
+
+    if (privat != NULL)
+    {
+        item = SCHGUI_CAIRO_DRAW_ITEM(schgui_cairo_line_new(SCH_LINE(shape), privat->config));
+    }
+
+    return item;
+}
+
+static SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_net(SchGUICairoFactory *factory, SchNet *shape)
+{
+    SchGUICairoDrawItem *item = NULL;
+    SchGUICairoFactoryPrivate *privat = SCHGUI_CAIRO_FACTORY_GET_PRIVATE(factory);
+
+    if (privat != NULL)
+    {
+        item = SCHGUI_CAIRO_DRAW_ITEM(schgui_cairo_net_new(SCH_NET(shape), privat->config));
+    }
+
+    return item;
+}
+
+static SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_pin(SchGUICairoFactory *factory, SchPin *shape)
+{
+    SchGUICairoDrawList *draw_list = NULL;
+    SchGUICairoFactoryPrivate *privat = SCHGUI_CAIRO_FACTORY_GET_PRIVATE(factory);
+
+    if (privat != NULL)
+    {
+        SchGUICairoDrawItem *draw_item;
+
+        draw_item = SCHGUI_CAIRO_DRAW_ITEM(schgui_cairo_pin_new(SCH_PIN(shape), privat->config));
+
+        if (draw_item != NULL)
+        {
+            draw_list = SCHGUI_CAIRO_DRAW_LIST(g_object_new(SCHGUI_TYPE_CAIRO_DRAW_LIST, NULL));
+
+            schgui_cairo_draw_list_append(draw_list, draw_item);
+
+            g_object_unref(draw_item);
+        }
+
+        draw_item = schgui_cairo_factory_create_from_attributes(factory, SCH_SHAPE(shape));
+
+        if (draw_item != NULL)
+        {
+            if (draw_list == NULL)
+            {
+                draw_list = SCHGUI_CAIRO_DRAW_LIST(g_object_new(SCHGUI_TYPE_CAIRO_DRAW_LIST, NULL));
+            }
+
+            schgui_cairo_draw_list_append(draw_list, draw_item);
+
+            g_object_unref(draw_item);
+        }
+
+    }
+
+    return SCHGUI_CAIRO_DRAW_ITEM(draw_list);
+}
+
+SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_shape(SchGUICairoFactory *factory, SchShape *shape)
+{
+    SchGUICairoDrawItem *item = NULL;
+
+    if (factory != NULL)
+    {
+        SchGUICairoFactoryClass *klasse = SCHGUI_CAIRO_FACTORY_GET_CLASS(factory);
+
+        SchGUICairoDrawItem* (*func)(SchGUICairoFactory *factory, SchShape *shape);
+
+        if (klasse != NULL)
+        {
+            func = g_hash_table_lookup(klasse->table, GINT_TO_POINTER(G_TYPE_FROM_INSTANCE(shape)));
+
+            if (func != NULL)
+            {
+                item = func(factory, shape);
+            }
+        }
+    }
+
+    return item;
+}
+
+static SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_text(SchGUICairoFactory *factory, SchText *shape)
+{
+    SchGUICairoDrawItem *item = NULL;
+    SchGUICairoFactoryPrivate *privat = SCHGUI_CAIRO_FACTORY_GET_PRIVATE(factory);
+
+    if (privat != NULL)
+    {
+        item = SCHGUI_CAIRO_DRAW_ITEM(schgui_cairo_text_new(SCH_TEXT(shape), privat->config));
+    }
+
+    return item;
+}
+
+static void
+schgui_cairo_factory_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
+{
+    SchGUICairoFactoryPrivate *privat = SCHGUI_CAIRO_FACTORY_GET_PRIVATE(object);
+
+    if (privat != NULL)
+    {
+        switch (property_id)
+        {
+            case SCHGUI_CAIRO_FACTORY_CONFIG:
+                g_value_set_object(value, privat->config);
+                break;
+
+            default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+        }
+    }
+}
+
 GType
 schgui_cairo_factory_get_type(void)
 {
@@ -115,16 +522,16 @@ schgui_cairo_factory_get_type(void)
     if (type == G_TYPE_INVALID)
     {
         static const GTypeInfo tinfo = {
-            sizeof(SchGUICairoFactoryClass),    /* class_size */
-            NULL,                               /* base_init */
-            NULL,                               /* base_finalize */
-            schgui_cairo_factory_class_init,    /* class_init */
-            NULL,                               /* class_finalize */
-            NULL,                               /* class_data */
-            sizeof(SchGUICairoFactory),         /* instance_size */
-            0,                                  /* n_preallocs */
-            NULL,                               /* instance_init */
-            NULL                                /* value_table */
+            sizeof(SchGUICairoFactoryClass),       /* class_size */
+            schgui_cairo_factory_base_init,        /* base_init */
+            schgui_cairo_factory_base_finalize,    /* base_finalize */
+            schgui_cairo_factory_class_init,       /* class_init */
+            NULL,                                  /* class_finalize */
+            NULL,                                  /* class_data */
+            sizeof(SchGUICairoFactory),            /* instance_size */
+            0,                                     /* n_preallocs */
+            NULL,                                  /* instance_init */
+            NULL                                   /* value_table */
             };
 
         type = g_type_register_static(
@@ -139,55 +546,49 @@ schgui_cairo_factory_get_type(void)
 }
 
 SchGUICairoFactory*
-schgui_cairo_factory_new(const SchFactory *shape, SchGUIDrawingCfg *config)
+schgui_cairo_factory_new(SchGUIDrawingCfg *config)
 {
-    return NULL;
+    return SCHGUI_CAIRO_FACTORY(
+        g_object_new(
+            SCHGUI_TYPE_CAIRO_FACTORY,
+            "config", config,
+            NULL
+            )
+        );
 }
 
-
-/*! \todo Move to a hash table in the class stucture */
-SchGUICairoDrawItem*
-schgui_cairo_factory_create_item(SchGUICairoFactory *factory, SchShape *shape, SchGUIDrawingCfg *config)
+void
+schgui_cairo_factory_set_config(SchGUICairoFactory *factory, SchGUIDrawingCfg *config)
 {
-    if (SCH_IS_ARC(shape))
+    SchGUICairoFactoryPrivate *privat = SCHGUI_CAIRO_FACTORY_GET_PRIVATE(factory);
+
+    if (privat != NULL)
     {
-        return schgui_cairo_arc_new(SCH_ARC(shape), config);
+        if (privat->config != NULL)
+        {
+            g_object_unref(privat->config);
+        }
+
+        privat->config = config;
+
+        if (privat->config != NULL)
+        {
+            g_object_ref(privat->config);
+        }
     }
-    else if (SCH_IS_BOX(shape))
+}
+
+static void
+schgui_cairo_factory_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec)
+{
+    switch (property_id)
     {
-        return schgui_cairo_box_new(SCH_BOX(shape), config);
-    }
-    else if (SCH_IS_BUS(shape))
-    {
-        return schgui_cairo_bus_new(SCH_BUS(shape), config);
-    }
-    else if (SCH_IS_CIRCLE(shape))
-    {
-        return schgui_cairo_circle_new(SCH_CIRCLE(shape), config);
-    }
-    //else if (SCH_IS_COMPONENT(shape))
-   // {
-    //    return schgui_cairo_arc_new(shape, config);
-   // }
-    else if (SCH_IS_LINE(shape))
-    {
-        return schgui_cairo_line_new(SCH_LINE(shape), config);
-    }
-    else if (SCH_IS_NET(shape))
-    {
-        return schgui_cairo_net_new(SCH_NET(shape), config);
-    }
-    else if (SCH_IS_PIN(shape))
-    {
-        return schgui_cairo_pin_new(SCH_PIN(shape), config);
-    }
-    else if (SCH_IS_TEXT(shape))
-    {
-        return schgui_cairo_text_new(SCH_TEXT(shape), config);
-    }
-    else
-    {
-        return NULL;
+        case SCHGUI_CAIRO_FACTORY_CONFIG:
+            schgui_cairo_factory_set_config(SCHGUI_CAIRO_FACTORY(object), g_value_get_object(value));
+            break;
+
+        default:
+            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
     }
 }
 

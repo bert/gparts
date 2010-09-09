@@ -64,6 +64,12 @@ schgui_cairo_bus_class_init(gpointer g_class, gpointer g_class_data);
 static void
 schgui_cairo_bus_draw(SchGUICairoBus *shape, cairo_t *cairo);
 
+static void
+schgui_cairo_bus_rotate(SchGUICairoBus *item, double dt);
+
+static void
+schgui_cairo_bus_translate(SchGUICairoBus *item, double dx, double dy);
+
 
 
 static void
@@ -114,8 +120,10 @@ schgui_cairo_bus_class_init(gpointer g_class, gpointer g_class_data)
 
     g_type_class_add_private(G_OBJECT_CLASS(g_class), sizeof(SchGUICairoBusPrivate));
 
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->bounds = schgui_cairo_bus_bounds;
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->draw   = schgui_cairo_bus_draw;
+    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->bounds    = schgui_cairo_bus_bounds;
+    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->draw      = schgui_cairo_bus_draw;
+    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->rotate    = schgui_cairo_bus_rotate;
+    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->translate = schgui_cairo_bus_translate;
 }
 
 static void
@@ -207,5 +215,29 @@ schgui_cairo_bus_new(const SchBus *shape, SchGUIDrawingCfg *config)
     }
 
     return item;
+}
+
+static void
+schgui_cairo_bus_rotate(SchGUICairoBus *item, double dt)
+{
+    SchGUICairoBusPrivate *privat = SCHGUI_CAIRO_BUS_GET_PRIVATE(item);
+
+    if (privat != NULL)
+    {
+    }
+}
+
+static void
+schgui_cairo_bus_translate(SchGUICairoBus *item, double dx, double dy)
+{
+    SchGUICairoBusPrivate *privat = SCHGUI_CAIRO_BUS_GET_PRIVATE(item);
+
+    if (privat != NULL)
+    {
+        privat->x[0] += dx;
+        privat->y[0] += dy;
+        privat->x[1] += dx;
+        privat->y[1] += dy;
+    }
 }
 
