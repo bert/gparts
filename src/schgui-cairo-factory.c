@@ -312,11 +312,14 @@ schgui_cairo_factory_create_from_component(SchGUICairoFactory *factory, SchCompo
 
     if (privat != NULL)
     {
-        SchDrawing          *drawing    = NULL;
+        int                 angle;
+        SchDrawing          *drawing = NULL;
         SchGUICairoDrawItem *draw_item;
         int                 dx;
         int                 dy;
+        int                 mirror;
 
+        sch_component_get_orientation(component, &angle, &mirror);
         sch_component_get_drawing(component, &drawing);
         sch_component_get_insertion_point(component, &dx, &dy);
 
@@ -350,6 +353,12 @@ schgui_cairo_factory_create_from_component(SchGUICairoFactory *factory, SchCompo
             g_object_unref(draw_item);
         }
 
+        if (mirror)
+        {
+            schgui_cairo_draw_item_mirror_y(SCHGUI_CAIRO_DRAW_ITEM(draw_list));
+        }
+
+        schgui_cairo_draw_item_rotate(SCHGUI_CAIRO_DRAW_ITEM(draw_list), geom_angle_radians(angle));
         schgui_cairo_draw_item_translate(SCHGUI_CAIRO_DRAW_ITEM(draw_list), dx, dy);
     }
 

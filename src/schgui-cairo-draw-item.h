@@ -44,6 +44,7 @@ struct _SchGUICairoDrawItemClass
 
     void (*bounds)(SchGUICairoDrawItem *item, cairo_t *cairo, GeomBounds *bounds);
     void (*draw)(SchGUICairoDrawItem *item, cairo_t *cairo);
+    void (*mirror_y)(SchGUICairoDrawItem *item);
     void (*rotate)(SchGUICairoDrawItem *item, double dt);
     void (*translate)(SchGUICairoDrawItem *item, double dx, double dy);
 };
@@ -51,10 +52,17 @@ struct _SchGUICairoDrawItemClass
 GType
 schgui_cairo_draw_item_get_type(void);
 
-/*! \brief Include the bounds of the drawing item
+/*! \brief Calculate the union of the given bounds and the drawing item
  *
- *  \todo Investigate use of cairo_path_extents().
+ *  This function operates in user coordinates.
+ *
  *  \todo The bounds should use doubles instead of ints.
+ *
+ *  NOTES
+ *  The function cairo_stroke_extents() ignores the current transformation
+ *  matrix. So, the current transformation matrix cannot be used to make
+ *  drawing item coordinates relative. As a result, all drawing items use 
+ *  absolute user coordinates.
  *
  *  \param [in]     item   The drawing item
  *  \param [in]     cairo  The cairo context
@@ -63,7 +71,7 @@ schgui_cairo_draw_item_get_type(void);
 void
 schgui_cairo_draw_item_bounds(SchGUICairoDrawItem *item, cairo_t *cairo, GeomBounds *bounds);
 
-/*! \brief Draw the drawing item 
+/*! \brief Draw this item ti the given Cairo context 
  *
  *  \param [in] item  The drawing item
  *  \param [in] cairo The cairo context to draw upon
@@ -71,10 +79,18 @@ schgui_cairo_draw_item_bounds(SchGUICairoDrawItem *item, cairo_t *cairo, GeomBou
 void
 schgui_cairo_draw_item_draw(SchGUICairoDrawItem *item, cairo_t *cairo);
 
+/*! \brief Mirror the drawing item on the y axis
+ *
+ *  \param [in] item  The drawing item
+ */
+void
+schgui_cairo_draw_item_mirror_y(SchGUICairoDrawItem *item);
+
+
 /*! \brief Rotate the drawing item 
  *
  *  \param [in] item  The drawing item
- *  \param [in] dt    The andle to rotate by
+ *  \param [in] dt    The angle, in radians, to rotate by
  */
 void
 schgui_cairo_draw_item_rotate(SchGUICairoDrawItem *item, double dt);

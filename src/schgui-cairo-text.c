@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file schgui-cairo-arc.c
+/*! \file schgui-cairo-text.c
  */
 
 #include <math.h>
@@ -67,13 +67,16 @@ static void
 schgui_cairo_text_class_init(gpointer g_class, gpointer g_class_data);
 
 static void
-schgui_cairo_text_draw(SchGUICairoText *shape, cairo_t *cairo);
+schgui_cairo_text_draw(SchGUICairoDrawItem *item, cairo_t *cairo);
 
 static void
-schgui_cairo_text_rotate(SchGUICairoText *item, double dt);
+schgui_cairo_text_mirror_y(SchGUICairoDrawItem *item, double dt);
 
 static void
-schgui_cairo_text_translate(SchGUICairoText *item, double dx, double dy);
+schgui_cairo_text_rotate(SchGUICairoDrawItem *item, double dt);
+
+static void
+schgui_cairo_text_translate(SchGUICairoDrawItem *item, double dx, double dy);
 
 
 static void
@@ -93,22 +96,22 @@ schgui_cairo_text_bounds(SchGUICairoDrawItem *item, cairo_t *cairo, GeomBounds *
 static void
 schgui_cairo_text_class_init(gpointer g_class, gpointer g_class_data)
 {
-    SchGUICairoTextClass *klasse = SCHGUI_CAIRO_TEXT_CLASS(g_class);
+    SchGUICairoDrawItemClass *klasse = SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class);
 
     g_type_class_add_private(G_OBJECT_CLASS(g_class), sizeof(SchGUICairoTextPrivate));
 
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->bounds    = schgui_cairo_text_bounds;
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->draw      = schgui_cairo_text_draw;
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->rotate    = schgui_cairo_text_rotate;
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->translate = schgui_cairo_text_translate;
+    klasse->bounds    = schgui_cairo_text_bounds;
+    klasse->draw      = schgui_cairo_text_draw;
+    klasse->rotate    = schgui_cairo_text_rotate;
+    klasse->translate = schgui_cairo_text_translate;
 }
 
 static void
-schgui_cairo_text_draw(SchGUICairoText *shape, cairo_t *cairo)
+schgui_cairo_text_draw(SchGUICairoDrawItem *item, cairo_t *cairo)
 {
     if (cairo != NULL)
     {
-        SchGUICairoTextPrivate *privat = SCHGUI_CAIRO_TEXT_GET_PRIVATE(shape);
+        SchGUICairoTextPrivate *privat = SCHGUI_CAIRO_TEXT_GET_PRIVATE(item);
 
         if (privat != NULL)
         {
@@ -220,6 +223,17 @@ schgui_cairo_text_get_type(void)
     }
 
     return type;
+}
+
+static void
+schgui_cairo_text_mirror_y(SchGUICairoDrawItem *item, double dt)
+{
+    SchGUICairoTextPrivate *privat = SCHGUI_CAIRO_TEXT_GET_PRIVATE(item);
+
+    if (privat != NULL)
+    {
+        /*! \todo Implement mirror for text */
+    }
 }
 
 SchGUICairoText*
@@ -458,17 +472,24 @@ schgui_cairo_drafter_draw_text(SchGUICairoDrafter *drafter, const struct _SchTex
 #endif
 
 static void
-schgui_cairo_text_rotate(SchGUICairoText *item, double dt)
+schgui_cairo_text_rotate(SchGUICairoDrawItem *item, double dt)
 {
     SchGUICairoTextPrivate *privat = SCHGUI_CAIRO_TEXT_GET_PRIVATE(item);
 
     if (privat != NULL)
     {
+        cairo_matrix_t transform;
+
+        cairo_matrix_init_rotate(&transform, dt);
+
+        cairo_matrix_transform_point(&transform, &(privat->x), &(privat->y));
+
+        privat->angle += dt;
     }
 }
 
 static void
-schgui_cairo_text_translate(SchGUICairoText *item, double dx, double dy)
+schgui_cairo_text_translate(SchGUICairoDrawItem *item, double dx, double dy)
 {
     SchGUICairoTextPrivate *privat = SCHGUI_CAIRO_TEXT_GET_PRIVATE(item);
 

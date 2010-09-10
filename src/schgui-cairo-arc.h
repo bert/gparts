@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file schigui-cairo-arc.h
+/*! \file schgui-cairo-arc.h
  */
 
 #define SCHGUI_TYPE_CAIRO_ARC (schgui_cairo_arc_get_type())

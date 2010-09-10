@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file schigui-cairo-bus.h
+/*! \file schgui-cairo-bus.h
  */
 
 #define SCHGUI_TYPE_CAIRO_BUS (schgui_cairo_bus_get_type())

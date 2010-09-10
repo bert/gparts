@@ -66,16 +66,19 @@ static void
 schgui_cairo_arc_class_init(gpointer g_class, gpointer g_class_data);
 
 static void
-schgui_cairo_arc_draw(SchGUICairoArc *shape, cairo_t *cairo);
+schgui_cairo_arc_draw(SchGUICairoDrawItem *item, cairo_t *cairo);
 
 static void
-schgui_cairo_arc_rotate(SchGUICairoArc *item, double dt);
+schgui_cairo_arc_mirror_y(SchGUICairoDrawItem *item);
 
 static void
-schgui_cairo_arc_translate(SchGUICairoArc *item, double dx, double dy);
+schgui_cairo_arc_rotate(SchGUICairoDrawItem *item, double dt);
+
+static void
+schgui_cairo_arc_translate(SchGUICairoDrawItem *item, double dx, double dy);
 
 
-/*! \todo Use proper arc bounds */
+/*! \todo Calculate proper arc bounds */
 static void
 schgui_cairo_arc_bounds(SchGUICairoDrawItem *item, cairo_t *cairo, GeomBounds *bounds)
 {
@@ -97,28 +100,28 @@ schgui_cairo_arc_bounds(SchGUICairoDrawItem *item, cairo_t *cairo, GeomBounds *b
             geom_bounds_union(bounds, bounds, &temp);
         }
     }
-
 }
 
 static void
 schgui_cairo_arc_class_init(gpointer g_class, gpointer g_class_data)
 {
-    SchGUICairoArcClass *klasse = SCHGUI_CAIRO_ARC_CLASS(g_class);
+    SchGUICairoDrawItemClass *klasse = SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class);
 
     g_type_class_add_private(G_OBJECT_CLASS(g_class), sizeof(SchGUICairoArcPrivate));
 
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->bounds    = schgui_cairo_arc_bounds;
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->draw      = schgui_cairo_arc_draw;
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->rotate    = schgui_cairo_arc_rotate;
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->translate = schgui_cairo_arc_translate;
+    klasse->bounds    = schgui_cairo_arc_bounds;
+    klasse->draw      = schgui_cairo_arc_draw;
+    klasse->mirror_y  = schgui_cairo_arc_mirror_y;
+    klasse->rotate    = schgui_cairo_arc_rotate;
+    klasse->translate = schgui_cairo_arc_translate;
 }
 
 static void
-schgui_cairo_arc_draw(SchGUICairoArc *shape, cairo_t *cairo)
+schgui_cairo_arc_draw(SchGUICairoDrawItem *item, cairo_t *cairo)
 {
     if (cairo != NULL)
     {
-        SchGUICairoArcPrivate *privat = SCHGUI_CAIRO_ARC_GET_PRIVATE(shape);
+        SchGUICairoArcPrivate *privat = SCHGUI_CAIRO_ARC_GET_PRIVATE(item);
 
         if (privat != NULL)
         {
@@ -156,15 +159,15 @@ schgui_cairo_arc_get_type(void)
     {
         static const GTypeInfo tinfo = {
             sizeof(SchGUICairoArcClass),    /* class_size */
-            NULL,                              /* base_init */
-            NULL,                              /* base_finalize */
+            NULL,                           /* base_init */
+            NULL,                           /* base_finalize */
             schgui_cairo_arc_class_init,    /* class_init */
-            NULL,                              /* class_finalize */
-            NULL,                              /* class_data */
+            NULL,                           /* class_finalize */
+            NULL,                           /* class_data */
             sizeof(SchGUICairoArc),         /* instance_size */
-            0,                                 /* n_preallocs */
-            NULL,                              /* instance_init */
-            NULL                               /* value_table */
+            0,                              /* n_preallocs */
+            NULL,                           /* instance_init */
+            NULL                            /* value_table */
             };
 
         type = g_type_register_static(
@@ -177,6 +180,20 @@ schgui_cairo_arc_get_type(void)
 
     return type;
 }
+
+static void
+schgui_cairo_arc_mirror_y(SchGUICairoDrawItem *item)
+{
+    SchGUICairoArcPrivate *privat = SCHGUI_CAIRO_ARC_GET_PRIVATE(item);
+
+    if (privat != NULL)
+    {
+        privat->center_x = -privat->center_x;
+
+        privat->start = privat->start + M_PI; 
+    }
+}
+
 
 SchGUICairoArc*
 schgui_cairo_arc_new(const SchArc *shape, SchGUIDrawingCfg *config)
@@ -221,17 +238,24 @@ schgui_cairo_arc_new(const SchArc *shape, SchGUIDrawingCfg *config)
 }
 
 static void
-schgui_cairo_arc_rotate(SchGUICairoArc *item, double dt)
+schgui_cairo_arc_rotate(SchGUICairoDrawItem *item, double dt)
 {
     SchGUICairoArcPrivate *privat = SCHGUI_CAIRO_ARC_GET_PRIVATE(item);
 
     if (privat != NULL)
     {
+        cairo_matrix_t transform;
+
+        cairo_matrix_init_rotate(&transform, dt);
+
+        cairo_matrix_transform_point(&transform, &(privat->center_x), &(privat->center_y));
+
+        privat->start += dt;
     }
 }
 
 static void
-schgui_cairo_arc_translate(SchGUICairoArc *item, double dx, double dy)
+schgui_cairo_arc_translate(SchGUICairoDrawItem *item, double dx, double dy)
 {
     SchGUICairoArcPrivate *privat = SCHGUI_CAIRO_ARC_GET_PRIVATE(item);
 

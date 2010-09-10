@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file schigui-cairo-text.h
+/*! \file schgui-cairo-text.h
  */
 
 #define SCHGUI_TYPE_CAIRO_TEXT (schgui_cairo_text_get_type())

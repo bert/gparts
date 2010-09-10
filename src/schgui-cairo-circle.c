@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file schgui-cairo-arc.c
+/*! \file schgui-cairo-circle.c
  */
 
 #include <math.h>
@@ -63,13 +63,16 @@ static void
 schgui_cairo_circle_class_init(gpointer g_class, gpointer g_class_data);
 
 static void
-schgui_cairo_circle_draw(SchGUICairoCircle *shape, cairo_t *cairo);
+schgui_cairo_circle_draw(SchGUICairoDrawItem *item, cairo_t *cairo);
 
 static void
-schgui_cairo_circle_rotate(SchGUICairoCircle *item, double dt);
+schgui_cairo_circle_mirror_y(SchGUICairoDrawItem *item);
 
 static void
-schgui_cairo_circle_translate(SchGUICairoCircle *item, double dx, double dy);
+schgui_cairo_circle_rotate(SchGUICairoDrawItem *item, double dt);
+
+static void
+schgui_cairo_circle_translate(SchGUICairoDrawItem *item, double dx, double dy);
 
 
 
@@ -100,22 +103,23 @@ schgui_cairo_circle_bounds(SchGUICairoDrawItem *item, cairo_t *cairo, GeomBounds
 static void
 schgui_cairo_circle_class_init(gpointer g_class, gpointer g_class_data)
 {
-    SchGUICairoCircleClass *klasse = SCHGUI_CAIRO_CIRCLE_CLASS(g_class);
+    SchGUICairoDrawItemClass *klasse = SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class);
 
     g_type_class_add_private(G_OBJECT_CLASS(g_class), sizeof(SchGUICairoCirclePrivate));
 
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->bounds    = schgui_cairo_circle_bounds;
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->draw      = schgui_cairo_circle_draw;
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->rotate    = schgui_cairo_circle_rotate;
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->translate = schgui_cairo_circle_translate;
+    klasse->bounds    = schgui_cairo_circle_bounds;
+    klasse->draw      = schgui_cairo_circle_draw;
+    klasse->mirror_y  = schgui_cairo_circle_mirror_y;
+    klasse->rotate    = schgui_cairo_circle_rotate;
+    klasse->translate = schgui_cairo_circle_translate;
 }
 
 static void
-schgui_cairo_circle_draw(SchGUICairoCircle *shape, cairo_t *cairo)
+schgui_cairo_circle_draw(SchGUICairoDrawItem *item, cairo_t *cairo)
 {
     if (cairo != NULL)
     {
-        SchGUICairoCirclePrivate *privat = SCHGUI_CAIRO_CIRCLE_GET_PRIVATE(shape);
+        SchGUICairoCirclePrivate *privat = SCHGUI_CAIRO_CIRCLE_GET_PRIVATE(item);
 
         if (privat != NULL)
         {
@@ -168,6 +172,18 @@ schgui_cairo_circle_get_type(void)
     return type;
 }
 
+static void
+schgui_cairo_circle_mirror_y(SchGUICairoDrawItem *item)
+{
+    SchGUICairoCirclePrivate *privat = SCHGUI_CAIRO_CIRCLE_GET_PRIVATE(item);
+
+    if (privat != NULL)
+    {
+        privat->center_x = -privat->center_x;
+    }
+}
+
+
 SchGUICairoCircle*
 schgui_cairo_circle_new(const SchCircle *shape, SchGUIDrawingCfg *config)
 {
@@ -214,17 +230,22 @@ schgui_cairo_circle_new(const SchCircle *shape, SchGUIDrawingCfg *config)
 }
 
 static void
-schgui_cairo_circle_rotate(SchGUICairoCircle *item, double dt)
+schgui_cairo_circle_rotate(SchGUICairoDrawItem *item, double dt)
 {
     SchGUICairoCirclePrivate *privat = SCHGUI_CAIRO_CIRCLE_GET_PRIVATE(item);
 
     if (privat != NULL)
     {
+        cairo_matrix_t transform;
+
+        cairo_matrix_init_rotate(&transform, dt);
+
+        cairo_matrix_transform_point(&transform, &(privat->center_x), &(privat->center_y));
     }
 }
 
 static void
-schgui_cairo_circle_translate(SchGUICairoCircle *item, double dx, double dy)
+schgui_cairo_circle_translate(SchGUICairoDrawItem *item, double dx, double dy)
 {
     SchGUICairoCirclePrivate *privat = SCHGUI_CAIRO_CIRCLE_GET_PRIVATE(item);
 

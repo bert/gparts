@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file schigui-cairo-pin.h
+/*! \file schgui-cairo-pin.h
  */
 
 #define SCHGUI_TYPE_CAIRO_PIN (schgui_cairo_pin_get_type())

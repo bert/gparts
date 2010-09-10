@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file schgui-cairo-arc.c
+/*! \file schgui-cairo-box.c
  */
 
 #include <math.h>
@@ -64,13 +64,17 @@ static void
 schgui_cairo_box_class_init(gpointer g_class, gpointer g_class_data);
 
 static void
-schgui_cairo_box_draw(SchGUICairoBox *shape, cairo_t *cairo);
+schgui_cairo_box_draw(SchGUICairoDrawItem *item, cairo_t *cairo);
 
 static void
-schgui_cairo_box_rotate(SchGUICairoBox *shape, double dt);
+schgui_cairo_box_mirror_y(SchGUICairoDrawItem *item);
 
 static void
-schgui_cairo_box_translate(SchGUICairoBox *shape, double dx, double dy);
+schgui_cairo_box_rotate(SchGUICairoDrawItem *item, double dt);
+
+static void
+schgui_cairo_box_translate(SchGUICairoDrawItem *item, double dx, double dy);
+
 
 
 static void
@@ -99,22 +103,23 @@ schgui_cairo_box_bounds(SchGUICairoDrawItem *item, cairo_t *cairo, GeomBounds *b
 static void
 schgui_cairo_box_class_init(gpointer g_class, gpointer g_class_data)
 {
-    SchGUICairoBoxClass *klasse = SCHGUI_CAIRO_BOX_CLASS(g_class);
+    SchGUICairoDrawItemClass *klasse = SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class);
 
     g_type_class_add_private(G_OBJECT_CLASS(g_class), sizeof(SchGUICairoBoxPrivate));
 
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->bounds    = schgui_cairo_box_bounds;
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->draw      = schgui_cairo_box_draw;
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->rotate    = schgui_cairo_box_rotate;
-    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->translate = schgui_cairo_box_translate;
+    klasse->bounds    = schgui_cairo_box_bounds;
+    klasse->draw      = schgui_cairo_box_draw;
+    klasse->mirror_y  = schgui_cairo_box_mirror_y;
+    klasse->rotate    = schgui_cairo_box_rotate;
+    klasse->translate = schgui_cairo_box_translate;
 }
 
 static void
-schgui_cairo_box_draw(SchGUICairoBox *shape, cairo_t *cairo)
+schgui_cairo_box_draw(SchGUICairoDrawItem *item, cairo_t *cairo)
 {
     if (cairo != NULL)
     {
-        SchGUICairoBoxPrivate *privat = SCHGUI_CAIRO_BOX_GET_PRIVATE(shape);
+        SchGUICairoBoxPrivate *privat = SCHGUI_CAIRO_BOX_GET_PRIVATE(item);
 
         if (privat != NULL)
         {
@@ -138,6 +143,18 @@ schgui_cairo_box_draw(SchGUICairoBox *shape, cairo_t *cairo)
         }
     }
 }
+
+static void
+schgui_cairo_box_mirror_y(SchGUICairoDrawItem *item)
+{
+    SchGUICairoBoxPrivate *privat = SCHGUI_CAIRO_BOX_GET_PRIVATE(item);
+
+    if (privat != NULL)
+    {
+        privat->corner_x = -privat->corner_x - privat->width;
+    }
+}
+
 
 GType
 schgui_cairo_box_get_type(void)
@@ -217,17 +234,18 @@ schgui_cairo_box_new(const SchBox *shape, SchGUIDrawingCfg *config)
 }
 
 static void
-schgui_cairo_box_rotate(SchGUICairoBox *item, double dt)
+schgui_cairo_box_rotate(SchGUICairoDrawItem *item, double dt)
 {
     SchGUICairoBoxPrivate *privat = SCHGUI_CAIRO_BOX_GET_PRIVATE(item);
 
     if (privat != NULL)
     {
+        /* \todo Implement box rotation */
     }
 }
 
 static void
-schgui_cairo_box_translate(SchGUICairoBox *item, double dx, double dy)
+schgui_cairo_box_translate(SchGUICairoDrawItem *item, double dx, double dy)
 {
     SchGUICairoBoxPrivate *privat = SCHGUI_CAIRO_BOX_GET_PRIVATE(item);
 

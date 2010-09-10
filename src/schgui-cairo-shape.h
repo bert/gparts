@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file sch-cairo-shape.h
+/*! \file schgui-cairo-shape.h
  */
 
 #define SCH_TYPE_CAIRO_SHAPE (sch_cairo_shape_get_type())

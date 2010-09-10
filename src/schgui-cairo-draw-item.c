@@ -87,6 +87,20 @@ schgui_cairo_draw_item_get_type(void)
 }
 
 void
+schgui_cairo_draw_item_mirror_y(SchGUICairoDrawItem *item)
+{
+    if (item != NULL)
+    {
+        SchGUICairoDrawItemClass *klasse = SCHGUI_CAIRO_DRAW_ITEM_GET_CLASS(item);
+
+        if ((klasse != NULL) && (klasse->mirror_y != NULL))
+        {
+            klasse->mirror_y(item);
+        }
+    }
+}
+
+void
 schgui_cairo_draw_item_rotate(SchGUICairoDrawItem *item, double dt)
 {
     if (item != NULL)

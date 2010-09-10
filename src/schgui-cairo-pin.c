@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file schgui-cairo-arc.c
+/*! \file schgui-cairo-pin.c
  */
 
 #include <math.h>
@@ -63,6 +63,9 @@ schgui_cairo_pin_class_init(gpointer g_class, gpointer g_class_data);
 
 static void
 schgui_cairo_pin_draw(SchGUICairoPin *shape, cairo_t *cairo);
+
+static void
+schgui_cairo_pin_mirror_y(SchGUICairoPin *item);
 
 static void
 schgui_cairo_pin_rotate(SchGUICairoPin *item, double dt);
@@ -122,6 +125,7 @@ schgui_cairo_pin_class_init(gpointer g_class, gpointer g_class_data)
 
     SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->bounds    = schgui_cairo_pin_bounds;
     SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->draw      = schgui_cairo_pin_draw;
+    SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->mirror_y  = schgui_cairo_pin_mirror_y;
     SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->rotate    = schgui_cairo_pin_rotate;
     SCHGUI_CAIRO_DRAW_ITEM_CLASS(g_class)->translate = schgui_cairo_pin_translate;
 }
@@ -178,6 +182,19 @@ schgui_cairo_pin_get_type(void)
     return type;
 }
 
+static void
+schgui_cairo_pin_mirror_y(SchGUICairoPin *item)
+{
+    SchGUICairoPinPrivate *privat = SCHGUI_CAIRO_PIN_GET_PRIVATE(item);
+
+    if (privat != NULL)
+    {
+        privat->x[0] = -privat->x[0];
+        privat->x[1] = -privat->x[1];
+    }
+}
+
+
 SchGUICairoPin*
 schgui_cairo_pin_new(const SchPin *shape, SchGUIDrawingCfg *config)
 {
@@ -224,6 +241,12 @@ schgui_cairo_pin_rotate(SchGUICairoPin *item, double dt)
 
     if (privat != NULL)
     {
+        cairo_matrix_t transform;
+
+        cairo_matrix_init_rotate(&transform, dt);
+
+        cairo_matrix_transform_point(&transform, &(privat->x[0]), &(privat->y[0]));
+        cairo_matrix_transform_point(&transform, &(privat->x[1]), &(privat->y[1]));
     }
 }
 

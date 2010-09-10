@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file schigui-cairo-circle.h
+/*! \file schgui-cairo-circle.h
  */
 
 #define SCHGUI_TYPE_CAIRO_CIRCLE (schgui_cairo_circle_get_type())
