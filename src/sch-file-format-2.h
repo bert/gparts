@@ -70,8 +70,8 @@ sch_file_format_2_write_line(const SchFileFormat2 *format, SchOutputStream *stre
 void
 sch_file_format_2_write_net(const SchFileFormat2 *format, SchOutputStream *stream, const SchNet *shape, GError **error);
 
-//void
-//sch_file_format_2_write_path(const SchFileFormat2 *format, SchOutputStream *stream, const SchPath *shape, GError **error);
+void
+sch_file_format_2_write_path(const SchFileFormat2 *format, SchOutputStream *stream, const SchPath *shape, GError **error);
 
 void
 sch_file_format_2_write_picture(const SchFileFormat2 *format, SchOutputStream *stream, const SchPicture *shape, GError **error);

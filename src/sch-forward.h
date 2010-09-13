@@ -68,6 +68,9 @@ typedef struct _SchNetClass SchNetClass;
 typedef struct _SchOutputStream SchOutputStream;
 typedef struct _SchOutputStreamClass SchOutputStreamClass;
 
+typedef struct _SchPath SchPath;
+typedef struct _SchPathClass SchPathClass;
+
 typedef struct _SchPin SchPin;
 typedef struct _SchPinClass SchPinClass;
 

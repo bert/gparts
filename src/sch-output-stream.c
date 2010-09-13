@@ -52,6 +52,8 @@ sch_output_stream_get_property(GObject *object, guint property_id, GValue *value
 static void
 sch_output_stream_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
 
+static void
+sch_output_stream_write_path_2_proc(SchPathCommand *command, gpointer user_data);
 
 
 static void
@@ -778,8 +780,187 @@ sch_output_stream_write_net_2(SchOutputStream *stream, const SchNet *shape, GErr
 
 }
 
-//void
-//sch_output_stream_write_path_2(SchOutputStream *stream, const SchPath *shape, GError **error);
+void
+sch_output_stream_write_path_2(SchOutputStream *stream, const SchPath *shape, GError **error)
+{
+    SchOutputStreamPrivate *privat = SCH_OUTPUT_STREAM_GET_PRIVATE(stream);
+
+    if (privat != NULL && shape != NULL)
+    {
+        gchar *str;
+        int   x;
+        int   y;
+        int   radius;
+        int   color;
+        int   line_width;
+        int   capstyle;
+        int   dashstyle;
+        int   dashlength;
+        int   dashspace;
+        int   fill_type;
+        int   fill_width;
+        int   fill_angle1;
+        int   fill_pitch1;
+        int   fill_angle2;
+        int   fill_pitch2;
+        int   count = sch_path_count(shape);
+
+        g_object_get(
+            (gpointer) shape,
+            "color",            &color,
+            "line-width",       &line_width,
+            "line-cap-style",   &capstyle,
+            "line-dash-style",  &dashstyle,
+            "line-dash-length", &dashlength,
+            "line-dash-space",  &dashspace,
+            "fill-type",        &fill_type,
+            "fill-width",       &fill_width,
+            "fill-angle1",      &fill_angle1,
+            "fill-pitch1",      &fill_pitch1,
+            "fill-angle2",      &fill_angle2,
+            "fill-pitch2",      &fill_pitch2,
+            NULL
+            );
+
+        str = g_strdup_printf(
+            "%s %d %d %d %d %d %d %d %d %d %d %d %d %d%s",
+            "H",
+            color,
+            line_width,
+            capstyle,
+            dashstyle,
+            dashlength,
+            dashspace,
+            fill_type,
+            fill_width,
+            fill_angle1,
+            fill_pitch1,
+            fill_angle2,
+            fill_pitch2,
+            count,
+            SCH_OUTPUT_STREAM_EOL
+            );
+
+        g_output_stream_write(
+            privat->base_stream,
+            str,
+            strlen(str),
+            NULL,
+            error
+            );
+
+        sch_path_foreach(shape, sch_output_stream_write_path_2_proc, stream);
+
+        g_free(str);
+    }
+}
+
+static void
+sch_output_stream_write_path_2_proc(SchPathCommand *command, gpointer user_data)
+{
+    SchOutputStreamPrivate *privat = SCH_OUTPUT_STREAM_GET_PRIVATE(user_data);
+
+    if ((privat != NULL) && (command != NULL))
+    {
+        gchar *str = NULL;
+
+        switch (command->type)
+        {
+            case SCH_PATH_COMMAND_INVALID:
+               g_debug("SchGUICairoPath: invalid path command");
+                break;
+
+            case SCH_PATH_COMMAND_CLOSEPATH:
+                str = g_strdup_printf(
+                    "%s%s",
+                    "z",
+                    SCH_OUTPUT_STREAM_EOL
+                    );
+                break;
+
+            case SCH_PATH_COMMAND_CURVETO_ABS:
+                str = g_strdup_printf(
+                    "%s %d %d %d %d %d %d%s",
+                    "C",
+                    command->curveto.x[0],
+                    command->curveto.y[0],
+                    command->curveto.x[1],
+                    command->curveto.y[1],
+                    command->curveto.x[2],
+                    command->curveto.y[2],
+                    SCH_OUTPUT_STREAM_EOL
+                    );
+                break;
+
+            case SCH_PATH_COMMAND_CURVETO_REL:
+                str = g_strdup_printf(
+                    "%s %d %d %d %d %d %d%s",
+                    "c",
+                    command->curveto.x[0],
+                    command->curveto.y[0],
+                    command->curveto.x[1],
+                    command->curveto.y[1],
+                    command->curveto.x[2],
+                    command->curveto.y[2],
+                    SCH_OUTPUT_STREAM_EOL
+                    );
+                break;
+
+            case SCH_PATH_COMMAND_LINETO_ABS:
+                str = g_strdup_printf(
+                    "%s %d %d%s",
+                    "L",
+                    command->lineto.x,
+                    command->lineto.y,
+                    SCH_OUTPUT_STREAM_EOL
+                    );
+                break;
+
+            case SCH_PATH_COMMAND_LINETO_REL:
+                str = g_strdup_printf(
+                    "%s %d %d%s",
+                    "l",
+                    command->lineto.x,
+                    command->lineto.y,
+                    SCH_OUTPUT_STREAM_EOL
+                    );
+                break;
+
+            case SCH_PATH_COMMAND_MOVETO_ABS:
+                str = g_strdup_printf(
+                    "%s %d %d%s",
+                    "M",
+                    command->moveto.x,
+                    command->moveto.y,
+                    SCH_OUTPUT_STREAM_EOL
+                    );
+                break;
+
+            case SCH_PATH_COMMAND_MOVETO_REL:
+                str = g_strdup_printf(
+                    "%s %d %d%s",
+                    "m",
+                    command->moveto.x,
+                    command->moveto.y,
+                    SCH_OUTPUT_STREAM_EOL
+                    );
+                break;
+
+            default:
+                g_debug("SchGUICairoPath: unknown path command");
+        }
+
+        g_output_stream_write(
+            privat->base_stream,
+            str,
+            strlen(str),
+            NULL,
+            NULL /*! \todo FIXME error */
+            );
+
+        g_free(str);
+    }
+}
 
 void
 sch_output_stream_write_picture_2(SchOutputStream *stream, const SchPicture *shape, GError **error)

@@ -130,6 +130,8 @@ libsch_la_SOURCES = \
 	sch-multiline.c \
 	sch-net.c \
 	sch-output-stream.c \
+	sch-path.c \
+	sch-path-command.c \
 	sch-pin.c \
         sch-shape.c \
 	sch-text.c
@@ -147,6 +149,7 @@ libschgui_la_SOURCES = \
 	schgui-cairo-factory.c \
 	schgui-cairo-line.c \
 	schgui-cairo-net.c \
+	schgui-cairo-path.c \
 	schgui-cairo-pin.c \
 	schgui-cairo-text.c \
 	schgui-clipboard.c \

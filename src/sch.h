@@ -33,6 +33,7 @@
 
 #include "sch-fill-style.h"
 #include "sch-line-style.h"
+#include "sch-path-command.h"
 
 #include "sch-attributes.h"
 #include "sch-multiline.h"
@@ -48,6 +49,7 @@
 #include "sch-component.h"
 #include "sch-line.h"
 #include "sch-net.h"
+#include "sch-path.h"
 #include "sch-picture.h"
 #include "sch-pin.h"
 #include "sch-text.h"

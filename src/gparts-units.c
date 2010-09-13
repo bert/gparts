@@ -41,7 +41,7 @@
  *  \c VOLTS Voltage.
  */
 
-/* FIXME Below needs to work with all compilers.  The following will work in
+/*! \todo Below needs to work with all compilers.  The following will work in
  * GCC even without C99 support, but it will issue a warning.
  */
 //#ifdef __STDC__VERSION__
@@ -156,7 +156,7 @@ static const GPartsUnitsFormat gparts_units_format[] =
 /*!
  *
  *
- *  FIXME Add sentinel to the table.
+ *  \todo Add sentinel to the table.
  */
 static const GPartsUnitsMetricPrefix gparts_units_metric_prefixes[] =
 {

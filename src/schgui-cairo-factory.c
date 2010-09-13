@@ -40,6 +40,7 @@
 #include "schgui-cairo-circle.h"
 #include "schgui-cairo-line.h"
 #include "schgui-cairo-net.h"
+#include "schgui-cairo-path.h"
 #include "schgui-cairo-pin.h"
 #include "schgui-cairo-text.h"
 
@@ -97,6 +98,12 @@ schgui_cairo_factory_create_from_line(SchGUICairoFactory *factory, SchLine *line
 
 static SchGUICairoDrawItem*
 schgui_cairo_factory_create_from_net(SchGUICairoFactory *factory, SchNet *net);
+
+static SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_path(SchGUICairoFactory *factory, SchPath *path);
+
+static SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_path_proc(SchPathCommand *command, gpointer user_data);
 
 static SchGUICairoDrawItem*
 schgui_cairo_factory_create_from_pin(SchGUICairoFactory *factory, SchPin *pin);
@@ -171,6 +178,12 @@ schgui_cairo_factory_base_init(gpointer g_class)
         klasse->table,
         GINT_TO_POINTER(SCH_TYPE_NET),
         schgui_cairo_factory_create_from_net
+        );
+
+    g_hash_table_insert(
+        klasse->table,
+        GINT_TO_POINTER(SCH_TYPE_PATH),
+        schgui_cairo_factory_create_from_path
         );
 
     g_hash_table_insert(
@@ -420,6 +433,20 @@ schgui_cairo_factory_create_from_net(SchGUICairoFactory *factory, SchNet *shape)
     if (privat != NULL)
     {
         item = SCHGUI_CAIRO_DRAW_ITEM(schgui_cairo_net_new(SCH_NET(shape), privat->config));
+    }
+
+    return item;
+}
+
+static SchGUICairoDrawItem*
+schgui_cairo_factory_create_from_path(SchGUICairoFactory *factory, SchPath *path)
+{
+    SchGUICairoDrawItem *item = NULL;
+    SchGUICairoFactoryPrivate *privat = SCHGUI_CAIRO_FACTORY_GET_PRIVATE(factory);
+
+    if (privat != NULL)
+    {
+        item = SCHGUI_CAIRO_DRAW_ITEM(schgui_cairo_path_new(SCH_PATH(path), privat->config));
     }
 
     return item;

@@ -202,11 +202,11 @@ sch_file_format_2_write_net(const SchFileFormat2 *format, SchOutputStream *strea
 }
 
 
-//void
-//sch_file_format_2_write_path(const SchFileFormat2 *format, SchOutputStream *stream, const SchPath *shape, GError **error)
-//{
-    //sch_output_stream_write_path_2(stream, shape, NULL);
-//}
+void
+sch_file_format_2_write_path(const SchFileFormat2 *format, SchOutputStream *stream, const SchPath *shape, GError **error)
+{
+    sch_output_stream_write_path_2(stream, shape, NULL);
+}
 
 void
 sch_file_format_2_write_picture(const SchFileFormat2 *format, SchOutputStream *stream, const SchPicture *shape, GError **error)

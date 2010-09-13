@@ -19,6 +19,8 @@
  */
 
 /*! \file sch-loader.c
+ *
+ *  \todo Clean up this mess!
  */
 
 #include <errno.h>
@@ -118,7 +120,11 @@ read_file(SchDrawing *drawing, FILE *file, GError **error);
 static gchar*
 read_line(FILE *file);
 
+static gchar*
+read_lines(FILE *file, int count);
 
+static void
+process_path_commands(SchPath *path, const char* string);
 
 
 void
@@ -522,6 +528,25 @@ static const struct PARAM net_params[] =
     { NULL,               0 }
 };
 
+static const struct PARAM path_params[] =
+{
+    { NULL,               1 },
+    { "color",            1 },
+    { "line-width",       3 },
+    { "line-cap-style",   3 },
+    { "line-dash-style",  3 },
+    { "line-dash-length", 3 },
+    { "line-dash-space",  3 },
+    { "fill-type",        3 },
+    { "fill-width",       3 },
+    { "fill-angle1",      3 },
+    { "fill-pitch1",      3 },
+    { "fill-angle2",      3 },
+    { "fill-pitch2",      3 },
+    { NULL,               0 }
+};
+
+
 
 static const struct PARAM pin_params[] =
 {
@@ -873,6 +898,10 @@ process_object(FILE *file, gchar **tokens)
 static  GObject*
 process_path(FILE *file, gchar **tokens)
 {
+    SchPath *path = sch_path_new(NULL);
+
+    process_params(G_OBJECT(path), tokens, path_params, 14);
+
     //g_debug("Process path");
     if ((tokens != NULL) && (g_strv_length(tokens) > 13))
     {
@@ -891,18 +920,20 @@ process_path(FILE *file, gchar **tokens)
         }
         else
         {
-            long index;
+            gchar *line = read_lines(file, lines);
 
-            for (index=0; index<lines; index++)
-            {
-                gchar *line = read_line(file);
-                g_free(line);    
-            }
+            g_debug("Got some path stuff");
+            g_debug("%d", lines);
+            g_debug("%s", line);
+
+            process_path_commands(path, line);
+
+            g_free(line);    
         }
     }
 
 
-    return NULL;
+    return path;
 }
 
 static GObject*
@@ -1007,6 +1038,41 @@ read_line(FILE *file)
 
     return result;
 }
+
+/*! \brief Reads a line from a file
+ */
+static gchar*
+read_lines(FILE *file, int count)
+{
+    gchar *result = NULL;
+
+    if (!feof(file) && (count > 0))
+    {
+        gint c = fgetc(file);
+        GString *line = g_string_sized_new(10);
+
+        while (!ferror(file) && !feof(file))
+        {
+            if (c == '\n')
+            {
+                count--;
+
+                if (count <= 0)
+                {
+                    break;
+                }
+            }
+
+            g_string_append_c(line, c);
+            c = fgetc(file);
+        }
+
+        result = g_string_free(line, ferror(file));
+    }
+
+    return result;
+}
+
 
 
 static void
@@ -1143,5 +1209,192 @@ process_params(GObject *object, gchar **token, const struct PARAM paramv[], gint
             }
         }
     }
+}
+
+
+
+static void
+process_path_command_closepath(SchPath *path, GMatchInfo *match_info);
+
+static void
+process_path_command_curveto(SchPath *path, GMatchInfo *match_info);
+
+static void
+process_path_command_lineto(SchPath *path, GMatchInfo *match_info);
+
+static void
+process_path_command_moveto(SchPath *path, GMatchInfo *match_info);
+
+
+static void
+process_path_commands(SchPath *path, const char* string)
+{
+    GRegex *re = g_regex_new(
+        "([MmLlCcZz])([[:space:]]*([0-9]+)([[:space:]]*[,]?[[:space:]]*([0-9]+))*)*",
+        0,
+        0,
+        NULL
+        );
+        
+    if (re != NULL)
+    {
+        GMatchInfo *match_info;
+
+        g_regex_match(re, string, 0, &match_info);
+
+        while (g_match_info_matches (match_info))
+        {
+            gchar *word = g_match_info_fetch (match_info, 0);
+
+            switch (*word)
+            {
+                case 'C':
+                    process_path_command_curveto(path, match_info);
+                    break;
+                
+                case 'L':
+                    process_path_command_lineto(path, match_info);
+                    break;
+                
+                case 'M':
+                    process_path_command_moveto(path, match_info);
+                    break;
+
+                case 'z':
+                    process_path_command_closepath(path, match_info);
+                    break;
+                
+                deafult:
+                    break;
+            }
+
+            g_free (word);
+            g_match_info_next (match_info, NULL);
+        }
+
+        g_match_info_free(match_info);
+
+        g_regex_unref(re);
+    }
+}
+
+static void
+process_path_command_closepath(SchPath *path, GMatchInfo *match_info)
+{
+    gchar *word = g_match_info_fetch (match_info, 0);
+    SchPathCommand command;
+
+    g_debug("Closepath: %s", word);
+
+    command.type = SCH_PATH_COMMAND_CLOSEPATH;
+
+    sch_path_append(path, &command);
+
+    g_free (word);
+}
+
+static void
+process_path_command_curveto(SchPath *path, GMatchInfo *match_info)
+{
+    gchar *word = g_match_info_fetch (match_info, 0);
+    SchPathCommand command;
+    int i;
+    int count = g_match_info_get_match_count(match_info);
+
+    g_debug("Curveto: %s", word);
+
+    command.type = SCH_PATH_COMMAND_CURVETO_ABS;
+
+
+    for (i=0; (i+13)<count; i++)
+    {
+        gchar *a = g_match_info_fetch (match_info, i+3);
+        command.curveto.x[0] = atoi(a);
+        g_free (a);
+
+        a = g_match_info_fetch (match_info, i+5);
+        command.curveto.y[0] = atoi(a);
+        g_free (a);
+
+        a = g_match_info_fetch (match_info, i+7);
+        command.curveto.x[1] = atoi(a);
+        g_free (a);
+
+        a = g_match_info_fetch (match_info, i+9);
+        command.curveto.y[1] = atoi(a);
+        g_free (a);
+
+        a = g_match_info_fetch (match_info, i+11);
+        command.curveto.x[2] = atoi(a);
+        g_free (a);
+
+        a = g_match_info_fetch (match_info, i+13);
+        command.curveto.y[2] = atoi(a);
+        g_free (a);
+
+        sch_path_append(path, &command);
+    }
+
+    g_free (word);
+}
+
+
+static void
+process_path_command_lineto(SchPath *path, GMatchInfo *match_info)
+{
+    gchar *word = g_match_info_fetch (match_info, 0);
+    SchPathCommand command;
+    int i;
+    int count = g_match_info_get_match_count(match_info);
+
+    g_debug("Lineto: %s", word);
+
+    command.type = SCH_PATH_COMMAND_LINETO_ABS;
+
+
+    for (i=0; (i+5)<count; i++)
+    {
+        gchar *a = g_match_info_fetch (match_info, i+3);
+        command.lineto.x = atoi(a);
+        g_free (a);
+
+        a = g_match_info_fetch (match_info, i+5);
+        command.lineto.y = atoi(a);
+        g_free (a);
+
+        sch_path_append(path, &command);
+    }
+
+    g_free (word);
+}
+
+static void
+process_path_command_moveto(SchPath *path, GMatchInfo *match_info)
+{
+    gchar *word = g_match_info_fetch (match_info, 0);
+    SchPathCommand command;
+    int i;
+    int count = g_match_info_get_match_count(match_info);
+
+    g_debug("Moveto: %s", word);
+
+    command.type = SCH_PATH_COMMAND_MOVETO_ABS;
+
+    for (i=0; (i+5)<count; i++)
+    {
+        gchar *a = g_match_info_fetch (match_info, i+3);
+        command.lineto.x = atoi(a);
+        g_free (a);
+
+        a = g_match_info_fetch (match_info, i+5);
+        command.lineto.y = atoi(a);
+        g_free (a);
+
+        sch_path_append(path, &command);
+    
+        command.type = SCH_PATH_COMMAND_LINETO_ABS;
+    }
+
+    g_free (word);
 }
 
