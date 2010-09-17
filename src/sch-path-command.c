@@ -31,7 +31,7 @@
 SchPathCommand*
 sch_path_command_copy(const SchPathCommand *command)
 {
-    return (SchPathCommand*) g_memdup(command, sizeof(SchPathCommand));
+    return SCH_PATH_COMMAND(g_memdup(command, sizeof(SchPathCommand)));
 }
 
 GType

@@ -21,9 +21,39 @@
 /*! \file sch-line-style.c
  */
 
-#include <stdlib.h>
+#include <glib.h>
+#include <glib-object.h>
 
 #include "sch-line-style.h"
+
+SchLineStyle*
+sch_line_style_copy(const SchLineStyle *style)
+{
+    return SCH_LINE_STYLE(g_memdup(style, sizeof(SchLineStyle)));
+}
+
+GType
+sch_line_style_get_type(void)
+{
+    static GType type = G_TYPE_INVALID;
+
+    if (type == G_TYPE_INVALID)
+    {
+        g_boxed_type_register_static(
+            "SchLineStyle",
+            (GBoxedCopyFunc) sch_line_style_copy,
+            (GBoxedFreeFunc) sch_line_style_free
+            );
+    }
+
+    return type;
+}
+
+void
+sch_line_style_free(SchLineStyle *style)
+{
+    g_free(style);
+}
 
 void
 sch_line_style_init(SchLineStyle *style)
@@ -36,4 +66,5 @@ sch_line_style_init(SchLineStyle *style)
         style->dash_space  = -1;
     }
 }
+
 

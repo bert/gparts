@@ -21,6 +21,9 @@
 /*! \file sch-line-style.h
  */
 
+#define SCH_TYPE_LINE_STYLE (sch_line_style_get_type())
+#define SCH_LINE_STYLE(obj) ((SchLineStyle*)obj)
+
 typedef struct _SchLineStyle SchLineStyle;
 
 struct _SchLineStyle
@@ -31,6 +34,33 @@ struct _SchLineStyle
     int dash_space;
 };
 
+GType
+sch_line_style_get_type(void);
+
+/*! \brief Make a copy of the SchLineStyle
+ *
+ *  When no longer needed, the caller must call sch_line_style_free()
+ *  on the returned pointer.
+ *
+ *  \param [in] style The SchLineStyle to be copied
+ *  \return A pointer to the copied SchLineStyle 
+ */
+SchLineStyle*
+sch_line_style_copy(const SchLineStyle *style);
+
+/*! \brief Free the memory associated with SchLineStyle
+ *
+ *  When passing in a NULL pointer, this function does nothing.
+ *
+ *  \param [in] style The SchLineStyle to be freed 
+ */
+void
+sch_line_style_free(SchLineStyle *style);
+
+/*! \brief Initialize a SchLineStyle to default values
+ *
+ *  \param [out] style The SchLineStyle to be initialized
+ */
 void
 sch_line_style_init(SchLineStyle *style);
 

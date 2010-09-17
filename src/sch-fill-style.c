@@ -21,9 +21,39 @@
 /*! \file sch-fill-style.c
  */
 
-#include <stdlib.h>
+#include <glib.h>
+#include <glib-object.h>
 
 #include "sch-fill-style.h"
+
+SchFillStyle*
+sch_fill_style_copy(const SchFillStyle *style)
+{
+    return SCH_FILL_STYLE(g_memdup(style, sizeof(SchFillStyle)));
+}
+
+GType
+sch_fill_style_get_type(void)
+{
+    static GType type = G_TYPE_INVALID;
+
+    if (type == G_TYPE_INVALID)
+    {
+        g_boxed_type_register_static(
+            "SchFillStyle",
+            (GBoxedCopyFunc) sch_fill_style_copy,
+            (GBoxedFreeFunc) sch_fill_style_free
+            );
+    }
+
+    return type;
+}
+
+void
+sch_fill_style_free(SchFillStyle *style)
+{
+    g_free(style);
+}
 
 void
 sch_fill_style_init(SchFillStyle *style)

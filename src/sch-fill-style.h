@@ -21,6 +21,9 @@
 /*! \file sch-fill-style.h
  */
 
+#define SCH_TYPE_FILL_STYLE (sch_fill_style_get_type())
+#define SCH_FILL_STYLE(obj) ((SchFillStyle*)obj)
+
 #define SCH_FILL_STYLE_FILL_TYPE_HOLLOW  0
 #define SCH_FILL_STYLE_FILL_TYPE_SOLID   1
 #define SCH_FILL_STYLE_FILL_TYPE_MESH    2
@@ -38,6 +41,34 @@ struct _SchFillStyle
     int angle2;
     int pitch2;
 };
+
+GType
+sch_fill_style_get_type(void);
+
+/*! \brief Make a copy of the SchFillStyle
+ *
+ *  When no longer needed, the caller must call sch_fill_style_free()
+ *  on the returned pointer.
+ *
+ *  \param [in] style The SchFillStyle to be copied
+ *  \return A pointer to the copied SchFillStyle 
+ */
+SchFillStyle*
+sch_fill_style_copy(const SchFillStyle *style);
+
+/*! \brief Free the memory associated with SchFillStyle
+ *
+ *  When passing in a NULL pointer, this function does nothing.
+ *
+ *  \param [in] style The SchFillStyle to be freed 
+ */
+void
+sch_fill_style_free(SchFillStyle *style);
+
+/*! \brief Initialize a SchFillStyle to default values
+ *
+ *  \param [out] style The SchFillStyle to be initialized
+ */
 
 void
 sch_fill_style_init(SchFillStyle *style);

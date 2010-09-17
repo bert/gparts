@@ -27,13 +27,17 @@
 
 #include "geom.h"
 
-#include "sch-forward.h"
-
-#include "sch-config.h"
+/* Boxed types */
 
 #include "sch-fill-style.h"
 #include "sch-line-style.h"
 #include "sch-path-command.h"
+
+/* Forward declarations */
+
+#include "sch-forward.h"
+
+#include "sch-config.h"
 
 #include "sch-attributes.h"
 #include "sch-multiline.h"

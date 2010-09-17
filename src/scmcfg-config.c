@@ -49,9 +49,9 @@ scmcfg_config_load_inner_handler(void *data, SCM key, SCM args);
 
 SCM_DEFINE(always_promote_attributes, "always-promote-attributes", 1, 0, 0, (SCM a), "")
 {
-    SchFactory *factory = sch_factory_get_default();
+    SchConfig *config = sch_config_new();
 
-    if (factory != NULL)
+    if (config != NULL)
     {
         int    index;
         GArray *list = g_array_new(TRUE, FALSE, sizeof(char*)); 
@@ -66,7 +66,7 @@ SCM_DEFINE(always_promote_attributes, "always-promote-attributes", 1, 0, 0, (SCM
             temp = scm_cdr(temp);
         }
 
-        g_object_set(factory, "always-promote-attributes", (char**) list->data, NULL);
+        sch_config_set_promote_attributes(config, (char**) list->data);
 
         for (index=0; index<list->len; index++)
         {
@@ -81,19 +81,19 @@ SCM_DEFINE(always_promote_attributes, "always-promote-attributes", 1, 0, 0, (SCM
 
 SCM_DEFINE(attribute_promotion, "attribute-promotion", 1, 0, 0, (SCM a), "")
 {
-    SchFactory *factory = sch_factory_get_default();
+    SchConfig *config = sch_config_new();
 
-    if (factory != NULL)
+    if (config != NULL)
     {
         char *value = scm_to_locale_string(a);
 
         if (strcmp(value, ENABLED) == 0)
         {
-            g_object_set(factory, "attribute-promotion", TRUE, NULL);
+            sch_config_set_attribute_promotion(config, TRUE);
         }
         else
         {
-            g_object_set(factory, "attribute-promotion", FALSE, NULL);
+            sch_config_set_attribute_promotion(config, FALSE);
         }
 
         free(value);
@@ -204,19 +204,19 @@ SCM_DEFINE(eval_protected, "eval-protected", 1, 1, 0, (SCM a, SCM b), "")
 
 SCM_DEFINE(keep_invisible, "keep-invisible", 1, 0, 0, (SCM a), "")
 {
-    SchFactory *factory = sch_factory_get_default();
+    SchConfig *config = sch_config_new();
 
-    if (factory != NULL)
+    if (config != NULL)
     {
         char *value = scm_to_locale_string(a);
 
         if (strcmp(value, ENABLED) == 0)
         {
-            g_object_set(factory, "keep-invisible", TRUE, NULL);
+            sch_config_set_keep_invisible(config, TRUE);
         }
         else
         {
-            g_object_set(factory, "keep-invisible", FALSE, NULL);
+            sch_config_set_keep_invisible(config, FALSE);
         }
 
         free(value);
@@ -289,19 +289,19 @@ SCM_DEFINE(print_color_map, "print-color-map", 0, 1, 0, (SCM a), "")
 
 SCM_DEFINE(promote_invisible, "promote-invisible", 1, 0, 0, (SCM a), "")
 {
-    SchFactory *factory = sch_factory_get_default();
+    SchConfig *config = sch_config_new();
 
-    if (factory != NULL)
+    if (config != NULL)
     {
         char *value = scm_to_locale_string(a);
 
         if (strcmp(value, ENABLED) == 0)
         {
-            g_object_set(factory, "promote-invisible", TRUE, NULL);
+            sch_config_set_promote_invisible(config, TRUE);
         }
         else
         {
-            g_object_set(factory, "promote-invisible", FALSE, NULL);
+            sch_config_set_promote_invisible(config, FALSE);
         }
 
         free(value);
