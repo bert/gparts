@@ -32,20 +32,14 @@
 
 enum
 {
-    SCH_FACTORY_ALWAYS_PROMOTE_ATTRIBUTES = 1,
-    SCH_FACTORY_ATTRIBUTE_PROMOTION,
-    SCH_FACTORY_KEEP_INVISIBLE,
-    SCH_FACTORY_PROMOTE_INVISIBLE
+    SCH_FACTORY_CONFIG = 1,
 };
 
 typedef struct _SchFactoryPrivate SchFactoryPrivate;
 
 struct _SchFactoryPrivate
 {
-    gchar    **promote_attributes;
-    gboolean attribute_promotion;
-    gboolean keep_invisible;
-    gboolean promote_invisible;
+    SchConfig *config;
 };
 
 
@@ -81,48 +75,12 @@ sch_factory_class_init(gpointer g_class, gpointer g_class_data)
 
     g_object_class_install_property(
         klasse,
-        SCH_FACTORY_ALWAYS_PROMOTE_ATTRIBUTES,
-        g_param_spec_boxed(
-            "always-promote-attributes",
-            "always-promote-attributes",
-            "always-promote-attributes",
-            G_TYPE_STRV,
-            G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
-            )
-        );
-
-    g_object_class_install_property(
-        klasse,
-        SCH_FACTORY_ATTRIBUTE_PROMOTION,
-        g_param_spec_boolean(
-            "attribute-promotion",
-            "attribute-promotion",
-            "attribute-promotion",
-            TRUE,
-            G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
-            )
-        );
-
-    g_object_class_install_property(
-        klasse,
-        SCH_FACTORY_KEEP_INVISIBLE,
-        g_param_spec_boolean(
-            "keep-invisible",
-            "keep-invisible",
-            "keep-invisible",
-            TRUE,
-            G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
-            )
-        );
-
-    g_object_class_install_property(
-        klasse,
-        SCH_FACTORY_PROMOTE_INVISIBLE,
-        g_param_spec_boolean(
-            "promote-invisible",
-            "promote-invisible",
-            "promote-invisible",
-            FALSE,
+        SCH_FACTORY_CONFIG,
+        g_param_spec_object(
+            "config",
+            "Configuration",
+            "Configuration",
+            SCH_TYPE_CONFIG,
             G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
@@ -131,48 +89,30 @@ sch_factory_class_init(gpointer g_class, gpointer g_class_data)
 static void
 sch_factory_dispose(GObject *object)
 {
+    sch_factory_set_config(SCH_FACTORY(object), NULL);
+
     misc_object_chain_dispose(object);
 }
 
 static void
 sch_factory_finalize(GObject *object)
 {
-    SchFactoryPrivate *privat = SCH_FACTORY_GET_PRIVATE(object);
-
-    if (privat != NULL)
-    {
-        g_strfreev(privat->promote_attributes);
-    }
-
     misc_object_chain_finalize(object);
 }
 
 
-SchFactory*
-sch_factory_get_default(void)
+SchConfig*
+sch_factory_get_config(SchFactory *factory)
 {
-    static SchFactory *factory = NULL;
-
-    if (factory == NULL)
-    {
-        factory = SCH_FACTORY(g_object_new(SCH_TYPE_FACTORY, NULL));
-    }
-
-    return factory;
-}
-
-gchar**
-sch_factory_get_promote_attributes(GObject *object)
-{
-    char **names = NULL;
-    SchFactoryPrivate *privat = SCH_FACTORY_GET_PRIVATE(object);
+    SchConfig *config = NULL;
+    SchFactoryPrivate *privat = SCH_FACTORY_GET_PRIVATE(factory);
 
     if (privat != NULL)
     {
-        names = g_strdupv(privat->promote_attributes);
+        config = privat->config;
     }
 
-    return names;
+    return config;
 }
 
 static void
@@ -184,20 +124,8 @@ sch_factory_get_property(GObject *object, guint property_id, GValue *value, GPar
     {
         switch (property_id)
         {
-            case SCH_FACTORY_ALWAYS_PROMOTE_ATTRIBUTES:
-                g_value_take_boxed(value, sch_factory_get_promote_attributes);
-                break;
-
-            case SCH_FACTORY_ATTRIBUTE_PROMOTION:
-                g_value_set_boolean(value, privat->attribute_promotion);
-                break;
-
-            case SCH_FACTORY_KEEP_INVISIBLE:
-                g_value_set_boolean(value, privat->keep_invisible);
-                break;
-
-            case SCH_FACTORY_PROMOTE_INVISIBLE:
-                g_value_set_boolean(value, privat->promote_invisible);
+            case SCH_FACTORY_CONFIG:
+                g_value_set_object(value, privat->config);
                 break;
 
             default:
@@ -237,42 +165,49 @@ sch_factory_get_type(void)
     return type;
 }
 
-void
-sch_factory_set_promote_attributes(GObject *object, char **name)
+SchFactory*
+sch_factory_new(SchConfig *config)
 {
-    SchFactoryPrivate *privat = SCH_FACTORY_GET_PRIVATE(object);
+    return SCH_FACTORY(g_object_new(
+        SCH_TYPE_FACTORY,
+        "config", config,
+        NULL
+        ));
+}
+
+
+void
+sch_factory_set_config(SchFactory *factory, SchConfig *config)
+{
+    SchFactoryPrivate *privat = SCH_FACTORY_GET_PRIVATE(factory);
 
     if (privat != NULL)
     {
-        g_strfreev(privat->promote_attributes);
+        if (privat->config != NULL)
+        {
+            /* g_object_unref(privat->config) */
+        }
 
-        privat->promote_attributes = g_strdupv(name);
+        privat->config = config;
+
+        if (privat->config != NULL)
+        {
+            /* g_object_ref(privat->config) */
+        }
     }
 }
 
 static void
 sch_factory_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec)
 {
-    SchFactoryPrivate *privat = SCH_FACTORY_GET_PRIVATE(object);
+    SchFactory *factory = SCH_FACTORY(object);
 
-    if (privat != NULL)
+    if (factory != NULL)
     {
         switch (property_id)
         {
-            case SCH_FACTORY_ALWAYS_PROMOTE_ATTRIBUTES:
-                sch_factory_set_promote_attributes(object, g_value_get_boxed(value));
-                break;
-
-            case SCH_FACTORY_ATTRIBUTE_PROMOTION:
-                privat->attribute_promotion = g_value_get_boolean(value);
-                break;
-
-            case SCH_FACTORY_KEEP_INVISIBLE:
-                privat->keep_invisible = g_value_get_boolean(value);
-                break;
-
-            case SCH_FACTORY_PROMOTE_INVISIBLE:
-                privat->promote_invisible = g_value_get_boolean(value);
+            case SCH_FACTORY_CONFIG:
+                sch_factory_set_config(factory, SCH_CONFIG(g_value_get_object(value)));
                 break;
 
             default:

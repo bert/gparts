@@ -28,8 +28,6 @@
 #define SCH_IS_FACTORY_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCH_TYPE_FACTORY))
 #define SCH_FACTORY_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCH_TYPE_FACTORY,SchFactoryClass))
 
-struct _SchFactoryStyle;
-
 struct _SchFactory
 {
     GObject parent;
@@ -40,14 +38,30 @@ struct _SchFactoryClass
     GObjectClass parent;
 };
 
-SchFactory*
-sch_factory_get_default(void);
-
-gchar**
-sch_factory_get_promote_attributes(GObject *object);
-
 GType
 sch_factory_get_type(void);
 
+/*! \brief Get the configuration used by this factory
+ *
+ *  \param [in] factory
+ *  \return A pointer to the configuration.
+ */
+SchConfig*
+sch_factory_get_config(SchFactory *factory);
+
+/*! \brief Create a new schematic shape factory
+ *
+ *  \param [in] config
+ *  \return A pointer to the new factory
+ */
+SchFactory*
+sch_factory_new(SchConfig *config);
+
+/*! \brief Set the configuration for this factory to use
+ *
+ *  \param [in] factory
+ *  \param [in] config
+ */
 void
-sch_factory_set_promote_attributes(GObject *object, gchar **name);
+sch_factory_set_config(SchFactory *factory, SchConfig *config);
+

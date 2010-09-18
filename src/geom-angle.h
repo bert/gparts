@@ -21,6 +21,14 @@
 /*! \file geom-angle.h
  */
 
+/*! \brief Convert an angle from radians to degrees
+ *
+ * \param [in] angle The angle in radians
+ * \return The angle in degrees
+ */
+int
+geom_angle_degrees(double angle);
+
 /*! \brief Normalize an angle to the range of [0,360)
  *
  * \param [in] angle The angle in degrees

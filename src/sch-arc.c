@@ -451,10 +451,18 @@ sch_arc_get_line_width(const SchArc *shape, int *width)
 SchArc*
 sch_arc_new(const SchConfig *config)
 {
+    SchLineStyle line_style;
+
+    sch_config_get_line_style(config, &line_style);
+
     return SCH_ARC(g_object_new(
         SCH_TYPE_ARC,
-        "color",      sch_config_get_graphic_color(config),
-        "line-width", sch_config_get_line_width(config),
+        "color",            sch_config_get_graphic_color(config),
+        "line-width",       sch_config_get_line_width(config),
+        "line-cap-style",   line_style.cap_style,
+        "line-dash-style",  line_style.dash_style,
+        "line-dash-length", line_style.dash_length,
+        "line-dash-space",  line_style.dash_space,
         NULL
         ));
 }

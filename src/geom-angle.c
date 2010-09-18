@@ -25,6 +25,12 @@
 #include <stdlib.h>
 
 int
+geom_angle_degrees(double angle)
+{
+    return 180.0 * angle / M_PI;
+}
+
+int
 geom_angle_normalize(int angle)
 {
    if (angle < 0)

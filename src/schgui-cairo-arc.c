@@ -90,14 +90,70 @@ schgui_cairo_arc_bounds(SchGUICairoDrawItem *item, cairo_t *cairo, GeomBounds *b
         {
             GeomBounds temp;
 
-            temp.min_x = privat->center_x - privat->radius;
-            temp.min_y = privat->center_y - privat->radius;
-            temp.max_x = privat->center_x + privat->radius;
-            temp.max_y = privat->center_y + privat->radius;
+            double radians0 = geom_angle_radians(privat->start);
+            double radians1 = geom_angle_radians(privat->start + privat->sweep);
 
-            geom_bounds_expand(&temp, &temp, privat->width);
+            double x0 = privat->center_x + privat->radius * cos(radians0);    
+            double y0 = privat->center_y + privat->radius * sin(radians0);    
 
-            geom_bounds_union(bounds, bounds, &temp);
+            double x1 = privat->center_x + privat->radius * cos(radians1);    
+            double y1 = privat->center_y + privat->radius * sin(radians1);
+
+            double start;
+            double end;
+
+            if (x0 < x1)
+            {
+                temp.min_x = floor(x0);
+                temp.max_x = ceil(x1);
+            }
+            else
+            {
+                temp.min_x = floor(x1);
+                temp.max_x = ceil(x0);
+            }
+
+            if (y0 < y1)
+            {
+                temp.min_y = floor(y0);
+                temp.max_y = ceil(y1);
+            }
+            else
+            {
+                temp.min_y = floor(y1);
+                temp.max_y = ceil(y0);
+            }
+
+            if (privat->sweep >= 0)
+            {
+                start = geom_angle_normalize(geom_angle_degrees(privat->start));
+                end = start + geom_angle_degrees(privat->sweep);
+            }
+            else
+            {
+                start = geom_angle_normalize(geom_angle_degrees(privat->start + privat->sweep));
+                end = start - geom_angle_degrees(privat->sweep);
+            }
+
+            if (start < 90 && end > 90)
+            {
+                bounds->max_y = ceil(privat->center_y + privat->radius);
+            }
+
+            if (start < 180 && end > 180)
+            {
+                bounds->min_x = floor(privat->center_x - privat->radius);
+            }
+
+            if (start < 270 && end > 270)
+            {
+                bounds->min_y = floor(privat->center_y - privat->radius);
+            }
+
+            if (start < 360 && end > 360)
+            {
+                bounds->max_x = ceil(privat->center_x + privat->radius);
+            }
         }
     }
 }

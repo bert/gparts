@@ -581,10 +581,26 @@ sch_circle_get_line_style(const SchCircle *shape, struct _SchLineStyle *style)
 SchCircle*
 sch_circle_new(const SchConfig *config)
 {
+    SchFillStyle fill_style;
+    SchLineStyle line_style;
+
+    sch_config_get_fill_style(config, &fill_style);
+    sch_config_get_line_style(config, &line_style);
+
     return SCH_CIRCLE(g_object_new(
         SCH_TYPE_CIRCLE,
-        "color",      sch_config_get_graphic_color(config),
-        "line-width", sch_config_get_line_width(config),
+        "color",            sch_config_get_graphic_color(config),
+        "line-width",       sch_config_get_line_width(config),
+        "line-cap-style",   line_style.cap_style,
+        "line-dash-style",  line_style.dash_style,
+        "line-dash-length", line_style.dash_length,
+        "line-dash-space",  line_style.dash_space,
+        "fill-type",        fill_style.type,
+        "fill-width",       fill_style.width,
+        "fill-angle1",      fill_style.angle1,
+        "fill-pitch1",      fill_style.pitch1,
+        "fill-angle2",      fill_style.angle2,
+        "fill-pitch2",      fill_style.pitch2,
         NULL
         ));
 }
