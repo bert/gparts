@@ -33,7 +33,9 @@
 
 enum
 {
-    SCH_DRAWING_FILE_FORMAT = 1,
+    SCH_DRAWING_BASENAME = 1,
+    SCH_DRAWING_FILE_FORMAT,
+    SCH_DRAWING_FILENAME
 };
 
 typedef struct _SchDrawingPrivate SchDrawingPrivate;
@@ -41,6 +43,7 @@ typedef struct _SchDrawingPrivate SchDrawingPrivate;
 struct _SchDrawingPrivate
 {
     SchFileFormat2 *file_format;
+    char           *filename;
     GSList         *shapes;
 };
 
@@ -58,6 +61,7 @@ sch_drawing_set_property(GObject *object, guint property_id, const GValue *value
 
 static void
 sch_drawing_init(GTypeInstance *instance, gpointer g_class);
+
 
 
 void
@@ -103,6 +107,18 @@ sch_drawing_class_init(gpointer g_class, gpointer g_class_data)
 
     g_object_class_install_property(
         object_class,
+        SCH_DRAWING_BASENAME,
+        g_param_spec_string(
+            "basename",
+            "Basename",
+            "",
+            NULL,
+            G_PARAM_LAX_VALIDATION | G_PARAM_READABLE | G_PARAM_STATIC_STRINGS
+            )
+        );
+
+    g_object_class_install_property(
+        object_class,
         SCH_DRAWING_FILE_FORMAT,
         g_param_spec_object(
             "file-format",
@@ -112,6 +128,19 @@ sch_drawing_class_init(gpointer g_class, gpointer g_class_data)
             G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
+
+    g_object_class_install_property(
+        object_class,
+        SCH_DRAWING_FILENAME,
+        g_param_spec_string(
+            "filename",
+            "Filename",
+            "",
+            NULL,
+            G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
+            )
+        );
+
 
     klasse->signal_id[SCH_DRAWING_SIGNAL_APPEND] = g_signal_new(
         "append",
@@ -183,6 +212,34 @@ sch_drawing_foreach(SchDrawing *drawing, GFunc func, gpointer user_data)
     }
 }
 
+char*
+sch_drawing_get_basename(const SchDrawing *drawing)
+{
+    char *basename = NULL;
+    SchDrawingPrivate *privat = SCH_DRAWING_GET_PRIVATE(drawing);
+
+    if (privat != NULL)
+    {
+        basename = g_path_get_basename(privat->filename);
+    }
+
+    return basename;
+}
+
+char*
+sch_drawing_get_filename(const SchDrawing *drawing)
+{
+    char *filename = NULL;
+    SchDrawingPrivate *privat = SCH_DRAWING_GET_PRIVATE(drawing);
+
+    if (privat != NULL)
+    {
+        filename = g_strdup(privat->filename);
+    }
+
+    return filename;
+}
+
 void
 sch_drawing_prepend_shape(SchDrawing *drawing, SchShape *shape)
 {
@@ -220,8 +277,16 @@ sch_drawing_get_property(GObject *object, guint property_id, GValue *value, GPar
     {
         switch (property_id)
         {
+            case SCH_DRAWING_BASENAME:
+                g_value_take_string(value, sch_drawing_get_basename(SCH_DRAWING(object)));
+                break;
+
             case SCH_DRAWING_FILE_FORMAT:
                 g_value_set_object(value, privat->file_format);
+                break;
+
+            case SCH_DRAWING_FILENAME:
+                g_value_set_string(value, privat->filename);
                 break;
 
             default:
@@ -282,6 +347,22 @@ sch_drawing_set_file_format(SchDrawing *drawing, SchFileFormat2 *format)
     }
 }
 
+void
+sch_drawing_set_filename(const SchDrawing *drawing, const char *filename)
+{
+    SchDrawingPrivate *privat = SCH_DRAWING_GET_PRIVATE(drawing);
+
+    if (privat != NULL)
+    {
+        g_free(privat->filename);
+
+        privat->filename = g_strdup(filename);
+
+        g_object_notify(G_OBJECT(drawing), "basename");
+        g_object_notify(G_OBJECT(drawing), "filename");
+    }
+}
+
 static void
 sch_drawing_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec)
 {
@@ -289,6 +370,10 @@ sch_drawing_set_property(GObject *object, guint property_id, const GValue *value
     {
         case SCH_DRAWING_FILE_FORMAT:
             sch_drawing_set_file_format(SCH_DRAWING(object), SCH_FILE_FORMAT_2(g_value_get_object(value)));
+            break; 
+
+        case SCH_DRAWING_FILENAME:
+            sch_drawing_set_filename(SCH_DRAWING(object), g_value_get_string(value));
             break; 
 
         default:

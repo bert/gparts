@@ -137,23 +137,25 @@ schgui_cairo_arc_bounds(SchGUICairoDrawItem *item, cairo_t *cairo, GeomBounds *b
 
             if (start < 90 && end > 90)
             {
-                bounds->max_y = ceil(privat->center_y + privat->radius);
+                temp.max_y = ceil(privat->center_y + privat->radius);
             }
 
             if (start < 180 && end > 180)
             {
-                bounds->min_x = floor(privat->center_x - privat->radius);
+                temp.min_x = floor(privat->center_x - privat->radius);
             }
 
             if (start < 270 && end > 270)
             {
-                bounds->min_y = floor(privat->center_y - privat->radius);
+                temp.min_y = floor(privat->center_y - privat->radius);
             }
 
             if (start < 360 && end > 360)
             {
-                bounds->max_x = ceil(privat->center_x + privat->radius);
+                temp.max_x = ceil(privat->center_x + privat->radius);
             }
+
+            geom_bounds_union(bounds, bounds, &temp);
         }
     }
 }

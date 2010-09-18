@@ -650,6 +650,8 @@ sch_output_stream_write_component_2(SchOutputStream *stream, const SchComponent 
 
         g_free(basename);
 
+        g_debug("Output : %s", str);
+
         g_output_stream_write(
             privat->base_stream,
             str,

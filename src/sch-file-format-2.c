@@ -186,7 +186,16 @@ sch_file_format_2_write_circle(const SchFileFormat2 *format, SchOutputStream *st
 void
 sch_file_format_2_write_component(const SchFileFormat2 *format, SchOutputStream *stream, const SchComponent *shape, GError **error)
 {
+    SchAttributes *attributes = sch_shape_get_attributes(shape);
+
     sch_output_stream_write_component_2(stream, shape, NULL);
+
+    if (attributes != NULL)
+    {
+        sch_attributes_write(attributes, format, stream, error);
+
+        g_object_unref(attributes);
+    }
 }
 
 void
@@ -240,7 +249,10 @@ sch_file_format_2_write_text(const SchFileFormat2 *format, SchOutputStream *stre
 
     sch_output_stream_write_string(stream, sch_multiline_peek_plain(multiline, 0), NULL);
 
-    /* FIXME needs to unref */
+    if (multiline != NULL)
+    {
+        g_object_unref(multiline);
+    }
 }
 
 void

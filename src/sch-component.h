@@ -41,15 +41,134 @@ struct _SchComponentClass
 GType
 sch_component_get_type(void);
 
-void
-sch_component_get_drawing(const SchComponent *shape, SchDrawing **drawing);
+/*! \brief Get the rotation angle of the component
+ *
+ *  \param [in] shape The component
+ *  \return The rotation angle of the component
+ */
+int
+sch_component_get_angle(const SchComponent *shape);
 
-void
-sch_component_set_drawing(SchComponent *shape, SchDrawing *drawing);
+/*! \brief Get the basename of the component
+ *
+ *  When no longer needed, call g_free() on the returned pointer
+ *
+ *  \param [in] shape The component
+ *  \return The basename of the component
+ */
+char*
+sch_component_get_basename(const SchComponent *component);
 
+/*! \brief Get the symbol drawing for this component
+ *
+ *  When no longer needed, call g_object_unref on the returned pointer.
+ *
+ *  \param [in] shape The component
+ *  \return The symbol drawing
+ */
+SchDrawing*
+sch_component_get_drawing(const SchComponent *shape);
+
+/*! \brief
+ *
+ *  \param [in] shape The component
+ *  \return
+ */
 void
 sch_component_get_insertion_point(const SchComponent *shape, int *x, int *y);
 
+/*! \brief Get if the component reflects on the y axis
+ *
+ *  \param [in] shape The component
+ *  \return
+ */
+int
+sch_component_get_mirror(const SchComponent *shape);
+
+/*! \brief
+ *
+ *  \param [in] shape The component
+ *  \return
+ */
 void
 sch_component_get_orientation(const SchComponent *shape, int *angle, int *mirror);
+
+/*! \brief Get the x coordinate of the insertion point
+ *
+ *  \param [in] shape The component
+ *  \return The x coordinate of the insertion point
+ */
+int
+sch_component_get_x(const SchComponent *shape);
+
+/*! \brief Get the y coordinate of the insertion point
+ *
+ *  \param [in] shape The component
+ *  \return The y coordinate of the insertion point
+ */
+int
+sch_component_get_y(const SchComponent *shape);
+
+/*! \brief Instantiate a component
+ *
+ *  \param [in] config  The configuration
+ *  \param [in] drawing The symbol drawing
+ */
+SchComponent*
+sch_component_instantiate(const SchConfig *config, SchDrawing *drawing);
+
+/*! \brief Create a new, empty component
+ *
+ *  \param [in] config The configuration
+ */
+SchComponent*
+sch_component_new(const SchConfig *config);
+
+/*! \brief Set the rotation angle for the component
+ *
+ * \param [in] shape The component
+ * \param [in] angle The rotation angle
+ */
+void
+sch_component_set_angle(SchComponent *shape, int angle);
+
+/*! \brief Set the symbol drawing for this component
+ *
+ *  \param [in] shape The component
+ *  \param [in] drawing The symbol drawing
+ */
+void
+sch_component_set_drawing(SchComponent *shape, SchDrawing *drawing);
+
+/*! \brief Set if the component reflects on the y axis
+ *
+ * \param [in] shape The component
+ * \param [in] mirror
+ */
+void
+sch_component_set_mirror(SchComponent *shape, int mirror);
+
+/*! \brief Set if the component is selectable or not
+ *
+ * \param [in] shape The component
+ * \param [in] selectable 
+ */
+void
+sch_component_set_selectable(SchComponent *shape, int selectable);
+
+/*! \brief Set the x coordinate of the insertion point
+ *
+ * \param [in] shape The component
+ * \param [in] x The x coordinate of the insertion point
+ */
+void
+sch_component_set_x(SchComponent *shape, int x);
+
+/*! \brief Set the y coordinate of the insertion point
+ *
+ * \param [in] shape The component
+ * \param [in] y The y coordinate of the insertion point
+ */
+void
+sch_component_set_y(SchComponent *shape, int y);
 

@@ -21,6 +21,25 @@
 /*! \file sch-text.h
  */
 
+#define SCH_TEXT_ALIGN_BOTTOM_LEFT    0
+#define SCH_TEXT_ALIGN_MIDDLE_LEFT    1
+#define SCH_TEXT_ALIGN_TOP_LEFT       2
+#define SCH_TEXT_ALIGN_BOTTOM_CENTER  3
+#define SCH_TEXT_ALIGN_CENTER         4
+#define SCH_TEXT_ALIGN_TOP_CENTER     5
+#define SCH_TEXT_ALIGN_BOTTOM_RIGHT   6
+#define SCH_TEXT_ALIGN_MIDDLE_RIGHT   7
+#define SCH_TEXT_ALIGN_TOP_RIGHT      8
+
+
+#define SCH_TEXT_SHOW_ALL    0
+#define SCH_TEXT_SHOW_VALUE  1
+#define SCH_TEXT_SHOW_NAME   2
+
+#define SCH_TEXT_VISIBLE_INVISIBLE  0
+#define SCH_TEXT_VISIBLE_VISIBLE    1
+
+
 #define SCH_TYPE_TEXT (sch_text_get_type())
 #define SCH_TEXT(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),SCH_TYPE_TEXT,SchText))
 #define SCH_TEXT_CLASS(cls) (G_TYPE_CHECK_CLASS_CAST((cls),SCH_TYPE_TEXT,SchTextClass))
@@ -41,35 +60,97 @@ struct _SchTextClass
 GType
 sch_text_get_type(void);
 
-int
-sch_text_get_x(SchText *text);
+/*! \brief Make a deep copy of the given text object
+ *
+ *
+ *  \param [in] text The text object to clone
+ *  \return A deep copy of the given text object
+ */
+SchText*
+sch_text_clone(const SchText *text);
 
+/*! \brief Get the alignment of the text
+ *
+ *
+ *  \param [in] text The text object
+ *  \return The alignment of the text
+ */
 int
-sch_text_get_y(SchText *text);
+sch_text_get_alignment(const SchText *text);
 
+/*! \brief Get the angle of the text
+ *
+ *
+ *  \param [in] text The text object
+ *  \return The angle of the text
+ */
 int
-sch_text_get_size(SchText *text);
+sch_text_get_angle(const SchText *text);
 
+/*! \brief Get the color of the text
+ *
+ *
+ *  \param [in] text The text object
+ *  \return The color of the text
+ */
 int
-sch_text_get_angle(SchText *text);
+sch_text_get_color(const SchText *shape);
 
+/*! \brief Get the content of the text
+ *
+ *  When no longer needed, call g_objectunref() on the returned pointer.
+ *
+ *  \param [in] text The text object
+ *  \return A pointer to the multiline object
+ */
 SchMultiline*
-sch_text_get_multiline(SchText *text);
+sch_text_get_multiline(const SchText *text);
 
-void
-sch_text_set_multiline(SchText *text, SchMultiline *multiline);
-
+/*! \brief Get the portion of attributes to show
+ *
+ *
+ *  \param [in] text The text object
+ *  \return The portion of attributes to show
+ */
 int
-sch_text_get_alignment(SchText *text);
+sch_text_get_show(const SchText *shape);
 
-void
-sch_text_get_color(const SchText *shape, int *index);
+/*! \brief Get the point size of the text
+ *
+ *
+ *  \param [in] text The text object
+ *  \return The point size of the text
+ */
+int
+sch_text_get_size(const SchText *text);
 
-void
-sch_text_get_show(const SchText *shape, int *show);
+/*! \brief Get the visiblility of the text
+ *
+ *
+ *  \param [in] text The text object
+ *  \return zero The text is invisible
+ *  \return non-zero The text is visible
+ */
+int
+sch_text_get_visible(const SchText *shape);
 
-void
-sch_text_get_visible(const SchText *shape, int *visible);
+/*! \brief Get the x coordinate of the text insertion point
+ *
+ *
+ *  \param [in] text The text object
+ *  \return The x coordinate of the text insertion point
+ */
+int
+sch_text_get_x(const SchText *text);
+
+/*! \brief Get the y coordinate of the text insertion point
+ *
+ *
+ *  \param [in] text The text object
+ *  \return The y coordinate of the text insertion point
+ */
+int
+sch_text_get_y(const SchText *text);
 
 /*! \brief Create a text object
  *
@@ -78,4 +159,85 @@ sch_text_get_visible(const SchText *shape, int *visible);
  */
 SchText*
 sch_text_new(const SchConfig *config);
+
+/*! \brief Set the alignment of the text
+ *
+ *
+ *  \param [in] text The text object
+ *  \param [in] alignment
+ */
+void
+sch_text_set_alignment(SchText *shape, int alignment);
+
+/*! \brief Set the angle of the text
+ *
+ *
+ *  \param [in] text The text object
+ *  \param [in] angle
+ */
+void
+sch_text_set_angle(SchText *shape, int angle);
+
+/*! \brief Set the color of the text
+ *
+ *
+ *  \param [in] text The text object
+ *  \param [in] color The color
+ */
+void
+sch_text_set_color(SchText *shape, int color);
+ 
+/*! \brief
+ *
+ *
+ *  \param [in] text The text object
+ *  \return
+ */
+void
+sch_text_set_multiline(SchText *text, SchMultiline *multiline);
+
+/*! \brief Set which portions of attributes show
+ *
+ *
+ *  \param [in] text The text object
+ *  \param [in] The portion of the attribute that is shown
+ */
+void
+sch_text_set_show(SchText *shape, int show);
+
+/*! \brief Set the point size of the text
+ *
+ *
+ *  \param [in] text The text object
+ *  \param [in] size The point size of the text
+ */
+void
+sch_text_set_size(SchText *shape, int size);
+
+/*! \brief Set the visibility of the text
+ *
+ *
+ *  \param [in] text The text object
+ *  \param [in] visible Zero is invisible, non-zero is visible
+ */
+void
+sch_text_set_visible(SchText *shape, int visible);
+
+/*! \brief Set the x coordinate of the text insertion point
+ *
+ *
+ *  \param [in] text The text object
+ *  \param [in] x The x coordinate
+ */
+void
+sch_text_set_x(SchText *shape, int x);
+
+/*! \brief Set the y coordinate of the text insertion point
+ *
+ *
+ *  \param [in] text The text object
+ *  \param [in] y The y coordinate
+ */
+void
+sch_text_set_y(SchText *shape, int y);
 

@@ -287,6 +287,8 @@ sch_loader_load_drawing(SchLoader *loader, const gchar *filename, GError **error
     {
         drawing = g_object_new(SCH_TYPE_DRAWING, NULL);
 
+        sch_drawing_set_filename(drawing, filename);
+
         read_file(drawing, file, error);
 
         fclose(file);
@@ -318,6 +320,8 @@ sch_loader_load_symbol(SchLoader *loader, const gchar *filename, GError **error)
     if (file != NULL)
     {
         drawing = g_object_new(SCH_TYPE_DRAWING, NULL);
+
+        sch_drawing_set_filename(drawing, filename);
 
         read_file(drawing, file, error);
 
@@ -694,9 +698,7 @@ process_circle(FILE *file, gchar **tokens)
 static GObject*
 process_component(FILE *file, gchar **tokens)
 {
-    SchComponent *component;
-
-    component = g_object_new(SCH_TYPE_COMPONENT, NULL);
+    SchComponent *component = sch_component_new(NULL);
 
     process_params(G_OBJECT(component), tokens, component_params, 8);
 

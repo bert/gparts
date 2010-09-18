@@ -44,18 +44,45 @@ struct _SchMultilineClass
 GType
 sch_multiline_get_type(void);
 
+/*! \brief
+ *
+ */
 void
 sch_multiline_append(SchMultiline *multiline, const char *string);
 
+/*! \brief
+ *
+ */
 void
 sch_multiline_clear(SchMultiline *multiline);
 
+/*! \brief
+ *
+ */
+SchMultiline*
+sch_multiline_clone(const SchMultiline *multiline);
+
+/*! \brief
+ *
+ */
+int
+sch_multiline_lines(SchMultiline *multiline);
+
+/*! \brief
+ *
+ */
+SchMultiline*
+sch_multiline_new(void);
+
+/*! \brief
+ *
+ */
 const char*
 sch_multiline_peek_markup(SchMultiline *multiline, int show);
 
+/*! \brief
+ *
+ */
 const char*
 sch_multiline_peek_plain(SchMultiline *multiline, int show);
-
-int
-sch_multiline_lines(SchMultiline *multiline);
 

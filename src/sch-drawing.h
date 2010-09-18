@@ -71,6 +71,26 @@ sch_drawing_append_shape(SchDrawing *drawing, SchShape *shape);
 void
 sch_drawing_foreach(SchDrawing *drawing, GFunc func, gpointer user_data);
 
+/*! \brief Get the basename of the drawing
+ *
+ *  When no longer needed, call g_free() on the returned pointer.
+ *
+ *  \param [in] The drawing
+ *  \return The basename of the drawing
+ */
+char*
+sch_drawing_get_basename(const SchDrawing *drawing);
+
+/*! \brief Get the filename of the drawing
+ *
+ *  When no longer needed, call g_free() on the returned pointer.
+ *
+ *  \param [in] The drawing
+ *  \return The filename of the drawing
+ */
+char*
+sch_drawing_get_filename(const SchDrawing *drawing);
+
 /*! \brief Prepend a shape to the drawing
  *
  *  After prepending the shape, the drawing emits the "prepend" signal.
@@ -98,6 +118,14 @@ sch_drawing_rotate(SchDrawing *drawing, int angle);
  */
 void
 sch_drawing_set_file_format(SchDrawing *drawing, SchFileFormat2 *format);
+
+/*! \brief Set the filename of the drawing
+ *
+ *  \param [in] The drawing
+ *  \param [in] The filename of the drawing
+ */
+void
+sch_drawing_set_filename(const SchDrawing *drawing, const char *filename);
 
 /*! \brief Transform the drawing
  *

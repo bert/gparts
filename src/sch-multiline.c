@@ -40,6 +40,58 @@ struct _SchMultilinePrivate
 static void
 sch_multiline_class_init(gpointer g_class, gpointer g_class_data);
 
+
+
+void
+sch_multiline_append(SchMultiline *multiline, const char *string)
+{
+    if (g_utf8_validate(string, -1, NULL))
+    {
+        SchMultilinePrivate *privat = SCH_MULTILINE_GET_PRIVATE(multiline);
+    
+        if (privat != NULL)
+        {
+            char *temp = g_strdup(string);
+
+            if (privat->strings == NULL)
+            {
+                privat->strings = g_array_new(TRUE, FALSE, sizeof(char*));
+            }
+
+            g_array_append_val(privat->strings, temp);
+        }
+    }
+}
+
+void
+sch_multiline_clear(SchMultiline *multiline)
+{
+}
+
+SchMultiline*
+sch_multiline_clone(const SchMultiline *multiline)
+{
+    SchMultiline *temp = NULL;
+    SchMultilinePrivate *privat = SCH_MULTILINE_GET_PRIVATE(multiline);
+    
+    if (privat != NULL)
+    {
+        temp = sch_multiline_new();
+
+        if (privat->strings != NULL)
+        {
+            int i = 0;
+
+            while (i < privat->strings->len)
+            {
+                sch_multiline_append(temp, g_array_index(privat->strings, char*, i++));
+            }
+        }
+    }
+
+    return temp;
+}
+
 static void
 sch_multiline_class_init(gpointer g_class, gpointer g_class_data)
 {
@@ -79,32 +131,6 @@ sch_multiline_get_type(void)
     return type;
 }
 
-void
-sch_multiline_append(SchMultiline *multiline, const char *string)
-{
-    if (g_utf8_validate(string, -1, NULL))
-    {
-        SchMultilinePrivate *privat = SCH_MULTILINE_GET_PRIVATE(multiline);
-    
-        if (privat != NULL)
-        {
-            char *temp = g_strdup(string);
-
-            if (privat->strings == NULL)
-            {
-                privat->strings = g_array_new(TRUE, FALSE, sizeof(char*));
-            }
-
-            g_array_append_val(privat->strings, temp);
-        }
-    }
-}
-
-void
-sch_multiline_clear(SchMultiline *multiline)
-{
-}
-
 int
 sch_multiline_lines(SchMultiline *multiline)
 {
@@ -117,6 +143,12 @@ sch_multiline_lines(SchMultiline *multiline)
     }
 
     return lines;
+}
+
+SchMultiline*
+sch_multiline_new(void)
+{
+    return SCH_MULTILINE(g_object_new(SCH_TYPE_MULTILINE, NULL));
 }
 
 const char*

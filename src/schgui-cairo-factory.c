@@ -326,14 +326,13 @@ schgui_cairo_factory_create_from_component(SchGUICairoFactory *factory, SchCompo
     if (privat != NULL)
     {
         int                 angle;
-        SchDrawing          *drawing = NULL;
+        SchDrawing          *drawing = sch_component_get_drawing(component);
         SchGUICairoDrawItem *draw_item;
         int                 dx;
         int                 dy;
         int                 mirror;
 
         sch_component_get_orientation(component, &angle, &mirror);
-        sch_component_get_drawing(component, &drawing);
         sch_component_get_insertion_point(component, &dx, &dy);
 
         draw_item = schgui_cairo_factory_create_from_drawing(factory, drawing);

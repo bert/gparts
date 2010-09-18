@@ -240,11 +240,8 @@ SchGUICairoText*
 schgui_cairo_text_new(const SchText *shape, SchGUIDrawingCfg *config)
 {
     SchGUICairoText *item = NULL;
-    int vis;
 
-    sch_text_get_visible(shape, &vis);
-
-    if (vis)
+    if (sch_text_get_visible(shape))
     {
         item = SCHGUI_CAIRO_TEXT(g_object_new(SCHGUI_TYPE_CAIRO_TEXT, NULL));
 
@@ -257,7 +254,7 @@ schgui_cairo_text_new(const SchText *shape, SchGUIDrawingCfg *config)
             SchMultiline *multiline = sch_text_get_multiline(shape);
             int                   show;
 
-            sch_text_get_color(shape, &index);
+            index = sch_text_get_color(shape);
 
             privat->visible = schgui_drawing_cfg_get_color(config, index, &color);
 
@@ -266,6 +263,8 @@ schgui_cairo_text_new(const SchText *shape, SchGUIDrawingCfg *config)
             privat->blue  = color.blue;
             privat->alpha = privat->visible ? 1.0 : 0.0;
 
+            privat->alignment = sch_text_get_alignment(shape);
+            privat->angle = geom_angle_radians(sch_text_get_angle(shape));
             privat->x = sch_text_get_x(shape);
             privat->y = sch_text_get_y(shape);
 
@@ -273,7 +272,8 @@ schgui_cairo_text_new(const SchText *shape, SchGUIDrawingCfg *config)
 
             pango_font_description_set_size(privat->font_desc, PANGO_SCALE * sch_text_get_size(shape));
 
-            sch_text_get_show(shape, &show);
+
+            show = sch_text_get_show(shape);
 
             {
                 char *temp = sch_multiline_peek_markup(multiline, show);
@@ -285,10 +285,11 @@ schgui_cairo_text_new(const SchText *shape, SchGUIDrawingCfg *config)
                  privat->markup = strdup(temp);
             }
 
+            if (multiline != NULL)
+            {
+                g_object_unref(multiline);
+            }
 
-            privat->alignment = sch_text_get_alignment(shape);
-
-             privat->angle = geom_angle_radians(sch_text_get_angle(shape));
         }
     }
 
