@@ -68,6 +68,9 @@ gparts_preview_ctrl_set_copy_action(GPartsPreviewCtrl *preview_ctrl, GtkAction *
 void
 gparts_preview_ctrl_set_symbol_source(GPartsPreviewCtrl *preview_ctrl, GtkTreeView *soruce);
 
+void
+gparts_preview_ctrl_set_attrib_source(GPartsPreviewCtrl *preview_ctrl, GtkTreeView *attrib_source);
+
 /*! \brief Sets the target view for results from database queries.
  *
  *  \param [in] preview_ctrl The controller.

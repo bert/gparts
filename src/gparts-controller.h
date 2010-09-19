@@ -36,6 +36,7 @@ struct _GPartsControllerInterface
     GTypeInterface parent;
 
     gchar* (*get_field)(GPartsController *controller, const gchar *name);
+    GHashTable* (*get_table)(GPartsController *controller);
 };
 
 /*! \brief Gets the value of a field.
@@ -48,6 +49,9 @@ struct _GPartsControllerInterface
  */
 gchar*
 gparts_controller_get_field(GPartsController *controller, const gchar *name);
+
+GHashTable*
+gparts_controller_get_table(GPartsController *controller);
 
 GType
 gparts_controller_get_type(void);

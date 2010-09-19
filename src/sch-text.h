@@ -124,6 +124,16 @@ sch_text_get_show(const SchText *shape);
 int
 sch_text_get_size(const SchText *text);
 
+/*! \brief Get all he text as one string
+ *
+ *  When no longer needed, call g_free() on the returned string.
+ *
+ *  \param [in] text he text object
+ *  \return All the text as one string
+ */
+char*
+sch_text_get_string(const SchText *text);
+
 /*! \brief Get the visiblility of the text
  *
  *
@@ -213,6 +223,15 @@ sch_text_set_show(SchText *shape, int show);
  */
 void
 sch_text_set_size(SchText *shape, int size);
+
+/*! \brief Set all the text as one string
+ *
+ *
+ *  \param [in] text The text object
+ *  \param [in] string All the text as one string
+ */
+void
+sch_text_set_string(SchText *shape, const char *string);
 
 /*! \brief Set the visibility of the text
  *

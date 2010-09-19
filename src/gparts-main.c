@@ -324,6 +324,7 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
 
     g_object_new(
         GPARTS_TYPE_PREVIEW_CTRL,
+        "attrib-source", part_controller,
         "symbol-source", symbol_controller,
         "target",        SCHGUI_DRAWING_VIEW(gtk_builder_get_object(private->builder, "parts-graphic-view")),
         NULL

@@ -170,6 +170,7 @@ libgeom_la_CFLAGS = -Wall $(AM_CFLAGS) $(GLIB_CFLAGS)
 libgeom_la_LIBADD = $(GLIB_LIBS)
 
 libmisc_la_SOURCES = \
+	misc-macro.c \
 	misc-object.c
 libmisc_la_CFLAGS = -Wall $(AM_CFLAGS) $(GLIB_CFLAGS)
 libmisc_la_LIBADD = $(GLIB_LIBS)

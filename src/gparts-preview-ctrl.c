@@ -24,6 +24,7 @@
 #include <gtk/gtk.h>
 
 #include "misc-object.h"
+#include "gparts-controller.h"
 
 #include "gparts-database-result.h"
 #include "gparts-database.h"
@@ -40,6 +41,7 @@ enum
 {
     GPARTS_PREVIEW_CTRL_PROPID_COPY_ACTION = 1,
 
+    GPARTS_PREVIEW_CTRL_PROPID_ATTRIB_SOURCE,
     GPARTS_PREVIEW_CTRL_PROPID_SYMBOL_SOURCE,
     GPARTS_PREVIEW_CTRL_PROPID_TARGET,
 };
@@ -51,6 +53,7 @@ struct _GPartsPreviewCtrlPrivate
     GtkAction        *copy_action;
 
     GtkTreeView      *symbol_source;
+    GtkTreeView      *attrib_source;
     GtkDrawingArea   *target;
 };
 
@@ -94,8 +97,10 @@ gparts_preview_ctrl_updated_cb(GtkWidget *widget, GPartsPreviewCtrl *controller)
 
     if (privat != NULL)
     {
-        SchDrawing *drawing = NULL;
-        gchar      *symbol_name;
+        SchComponent *component;
+        SchDrawing   *drawing = NULL;
+        SchDrawing   *symbol = NULL;
+        gchar        *symbol_name;
 
         symbol_name = gparts_controller_get_field(privat->symbol_source, "SymbolPath");
 
@@ -105,10 +110,40 @@ gparts_preview_ctrl_updated_cb(GtkWidget *widget, GPartsPreviewCtrl *controller)
 
             if (loader != NULL)
             {
-                drawing = sch_loader_load_symbol(loader, symbol_name, NULL);
+                symbol = sch_loader_load_symbol(loader, symbol_name, NULL);
             }
 
             g_free(symbol_name);
+        }
+
+        component = sch_component_instantiate(sch_config_new(), symbol);
+
+        if (symbol != NULL)
+        {
+            g_object_unref(symbol);
+        }
+
+        if (component != NULL)
+        {
+            drawing = sch_drawing_new();
+
+            sch_drawing_append_shape(drawing, SCH_SHAPE(component));
+
+            /*! \todo add attributes to the component from the database */
+            {
+                SchAttributes *attributes = sch_shape_get_attributes(SCH_SHAPE(component));
+
+                if (attributes != NULL)
+                {
+                    GHashTable *table = gparts_controller_get_table(privat->attrib_source);
+
+                    sch_attributes_expand_macros(attributes, table);
+
+                    g_object_unref(attributes);
+                }
+            }
+
+            g_object_unref(component);
         }
 
         schgui_drawing_view_set_drawing(privat->target, drawing);
@@ -148,6 +183,18 @@ gparts_preview_ctrl_class_init(gpointer g_class, gpointer g_class_data)
             "",
             "",
             GTK_TYPE_ACTION,
+            G_PARAM_READWRITE
+            )
+        );
+
+    g_object_class_install_property(
+        object_class,
+        GPARTS_PREVIEW_CTRL_PROPID_ATTRIB_SOURCE,
+        g_param_spec_object(
+            "attrib-source",
+            "",
+            "",
+            G_TYPE_OBJECT,
             G_PARAM_READWRITE
             )
         );
@@ -264,6 +311,10 @@ gparts_preview_ctrl_set_property(GObject *object, guint property_id, const GValu
             gparts_preview_ctrl_set_copy_action(preview_ctrl, g_value_get_object(value));
             break;
 
+        case GPARTS_PREVIEW_CTRL_PROPID_ATTRIB_SOURCE:
+            gparts_preview_ctrl_set_attrib_source(preview_ctrl, g_value_get_object(value));
+            break;
+
         case GPARTS_PREVIEW_CTRL_PROPID_SYMBOL_SOURCE:
             gparts_preview_ctrl_set_symbol_source(preview_ctrl, g_value_get_object(value));
             break;
@@ -314,6 +365,43 @@ gparts_preview_ctrl_set_copy_action(GPartsPreviewCtrl *preview_ctrl, GtkAction *
         g_object_notify(G_OBJECT(preview_ctrl), "copy-action");
     }
 }
+
+void
+gparts_preview_ctrl_set_attrib_source(GPartsPreviewCtrl *preview_ctrl, GtkTreeView *attrib_source)
+{
+    GPartsPreviewCtrlPrivate *privat = GPARTS_PREVIEW_CTRL_GET_PRIVATE(preview_ctrl);
+
+    if (privat->attrib_source = attrib_source)
+    {
+        if (privat->attrib_source != NULL)
+        {
+            g_signal_handlers_disconnect_by_func(
+                privat->attrib_source,
+                G_CALLBACK(gparts_preview_ctrl_updated_cb),
+                preview_ctrl
+                );
+
+            g_object_unref(privat->attrib_source);
+        }
+
+        privat->attrib_source = attrib_source;
+
+        if (privat->attrib_source != NULL)
+        {
+            g_object_ref(privat->attrib_source);
+
+            g_signal_connect(
+                privat->attrib_source,
+                "updated",
+                G_CALLBACK(gparts_preview_ctrl_updated_cb),
+                preview_ctrl
+                );
+        }
+
+        g_object_notify(G_OBJECT(preview_ctrl), "attrib-source");
+    }
+}
+
 
 void
 gparts_preview_ctrl_set_symbol_source(GPartsPreviewCtrl *preview_ctrl, GtkTreeView *symbol_source)

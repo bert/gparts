@@ -94,6 +94,9 @@ gparts_result_controller_finalize(GObject *object);
 static gchar*
 gparts_result_controller_get_field(GPartsController *controller, const gchar *name);
 
+static GHashTable*
+gparts_result_controller_get_table(GPartsResultController *controller);
+
 static void
 gparts_result_controller_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
 
@@ -314,6 +317,7 @@ static void
 gparts_result_controller_controller_init(GPartsControllerInterface *iface)
 {
     iface->get_field = gparts_result_controller_get_field;
+    iface->get_table = gparts_result_controller_get_table;
 }
 
 static void
@@ -389,6 +393,39 @@ gparts_result_controller_get_field(GPartsController *controller, const gchar *na
 
     return value;
 }
+
+static GHashTable*
+gparts_result_controller_get_table(GPartsResultController *controller)
+{
+    GtkTreeViewColumn *column;
+    gint index = 0;
+    GPartsResultControllerPrivate *privat = GPARTS_RESULT_CONTROLLER_GET_PRIVATE(controller);
+    GHashTable *table = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
+
+    column = gtk_tree_view_get_column(privat->target, index++);
+
+    while (column != NULL)
+    {
+        const gchar *name;
+        gchar *value;
+
+        name = gtk_tree_view_column_get_title(column);
+
+        value = gparts_result_controller_get_field(
+            controller,
+            name
+            );
+
+        g_debug("Table insert %s, %s", name, value);
+
+        g_hash_table_insert(table, name, value);
+
+        column = gtk_tree_view_get_column(privat->target, index++);
+    }
+
+    return table;
+}
+
 
 GType
 gparts_result_controller_get_type(void)

@@ -50,6 +50,31 @@ gparts_controller_get_field(GPartsController *controller, const gchar *name)
     return field;
 }
 
+GHashTable*
+gparts_controller_get_table(GPartsController *controller)
+{
+    GHashTable *table = NULL;
+
+    if (controller != NULL)
+    {
+        GPartsControllerInterface *iface = GPARTS_CONTROLLER_GET_INTERFACE(controller);
+
+        if (iface == NULL)
+        {
+        }
+        else if (iface->get_table == NULL)
+        {
+        }
+        else
+        {
+            table = iface->get_table(controller);
+        }
+    }
+
+    return table;
+}
+
+
 GType
 gparts_controller_get_type(void)
 {

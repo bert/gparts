@@ -1,0 +1,123 @@
+/* gEDA - GPL Electronic Design Automation
+ * gparts - gEDA Parts Manager
+ * Copyright (C) 2010 Edward C. Hennessy
+ * Copyright (C) 2010 gEDA Contributors (see ChangeLog for details)
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
+ */
+
+/*! \file misc-macro.c
+ */
+
+#include <glib.h>
+
+typedef struct _MiscMacroExpandData MiscMacroExpandData;
+
+struct _MiscMacroExpandData
+{
+    const GHashTable *table;
+};
+
+static gboolean
+misc_macro_expand_cb(const GMatchInfo *info, GString *result, gpointer data);
+
+
+
+gchar*
+misc_macro_expand(const GRegex* regex, const gchar *string, const GHashTable *table)
+{
+    MiscMacroExpandData data;
+
+    g_debug("misc macro expand");
+
+    data.table = table;
+
+    return g_regex_replace_eval(
+        regex,                   /* regex */
+        string,                  /* string */
+        -1,                      /* string_len */
+        0,                       /* start_position */
+        0,                       /* match_options */
+        misc_macro_expand_cb,    /* eval */
+        &table,                  /* user_data */
+        NULL                     /* error */
+        );
+}
+
+static gboolean
+misc_macro_expand_cb(const GMatchInfo *info, GString *result, gpointer user_data)
+{
+    gchar *value = NULL;
+
+    if (user_data != NULL)
+    {
+        MiscMacroExpandData *data = (MiscMacroExpandData*) user_data;
+
+        if (data->table != NULL)
+        {
+            gchar *name = g_match_info_fetch(info, 1);
+
+            if (name != NULL)
+            {
+                g_debug("  Name = %s", name);
+
+                value = g_hash_table_lookup(data->table, name);
+
+                g_free(name);
+            }
+        }
+    }
+
+    g_debug("  Value = %s", value);
+
+    if (value != NULL)
+    {
+        g_string_append(result, value);
+    }
+    else
+    {
+        gchar *macro = g_match_info_fetch(info, 0);
+
+        g_string_append(result, macro);
+
+        g_free(macro);
+    }
+
+    return FALSE;
+}
+
+GRegex*
+misc_macro_new_regex(void)
+{
+    static GRegex *regex = NULL;
+
+    if (regex == NULL)
+    {
+        regex = g_regex_new(
+            "(?:\\$\\((\\w+)\\))",
+            0,
+            0,
+            NULL
+            );
+    }
+
+    if (regex != NULL)
+    {
+        g_regex_ref(regex);
+    }
+
+    return regex;
+}
+

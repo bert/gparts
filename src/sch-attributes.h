@@ -51,6 +51,21 @@ sch_attributes_get_type(void);
 void
 sch_attributes_append(SchAttributes *attributes, SchShape *shape);
 
+/*! \brief Expand macros within the attributes
+ *
+ *  Macros in the attributes have the form of $(name). Whenever this
+ *  function encounters a $(name), it replaces the string with the value
+ *  from the hash table.
+ *
+ *  The hash table keys are strings containing the macro names and the values
+ *  are strings containing the macro values.
+ *
+ *  \param [in] attributes The attributes
+ *  \param [in] macros     The macros
+ */
+void
+sch_attributes_expand_macros(SchAttributes *attributes, const GHashTable *table);
+
 /*! \brief Call a function for each shape in the attributes
  *
  *  void func(SchShape *shape, gpointer user_data);
@@ -61,7 +76,6 @@ sch_attributes_append(SchAttributes *attributes, SchShape *shape);
  */
 void
 sch_attributes_foreach(SchAttributes *attributes, GFunc func, gpointer user_data);
-
 
 /*! \brief Writes schematic attributes to an output stream.
  *

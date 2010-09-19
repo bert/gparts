@@ -326,6 +326,12 @@ sch_drawing_get_type(void)
     return type;
 }
 
+SchDrawing*
+sch_drawing_new(void)
+{
+    return SCH_DRAWING(g_object_new(SCH_TYPE_DRAWING, NULL));
+}
+
 void
 sch_drawing_set_file_format(SchDrawing *drawing, SchFileFormat2 *format)
 {

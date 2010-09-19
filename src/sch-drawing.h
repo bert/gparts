@@ -91,6 +91,13 @@ sch_drawing_get_basename(const SchDrawing *drawing);
 char*
 sch_drawing_get_filename(const SchDrawing *drawing);
 
+/*! \brief Create a new, empty drawing
+ *
+ *  \return The drawing
+ */
+SchDrawing*
+sch_drawing_new(void);
+
 /*! \brief Prepend a shape to the drawing
  *
  *  After prepending the shape, the drawing emits the "prepend" signal.

@@ -409,6 +409,19 @@ sch_text_get_show(const SchText *shape)
     return show;
 }
 
+char*
+sch_text_get_string(const SchText *text)
+{
+    SchTextPrivate *privat = SCH_TEXT_GET_PRIVATE(text);
+    char *string = NULL;
+
+    if ((privat != NULL) && (privat->multiline != NULL))
+    {
+        string = g_strdup(sch_multiline_peek_plain(privat->multiline, 0));
+    }
+
+    return string;
+}
 
 GType
 sch_text_get_type(void)
@@ -639,6 +652,26 @@ sch_text_set_size(SchText *shape, int size)
 
         g_object_notify(G_OBJECT(shape), "size");
     }
+}
+
+void
+sch_text_set_string(SchText *shape, const char *string)
+{
+    SchMultiline *multiline = g_object_new(SCH_TYPE_MULTILINE, NULL);
+
+    gchar **lines = g_strsplit(string, "\n", 0);
+    gchar **temp = lines;
+
+    while (*temp != NULL)
+    {
+        sch_multiline_append(multiline, *temp);
+
+        temp++;
+    }
+
+    g_strfreev(lines);
+
+    sch_text_set_multiline(shape, multiline);
 }
 
 void
