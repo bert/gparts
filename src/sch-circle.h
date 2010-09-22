@@ -28,11 +28,15 @@
 #define SCH_IS_CIRCLE_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCH_TYPE_CIRCLE))
 #define SCH_CIRCLE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCH_TYPE_CIRCLE,SchCircleClass))
 
+/*! \extends SchShape
+ */
 struct _SchCircle
 {
     SchShape parent;
 };
 
+/*! \private
+ */
 struct _SchCircleClass
 {
     SchShapeClass parent;

@@ -40,8 +40,6 @@ misc_macro_expand(const GRegex* regex, const gchar *string, const GHashTable *ta
 {
     MiscMacroExpandData data;
 
-    g_debug("misc macro expand");
-
     data.table = table;
 
     return g_regex_replace_eval(
@@ -71,16 +69,12 @@ misc_macro_expand_cb(const GMatchInfo *info, GString *result, gpointer user_data
 
             if (name != NULL)
             {
-                g_debug("  Name = %s", name);
-
                 value = g_hash_table_lookup(data->table, name);
 
                 g_free(name);
             }
         }
     }
-
-    g_debug("  Value = %s", value);
 
     if (value != NULL)
     {
@@ -98,6 +92,30 @@ misc_macro_expand_cb(const GMatchInfo *info, GString *result, gpointer user_data
     return FALSE;
 }
 
+void
+misc_macro_find(const GRegex *regex, const gchar *string, GHashTable *table)
+{
+    GMatchInfo *info;
+
+    g_regex_match(regex, string, 0, &info);
+
+    while (g_match_info_matches(info))
+    {
+        gchar *name = g_match_info_fetch(info, 1);
+
+        if (!g_hash_table_lookup_extended(table, name, NULL, NULL))
+        {
+            g_hash_table_insert(table, name, NULL);
+        }
+
+        g_free(name);
+
+        g_match_info_next(info, NULL);
+    }
+
+    g_match_info_free(info);
+}
+
 GRegex*
 misc_macro_new_regex(void)
 {
@@ -106,10 +124,10 @@ misc_macro_new_regex(void)
     if (regex == NULL)
     {
         regex = g_regex_new(
-            "(?:\\$\\((\\w+)\\))",
-            0,
-            0,
-            NULL
+            "\\$\\((\\w+)\\)",    /* pattern */
+            0,                    /* compile_options */
+            0,                    /* match_options */
+            NULL                  /* error */
             );
     }
 
@@ -119,5 +137,16 @@ misc_macro_new_regex(void)
     }
 
     return regex;
+}
+
+GHashTable*
+misc_macro_new_table(void)
+{
+    return g_hash_table_new_full(
+        g_str_hash,     /* hash_func */
+        g_str_equal,    /* key_equal_func */
+        g_free,         /* key_destroy_func */
+        g_free          /* value_destroy_func */
+        );
 }
 

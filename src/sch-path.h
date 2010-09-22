@@ -28,11 +28,15 @@
 #define SCH_IS_PATH_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCH_TYPE_PATH))
 #define SCH_PATH_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCH_TYPE_PATH,SchPathClass))
 
+/*! \extends SchShape
+ */
 struct _SchPath
 {
     SchShape parent;
 };
 
+/*! \private
+ */
 struct _SchPathClass
 {
     SchShapeClass parent;

@@ -61,7 +61,7 @@ sch_attributes_class_init(gpointer g_class, gpointer g_class_data)
 }
 
 void
-sch_attributes_expand_macros(SchAttributes *attributes, const GHashTable *table)
+sch_attributes_expand_macros(SchAttributes *attributes, const GRegex *regex, const GHashTable *table)
 {
     if (table != NULL)
     {
@@ -70,26 +70,34 @@ sch_attributes_expand_macros(SchAttributes *attributes, const GHashTable *table)
         if (privat != NULL)
         {
             GSList *node = privat->shapes;
-            GRegex *regex = misc_macro_new_regex();
 
             while (node != NULL)
             {
-                if (SCH_IS_TEXT(node->data))
-                {
-                    SchText *text = SCH_TEXT(node->data);
-                    char *string = sch_text_get_string(text);
-
-                    char *result = misc_macro_expand(regex, string, table);
-
-                    sch_text_set_string(text, result);
-                    g_free(string);
-                    g_free(result);
-                }
+                sch_shape_expand_macros(SCH_SHAPE(node->data), regex, table);
 
                 node = g_slist_next(node);
             }
+        }
+    }
+}
 
-            g_regex_unref(regex);
+void
+sch_attributes_find_macros(SchAttributes *attributes, const GRegex *regex, GHashTable *table)
+{
+    if (table != NULL)
+    {
+        SchAttributesPrivate *privat = SCH_ATTRIBUTES_GET_PRIVATE(attributes);
+
+        if (privat != NULL)
+        {
+            GSList *node = privat->shapes;
+
+            while (node != NULL)
+            {
+                sch_shape_find_macros(SCH_SHAPE(node->data), regex, table);
+
+                node = g_slist_next(node);
+            }
         }
     }
 }

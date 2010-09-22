@@ -52,6 +52,12 @@ static void
 sch_shape_dispose(GObject *object);
 
 static void
+sch_shape_expand_macros_base(SchShape *shape, const GRegex *regex, const GHashTable *table);
+
+static void
+sch_shape_find_macros_base(const SchShape *shape, const GRegex *regex, GHashTable *table);
+
+static void
 sch_shape_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
 
 static void
@@ -75,6 +81,9 @@ sch_shape_class_init(gpointer g_class, gpointer g_class_data)
     klasse->parent.get_property = sch_shape_get_property;
     klasse->parent.set_property = sch_shape_set_property;
 
+    klasse->expand_macros = sch_shape_expand_macros_base;
+    klasse->find_macros   = sch_shape_find_macros_base;
+
     g_object_class_install_property(
         G_OBJECT_CLASS(klasse),
         SCH_SHAPE_ATTRIBUTES,
@@ -95,6 +104,50 @@ sch_shape_dispose(GObject *object)
     sch_shape_set_attributes(SCH_SHAPE(object), NULL);
 
     misc_object_chain_dispose(object);
+}
+
+void
+sch_shape_expand_macros(SchShape *shape, const GRegex *regex, const GHashTable *table)
+{
+    SchShapeClass *klasse = SCH_SHAPE_GET_CLASS(shape);
+
+    if ((klasse != NULL) && (klasse->expand_macros != NULL))
+    {
+        klasse->expand_macros(shape, regex, table);
+    }
+}
+
+static void
+sch_shape_expand_macros_base(SchShape *shape, const GRegex *regex, const GHashTable *table)
+{
+    SchShapePrivate *privat = SCH_SHAPE_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        sch_attributes_expand_macros(privat->attributes, regex, table);
+    }
+}
+
+void
+sch_shape_find_macros(const SchShape *shape, const GRegex *regex, GHashTable *table)
+{
+    SchShapeClass *klasse = SCH_SHAPE_GET_CLASS(shape);
+
+    if ((klasse != NULL) && (klasse->find_macros != NULL))
+    {
+        klasse->find_macros(shape, regex, table);
+    }
+}
+
+static void
+sch_shape_find_macros_base(const SchShape *shape, const GRegex *regex, GHashTable *table)
+{
+    SchShapePrivate *privat = SCH_SHAPE_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        sch_attributes_find_macros(privat->attributes, regex, table);
+    }
 }
 
 static void
@@ -189,7 +242,7 @@ sch_shape_set_property(GObject *object, guint property_id, const GValue *value, 
         }
     }
 }
- 
+
 void
 sch_shape_transform(SchShape *shape, const GeomTransform *transform)
 {

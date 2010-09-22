@@ -36,6 +36,20 @@
 gchar*
 misc_macro_expand(const GRegex* regex, const gchar *string, const GHashTable *table);
 
+/*! \brief Finds all the macros in the given string
+ *
+ *  This function finds all the macros in the given string and adds the
+ *  names as hash table keys. New names added to the table are inserted
+ *  with the value NULL. If the name already exists in the table, the
+ *  data is not overwritten.
+ *
+ *  \param [in]     regex  The regex used to find and replace macros
+ *  \param [in]     string A string containing macros to be expanded
+ *  \param [in,out] table  A table of macro names and values.
+ */
+void
+misc_macro_find(const GRegex *regex, const gchar *string, GHashTable *table);
+
 /*! \brief Create the regular expression used to expand macros
  *
  *  Creates a regular expression for macros in the form of $(name).
@@ -49,4 +63,15 @@ misc_macro_expand(const GRegex* regex, const gchar *string, const GHashTable *ta
  */
 GRegex*
 misc_macro_new_regex(void);
+
+/*! \brief Create a new hash table suitable for use with this module
+ *
+ *  Both the key and value are strings.
+ *
+ *  When no longer needed, call g_hash_table_unref() on the returned GHashTable.
+ *
+ *  \return A pointer to the newly created hash table
+ */
+GHashTable*
+misc_macro_new_table(void);
 

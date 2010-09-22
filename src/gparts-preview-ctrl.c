@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gparts-preview-ctrl.c 
+/*! \file gparts-preview-ctrl.c
  */
 
 #include <gtk/gtk.h>
@@ -125,24 +125,16 @@ gparts_preview_ctrl_updated_cb(GtkWidget *widget, GPartsPreviewCtrl *controller)
 
         if (component != NULL)
         {
+            GRegex *regex = misc_macro_new_regex();
+            GHashTable *table = gparts_controller_get_table(privat->attrib_source);
+
+            sch_shape_expand_macros(SCH_SHAPE(component), regex, table);
+            g_regex_unref(regex);
+            g_hash_table_unref(table);
+
             drawing = sch_drawing_new();
 
             sch_drawing_append_shape(drawing, SCH_SHAPE(component));
-
-            /*! \todo add attributes to the component from the database */
-            {
-                SchAttributes *attributes = sch_shape_get_attributes(SCH_SHAPE(component));
-
-                if (attributes != NULL)
-                {
-                    GHashTable *table = gparts_controller_get_table(privat->attrib_source);
-
-                    sch_attributes_expand_macros(attributes, table);
-
-                    g_object_unref(attributes);
-                }
-            }
-
             g_object_unref(component);
         }
 

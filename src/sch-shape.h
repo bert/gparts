@@ -32,6 +32,8 @@
 
 /* typedefs in sch-forward.h */
 
+/*! \brief A base class for objects in a schematic
+ */
 struct _SchShape
 {
     GObject parent;
@@ -41,6 +43,8 @@ struct _SchShapeClass
 {
     GObjectClass parent;
 
+    void (*expand_macros)(SchShape *shape, const GRegex *regex, const GHashTable *table);
+    void (*find_macros)(const SchShape *shape, const GRegex *regex, GHashTable *table);
     void (*rotate)(SchShape *shape, int angle);
     void (*transform)(SchShape *shape, const GeomTransform *transform);
     void (*translate)(SchShape *shape, int dx, int dy);
@@ -49,6 +53,34 @@ struct _SchShapeClass
 
 GType
 sch_shape_get_type(void);
+
+/*! \brief Expand macros found in the given string
+ *
+ *  The hash table keys are strings containing the macro names and the values
+ *  are strings containing the macro values.
+ *
+ *  When no longer needed, call g_free() on the returned string.
+ *
+ *  \param [in,out] shape The shape
+ *  \param [in]     regex  The regex used to find and replace macros
+ *  \param [in]     table  A table of macro names and values.
+ */
+void
+sch_shape_expand_macros(SchShape *shape, const GRegex *regex, const GHashTable *table);
+
+/*! \brief Finds all the macros in the given string
+ *
+ *  This function finds all the macros in the given string and adds the
+ *  names as hash table keys. New names added to the table are inserted
+ *  with the value NULL. If the name already exists in the table, the
+ *  data is not overwritten.
+ *
+ *  \param [in]     shape  The shape
+ *  \param [in]     regex  The regex used to find and replace macros
+ *  \param [in,out] table  A table of macro names and values.
+ */
+void
+sch_shape_find_macros(const SchShape *shape, const GRegex *regex, GHashTable *table);
 
 void
 sch_shape_rotate(SchShape *shape, int angle);
@@ -61,7 +93,7 @@ sch_shape_translate(SchShape *shape, int dx, int dy);
 
 /*! \brief Get the attributes associated with this shape.
  *
- *  The caller must call g_object_unref when the attributes are no longer
+ *  The caller must call g_object_unref() when the attributes are no longer
  *  needed.
  *
  *  \param [in] shape The shape

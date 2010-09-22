@@ -61,10 +61,14 @@ sch_attributes_append(SchAttributes *attributes, SchShape *shape);
  *  are strings containing the macro values.
  *
  *  \param [in] attributes The attributes
+ *  \param [in] regex      The regex used to find and replace macros
  *  \param [in] macros     The macros
  */
 void
-sch_attributes_expand_macros(SchAttributes *attributes, const GHashTable *table);
+sch_attributes_expand_macros(SchAttributes *attributes, const GRegex *regex, const GHashTable *table);
+
+void
+sch_attributes_find_macros(SchAttributes *attributes, const GRegex *regex, GHashTable *table);
 
 /*! \brief Call a function for each shape in the attributes
  *

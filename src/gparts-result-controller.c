@@ -409,7 +409,7 @@ gparts_result_controller_get_table(GPartsResultController *controller)
         const gchar *name;
         gchar *value;
 
-        name = gtk_tree_view_column_get_title(column);
+        name = g_strdup(gtk_tree_view_column_get_title(column));
 
         value = gparts_result_controller_get_field(
             controller,

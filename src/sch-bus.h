@@ -28,11 +28,15 @@
 #define SCH_IS_BUS_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCH_TYPE_BUS))
 #define SCH_BUS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCH_TYPE_BUS,SchBusClass))
 
+/*! \extends SchShape
+ */
 struct _SchBus
 {
     SchShape parent;
 };
 
+/*! \private
+ */
 struct _SchBusClass
 {
     SchShapeClass parent;

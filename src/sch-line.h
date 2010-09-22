@@ -28,13 +28,15 @@
 #define SCH_IS_LINE_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCH_TYPE_LINE))
 #define SCH_LINE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCH_TYPE_LINE,SchLineClass))
 
-struct _SchLineStyle;
-
+/*! \extends SchShape
+ */
 struct _SchLine
 {
     SchShape parent;
 };
 
+/*! \private
+ */
 struct _SchLineClass
 {
     SchShapeClass parent;
@@ -50,7 +52,7 @@ void
 sch_line_get_line(const SchLine *sline, GeomLine *gline);
 
 void
-sch_line_get_line_style(const SchLine *line, struct _SchLineStyle *style);
+sch_line_get_line_style(const SchLine *line, SchLineStyle *style);
 
 void
 sch_line_get_line_width(const SchLine *line, int *width);

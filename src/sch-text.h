@@ -47,11 +47,17 @@
 #define SCH_IS_TEXT_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCH_TYPE_TEXT))
 #define SCH_TEXT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCH_TYPE_TEXT,SchTextClass))
 
+/*! \brief An object for text
+ *
+ *  \extends SchShape
+ */
 struct _SchText
 {
     SchShape parent;
 };
 
+/*! \private
+ */
 struct _SchTextClass
 {
     SchShapeClass parent;

@@ -28,14 +28,15 @@
 #define SCH_IS_BOX_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCH_TYPE_BOX))
 #define SCH_BOX_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCH_TYPE_BOX,SchBoxClass))
 
-struct _SchFillStyle;
-struct _SchLineStyle;
-
+/*! \extends SchShape
+ */
 struct _SchBox
 {
     SchShape parent;
 };
 
+/*! \private
+ */
 struct _SchBoxClass
 {
     SchShapeClass parent;

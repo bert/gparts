@@ -28,14 +28,15 @@
 #define SCH_IS_PICTURE_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCH_TYPE_PICTURE))
 #define SCH_PICTURE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCH_TYPE_PICTURE,SchPictureClass))
 
-typedef struct _SchPicture SchPicture;
-typedef struct _SchPictureClass SchPictureClass;
-
+/*! \extends SchShape
+ */
 struct _SchPicture
 {
     GObject parent;
 };
 
+/*! \private
+ */
 struct _SchPictureClass
 {
     GObjectClass parent;

@@ -64,6 +64,12 @@ static void
 sch_component_class_init(gpointer g_class, gpointer g_class_data);
 
 static void
+sch_component_expand_macros(SchShape *shape, const GRegex *regex, const GHashTable *table);
+
+static void
+sch_component_find_macros(const SchShape *shape, const GRegex *regex, GHashTable *table);
+
+static void
 sch_component_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
 
 static void
@@ -87,10 +93,13 @@ sch_component_class_init(gpointer g_class, gpointer g_class_data)
     object_class->get_property = sch_component_get_property;
     object_class->set_property = sch_component_set_property;
 
+    klasse->parent.find_macros   = sch_component_find_macros;
+    klasse->parent.expand_macros = sch_component_expand_macros;
     //klasse->parent.rotate    = sch_line_rotate;
     //klasse->parent.transform = sch_line_transform;
     //klasse->parent.translate = sch_line_translate;
-    klasse->parent.write     = sch_component_write;
+    klasse->parent.write         = sch_component_write;
+
 
     g_object_class_install_property(
         object_class,
@@ -185,6 +194,39 @@ sch_component_class_init(gpointer g_class, gpointer g_class_data)
             G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
+}
+
+static void
+sch_component_expand_macros(SchShape *shape, const GRegex *regex, const GHashTable *table)
+{
+    SchShapeClass *klasse = SCH_SHAPE_GET_CLASS(shape);
+
+    if (klasse != NULL)
+    {
+        SchShapeClass *parent_klasse = SCH_SHAPE_CLASS(g_type_class_peek_parent(klasse));
+
+        if ((parent_klasse != NULL) && (parent_klasse->expand_macros != NULL))
+        {
+            parent_klasse->expand_macros(shape, regex, table);
+        }
+    }
+}
+
+
+static void
+sch_component_find_macros(const SchShape *shape, const GRegex *regex, GHashTable *table)
+{
+    SchShapeClass *klasse = SCH_SHAPE_GET_CLASS(shape);
+
+    if (klasse != NULL)
+    {
+        SchShapeClass *parent_klasse = SCH_SHAPE_CLASS(g_type_class_peek_parent(klasse));
+
+        if ((parent_klasse != NULL) && (parent_klasse->expand_macros != NULL))
+        {
+            parent_klasse->find_macros(shape, regex, table);
+        }
+    }
 }
 
 int

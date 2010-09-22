@@ -71,6 +71,9 @@ typedef struct _SchOutputStreamClass SchOutputStreamClass;
 typedef struct _SchPath SchPath;
 typedef struct _SchPathClass SchPathClass;
 
+typedef struct _SchPicture SchPicture;
+typedef struct _SchPictureClass SchPictureClass;
+
 typedef struct _SchPin SchPin;
 typedef struct _SchPinClass SchPinClass;
 
