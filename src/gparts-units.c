@@ -1,7 +1,7 @@
 /* gEDA - GPL Electronic Design Automation
  * gparts - gEDA Parts Manager
- * Copyright (C) 2009 Edward C. Hennessy
- * Copyright (C) 2009 gEDA Contributors (see ChangeLog for details)
+ * Copyright (C) 2010 Edward C. Hennessy
+ * Copyright (C) 2010 gEDA Contributors (see ChangeLog for details)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,28 +18,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gparts-units.c 
+/*! \file gparts-units.c
  */
 
 #include <math.h>
-#include <gtk/gtk.h>
+#include <glib.h>
+#include <glib-object.h>
 
-#include "gparts-database-result.h"
-#include "gparts-result-model.h"
-
-/*! \file gparts-units.c
- *
- *  \brief Formats numeric data with units of measure.
- *
- *  \par Supported Units
- *  \c AMPS Current.
- *
- *  \c PERCENT A percentage.
- *
- *  \c RESISTOR A resistor's value.
- *
- *  \c VOLTS Voltage.
- */
+#include "gparts-units.h"
 
 /*! \todo Below needs to work with all compilers.  The following will work in
  * GCC even without C99 support, but it will issue a warning.
@@ -54,90 +40,27 @@
 //#define GPARTS_SYMBOL_OHM   ""
 //#endif
 
-typedef struct _GPartsUnitsCellDataFunc GPartsUnitsCellDataFunc;
 typedef struct _GPartsUnitsFormat GPartsUnitsFormat;
 typedef struct _GPartsUnitsMetricPrefix GPartsUnitsMetricPrefix;
-typedef struct _GPartsUnitsPrivate GPartsUnitsPrivate;
 
-/*  \brief Holds some data
- */
-struct _GPartsUnitsCellDataFunc
+struct _GPartsUnits
 {
-    const gchar         *name;
-    GtkTreeCellDataFunc func;
-    const gchar         *symbol;
+    gdouble         value;
+    GValueTransform func;
+    const gchar     *symbol;
 };
 
-/*! \brief Junk
- *  \private
- *
- *  \todo Get rid of this table by using math functions to calculate the format.
- */
 struct _GPartsUnitsFormat
 {
     const gchar *string;
     float       value;
 };
 
-/*! \brief Structure for an entry in a lookup table.
- *  \private
- *
- *
- *
- *
- *
- */
 struct _GPartsUnitsMetricPrefix
 {
     const gchar *prefix;
     const gchar *symbol;
-    const gchar *symbol2;
-    float       value;
-};
-
-/*!
- *  \private
- *
- *
- *
- */
-struct _GPartsUnitsPrivate
-{
-    gint       column;
-    const char *symbol;
-};
-
-static void
-gparts_units_cell_format_generic(GtkTreeViewColumn *column, GtkCellRenderer *cell, GtkTreeModel *model, GtkTreeIter *iter, gpointer data);
-
-static void
-gparts_units_cell_format_resistor(GtkTreeViewColumn *column, GtkCellRenderer *cell, GtkTreeModel *model, GtkTreeIter *iter, gpointer data);
-
-static void
-gparts_units_cell_format_percent(GtkTreeViewColumn *column, GtkCellRenderer *cell, GtkTreeModel *model, GtkTreeIter *iter, gpointer data);
-
-static const GPartsUnitsCellDataFunc*
-gparts_units_find_cell_data_func(const gchar *name);
-
-static const gchar*
-gparts_units_find_format(gdouble value);
-
-static const GPartsUnitsMetricPrefix*
-gparts_units_find_metric_prefix(gdouble value);
-
-/*
- *
- *
- *
- *  The last entry in the table must have a function pointer of NULL.
- */
-static const GPartsUnitsCellDataFunc gparts_units_cell_data_func[] =
-{
-    { "AMPS",     gparts_units_cell_format_generic,  "A"               },
-    { "PERCENT",  gparts_units_cell_format_percent,  NULL              },
-    { "RESISTOR", gparts_units_cell_format_resistor, GPARTS_SYMBOL_OHM },
-    { "VOLTS",    gparts_units_cell_format_generic,  "V"               },
-    { "NONE",     NULL,                              NULL              }
+    gdouble      value;
 };
 
 /*
@@ -153,224 +76,51 @@ static const GPartsUnitsFormat gparts_units_format[] =
     { "%.0f %s%s",    0 }
 };
 
-/*!
- *
- *
- *  \todo Add sentinel to the table.
- */
 static const GPartsUnitsMetricPrefix gparts_units_metric_prefixes[] =
 {
-    { "yotta",  "Y",                  "Y",  1e24 },
-    { "zetta",  "Z",                  "Z",  1e21 },
-    { "exa",    "E",                  "E",  1e18 },
-    { "peta",   "P",                  "P",  1e15 },
-    { "tera",   "T",                  "T",  1e12 },
-    { "giga",   "G",                  "G",   1e9 },
-    { "mega",   "M",                  "M",   1e6 },
-    { "kilo",   "k",                  "k",   1e3 },
-    { "",       "",                   "",      1 },
-    { "milli",  "m",                  "m",  1e-3 },
-    { "micro",  GPARTS_SYMBOL_MICRO,  "u",  1e-6 },
-    { "nano",   "n",                  "n",  1e-9 },
-    { "pico",   "p",                  "p", 1e-12 },
-    { "femto",  "f",                  "f", 1e-15 },
-    { "atto",   "a",                  "a", 1e-18 },
-    { "zepto",  "z",                  "z", 1e-21 },
-    { "yocto",  "y",                  "y", 1e-24 },
-    { "",       "",                   "",      0 }
+    { "yotta",  "Y",                   1e24 },
+    { "zetta",  "Z",                   1e21 },
+    { "exa",    "E",                   1e18 },
+    { "peta",   "P",                   1e15 },
+    { "tera",   "T",                   1e12 },
+    { "giga",   "G",                    1e9 },
+    { "mega",   "M",                    1e6 },
+    { "kilo",   "k",                    1e3 },
+    { "",       "",                       1 },
+    { "milli",  "m",                   1e-3 },
+    { "micro",  GPARTS_SYMBOL_MICRO,   1e-6 },
+    { "nano",   "n",                   1e-9 },
+    { "pico",   "p",                  1e-12 },
+    { "femto",  "f",                  1e-15 },
+    { "atto",   "a",                  1e-18 },
+    { "zepto",  "z",                  1e-21 },
+    { "yocto",  "y",                  1e-24 },
+    { "",       "",                       0 },
 };
 
-/*! \brief Sets the numeric format and units for a GtkTreeViewColumn's cells.
- *  \public
- *
- *  \param [in] column   The tree view column to recieve the format.
- *  \param [in] renderer The cell renerer within the tree view column.
- *  \param [in] index    The tree model's zero based column index of the data.
- *  \param [in] units    The name of the numeric format and units to use.
- */
-void
-gparts_units_attach_cell_data_func(GtkTreeViewColumn *column, GtkCellRenderer *renderer, gint index, const gchar *units)
-{
-    GPartsUnitsCellDataFunc *func = gparts_units_find_cell_data_func(units);
+static const gchar*
+gparts_units_find_format(gdouble value);
 
-    GPartsUnitsPrivate *private = g_new0(GPartsUnitsPrivate,1);
+static const GPartsUnitsMetricPrefix*
+gparts_units_find_metric_prefix(gdouble value);
 
-    private->column = index;
-    private->symbol = func->symbol;
-
-    gtk_tree_view_column_set_cell_data_func(
-        column,
-        renderer,
-        func->func,
-        private,
-        g_free
-        );
-}
-
-/*! \brief Format a cell with a metric value.
- *
- *
- *
- *  \param [in] column The GtkTreeViewColumn.
- *  \param [in] cell   The GtkCellRendererText.
- *  \param [in] model  A GtkTreeModel where the original data resides.
- *  \param [in] iter   A GtkTreeIter for the row being formatted.
- *  \param [in] data   The resitor value's zero based column index, cast into a pointer.
- */
 static void
-gparts_units_cell_format_generic(GtkTreeViewColumn *column, GtkCellRenderer *cell, GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
-{
-    GValue value = {0};
+gparts_units_transform(const GValue *src_value, GValue *dest_value);
 
-    gtk_tree_model_get_value(
-        model,
-        iter,
-        ((GPartsUnitsPrivate*) data)->column,
-        &value
-        );
-
-    if (G_IS_VALUE(&value) && G_VALUE_HOLDS_DOUBLE(&value))
-    {
-        double n = g_value_get_double(&value);
-        GString *string = g_string_new("");
-
-        const GPartsUnitsMetricPrefix* prefix = gparts_units_find_metric_prefix(n);
-
-        const gchar *format = gparts_units_find_format(n/prefix->value);
-
-        g_string_printf(string, format, n/prefix->value, prefix->symbol, ((GPartsUnitsPrivate*) data)->symbol);
-
-        g_value_unset(&value);
-        g_value_init(&value, G_TYPE_STRING);
-
-        g_value_take_string(&value, string->str);
-        g_string_free(string, FALSE);
-
-        g_object_set_property(G_OBJECT(cell), "text", &value);
-        g_value_unset(&value);
-    }
-}
-
-/*! \brief Format a cell as a resistor's value.
- *
- *  \param [in] column The GtkTreeViewColumn.
- *  \param [in] cell   The GtkCellRendererText.
- *  \param [in] model  A GtkTreeModel where the original data resides.
- *  \param [in] iter   A GtkTreeIter for the row being formatted.
- *  \param [in] data   The resitor value's zero based column index, cast into a pointer.
- *
- *  \todo Use the resistor's tolerance (the next column) to determine the number
- *  of digits to show.
- */
 static void
-gparts_units_cell_format_resistor(GtkTreeViewColumn *column, GtkCellRenderer *cell, GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
-{
-    GValue value = {0};
+gparts_units_transform_percent(const GValue *src_value, GValue *dest_value);
 
-    gtk_tree_model_get_value(
-        model,
-        iter,
-        ((GPartsUnitsPrivate*) data)->column,
-        &value
-        );
-
-    if (G_IS_VALUE(&value) && G_VALUE_HOLDS_DOUBLE(&value))
-    {
-        double n = g_value_get_double(&value);
-        GString *string = g_string_new("");
-
-        const GPartsUnitsMetricPrefix* prefix = gparts_units_find_metric_prefix(n);
-
-        const gchar *format = gparts_units_find_format(n/prefix->value);
-
-        g_string_printf(string, format, n/prefix->value, prefix->symbol, GPARTS_SYMBOL_OHM);
-
-        g_value_unset(&value);
-        g_value_init(&value, G_TYPE_STRING);
-
-        g_value_take_string(&value, string->str);
-        g_string_free(string, FALSE);
-
-        g_object_set_property(G_OBJECT(cell), "text", &value);
-        g_value_unset(&value);
-    }
-}
-
-/*! \brief Format a cell as a percentage.
- *
- *  \param [in] column The GtkTreeViewColumn.
- *  \param [in] cell   The GtkCellRendererText.
- *  \param [in] model  A GtkTreeModel where the original data resides.
- *  \param [in] iter   A GtkTreeIter for the row being formatted.
- *  \param [in] data   The model's zero based column index, cast into a pointer.
- *
- *  \todo FIXME With a fractional percent, this function will only display the most
- *  significant digit.  So, "0.15%" becomes "0.1%."  This function should make
- *  an attempt to display all digits, without displaying additional trailing
- *  zeros.
- */
 static void
-gparts_units_cell_format_percent(GtkTreeViewColumn *column, GtkCellRenderer *cell, GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
+gparts_units_transform_std(const GValue *src_value, GValue *dest_value);
+
+
+
+GPartsUnits*
+gparts_units_copy(const GPartsUnits *units)
 {
-    GValue value = {0};
-
-    gtk_tree_model_get_value(
-        model,
-        iter,
-        ((GPartsUnitsPrivate*) data)->column,
-        &value
-        );
-
-    if (G_IS_VALUE(&value) && G_VALUE_HOLDS_DOUBLE(&value))
-    {
-        gint    digits = 0;
-        gdouble percent = g_value_get_double(&value) * 100;
-        GString *string = g_string_new("");
-
-        if (percent != 0)
-        {
-            digits = ceil(-log10(fabs(percent)));
-
-            if (digits < 0)
-            {
-                digits = 0;
-            }
-        }
-
-        g_string_printf(string, "%.*f %%", digits, percent);
-
-        g_value_unset(&value);
-        g_value_init(&value, G_TYPE_STRING);
-
-        g_value_take_string(&value, string->str);
-        g_string_free(string, FALSE);
-
-        g_object_set_property(G_OBJECT(cell), "text", &value);
-        g_value_unset(&value);
-    }
+    return GPARTS_UNITS(g_memdup(units, sizeof(GPartsUnits)));
 }
 
-/*! \brief Finds the format data using the format name.
- *
- *  \param [in] name
- *  \return A pointer to a GPartsUnitsCellDataFunc.  This function does not
- *  return NULL.
- */
-static const GPartsUnitsCellDataFunc*
-gparts_units_find_cell_data_func(const gchar *name)
-{
-    GPartsUnitsCellDataFunc *func = &gparts_units_cell_data_func[0];
-
-    while (func->func != NULL && g_strcmp0(name, func->name) != 0)
-    {
-        func++;
-    }
-
-    return func;
-}
-
-/* \todo Get rid of this function by using math functions to calculate the format.
- */
 static const gchar*
 gparts_units_find_format(gdouble value)
 {
@@ -386,7 +136,7 @@ gparts_units_find_format(gdouble value)
 
 /*! \brief Finds the right metric prefix for a given value.
  *
- *  \param [in] value The value in prefix-less units.
+ *  \param [in] value The value in base units.
  *  \return A pointer to a GPartsUnitsMetricPrefix.  This function does not
  *  return NULL.
  */
@@ -395,11 +145,208 @@ gparts_units_find_metric_prefix(gdouble value)
 {
     const GPartsUnitsMetricPrefix *prefix = &gparts_units_metric_prefixes[0];
 
+    if (value == 0)
+    {
+        value = 1;
+    }
+
     while (fabs(value) < prefix->value)
     {
         prefix++;
     }
 
     return prefix;
+}
+
+GType
+gparts_units_get_type(void)
+{
+    static GType type = G_TYPE_INVALID;
+
+    if (type == G_TYPE_INVALID)
+    {
+        type = g_boxed_type_register_static(
+            "GPartsUnits",
+            (GBoxedCopyFunc) gparts_units_copy,
+            (GBoxedFreeFunc) gparts_units_free
+            );
+
+        g_value_register_transform_func(
+            GPARTS_TYPE_UNITS,
+            G_TYPE_STRING,
+            gparts_units_transform
+            );
+    }
+
+    return type;
+}
+
+void
+gparts_units_free(GPartsUnits *units)
+{
+    g_free(units);
+}
+
+GPartsUnits*
+gparts_units_new_amps(gdouble amps)
+{
+    GPartsUnits *units = GPARTS_UNITS(g_malloc(sizeof(GPartsUnits)));
+
+    units->value  = amps;
+    units->func   = gparts_units_transform_std;
+    units->symbol = "A";
+
+    return units;
+}
+
+GPartsUnits*
+gparts_units_new_farads(gdouble farads)
+{
+    GPartsUnits *units = GPARTS_UNITS(g_malloc(sizeof(GPartsUnits)));
+
+    units->value  = farads;
+    units->func   = gparts_units_transform_std;
+    units->symbol = "F";
+
+    return units;
+}
+
+GPartsUnits*
+gparts_units_new_henrys(gdouble henrys)
+{
+    GPartsUnits *units = GPARTS_UNITS(g_malloc(sizeof(GPartsUnits)));
+
+    units->value  = henrys;
+    units->func   = gparts_units_transform_std;
+    units->symbol = "H";
+
+    return units;
+}
+
+GPartsUnits*
+gparts_units_new_none(gdouble value)
+{
+    GPartsUnits *units = GPARTS_UNITS(g_malloc(sizeof(GPartsUnits)));
+
+    units->value  = value;
+    units->func   = gparts_units_transform_std;
+    units->symbol = "";
+
+    return units;
+}
+
+GPartsUnits*
+gparts_units_new_percent(gdouble ohms)
+{
+    GPartsUnits *units = GPARTS_UNITS(g_malloc(sizeof(GPartsUnits)));
+
+    units->value  = ohms;
+    units->func   = gparts_units_transform_percent;
+    units->symbol = "%";
+
+    return units;
+}
+
+GPartsUnits*
+gparts_units_new_ohms(gdouble ohms)
+{
+    GPartsUnits *units = GPARTS_UNITS(g_malloc(sizeof(GPartsUnits)));
+
+    units->value  = ohms;
+    units->func   = gparts_units_transform_std;
+    units->symbol = GPARTS_SYMBOL_OHM;
+
+    return units;
+}
+
+
+GPartsUnits*
+gparts_units_new_volts(gdouble volts)
+{
+    GPartsUnits *units = GPARTS_UNITS(g_malloc(sizeof(GPartsUnits)));
+
+    units->value  = volts;
+    units->func   = gparts_units_transform_std;
+    units->symbol = "V";
+
+    return units;
+}
+
+static void
+gparts_units_transform(const GValue *src_value, GValue *dest_value)
+{
+    if (G_IS_VALUE(src_value))
+    {
+        GPartsUnits *units = g_value_get_boxed(src_value);
+
+        units->func(src_value, dest_value);
+    }
+}
+
+static void
+gparts_units_transform_percent(const GValue *src_value, GValue *dest_value)
+{
+    if (G_IS_VALUE(src_value))
+    {
+        GPartsUnits *units = g_value_get_boxed(src_value);
+        GString *string = g_string_new("");
+        gdouble percent = 100.0 * units->value;
+        gint digits = 0;
+        const gchar *symbol = units->symbol;
+
+        if (symbol == NULL)
+        {
+            symbol = "%";
+        }
+
+        if (percent != 0)
+        {
+            digits = ceil(-log10(fabs(percent)));
+
+            if (digits < 0)
+            {
+                digits = 0;
+            }
+        }
+
+        g_string_printf(string, "%.*f %s", digits, percent, symbol);
+
+        g_value_take_string(dest_value, string->str);
+        g_string_free(string, FALSE);
+    }
+    else
+    {
+        g_value_set_string(dest_value, "Error");
+    }
+}
+
+
+static void
+gparts_units_transform_std(const GValue *src_value, GValue *dest_value)
+{
+    if (G_IS_VALUE(src_value))
+    {
+        GPartsUnits *units = g_value_get_boxed(src_value);
+        GString *string = g_string_new("");
+        double n = units->value;
+        const GPartsUnitsMetricPrefix* prefix = gparts_units_find_metric_prefix(n);
+
+        const gchar *format = gparts_units_find_format(n/prefix->value);
+        const gchar *symbol = units->symbol;
+
+        if (symbol == NULL)
+        {
+            symbol = "";
+        }
+
+        g_string_printf(string, format, n/prefix->value, prefix->symbol, symbol);
+
+        g_value_take_string(dest_value, string->str);
+        g_string_free(string, FALSE);
+    }
+    else
+    {
+        g_value_set_string(dest_value, "Error");
+    }
 }
 

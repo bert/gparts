@@ -38,7 +38,6 @@ struct _GPartsDatabaseResultInterface
     guint (*get_column_count)(GPartsDatabaseResult *result);
     gboolean (*get_column_index)(GPartsDatabaseResult *result, const gchar *name, gint *index);
     GType (*get_column_type)(GPartsDatabaseResult *result, gint column);
-    const gchar* (*get_column_units)(GPartsDatabaseResult *result, gint column);
     void (*get_column_value)(GPartsDatabaseResult *result, gint column, GValue *value);
     void (*get_field_value)(GPartsDatabaseResult *result, gint row, gint column, GValue *value);
     guint (*get_row_count)(GPartsDatabaseResult *result);
@@ -73,14 +72,6 @@ gparts_database_result_get_column_index(GPartsDatabaseResult *result, const gcha
  */
 GType
 gparts_database_result_get_column_type(GPartsDatabaseResult *result, gint column);
-
-/*! \brief Gets the units for a column.
- *
- *  \param [in] result The database result.
- *  \param [in] column The zero-based index of the column.
- */
-const gchar*
-gparts_database_result_get_column_units(GPartsDatabaseResult *result, gint column);
 
 /*! \brief Gets the name of a column.
  *

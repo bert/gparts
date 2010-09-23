@@ -18,11 +18,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gparts-mysql-result.c 
+/*! \file gparts-mysql-result.c
  */
 
 #include <glib-object.h>
 #include <mysql.h>
+
+#include "gparts-units.h"
 
 #include "gparts-database-result.h"
 #include "gparts-mysql-result.h"
@@ -55,9 +57,6 @@ gparts_mysql_result_get_column_index(GPartsDatabaseResult *result, const gchar *
 
 static GType
 gparts_mysql_result_get_column_type(GPartsDatabaseResult *result, gint column);
-
-static const gchar*
-gparts_mysql_result_get_column_units(GPartsDatabaseResult *result, gint column);
 
 static void
 gparts_mysql_result_get_column_value(GPartsDatabaseResult *result, gint column, GValue *value);
@@ -96,7 +95,6 @@ gparts_mysql_result_database_init(GPartsDatabaseResultInterface *iface)
     iface->get_column_count = gparts_mysql_result_get_column_count;
     iface->get_column_index = gparts_mysql_result_get_column_index;
     iface->get_column_type  = gparts_mysql_result_get_column_type;
-    iface->get_column_units = gparts_mysql_result_get_column_units;
     iface->get_column_value = gparts_mysql_result_get_column_value;
     iface->get_field_value  = gparts_mysql_result_get_field_value;
     iface->get_row_count    = gparts_mysql_result_get_row_count;
@@ -111,8 +109,6 @@ gparts_mysql_result_database_init(GPartsDatabaseResultInterface *iface)
 static void
 gparts_mysql_result_finalize(GObject *object)
 {
-    g_debug("gparts_mysql_result_finalize");
-
     GPartsMySQLResultPrivate *private = GPARTS_MYSQL_RESULT_GET_PRIVATE(object);
 
     mysql_free_result(private->result);
@@ -176,7 +172,7 @@ gparts_mysql_result_get_column_type(GPartsDatabaseResult *result, gint column)
         switch (field->type)
         {
             case MYSQL_TYPE_FLOAT:
-                type = G_TYPE_DOUBLE;
+                type = GPARTS_TYPE_UNITS;
                 break;
 
             case MYSQL_TYPE_LONG:
@@ -191,50 +187,48 @@ gparts_mysql_result_get_column_type(GPartsDatabaseResult *result, gint column)
     return type;
 }
 
-/*! \brief Gets the units for a column.
- *
- *  \param [in] result The database result.
- *  \param [in] column The zero-based index of the column.
- */
-static const gchar*
-gparts_mysql_result_get_column_units(GPartsDatabaseResult *result, gint column)
+static GPartsUnits*
+gparts_mysql_result_get_column_in_units(const gchar *name, gdouble value)
 {
     /* TODO Temporary code until database gets metadata. */
 
+    typedef GPartsUnits* (*GPartsUnitsNewFunc)(gdouble value);
+
     struct entry
     {
-        const gchar *name;
-        const gchar *units;
+        const gchar        *name;
+        GPartsUnitsNewFunc func;
     };
 
-    struct entry table[] =
+    static const struct entry table[] =
     {
-        { "IF",         "AMPS",    },
-        { "Resistance", "RESISTOR" },
-        { "Tolerance",  "PERCENT"  },
-        { "VBR",        "VOLTS"    },
-        { "VZ",         "VOLTS"    },
-        { "VF",         "VOLTS"    },
-        { "VR",         "VOLTS"    },
-        { "VRWM",       "VOLTS"    },
-        { "VZ",         "VOLTS"    },
-        { NULL,         "NONE"     }
+        { "Capacitance", gparts_units_new_farads  },
+        { "Inductance",  gparts_units_new_henrys  },
+        { "IF",          gparts_units_new_amps    },
+        { "Resistance",  gparts_units_new_ohms    },
+        { "Tolerance",   gparts_units_new_percent },
+        { "VBR",         gparts_units_new_volts   },
+        { "VZ",          gparts_units_new_volts   },
+        { "VF",          gparts_units_new_volts   },
+        { "VR",          gparts_units_new_volts   },
+        { "VRWM",        gparts_units_new_volts   },
+        { "VZ",          gparts_units_new_volts   },
+        { NULL,          gparts_units_new_none    }
     };
 
-    GPartsMySQLResultPrivate *private = GPARTS_MYSQL_RESULT_GET_PRIVATE(result);
-    struct entry *t = &table[0];
-    const gchar *units = "NONE";
+    const struct entry *t = &table[0];
+    GPartsUnits *units = NULL;
 
-    if (column < mysql_num_fields(private->result))
+    while (units == NULL)
     {
-        MYSQL_FIELD *field = mysql_fetch_field_direct(private->result, column);
-
-        while (t->name != NULL && g_strcmp0(t->name, field->name) != 0)
+        if ((t->name == NULL) || (g_strcmp0(t->name, name) == 0))
+        {
+            units = t->func(value);
+        }
+        else
         {
             t++;
         }
-
-        units = t->units;
     }
 
     return units;
@@ -303,6 +297,19 @@ gparts_mysql_result_get_field_value(GPartsDatabaseResult *result, gint row, gint
         {
             g_value_init(value, G_TYPE_DOUBLE);
             g_value_set_double(value, g_ascii_strtod(string, NULL));
+            g_free(string);
+        }
+        else if (type == GPARTS_TYPE_UNITS)
+        {
+            MYSQL_FIELD *field = mysql_fetch_field_direct(private->result, column);
+            g_value_init(value, GPARTS_TYPE_UNITS);
+            g_value_take_boxed(
+                value,
+                gparts_mysql_result_get_column_in_units(
+                    field->name,
+                    g_ascii_strtod(string, NULL)
+                    )
+                );
             g_free(string);
         }
         else if (type == G_TYPE_INT)

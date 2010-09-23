@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gparts-database-result.c 
+/*! \file gparts-database-result.c
  */
 
 #include <glib-object.h>
@@ -94,28 +94,6 @@ gparts_database_result_get_column_type(GPartsDatabaseResult *result, gint column
     }
 
     return type;
-}
-
-const gchar*
-gparts_database_result_get_column_units(GPartsDatabaseResult *result, gint column)
-{
-    GPartsDatabaseResultInterface *iface = GPARTS_DATABASE_RESULT_GET_INTERFACE(result);
-    const gchar *units;
-
-    if (iface == NULL)
-    {
-        g_critical("Unable to get GPartsDatabaseResultInteface from parameter");
-    }
-    else if (iface->get_column_count == NULL)
-    {
-        g_critical("GPartsDatabaseResultInterface contains NULL get_column_units() function pointer");
-    }
-    else
-    {
-        units = iface->get_column_units(result, column);
-    }
-
-    return units;
 }
 
 void

@@ -1,7 +1,7 @@
 /* gEDA - GPL Electronic Design Automation
  * gparts - gEDA Parts Manager
- * Copyright (C) 2009 Edward C. Hennessy
- * Copyright (C) 2009 gEDA Contributors (see ChangeLog for details)
+ * Copyright (C) 2010 Edward C. Hennessy
+ * Copyright (C) 2010 gEDA Contributors (see ChangeLog for details)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,93 @@
 
 /*! \file gparts-units.h
  *
- *  \brief Formatting for GtkTreeViewColumn's cells.
+ *  \brief Data type for storing a value with a unit of measure.
  *
- *  This module provides formatting for cells within a GtkTreeViewColumn.
+ *  The creation functions have the same signature to allow them to be used
+ *  in tables of function pointers.
  */
 
+#define GPARTS_TYPE_UNITS (gparts_units_get_type())
+#define GPARTS_UNITS(obj) ((GPartsUnits*)obj)
+
+typedef struct _GPartsUnits GPartsUnits;
+
+GType
+gparts_units_get_type(void);
+
+/*! \brief Make a copy of the GPartsUnits
+ *
+ *  When no longer needed, the caller must call gparts_units_free()
+ *  on the returned pointer.
+ *
+ *  \param [in] style The GPartsUnits to be copied
+ *  \return A pointer to the copied GPartsUnits
+ */
+GPartsUnits*
+gparts_units_copy(const GPartsUnits *units);
+
+/*! \brief Free the memory associated with GPartsUnits
+ *
+ *  When passing in a NULL pointer, this function does nothing.
+ *
+ *  \param [in] style The GPartsUnits to be freed
+ */
 void
-gparts_units_attach_cell_data_func(GtkTreeViewColumn *column, GtkCellRenderer *renderer, gint index, const gchar *units);
+gparts_units_free(GPartsUnits *units);
+
+/*! \brief Create a new value with a measurement in amps.
+ *
+ *  \param [in] amps The current in amps.
+ *  \return A pointer to a new GPartsUnits boxed type
+ */
+GPartsUnits*
+gparts_units_new_amps(gdouble amps);
+
+/*! \brief Create a new value with a measurement in farads.
+ *
+ *  \param [in] amps The capacitance in farads.
+ *  \return A pointer to a new GPartsUnits boxed type
+ */
+GPartsUnits*
+gparts_units_new_farads(gdouble farads);
+
+/*! \brief Create a new value with a measurement in henrys.
+ *
+ *  \param [in] amps The inductance in henrys.
+ *  \return A pointer to a new GPartsUnits boxed type
+ */
+GPartsUnits*
+gparts_units_new_henrys(gdouble henrys);
+
+/*! \brief Create a new value, unitless, but with SI unit prefixes.
+ *
+ *  \param [in] value The value
+ *  \return A pointer to a new GPartsUnits boxed type
+ */
+GPartsUnits*
+gparts_units_new_none(gdouble value);
+
+/*! \brief Create a new value with a measurment in ohms.
+ *
+ *  \param [in] ohms The resistance in ohms
+ *  \return A pointer to a new GPartsUnits boxed type
+ */
+GPartsUnits*
+gparts_units_new_ohms(gdouble ohms);
+
+/*! \brief Create a percentage
+ *
+ *  \param [in] percent The percentge
+ *  \return A pointer to a new GPartsUnits boxed type
+ */
+GPartsUnits*
+gparts_units_new_percent(gdouble percent);
+
+/*! \brief Create a new value with a measurement in volts.
+ *
+ *  \param [in] volts The voltage in volts
+ *  \return A pointer to a new GPartsUnits boxed type
+ */
+GPartsUnits*
+gparts_units_new_volts(gdouble volts);
+

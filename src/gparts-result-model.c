@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gparts-result-model.c 
+/*! \file gparts-result-model.c
  */
 
 #include <gtk/gtk.h>
@@ -200,8 +200,6 @@ gparts_result_model_get_field(GPartsResultModel *model, GtkTreeIter *iter, const
                 &value
                 );
 
-            /* TODO The following code needs to go elsewhere or use transformations */
-
             if(G_IS_VALUE(&value))
             {
                 if (G_VALUE_HOLDS_STRING(&value))
@@ -215,6 +213,16 @@ gparts_result_model_get_field(GPartsResultModel *model, GtkTreeIter *iter, const
                 else if (G_VALUE_HOLDS_INT(&value))
                 {
                     g_string_printf(buffer, "%d", g_value_get_int(&value));
+                }
+                else if (g_value_type_transformable(G_VALUE_TYPE(&value), G_TYPE_STRING))
+                {
+                    GValue temp = {0};
+
+                    g_value_init(&temp, G_TYPE_STRING);
+                    g_value_transform(&value, &temp);
+
+                    g_string_printf(buffer, "%s", g_value_get_string(&temp));
+                    g_value_unset(&temp);
                 }
                 else
                 {
@@ -238,18 +246,19 @@ gparts_result_model_get_field(GPartsResultModel *model, GtkTreeIter *iter, const
 static void
 gparts_result_model_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
 {
-    GPartsResultModelPrivate *private = GPARTS_RESULT_MODEL_GET_PRIVATE(object);
+    GPartsResultModelPrivate *privat = GPARTS_RESULT_MODEL_GET_PRIVATE(object);
 
-    /* TODO handle case where private is NULL */
-
-    switch ( property_id )
+    if (privat != NULL)
     {
-        case GPARTS_RESULT_MODEL_PROPID_RESULT:
-            g_value_set_object(value, private->result);
-            break;
+        switch ( property_id )
+        {
+            case GPARTS_RESULT_MODEL_PROPID_RESULT:
+                g_value_set_object(value, privat->result);
+                break;
 
-        default:
-            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+            default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+        }
     }
 }
 
@@ -649,13 +658,6 @@ gparts_result_model_set_columns(GPartsDatabaseResult *result, GtkTreeView *tree_
                 {
                     g_object_set(G_OBJECT(node->data), "xalign", 1.0, NULL );
                 }
-
-                gparts_units_attach_cell_data_func(
-                    column,
-                    GTK_CELL_RENDERER(node->data),
-                    index,
-                    gparts_database_result_get_column_units(result, index)
-                    );
 
                 node = g_list_next(node);
             }
