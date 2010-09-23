@@ -21,13 +21,7 @@
 /*! \file gparts-result-model.c
  */
 
-#include <gtk/gtk.h>
-
-#include "misc-object.h"
-
-#include "gparts-database-result.h"
-#include "gparts-result-model.h"
-#include "gparts-units.h"
+#include "gparts.h"
 
 #define GPARTS_RESULT_MODEL_GET_PRIVATE(object) G_TYPE_INSTANCE_GET_PRIVATE(object,GPARTS_TYPE_RESULT_MODEL,GPartsResultModelPrivate)
 

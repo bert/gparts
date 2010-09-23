@@ -18,26 +18,44 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gparts-result-view.h
+/*! \file gparts-main.h
+ *
+ *  \brief Application controller for gEDA Part Manager.
  */
 
-#define GPARTS_TYPE_RESULT_VIEW (gparts_result_view_get_type())
-#define GPARTS_RESULT_VIEW(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),GPARTS_TYPE_RESULT_VIEW,GPartsResultView))
-#define GPARTS_RESULT_VIEW_CLASS(cls) (G_TYPE_CHECK_CLASS_CAST((cls),GPARTS_TYPE_RESULT_VIEW,GPartsResultViewClass))
-#define GPARTS_IS_RESULT_VIEW(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj),GPARTS_TYPE_RESULT_VIEW))
-#define GPARTS_IS_RESULT_VIEW_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),GPARTS_TYPE_RESULT_VIEW))
-#define GPARTS_RESULT_VIEW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),GPARTS_TYPE_RESULT_VIEW,GPartsResultViewClass))
+#include <glib-object.h>
+#include <gtk/gtk.h>
 
-struct _GPartsResultView
-{
-    GtkTreeView parent;
-};
+#include "sch.h"
 
-struct _GPartsResultViewClass
-{
-    GtkTreeViewClass parent;
-};
+#include "schgui-drawing-cfg.h"
+#include "schgui-cairo-drafter.h"
+#include "schgui-drawing-view.h"
 
-GType
-gparts_result_view_get_type(void);
+
+#include "gparts-units.h"
+
+#include "gparts-forward.h"
+
+#include "misc-object.h"
+
+#include "gparts-main.h"
+#include "gparts-database-result.h"
+#include "gparts-database.h"
+#include "gparts-result-model.h"
+#include "gparts-category-model.h"
+#include "gparts-preview.h"
+
+#include "gparts-mysql-database.h"
+
+#include "gparts-customize-ctrl.h"
+#include "gparts-login-ctrl.h"
+
+#include "gparts-controller.h"
+
+#include "gparts-result-controller.h"
+#include "gparts-category-controller.h"
+#include "gparts-preview-ctrl.h"
+#include "gparts-object-list.h"
+#include "gparts-result-view.h"
 

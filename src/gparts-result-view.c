@@ -18,18 +18,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gparts-result-view.c 
+/*! \file gparts-result-view.c
  */
 
 #include <string.h>
-#include <gtk/gtk.h>
 
-#include "misc-object.h"
-
-#include "gparts-database-result.h"
-#include "gparts-database.h"
-#include "gparts-result-model.h"
-#include "gparts-result-view.h"
+#include "gparts.h"
 
 #define GPARTS_RESULT_VIEW_GET_PRIVATE(object) G_TYPE_INSTANCE_GET_PRIVATE(object,GPARTS_TYPE_RESULT_VIEW,GPartsResultViewPrivate)
 

@@ -20,24 +20,33 @@
 
 /*! \file gparts-controller.h
  *
- *  \brief An interface for GParts' controllers.
+ *  \brief A base class for controllers.
  */
 
 #define GPARTS_TYPE_CONTROLLER (gparts_controller_get_type())
-#define GPARTS_CONTROLLER(object) (G_TYPE_CHECK_INSTANCE_CAST((object),GPARTS_TYPE_CONTROLLER,GPartsController))
-#define GPARTS_IS_CONTROLLER(object) (G_TYPE_CHECK_INSTANCE_TYPE((object),GPARTS_TYPE_CONTROLLER))
-#define GPARTS_CONTROLLER_GET_INTERFACE(instance) (G_TYPE_INSTANCE_GET_INTERFACE((instance),GPARTS_TYPE_CONTROLLER,GPartsControllerInterface))
+#define GPARTS_CONTROLLER(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),GPARTS_TYPE_CONTROLLER,GPartsController))
+#define GPARTS_CONTROLLER_CLASS(cls) (G_TYPE_CHECK_CLASS_CAST((cls),GPARTS_TYPE_CONTROLLER,GPartsControllerClass))
+#define GPARTS_IS_CONTROLLER(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj),GPARTS_TYPE_CONTROLLER))
+#define GPARTS_IS_CONTROLLER_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),GPARTS_TYPE_CONTROLLER))
+#define GPARTS_CONTROLLER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),GPARTS_TYPE_CONTROLLER,GPartsControllerClass))
 
-typedef struct _GPartsController GPartsController;
-typedef struct _GPartsControllerInterface GPartsControllerInterface;
-
-struct _GPartsControllerInterface
+struct _GPartsController
 {
-    GTypeInterface parent;
+    GObject parent;
+};
+
+struct _GPartsControllerClass
+{
+    GObjectClass parent;
 
     gchar* (*get_field)(GPartsController *controller, const gchar *name);
     GHashTable* (*get_table)(GPartsController *controller);
+
+    void (*set_copy_action)(GPartsController *controller, GtkAction *action);
 };
+
+GType
+gparts_controller_get_type(void);
 
 /*! \brief Gets the value of a field.
  *
@@ -53,6 +62,31 @@ gparts_controller_get_field(GPartsController *controller, const gchar *name);
 GHashTable*
 gparts_controller_get_table(GPartsController *controller);
 
-GType
-gparts_controller_get_type(void);
+/*! \brief Set the copy-action for this controller
+ *
+ *  When the application controller sets the view controller's \a copy-action
+ *  to a GtkAction, the view controller becomes responsible for handling
+ *  \a activate signals from the GtkAction. The view controller must maintain
+ *  the GtkAction's label and sensitive properties. The view controller must
+ *  keep these properties in sync with it's internal state.
+ *
+ *  The view controller must set the state of the GtkAction to match it's
+ *  internal state when this function is called.
+ *
+ *  When the application controller sets the view controller's \copy-action
+ *  to NULL, the view controller is no longer allowed to handle signals
+ *  or update the GtkAction's properties.
+ *
+ *  The base class behavior of this function sets the action's label to a
+ *  default value and disables the action. Derived classes that do not
+ *  implement a \a copy-action can use the base class behavior.
+ *
+ *  \param [in] controller A pointer to the controller
+ *  \param [in] action     A pointer to the \a copy-action
+ */
+void
+gparts_controller_set_copy_action(GPartsController *controller, GtkAction *action);
+
+void
+gparts_controller_set_refresh_action(GPartsController *controller, GtkAction *action);
 

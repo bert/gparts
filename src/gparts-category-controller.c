@@ -18,20 +18,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gparts-category-controller.c 
+/*! \file gparts-category-controller.c
  */
 
 #include <string.h>
-#include <gtk/gtk.h>
 
-#include "misc-object.h"
-
-#include "gparts-database-result.h"
-#include "gparts-database.h"
-#include "gparts-category-model.h"
-#include "gparts-controller.h"
-#include "gparts-category-controller.h"
-#include "gparts-login-ctrl.h"
+#include "gparts.h"
 
 enum
 {
@@ -54,9 +46,6 @@ struct _GPartsCategoryControllerPrivate
 
 static void
 gparts_category_controller_class_init(gpointer g_class, gpointer g_class_data);
-
-static void
-gparts_category_controller_controller_init(GPartsControllerInterface *iface);
 
 static void
 gparts_category_controller_dispose(GObject *object);
@@ -95,6 +84,7 @@ static void
 gparts_category_controller_class_init(gpointer g_class, gpointer g_class_data)
 {
     GObjectClass* object_class = G_OBJECT_CLASS(g_class);
+    GPartsControllerClass *klasse = GPARTS_CONTROLLER_CLASS(g_class);
 
     g_type_class_add_private(g_class, sizeof(GPartsCategoryControllerPrivate));
 
@@ -102,6 +92,8 @@ gparts_category_controller_class_init(gpointer g_class, gpointer g_class_data)
 
     object_class->get_property = gparts_category_controller_get_property;
     object_class->set_property = gparts_category_controller_set_property;
+
+    klasse->get_field = gparts_category_controller_get_field;
 
     g_object_class_install_property(
         object_class,
@@ -138,12 +130,6 @@ gparts_category_controller_class_init(gpointer g_class, gpointer g_class_data)
         G_TYPE_NONE,
         0
         );
-}
-
-static void
-gparts_category_controller_controller_init(GPartsControllerInterface *iface)
-{
-    iface->get_field = gparts_category_controller_get_field;
 }
 
 static void
@@ -206,23 +192,11 @@ gparts_category_controller_get_type(void)
             NULL
             };
 
-        static const GInterfaceInfo iinfo = {
-            (GInterfaceInitFunc) gparts_category_controller_controller_init,
-            NULL,
-            NULL
-            };
-
         type = g_type_register_static(
-            G_TYPE_OBJECT,
+            GPARTS_TYPE_CONTROLLER,
             "gparts-category-controller",
             &tinfo,
             0
-            );
-
-        g_type_add_interface_static(
-            type,
-            GPARTS_TYPE_CONTROLLER,
-            &iinfo
             );
     }
 

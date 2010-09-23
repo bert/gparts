@@ -21,21 +21,9 @@
 /*! \file gparts-preview-ctrl.c
  */
 
-#include <gtk/gtk.h>
+#include "gparts.h"
 
-#include "misc-object.h"
-#include "gparts-controller.h"
-
-#include "gparts-database-result.h"
-#include "gparts-database.h"
-#include "gparts-preview-ctrl.h"
-
-#include "sch.h"
-
-#include "schgui-drawing-cfg.h"
-#include "schgui-cairo-drafter.h"
-#include "schgui-drawing-view.h"
-
+#include "schgui-clipboard.h"
 
 enum
 {
@@ -51,6 +39,8 @@ typedef struct _GPartsPreviewCtrlPrivate GPartsPreviewCtrlPrivate;
 struct _GPartsPreviewCtrlPrivate
 {
     GtkAction        *copy_action;
+
+    SchGUIClipboard  *clipboard;
 
     GtkTreeView      *symbol_source;
     GtkTreeView      *attrib_source;
@@ -73,6 +63,9 @@ gparts_preview_ctrl_finalize(GObject *object);
 
 static void
 gparts_preview_ctrl_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
+
+static void
+gparts_preview_ctrl_set_copy_action(GPartsController *controller, GtkAction *action);
 
 static void
 gparts_preview_ctrl_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
@@ -158,6 +151,7 @@ static void
 gparts_preview_ctrl_class_init(gpointer g_class, gpointer g_class_data)
 {
     GObjectClass* object_class = G_OBJECT_CLASS(g_class);
+    GPartsControllerClass *klasse = GPARTS_CONTROLLER_CLASS(g_class);
 
     g_type_class_add_private(g_class, sizeof(GPartsPreviewCtrlPrivate));
 
@@ -166,6 +160,8 @@ gparts_preview_ctrl_class_init(gpointer g_class, gpointer g_class_data)
 
     object_class->get_property = gparts_preview_ctrl_get_property;
     object_class->set_property = gparts_preview_ctrl_set_property;
+
+    klasse->set_copy_action = gparts_preview_ctrl_set_copy_action;
 
     g_object_class_install_property(
         object_class,
@@ -220,6 +216,25 @@ gparts_preview_ctrl_class_init(gpointer g_class, gpointer g_class_data)
 static void
 gparts_preview_ctrl_copy_action_cb(GtkAction *action, GPartsPreviewCtrl *preview_ctrl)
 {
+    GPartsPreviewCtrlPrivate *privat = GPARTS_PREVIEW_CTRL_GET_PRIVATE(preview_ctrl);
+
+    if (privat != NULL)
+    {
+        SchDrawing *drawing = schgui_drawing_view_get_drawing(privat->target);
+
+        if (drawing != NULL)
+        {
+            if (privat->clipboard == NULL)
+            {
+                privat->clipboard = schgui_clipboard_new();
+            }
+
+            schgui_clipboard_copy_drawing(privat->clipboard, drawing);
+
+            g_object_unref(drawing);
+        }
+    }
+
 }
 
 static void
@@ -273,7 +288,7 @@ gparts_preview_ctrl_get_type(void)
             };
 
         type = g_type_register_static(
-            G_TYPE_OBJECT,
+            GPARTS_TYPE_CONTROLLER,
             "gparts-view-controller",
             &tinfo,
             0
@@ -285,6 +300,28 @@ gparts_preview_ctrl_get_type(void)
 GPartsPreviewCtrl*
 gparts_preview_ctrl_new()
 {
+}
+
+static void
+gparts_preview_notify_drawing_cb(GObject *object, GParamSpec *param, gpointer user_data)
+{
+    GPartsPreviewCtrlPrivate *privat = GPARTS_PREVIEW_CTRL_GET_PRIVATE(user_data);
+
+    if (privat != NULL)
+    {
+        SchDrawing *drawing = schgui_drawing_view_get_drawing(privat->target);
+
+        if (drawing != NULL)
+        {
+            gtk_action_set_sensitive(privat->copy_action, TRUE);
+
+            g_object_unref(drawing);
+        }
+        else
+        {
+            gtk_action_set_sensitive(privat->copy_action, FALSE);
+        }
+    }
 }
 
 static void
@@ -320,10 +357,10 @@ gparts_preview_ctrl_set_property(GObject *object, guint property_id, const GValu
     }
 }
 
-void
-gparts_preview_ctrl_set_copy_action(GPartsPreviewCtrl *preview_ctrl, GtkAction *action)
+static void
+gparts_preview_ctrl_set_copy_action(GPartsController *controller, GtkAction *action)
 {
-    GPartsPreviewCtrlPrivate *privat = GPARTS_PREVIEW_CTRL_GET_PRIVATE(preview_ctrl);
+    GPartsPreviewCtrlPrivate *privat = GPARTS_PREVIEW_CTRL_GET_PRIVATE(controller);
 
     if (privat->copy_action != action)
     {
@@ -332,7 +369,7 @@ gparts_preview_ctrl_set_copy_action(GPartsPreviewCtrl *preview_ctrl, GtkAction *
             g_signal_handlers_disconnect_by_func(
                 privat->copy_action,
                 G_CALLBACK(gparts_preview_ctrl_copy_action_cb),
-                preview_ctrl
+                controller
                 );
 
             g_object_unref(privat->copy_action);
@@ -348,13 +385,14 @@ gparts_preview_ctrl_set_copy_action(GPartsPreviewCtrl *preview_ctrl, GtkAction *
                 privat->copy_action,
                 "activate",
                 G_CALLBACK(gparts_preview_ctrl_copy_action_cb),
-                preview_ctrl
+                controller
                 );
 
+            gtk_action_set_label(privat->copy_action, "_Copy Component");
             //gtk_action_set_sensitive(privat->copy_action, (privat->database != NULL));
         }
 
-        g_object_notify(G_OBJECT(preview_ctrl), "copy-action");
+        g_object_notify(G_OBJECT(controller), "copy-action");
     }
 }
 
@@ -442,6 +480,12 @@ gparts_preview_ctrl_set_target(GPartsPreviewCtrl *preview_ctrl, GtkDrawingArea *
         {
             g_signal_handlers_disconnect_by_func(
                 privat->target,
+                G_CALLBACK(gparts_preview_notify_drawing_cb),
+                preview_ctrl
+                );
+
+            g_signal_handlers_disconnect_by_func(
+                privat->target,
                 G_CALLBACK(gparts_preview_ctrl_show_cb),
                 preview_ctrl
                 );
@@ -454,6 +498,13 @@ gparts_preview_ctrl_set_target(GPartsPreviewCtrl *preview_ctrl, GtkDrawingArea *
         if (privat->target != NULL)
         {
             g_object_ref(privat->target);
+
+            g_signal_connect(
+                privat->target,
+                "notify::drawing",
+                G_CALLBACK(gparts_preview_notify_drawing_cb),
+                preview_ctrl
+                );
 
             g_signal_connect(
                 privat->target,

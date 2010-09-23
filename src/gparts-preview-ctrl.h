@@ -28,17 +28,16 @@
 #define GPARTS_IS_PREVIEW_CTRL_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),GPARTS_TYPE_PREVIEW_CTRL))
 #define GPARTS_PREVIEW_CTRL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),GPARTS_TYPE_PREVIEW_CTRL,GPartsPreviewCtrlClass))
 
-typedef struct _GPartsPreviewCtrl GPartsPreviewCtrl;
-typedef struct _GPartsPreviewCtrlClass GPartsPreviewCtrlClass;
-
+/*! \extends GPartsController */
 struct _GPartsPreviewCtrl
 {
-    GObject parent;
+    GPartsController parent;
 };
 
+/*! \private */
 struct _GPartsPreviewCtrlClass
 {
-    GObjectClass parent;
+    GPartsControllerClass parent;
 };
 
 GType
@@ -46,16 +45,6 @@ gparts_preview_ctrl_get_type(void);
 
 GPartsPreviewCtrl*
 gparts_preview_ctrl_new();
-
-/*! \brief Sets the action.
- *
- *  Sets the action to copy the symbol to the clipboard.
- *
- *  \param [in] preview_ctrl The controller.
- *  \param [in] database The action to to copy the symbol to the clipboard.
- */
-void
-gparts_preview_ctrl_set_copy_action(GPartsPreviewCtrl *preview_ctrl, GtkAction *action);
 
 /*! \brief Sets the source view for data used by field expansion.
  *

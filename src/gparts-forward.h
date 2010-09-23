@@ -18,26 +18,29 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gparts-result-view.h
+/*! \file gparts-main.h
+ *
+ *  \brief Application controller for gEDA Part Manager.
  */
 
-#define GPARTS_TYPE_RESULT_VIEW (gparts_result_view_get_type())
-#define GPARTS_RESULT_VIEW(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),GPARTS_TYPE_RESULT_VIEW,GPartsResultView))
-#define GPARTS_RESULT_VIEW_CLASS(cls) (G_TYPE_CHECK_CLASS_CAST((cls),GPARTS_TYPE_RESULT_VIEW,GPartsResultViewClass))
-#define GPARTS_IS_RESULT_VIEW(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj),GPARTS_TYPE_RESULT_VIEW))
-#define GPARTS_IS_RESULT_VIEW_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),GPARTS_TYPE_RESULT_VIEW))
-#define GPARTS_RESULT_VIEW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),GPARTS_TYPE_RESULT_VIEW,GPartsResultViewClass))
+typedef struct _GParts GParts;
+typedef struct _GPartsClass GPartsClass;
 
-struct _GPartsResultView
-{
-    GtkTreeView parent;
-};
+typedef struct _GPartsCategoryController GPartsCategoryController;
+typedef struct _GPartsCategoryControllerClass GPartsCategoryControllerClass;
 
-struct _GPartsResultViewClass
-{
-    GtkTreeViewClass parent;
-};
+typedef struct _GPartsController GPartsController;
+typedef struct _GPartsControllerClass GPartsControllerClass;
 
-GType
-gparts_result_view_get_type(void);
+typedef struct _GPartsPreviewCtrl GPartsPreviewCtrl;
+typedef struct _GPartsPreviewCtrlClass GPartsPreviewCtrlClass;
+
+typedef struct _GPartsResultController GPartsResultController;
+typedef struct _GPartsResultControllerClass GPartsResultControllerClass;
+
+typedef struct _GPartsResultModel GPartsResultModel;
+typedef struct _GPartsResultModelClass GPartsResultModelClass;
+
+typedef struct _GPartsResultView GPartsResultView;
+typedef struct _GPartsResultViewClass GPartsResultViewClass;
 

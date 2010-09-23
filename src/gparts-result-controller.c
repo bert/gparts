@@ -18,21 +18,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gparts-result-controller.c 
+/*! \file gparts-result-controller.c
  */
 
 #include <string.h>
-#include <gtk/gtk.h>
 
-#include "misc-object.h"
-
-#include "gparts-database-result.h"
-#include "gparts-database.h"
-#include "gparts-controller.h"
-#include "gparts-result-model.h"
-#include "gparts-customize-ctrl.h"
-#include "gparts-login-ctrl.h"
-#include "gparts-result-controller.h"
+#include "gparts.h"
 
 #define GPARTS_RESULT_CONTROLLER_GET_PRIVATE(object) G_TYPE_INSTANCE_GET_PRIVATE(object,GPARTS_TYPE_RESULT_CONTROLLER,GPartsResultControllerPrivate)
 
@@ -75,9 +66,6 @@ gparts_result_controller_class_init(gpointer g_class, gpointer g_class_data);
 
 static void
 gparts_result_controller_connect_columns(GPartsResultController *controller);
-
-static void
-gparts_result_controller_controller_init(GPartsControllerInterface *iface);
 
 static void
 gparts_result_controller_database_controller_notify_cb(GPartsDatabase *database, GParamSpec *pspec, GPartsResultController *controller);
@@ -149,6 +137,7 @@ static void
 gparts_result_controller_class_init(gpointer g_class, gpointer g_class_data)
 {
     GObjectClass* object_class = G_OBJECT_CLASS(g_class);
+    GPartsControllerClass *klasse = GPARTS_CONTROLLER_CLASS(g_class);
 
     g_type_class_add_private(g_class, sizeof(GPartsResultControllerPrivate));
 
@@ -157,6 +146,9 @@ gparts_result_controller_class_init(gpointer g_class, gpointer g_class_data)
 
     object_class->get_property = gparts_result_controller_get_property;
     object_class->set_property = gparts_result_controller_set_property;
+
+    klasse->get_field = gparts_result_controller_get_field;
+    klasse->get_table = gparts_result_controller_get_table;
 
     g_object_class_install_property(
         object_class,
@@ -314,13 +306,6 @@ gparts_result_controller_connect_columns(GPartsResultController *controller)
 }
 
 static void
-gparts_result_controller_controller_init(GPartsControllerInterface *iface)
-{
-    iface->get_field = gparts_result_controller_get_field;
-    iface->get_table = gparts_result_controller_get_table;
-}
-
-static void
 gparts_result_controller_database_controller_notify_cb(GPartsDatabase *database, GParamSpec *pspec, GPartsResultController *controller)
 {
     gparts_result_controller_refresh(controller);
@@ -447,23 +432,11 @@ gparts_result_controller_get_type(void)
             NULL
             };
 
-        static const GInterfaceInfo iinfo = {
-            (GInterfaceInitFunc) gparts_result_controller_controller_init,
-            NULL,
-            NULL
-            };
-
         type = g_type_register_static(
-            G_TYPE_OBJECT,
+            GPARTS_TYPE_CONTROLLER,
             "GpartsResultController",
             &tinfo,
             0
-            );
-
-        g_type_add_interface_static(
-            type,
-            GPARTS_TYPE_CONTROLLER,
-            &iinfo
             );
     }
 

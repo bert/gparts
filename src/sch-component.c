@@ -444,27 +444,32 @@ sch_component_get_y(const SchComponent *shape)
 SchComponent*
 sch_component_instantiate(const SchConfig *config, SchDrawing *drawing)
 {
-    SchComponent        *component = sch_component_new(config);
-    SchComponentPrivate *privat    = SCH_COMPONENT_GET_PRIVATE(component);
+    SchComponent *component = NULL;
 
-    g_debug("Drawing = %p ", drawing);
-
-    if (privat != NULL)
+    if (drawing != NULL)
     {
-        SchComponentInstantiateProcData data;
+        SchComponentPrivate *privat;
 
-        data.config     = config;
-        data.component  = component;
-        data.attributes = sch_shape_get_attributes(SCH_SHAPE(component));
+        component = sch_component_new(config);
+        privat = SCH_COMPONENT_GET_PRIVATE(component);
 
-        privat->drawing = drawing;
-        g_object_ref(privat->drawing);
-
-        sch_drawing_foreach(drawing, (GFunc) sch_component_instantiate_proc, &data);
-
-        if (data.attributes != NULL)
+        if (privat != NULL)
         {
-            g_object_unref(data.attributes);
+            SchComponentInstantiateProcData data;
+
+            data.config     = config;
+            data.component  = component;
+            data.attributes = sch_shape_get_attributes(SCH_SHAPE(component));
+
+            privat->drawing = drawing;
+            g_object_ref(privat->drawing);
+
+            sch_drawing_foreach(drawing, (GFunc) sch_component_instantiate_proc, &data);
+
+            if (data.attributes != NULL)
+            {
+                g_object_unref(data.attributes);
+            }
         }
     }
 

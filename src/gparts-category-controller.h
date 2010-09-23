@@ -34,17 +34,16 @@
 #define GPARTS_IS_CATEGORY_CONTROLLER_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),GPARTS_TYPE_CATEGORY_CONTROLLER))
 #define GPARTS_CATEGORY_CONTROLLER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),GPARTS_TYPE_CATEGORY_CONTROLLER,GPartsCategoryControllerClass))
 
-typedef struct _GPartsCategoryController GPartsCategoryController;
-typedef struct _GPartsCategoryControllerClass GPartsCategoryControllerClass;
-
+/*! \extends GPartsController */
 struct _GPartsCategoryController
 {
-    GObject parent;
+    GPartsController parent;
 };
 
+/*! \private */
 struct _GPartsCategoryControllerClass
 {
-    GObjectClass parent;
+    GPartsControllerClass parent;
 };
 
 GType

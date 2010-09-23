@@ -28,9 +28,6 @@
 #define GPARTS_IS_RESULT_MODEL_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),GPARTS_TYPE_RESULT_MODEL))
 #define GPARTS_RESULT_MODEL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),GPARTS_TYPE_RESULT_MODEL,GPartsResultModelClass))
 
-typedef struct _GPartsResultModel GPartsResultModel;
-typedef struct _GPartsResultModelClass GPartsResultModelClass;
-
 struct _GPartsResultModel
 {
     GObject parent;

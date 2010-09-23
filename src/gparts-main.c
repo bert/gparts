@@ -18,36 +18,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gparts-main.c 
+/*! \file gparts-main.c
  */
 
 #include <gtk/gtk.h>
 
-#include "misc-object.h"
-
-#include "gparts-main.h"
-#include "gparts-database-result.h"
-#include "gparts-database.h"
-#include "gparts-result-model.h"
-#include "gparts-category-model.h"
-#include "gparts-preview.h"
-
-#include "gparts-mysql-database.h"
-
-#include "gparts-customize-ctrl.h"
-#include "gparts-login-ctrl.h"
-
-#include "gparts-result-controller.h"
-#include "gparts-category-controller.h"
-#include "gparts-preview-ctrl.h"
-#include "gparts-object-list.h"
-#include "gparts-result-view.h"
-
-#include "sch.h"
-
-#include "schgui-drawing-cfg.h"
-#include "schgui-cairo-drafter.h"
-#include "schgui-drawing-view.h"
+#include "gparts.h"
 
 #include "scmcfg-config.h"
 
@@ -59,6 +35,20 @@ struct _GPartsPrivate
 {
     GtkBuilder       *builder;
     GPartsObjectList *controllers;
+
+    GSList           *controllers2;
+
+    GtkNotebook      *notebook;
+
+    GtkAction        *copy_action;
+    GtkAction        *refresh_action;
+
+    GPartsController *current_controller;
+
+    /* A temporary measure to map GtkNotebook pages to their respective
+     * GPartsControllers.
+     */
+    GPartsController *kludge[9];
 };
 
 /**** Static methods ****/
@@ -75,13 +65,49 @@ gparts_finalize(GObject *object);
 static void
 gparts_set_database(GParts *gparts, GPartsDatabase *database);
 
+static void
+gparts_set_notebook(GParts *gparts, GtkNotebook *notebook);
+
 /**** Signal handlers ****/
 
 static void
 gparts_action_edit_preferences_cb(GtkWidget* widget, gpointer data);
 
 static void
+gparts_set_copy_action(GParts *gparts, GtkAction *action);
+
+static void
+gparts_set_current_controller(GParts *gparts, GPartsController *controller);
+
+static void
+gparts_set_refresh_action(GParts *gparts, GtkAction *action);
+
+static void
 gparts_destroy_cb(GtkWidget* widget, gpointer data);
+
+static void
+gparts_switch_page_cb(GtkNotebook *notebook, GtkNotebookPage *page, gint page_no, gpointer user_data);
+
+
+
+static void
+gparts_append_controller(GParts *gparts, GObject *object)
+{
+    if (object != NULL)
+    {
+        GPartsPrivate *privat = GPARTS_GET_PRIVATE(gparts);
+
+        if (privat != NULL)
+        {
+            if (g_slist_find(privat->controllers2, object) == NULL)
+            {
+                privat->controllers2 = g_slist_append(privat->controllers2, object);
+
+                g_object_ref(object);
+            }
+        }
+    }
+}
 
 static void
 gparts_class_init(gpointer g_class, gpointer g_class_data)
@@ -322,7 +348,7 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         NULL
         );
 
-    g_object_new(
+    private->kludge[5] = g_object_new(
         GPARTS_TYPE_PREVIEW_CTRL,
         "attrib-source", part_controller,
         "symbol-source", symbol_controller,
@@ -337,10 +363,254 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         NULL
         );
 
+    gparts_set_copy_action(
+        GPARTS(instance),
+        GTK_ACTION(gtk_builder_get_object(private->builder, "edit-copy"))
+        );
+
+    gparts_set_refresh_action(
+        GPARTS(instance),
+        GTK_ACTION(gtk_builder_get_object(private->builder, "view-refresh"))
+        );
+
+    gparts_set_notebook(
+        GPARTS(instance),
+        GTK_NOTEBOOK(gtk_builder_get_object(private->builder, "notebook"))
+        );
 
         //"customize-dialog", NULL,
 
     gtk_widget_show(widget);
+}
+
+static void
+gparts_copy_action_cb(GtkAction *action, gpointer user_data)
+{
+    GPartsPrivate *privat = GPARTS_GET_PRIVATE(user_data);
+
+    if (privat != NULL)
+    {
+    }
+}
+
+static void
+gparts_refresh_action_cb(GtkAction *action, gpointer user_data)
+{
+    GPartsPrivate *privat = GPARTS_GET_PRIVATE(user_data);
+
+    if (privat != NULL)
+    {
+    }
+}
+
+static void
+gparts_page_added_cb(GtkNotebook *notebook, GtkWidget *child, gint page_no, gpointer user_data)
+{
+    g_debug("Page added %d", page_no);
+}
+
+static void
+gparts_page_removed_cb(GtkNotebook *notebook, GtkWidget *child, gint page_no, gpointer user_data)
+{
+    g_debug("Page removed %d", page_no);
+}
+
+static void
+gparts_set_copy_action(GParts *gparts, GtkAction *action)
+{
+    GPartsPrivate *privat = GPARTS_GET_PRIVATE(gparts);
+
+    if (privat != NULL)
+    {
+        if (privat->copy_action != NULL)
+        {
+            g_signal_handlers_disconnect_by_func(
+                privat->copy_action,
+                G_CALLBACK(gparts_copy_action_cb),
+                gparts
+                );
+
+            g_object_unref(privat->copy_action);
+        }
+
+        privat->copy_action = action;
+
+        if (privat->copy_action != NULL)
+        {
+            g_object_ref(privat->copy_action);
+
+            g_signal_connect(
+                privat->copy_action,
+                "activate",
+                G_CALLBACK(gparts_copy_action_cb),
+                gparts
+                );
+        }
+
+        if (privat->current_controller != NULL)
+        {
+            gparts_controller_set_copy_action(privat->current_controller, privat->copy_action);
+        }
+        else
+        {
+            gtk_action_set_label(privat->copy_action, "_Copy");
+            gtk_action_set_sensitive(privat->copy_action, FALSE);
+        }
+
+        /* g_object_notify(G_OBJECT(gparts), "copy-action"); */
+    }
+}
+
+static void
+gparts_set_refresh_action(GParts *gparts, GtkAction *action)
+{
+    GPartsPrivate *privat = GPARTS_GET_PRIVATE(gparts);
+
+    if (privat != NULL)
+    {
+        if (privat->refresh_action != NULL)
+        {
+            g_signal_handlers_disconnect_by_func(
+                privat->refresh_action,
+                G_CALLBACK(gparts_refresh_action_cb),
+                gparts
+                );
+
+            g_object_unref(privat->refresh_action);
+        }
+
+        privat->refresh_action = action;
+
+        if (privat->refresh_action != NULL)
+        {
+            g_object_ref(privat->refresh_action);
+
+            g_signal_connect(
+                privat->refresh_action,
+                "activate",
+                G_CALLBACK(gparts_refresh_action_cb),
+                gparts
+                );
+        }
+
+        if (privat->current_controller != NULL)
+        {
+            gparts_controller_set_refresh_action(privat->current_controller, privat->refresh_action);
+        }
+        else
+        {
+            gtk_action_set_sensitive(privat->refresh_action, FALSE);
+        }
+
+        /* g_object_notify(G_OBJECT(gparts), "copy-action"); */
+    }
+
+}
+
+
+static void
+gparts_set_current_controller(GParts *gparts, GPartsController *controller)
+{
+    GPartsPrivate *privat = GPARTS_GET_PRIVATE(gparts);
+
+    if (privat != NULL)
+    {
+        if (privat->current_controller != NULL)
+        {
+            gparts_controller_set_copy_action(privat->current_controller, NULL);
+
+            g_object_unref(privat->current_controller);
+        }
+
+        privat->current_controller = controller;
+
+        if (privat->current_controller != NULL)
+        {
+            g_object_ref(privat->current_controller);
+
+            gparts_controller_set_copy_action(privat->current_controller, privat->copy_action);
+        }
+        else
+        {
+            gtk_action_set_label(privat->copy_action, "_Copy");
+            gtk_action_set_sensitive(privat->copy_action, FALSE);
+        }
+    }
+}
+
+static void
+gparts_set_notebook(GParts *gparts, GtkNotebook *notebook)
+{
+    GPartsPrivate *privat = GPARTS_GET_PRIVATE(gparts);
+
+    if (privat != NULL)
+    {
+        if (privat->notebook != NULL)
+        {
+            g_signal_handlers_disconnect_by_func(
+                privat->notebook,
+                G_CALLBACK(gparts_page_added_cb),
+                gparts
+                );
+
+            g_signal_handlers_disconnect_by_func(
+                privat->notebook,
+                G_CALLBACK(gparts_page_removed_cb),
+                gparts
+                );
+
+            g_signal_handlers_disconnect_by_func(
+                privat->notebook,
+                G_CALLBACK(gparts_switch_page_cb),
+                gparts
+                );
+
+            g_object_unref(privat->notebook);
+        }
+
+        privat->notebook = notebook;
+
+        if (privat->notebook != NULL)
+        {
+            g_object_ref(privat->notebook);
+
+            g_signal_connect(
+                privat->notebook,
+                "page-added",
+                G_CALLBACK(gparts_page_added_cb),
+                gparts
+                );
+
+            g_signal_connect(
+                privat->notebook,
+                "page-removed",
+                G_CALLBACK(gparts_page_removed_cb),
+                gparts
+                );
+
+            g_signal_connect(
+                privat->notebook,
+                "switch-page",
+                G_CALLBACK(gparts_switch_page_cb),
+                gparts
+                );
+        }
+
+        /* g_object_notify(G_OBJECT(gparts), "notebook"); */
+    }
+}
+
+static void
+gparts_switch_page_cb(GtkNotebook *notebook, GtkNotebookPage *page, gint page_no, gpointer user_data)
+{
+    GPartsPrivate *privat = GPARTS_GET_PRIVATE(user_data);
+
+    if (privat != NULL)
+    {
+        g_debug("Switch page %d", page_no);
+
+        gparts_set_current_controller(GPARTS(user_data), privat->kludge[page_no]);
+    }
 }
 
 int main(int argc, char* argv[])
@@ -359,3 +629,4 @@ int main(int argc, char* argv[])
 
     return 0;
 }
+

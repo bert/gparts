@@ -44,6 +44,14 @@ struct _SchGUIDrawingViewClass
 GType
 schgui_drawing_view_get_type(void);
 
+/*! \brief Get the drawing shown in this view
+ *
+ *  \param [in] widget This widget.
+ *  \return The drawing
+ */
+SchDrawing*
+schgui_drawing_view_get_drawing(SchGUIDrawingView *widget);
+
 /*! \brief Set a new drafter fo this widget
  *
  *  Drafters know 'how' to draw the contents of the window. Currently, the drafter
@@ -58,7 +66,7 @@ schgui_drawing_view_set_drafter(SchGUIDrawingView *widget, SchGUICairoDrafter *d
 /*! \brief Set the contents of the window to a new drawing.
  *
  *  \param [in] widget This widget.
- *  \param [in] drawing The new drawing to show in the window. 
+ *  \param [in] drawing The new drawing to show in the window.
  */
 void
 schgui_drawing_view_set_drawing(SchGUIDrawingView *widget, SchDrawing *drawing);

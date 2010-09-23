@@ -178,6 +178,25 @@ schgui_drawing_view_configure_event_cb(GtkWidget *widget, GdkEventConfigure *eve
     }
 }
 
+SchDrawing*
+schgui_drawing_view_get_drawing(SchGUIDrawingView *widget)
+{
+    SchDrawing *drawing = NULL;
+    SchGUIDrawingViewPrivate *privat = SCHGUI_DRAWING_VIEW_GET_PRIVATE(widget);
+
+    if (privat != NULL)
+    {
+        drawing = privat->drawing;
+
+        if (drawing != NULL)
+        {
+            g_object_ref(drawing);
+        }
+    }
+
+    return drawing;
+}
+
 static void
 schgui_drawing_view_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
 {
@@ -220,7 +239,7 @@ schgui_drawing_view_realize_cb(GtkWidget *widget, gpointer user_data)
         color.green = 0;
         color.blue  = 0;
     }
- 
+
     gtk_widget_modify_bg(widget, GTK_STATE_NORMAL, &color); 
 }
 
@@ -401,6 +420,8 @@ schgui_drawing_view_set_drawing(SchGUIDrawingView *widget, SchDrawing *drawing)
 
             schgui_drawing_view_zoom_extents(widget);
         }
+
+        g_object_notify(G_OBJECT(widget), "drawing");
 
         gtk_widget_queue_draw(GTK_WIDGET(widget));
     }
