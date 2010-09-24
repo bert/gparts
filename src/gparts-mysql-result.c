@@ -203,6 +203,9 @@ gparts_mysql_result_get_column_in_units(const gchar *name, gdouble value)
     static const struct entry table[] =
     {
         { "Capacitance", gparts_units_new_farads  },
+        { "PD",          gparts_units_new_watts   },
+        { "IC",          gparts_units_new_amps    },
+        { "FT",          gparts_units_new_hertz   },
         { "Inductance",  gparts_units_new_henrys  },
         { "IF",          gparts_units_new_amps    },
         { "Resistance",  gparts_units_new_ohms    },

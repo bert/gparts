@@ -73,6 +73,21 @@ CREATE TABLE ZenerDiode (
     PRIMARY KEY ( PartID )
     );
 
+-- Create a table for bipolar junction transistors.
+--
+CREATE TABLE BJT (
+
+    PartID        INTEGER UNSIGNED  NOT NULL,
+    PackageID     INTEGER UNSIGNED  NOT NULL,
+    Polarity      VARCHAR(500)      NOT NULL,
+    IC            FLOAT             NOT NULL,
+    FT            FLOAT             NOT NULL,
+    PD            FLOAT             NOT NULL,
+
+    PRIMARY KEY ( PartID )
+    );
+
+
 -- Create a view for diodes.
 --
 CREATE VIEW DiodeV AS
@@ -132,6 +147,32 @@ CREATE VIEW ZenerDiodeV AS
 
 INSERT INTO ColumnMeta ( ViewName, ColumnName, Units ) VALUES
     ( 'ZenerDiodeV', 'VZ', 'VOLTS' );
+
+-- Create a view for zener diodes.
+--
+CREATE VIEW BJTV AS
+    SELECT
+        Part.PartID,
+        Company.CompanyName,
+        Part.PartNumber,
+        Package.PackageName,
+        BJT.Polarity,
+        BJT.IC,
+        BJT.FT,
+        BJT.PD,
+        Device.DeviceID,
+        Device.DeviceName
+    FROM BJT
+        JOIN Part USING ( PartID )
+        JOIN Package USING ( PackageID )
+        JOIN Company USING ( CompanyID )
+        JOIN Device USING ( DeviceID );
+
+INSERT INTO ColumnMeta ( ViewName, ColumnName, Units ) VALUES
+    ( 'BJTV', 'IC', 'AMPS'  ),
+    ( 'BJTV', 'FT', 'HERTZ' ),
+    ( 'BJTV', 'PD', 'WATTS' );
+
 
 DELIMITER $$
 
@@ -234,6 +275,40 @@ BEGIN
        ZenerVoltage
        );
 END$$
+
+-- Adds a BJT to the GParts database.
+--
+CREATE PROCEDURE AddBJT(
+    IN CompanyName   VARCHAR(500),
+    IN PartNumber    VARCHAR(500),
+    IN PackageName   VARCHAR(500),
+    IN DeviceName    VARCHAR(500),
+    IN Polarity      VARCHAR(500),
+    IN IC            FLOAT,
+    IN FT            FLOAT,
+    IN PD            FLOAT
+    )
+
+BEGIN
+    CALL AddPart(
+        CompanyName,
+        PartNumber,
+        DeviceName
+        );
+
+    INSERT INTO BJT ( PartID, BJT.PackageID, Polarity, IC, FT, PD ) VALUES (
+       ( SELECT PartID
+           FROM Part JOIN Company USING ( CompanyID )
+           WHERE Company.CompanyName = CompanyName AND Part.PartNumber = PartNumber
+           ),
+       ( SELECT Package.PackageID FROM Package WHERE PackageName = Package.PackageName ),
+       Polarity,
+       IC,
+       FT,
+       PD
+       );
+END$$
+
 
 DELIMITER ;
 

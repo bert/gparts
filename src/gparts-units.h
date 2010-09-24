@@ -78,6 +78,15 @@ gparts_units_new_farads(gdouble farads);
 GPartsUnits*
 gparts_units_new_henrys(gdouble henrys);
 
+/*! \brief Create a new value with a measurement in hertz.
+ *
+ *  \param [in] hertz The inductance in hertz
+ *  \return A pointer to a new GPartsUnits boxed type
+ */
+GPartsUnits*
+gparts_units_new_hertz(gdouble hertz);
+
+
 /*! \brief Create a new value, unitless, but with SI unit prefixes.
  *
  *  \param [in] value The value
@@ -109,4 +118,12 @@ gparts_units_new_percent(gdouble percent);
  */
 GPartsUnits*
 gparts_units_new_volts(gdouble volts);
+
+/*! \brief Create a new value with a measurement in watts.
+ *
+ *  \param [in] watts The wattage in watts
+ *  \return A pointer to a new GPartsUnits boxed type
+ */
+GPartsUnits*
+gparts_units_new_watts(gdouble watts);
 

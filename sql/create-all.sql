@@ -27,4 +27,5 @@ source tmp/parts-bourns.sql;
 source tmp/parts-vishay-sprague.sql;
 
 source data/onsemi-switching-diodes.sql;
+source data/onsemi-transistors.sql;
 

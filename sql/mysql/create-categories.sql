@@ -52,6 +52,18 @@ CALL AddCategory(
     );
 
 CALL AddCategory(
+    "Transistors",
+    NULL,
+    "Discretes"
+    );
+
+CALL AddCategory(
+    "BJT",
+    "BJTV",
+    "Transistors"
+    );
+
+CALL AddCategory(
     "Passives",
     NULL,
     "UNKNOWN"

@@ -224,6 +224,18 @@ gparts_units_new_henrys(gdouble henrys)
 }
 
 GPartsUnits*
+gparts_units_new_hertz(gdouble hertz)
+{
+    GPartsUnits *units = GPARTS_UNITS(g_malloc(sizeof(GPartsUnits)));
+
+    units->value  = hertz;
+    units->func   = gparts_units_transform_std;
+    units->symbol = "Hz";
+
+    return units;
+}
+
+GPartsUnits*
 gparts_units_new_none(gdouble value)
 {
     GPartsUnits *units = GPARTS_UNITS(g_malloc(sizeof(GPartsUnits)));
@@ -271,6 +283,19 @@ gparts_units_new_volts(gdouble volts)
 
     return units;
 }
+
+GPartsUnits*
+gparts_units_new_watts(gdouble watts)
+{
+    GPartsUnits *units = GPARTS_UNITS(g_malloc(sizeof(GPartsUnits)));
+
+    units->value  = watts;
+    units->func   = gparts_units_transform_std;
+    units->symbol = "W";
+
+    return units;
+}
+
 
 static void
 gparts_units_transform(const GValue *src_value, GValue *dest_value)
