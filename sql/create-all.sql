@@ -17,7 +17,7 @@ use GParts;
 
 source sql/mysql/create-basic.sql;
 
---source sql/mysql/create-crystals.sql;
+source sql/mysql/create-crystals.sql;
 source sql/mysql/create-discretes.sql;
 source sql/mysql/create-passives.sql;
 source sql/mysql/create-categories.sql;
@@ -28,6 +28,7 @@ source tmp/symbols.sql
 source tmp/parts-bourns.sql;
 source tmp/parts-vishay-sprague.sql;
 
+source data/epson-crystals.sql;
 source data/onsemi-switching-diodes.sql;
 source data/onsemi-transistors.sql;
 

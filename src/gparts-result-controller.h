@@ -54,6 +54,7 @@ struct _GPartsResultControllerClass
     GPartsControllerClass parent;
 };
 
+/*! \private */
 GType
 gparts_result_controller_get_type(void);
 

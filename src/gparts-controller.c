@@ -27,6 +27,18 @@
 static void
 gparts_controller_set_copy_action_base(GPartsController *controller, GtkAction *action);
 
+static void
+gparts_controller_set_delete_action_base(GPartsController *controller, GtkAction *action);
+
+static void
+gparts_controller_set_edit_action_base(GPartsController *controller, GtkAction *action);
+
+static void
+gparts_controller_set_insert_action_base(GPartsController *controller, GtkAction *action);
+
+static void
+gparts_controller_set_paste_action_base(GPartsController *controller, GtkAction *action);
+
 
 
 static void
@@ -34,7 +46,11 @@ gparts_controller_class_init(gpointer g_class, gpointer g_class_data)
 {
     GPartsControllerClass *klasse = GPARTS_CONTROLLER_CLASS(g_class);
 
-    klasse->set_copy_action = gparts_controller_set_copy_action_base;
+    klasse->set_copy_action   = gparts_controller_set_copy_action_base;
+    klasse->set_delete_action = gparts_controller_set_delete_action_base;
+    klasse->set_edit_action   = gparts_controller_set_edit_action_base;
+    klasse->set_insert_action = gparts_controller_set_insert_action_base;
+    klasse->set_paste_action  = gparts_controller_set_paste_action_base;
 }
 
 gchar*
@@ -118,7 +134,6 @@ gparts_controller_set_copy_action(GPartsController *controller, GtkAction *actio
     }
 }
 
-
 static void
 gparts_controller_set_copy_action_base(GPartsController *controller, GtkAction *action)
 {
@@ -130,7 +145,99 @@ gparts_controller_set_copy_action_base(GPartsController *controller, GtkAction *
 }
 
 void
-gparts_controller_set_refresh_action(GPartsController *controller, GtkAction *action)
+gparts_controller_set_delete_action(GPartsController *controller, GtkAction *action)
 {
+    if (controller != NULL)
+    {
+        GPartsControllerClass *klasse = GPARTS_CONTROLLER_GET_CLASS(controller);
+
+        if ((klasse != NULL) && (klasse->set_delete_action != NULL))
+        {
+            klasse->set_delete_action(controller, action);
+        }
+    }
+}
+
+static void
+gparts_controller_set_delete_action_base(GPartsController *controller, GtkAction *action)
+{
+    if (action != NULL)
+    {
+        gtk_action_set_label(action, "Delete");
+        gtk_action_set_sensitive(action, FALSE);
+    }
+}
+
+void
+gparts_controller_set_edit_action(GPartsController *controller, GtkAction *action)
+{
+    if (controller != NULL)
+    {
+        GPartsControllerClass *klasse = GPARTS_CONTROLLER_GET_CLASS(controller);
+
+        if ((klasse != NULL) && (klasse->set_edit_action != NULL))
+        {
+            klasse->set_edit_action(controller, action);
+        }
+    }
+}
+
+static void
+gparts_controller_set_edit_action_base(GPartsController *controller, GtkAction *action)
+{
+    if (action != NULL)
+    {
+        gtk_action_set_label(action, "Edit");
+        gtk_action_set_sensitive(action, FALSE);
+    }
+}
+
+
+void
+gparts_controller_set_insert_action(GPartsController *controller, GtkAction *action)
+{
+    if (controller != NULL)
+    {
+        GPartsControllerClass *klasse = GPARTS_CONTROLLER_GET_CLASS(controller);
+
+        if ((klasse != NULL) && (klasse->set_insert_action != NULL))
+        {
+            klasse->set_insert_action(controller, action);
+        }
+    }
+}
+
+static void
+gparts_controller_set_insert_action_base(GPartsController *controller, GtkAction *action)
+{
+    if (action != NULL)
+    {
+        gtk_action_set_label(action, "Insert");
+        gtk_action_set_sensitive(action, FALSE);
+    }
+}
+
+void
+gparts_controller_set_paste_action(GPartsController *controller, GtkAction *action)
+{
+    if (controller != NULL)
+    {
+        GPartsControllerClass *klasse = GPARTS_CONTROLLER_GET_CLASS(controller);
+
+        if ((klasse != NULL) && (klasse->set_paste_action != NULL))
+        {
+            klasse->set_paste_action(controller, action);
+        }
+    }
+}
+
+static void
+gparts_controller_set_paste_action_base(GPartsController *controller, GtkAction *action)
+{
+    if (action != NULL)
+    {
+        gtk_action_set_label(action, "_Paste");
+        gtk_action_set_sensitive(action, FALSE);
+    }
 }
 

@@ -12,8 +12,22 @@
                 <child>
                     <object class="GtkAction" id="database-connect">
                         <property name="name">database-connect</property>
-                        <property name="label">Connect</property>
+                        <property name="label">Connect...</property>
                         <property name="stock-id">gtk-connect</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="database-create">
+                        <property name="name">database-create</property>
+                        <property name="label">Create...</property>
+                        <property name="sensitive">FALSE</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="database-drop">
+                        <property name="name">database-drop</property>
+                        <property name="label">Drop</property>
+                        <property name="sensitive">FALSE</property>
                     </object>
                 </child>
                 <child>
@@ -21,6 +35,19 @@
                         <property name="name">database-disconnect</property>
                         <property name="label">Disconnect</property>
                         <property name="stock-id">gtk-disconnect</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="database-import">
+                        <property name="name">database-import</property>
+                        <property name="label">Import</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="database-import-symbols">
+                        <property name="name">database-import-symbols</property>
+                        <property name="label">Symbols</property>
+                        <property name="sensitive">FALSE</property>
                     </object>
                 </child>
                 <child>
@@ -34,6 +61,34 @@
                         <property name="name">edit-copy</property>
                         <property name="label">_Copy</property>
                         <property name="stock-id">gtk-copy</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="edit-delete">
+                        <property name="name">edit-delete</property>
+                        <property name="label">Delete</property>
+                        <property name="stock-id">gtk-delete</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="edit-edit">
+                        <property name="name">edit-edit</property>
+                        <property name="label">Edit...</property>
+                        <property name="stock-id">gtk-edit</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="edit-insert">
+                        <property name="name">edit-insert</property>
+                        <property name="label">Insert</property>
+                        <property name="stock-id">gtk-new</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="edit-paste">
+                        <property name="name">edit-paste</property>
+                        <property name="label">_Paste</property>
+                        <property name="stock-id">gtk-paste</property>
                     </object>
                 </child>
                 <child>
@@ -75,9 +130,21 @@
                 <menu action="database">
                     <menuitem action="database-connect"/>
                     <menuitem action="database-disconnect"/>
+                    <separator/>
+                    <menuitem action="database-create"/>
+                    <menuitem action="database-drop"/>
+                    <separator/>
+                    <menu action="database-import">
+                        <menuitem action="database-import-symbols"/>
+                    </menu>
                 </menu>
                 <menu action="edit">
                     <menuitem action="edit-copy"/>
+                    <menuitem action="edit-paste"/>
+                    <menuitem action="edit-delete"/>
+                    <separator/>
+                    <menuitem action="edit-insert"/>
+                    <menuitem action="edit-edit"/>
                 </menu>
                 <menu action="view">
                     <menuitem action="view-refresh"/>
@@ -89,6 +156,10 @@
                 <toolitem action="database-connect"/>
                 <toolitem action="edit-copy"/>
                 <toolitem action="view-refresh"/>
+                <separator/>
+                <toolitem action="edit-insert"/>
+                <toolitem action="edit-delete"/>
+                <toolitem action="edit-edit"/>
             </toolbar>
         </ui>
     </object>

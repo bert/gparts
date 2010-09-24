@@ -237,6 +237,7 @@ CREATE VIEW CategoryV AS
 --
 CREATE VIEW CompanyV AS
     SELECT
+        CompanyID,
         CompanyName
     FROM Company
     ORDER BY CompanyName;
@@ -248,6 +249,7 @@ CREATE VIEW CompanyV AS
 --
 CREATE VIEW DeviceV AS
     SELECT
+        DeviceID,
         DeviceName
     FROM Device
     ORDER BY DeviceName;
@@ -259,6 +261,7 @@ CREATE VIEW DeviceV AS
 --
 CREATE VIEW DocumentV AS
     SELECT
+        DocumentID,
         Category,
         Title,
         FileLocation
@@ -272,6 +275,7 @@ CREATE VIEW DocumentV AS
 --
 CREATE VIEW FootprintV AS
     SELECT
+        FootprintID,
         FootprintName
     FROM Footprint
     ORDER BY FootprintName;
@@ -283,6 +287,7 @@ CREATE VIEW FootprintV AS
 --
 CREATE VIEW PackageV AS
     SELECT
+        PackageID,
         PackageName,
         Technology AS 'Tech'
     FROM Package

@@ -20,7 +20,25 @@
 
 /*! \file gparts-controller.h
  *
- *  \brief A base class for controllers.
+ *  \brief A base class for view controllers.
+ *
+ *  Two options for implementation of actions deligated to the view controller
+ *  include:
+ *
+ *  - making the GtkActions properties of the controller and making the
+ *  controller responsible for maintaining the GtkAction state and handling
+ *  signals emitted from the GtkAction. Setting the GtkAction to NULL revokes
+ *  responsibility. This mechanism does not lend itself to actions that
+ *  have one source or 'owner' and many controllers must handle the event.
+ *
+ *  - making the action's label and sensitivity properties of the controller.
+ *  The application controller responds to the notify signals and updates the
+ *  GtkAction's state. When the GtkAction emits an activate signal, the
+ *  App Controller calls one of this controller's methods. The application
+ *  controller ignores signals from inactive controllers.
+ *
+ *  Implementation currently uses the former. As implementation progresses,
+ *  the other mechanism may be more suitable.
  */
 
 #define GPARTS_TYPE_CONTROLLER (gparts_controller_get_type())
@@ -35,6 +53,7 @@ struct _GPartsController
     GObject parent;
 };
 
+/*! \private */
 struct _GPartsControllerClass
 {
     GObjectClass parent;
@@ -43,8 +62,13 @@ struct _GPartsControllerClass
     GHashTable* (*get_table)(GPartsController *controller);
 
     void (*set_copy_action)(GPartsController *controller, GtkAction *action);
+    void (*set_delete_action)(GPartsController *controller, GtkAction *action);
+    void (*set_edit_action)(GPartsController *controller, GtkAction *action);
+    void (*set_insert_action)(GPartsController *controller, GtkAction *action);
+    void (*set_paste_action)(GPartsController *controller, GtkAction *action);
 };
 
+/*! \private */
 GType
 gparts_controller_get_type(void);
 
@@ -62,7 +86,7 @@ gparts_controller_get_field(GPartsController *controller, const gchar *name);
 GHashTable*
 gparts_controller_get_table(GPartsController *controller);
 
-/*! \brief Set the copy-action for this controller
+/*! \brief Set the \a copy-action for this controller
  *
  *  When the application controller sets the view controller's \a copy-action
  *  to a GtkAction, the view controller becomes responsible for handling
@@ -87,6 +111,43 @@ gparts_controller_get_table(GPartsController *controller);
 void
 gparts_controller_set_copy_action(GPartsController *controller, GtkAction *action);
 
+/*! \brief Set the \a delete-action for this controller
+ *
+ *  See gparts_controller_set_copy_action() for a detailed description.
+ *
+ *  \param [in] controller A pointer to the controller
+ *  \param [in] action     A pointer to the \a delete-action
+ */
 void
-gparts_controller_set_refresh_action(GPartsController *controller, GtkAction *action);
+gparts_controller_set_delete_action(GPartsController *controller, GtkAction *action);
+
+/*! \brief Set the \a edit-action for this controller
+ *
+ *  See gparts_controller_set_copy_action() for a detailed description.
+ *
+ *  \param [in] controller A pointer to the controller
+ *  \param [in] action     A pointer to the \a edit-action
+ */
+void
+gparts_controller_set_edit_action(GPartsController *controller, GtkAction *action);
+
+/*! \brief Set the \a insert-action for this controller
+ *
+ *  See gparts_controller_set_copy_action() for a detailed description.
+ *
+ *  \param [in] controller A pointer to the controller
+ *  \param [in] action     A pointer to the \a insert-action
+ */
+void
+gparts_controller_set_insert_action(GPartsController *controller, GtkAction *action);
+
+/*! \brief Set the \a paste-action for this controller
+ *
+ *  See gparts_controller_set_copy_action() for a detailed description.
+ *
+ *  \param [in] controller A pointer to the controller
+ *  \param [in] action     A pointer to the \a paste-action
+ */
+void
+gparts_controller_set_paste_action(GPartsController *controller, GtkAction *action);
 
