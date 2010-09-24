@@ -22,6 +22,18 @@
 -- ---------------------------------------------------------------------------
 
 CALL AddCategory(
+    "Batteries",
+    "BatteryV",
+    "UNKNOWN"
+    );
+
+CALL AddCategory(
+    "Crystals",
+    "CrystalV",
+    "UNKNOWN"
+    );
+
+CALL AddCategory(
     "Discretes",
     NULL,
     "UNKNOWN"

@@ -111,6 +111,11 @@ CALL AddPackage(
     );
 
 CALL AddPackage(
+    "MA-505",
+    'SMT'
+    );
+
+CALL AddPackage(
     "SC-59",
     'SMT'
     );

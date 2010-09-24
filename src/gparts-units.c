@@ -32,8 +32,9 @@
  */
 //#ifdef __STDC__VERSION__
 //#if __STDC_VERSION__ >= 199901L
-#define GPARTS_SYMBOL_MICRO "\u00B5"
-#define GPARTS_SYMBOL_OHM   "\u2126"
+#define GPARTS_SYMBOL_CELCIUS "\u00B0C"
+#define GPARTS_SYMBOL_MICRO   "\u00B5"
+#define GPARTS_SYMBOL_OHM     "\u2126"
 //#endif
 //#else
 //#define GPARTS_SYMBOL_MICRO "u"
@@ -98,6 +99,7 @@ static const GPartsUnitsMetricPrefix gparts_units_metric_prefixes[] =
     { "",       "",                       0 },
 };
 
+
 static const gchar*
 gparts_units_find_format(gdouble value);
 
@@ -109,6 +111,9 @@ gparts_units_transform(const GValue *src_value, GValue *dest_value);
 
 static void
 gparts_units_transform_percent(const GValue *src_value, GValue *dest_value);
+
+static void
+gparts_units_transform_pp(const GValue *src_value, GValue *dest_value);
 
 static void
 gparts_units_transform_std(const GValue *src_value, GValue *dest_value);
@@ -188,6 +193,18 @@ gparts_units_free(GPartsUnits *units)
 }
 
 GPartsUnits*
+gparts_units_new_amphours(gdouble amphours)
+{
+    GPartsUnits *units = GPARTS_UNITS(g_malloc(sizeof(GPartsUnits)));
+
+    units->value  = amphours;
+    units->func   = gparts_units_transform_std;
+    units->symbol = "Ah";
+
+    return units;
+}
+
+GPartsUnits*
 gparts_units_new_amps(gdouble amps)
 {
     GPartsUnits *units = GPARTS_UNITS(g_malloc(sizeof(GPartsUnits)));
@@ -200,6 +217,18 @@ gparts_units_new_amps(gdouble amps)
 }
 
 GPartsUnits*
+gparts_units_new_celcius(gdouble celcius)
+{
+    GPartsUnits *units = GPARTS_UNITS(g_malloc(sizeof(GPartsUnits)));
+
+    units->value  = celcius;
+    units->func   = gparts_units_transform_std;
+    units->symbol = GPARTS_SYMBOL_CELCIUS;
+
+    return units;
+}
+
+GPartsUnits*
 gparts_units_new_farads(gdouble farads)
 {
     GPartsUnits *units = GPARTS_UNITS(g_malloc(sizeof(GPartsUnits)));
@@ -207,6 +236,18 @@ gparts_units_new_farads(gdouble farads)
     units->value  = farads;
     units->func   = gparts_units_transform_std;
     units->symbol = "F";
+
+    return units;
+}
+
+GPartsUnits*
+gparts_units_new_grams(gdouble grams)
+{
+    GPartsUnits *units = GPARTS_UNITS(g_malloc(sizeof(GPartsUnits)));
+
+    units->value  = grams;
+    units->func   = gparts_units_transform_std;
+    units->symbol = "g";
 
     return units;
 }
@@ -236,6 +277,18 @@ gparts_units_new_hertz(gdouble hertz)
 }
 
 GPartsUnits*
+gparts_units_new_meters(gdouble meters)
+{
+    GPartsUnits *units = GPARTS_UNITS(g_malloc(sizeof(GPartsUnits)));
+
+    units->value  = meters;
+    units->func   = gparts_units_transform_std;
+    units->symbol = "m";
+
+    return units;
+}
+
+GPartsUnits*
 gparts_units_new_none(gdouble value)
 {
     GPartsUnits *units = GPARTS_UNITS(g_malloc(sizeof(GPartsUnits)));
@@ -243,18 +296,6 @@ gparts_units_new_none(gdouble value)
     units->value  = value;
     units->func   = gparts_units_transform_std;
     units->symbol = "";
-
-    return units;
-}
-
-GPartsUnits*
-gparts_units_new_percent(gdouble ohms)
-{
-    GPartsUnits *units = GPARTS_UNITS(g_malloc(sizeof(GPartsUnits)));
-
-    units->value  = ohms;
-    units->func   = gparts_units_transform_percent;
-    units->symbol = "%";
 
     return units;
 }
@@ -271,6 +312,29 @@ gparts_units_new_ohms(gdouble ohms)
     return units;
 }
 
+GPartsUnits*
+gparts_units_new_percent(gdouble percent)
+{
+    GPartsUnits *units = GPARTS_UNITS(g_malloc(sizeof(GPartsUnits)));
+
+    units->value  = percent;
+    units->func   = gparts_units_transform_percent;
+    units->symbol = "%";
+
+    return units;
+}
+
+GPartsUnits*
+gparts_units_new_pp(gdouble pp)
+{
+    GPartsUnits *units = GPARTS_UNITS(g_malloc(sizeof(GPartsUnits)));
+
+    units->value  = pp;
+    units->func   = gparts_units_transform_pp;
+    units->symbol = NULL;
+
+    return units;
+}
 
 GPartsUnits*
 gparts_units_new_volts(gdouble volts)
@@ -345,6 +409,63 @@ gparts_units_transform_percent(const GValue *src_value, GValue *dest_value)
     }
 }
 
+static void
+gparts_units_transform_pp(const GValue *src_value, GValue *dest_value)
+{
+    if (G_IS_VALUE(src_value))
+    {
+        GPartsUnits *units = g_value_get_boxed(src_value);
+        GString *string = g_string_new("");
+        gdouble pp = units->value;
+        gint digits = 0;
+        const gchar *symbol;
+
+        if (fabs(pp) >= 1e-3)
+        {
+            pp *= 100;
+            symbol = "%";
+        }
+        else if (fabs(pp) >= 1e-6)
+        {
+            pp *= 1e6;
+            symbol = "ppm";
+        }
+        else if (fabs(pp) >= 1e-9)
+        {
+            pp *= 1e9;
+            symbol = "ppb";
+        }
+        else if (fabs(pp) >= 1e-12)
+        {
+            pp *= 1e12;
+            symbol = "ppt";
+        }
+        else
+        {
+            pp *= 1e15;
+            symbol = "ppq";
+        }
+
+        if (pp != 0)
+        {
+            digits = ceil(-log10(fabs(pp)));
+
+            if (digits < 0)
+            {
+                digits = 0;
+            }
+        }
+
+        g_string_printf(string, "%.*f %s", digits, pp, symbol);
+
+        g_value_take_string(dest_value, string->str);
+        g_string_free(string, FALSE);
+    }
+    else
+    {
+        g_value_set_string(dest_value, "Error");
+    }
+}
 
 static void
 gparts_units_transform_std(const GValue *src_value, GValue *dest_value)

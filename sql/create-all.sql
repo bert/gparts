@@ -16,6 +16,8 @@ create database GParts;
 use GParts;
 
 source sql/mysql/create-basic.sql;
+
+--source sql/mysql/create-crystals.sql;
 source sql/mysql/create-discretes.sql;
 source sql/mysql/create-passives.sql;
 source sql/mysql/create-categories.sql;
