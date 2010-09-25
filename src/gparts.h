@@ -23,8 +23,11 @@
  *  \brief Application controller for gEDA Part Manager.
  */
 
+#include <glib.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
+
+#include "misc-object.h"
 
 #include "sch.h"
 
@@ -32,30 +35,30 @@
 #include "schgui-cairo-drafter.h"
 #include "schgui-drawing-view.h"
 
+/* Boxed types */
 
 #include "gparts-units.h"
 
+/* Forward declarations for gparts package */
+
 #include "gparts-forward.h"
-
-#include "misc-object.h"
-
-#include "gparts-main.h"
-#include "gparts-database-result.h"
-#include "gparts-database.h"
-#include "gparts-result-model.h"
-#include "gparts-category-model.h"
-#include "gparts-preview.h"
-
-#include "gparts-mysql-database.h"
-
-#include "gparts-customize-ctrl.h"
-#include "gparts-login-ctrl.h"
 
 #include "gparts-controller.h"
 
-#include "gparts-result-controller.h"
 #include "gparts-category-controller.h"
-#include "gparts-preview-ctrl.h"
+#include "gparts-category-model.h"
+#include "gparts-customize-ctrl.h"
+
+#include "gparts-login-ctrl.h"
+
+#include "gparts-main.h"
+
 #include "gparts-object-list.h"
+
+#include "gparts-preview.h"
+#include "gparts-preview-ctrl.h"
+
+#include "gparts-result-controller.h"
+#include "gparts-result-model.h"
 #include "gparts-result-view.h"
 

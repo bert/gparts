@@ -23,6 +23,11 @@
 
 #include <string.h>
 
+#include <glib-object.h>
+
+#include "gparts-database-result.h"
+#include "gparts-database.h"
+
 #include "gparts.h"
 
 #define GPARTS_RESULT_CONTROLLER_GET_PRIVATE(object) G_TYPE_INSTANCE_GET_PRIVATE(object,GPARTS_TYPE_RESULT_CONTROLLER,GPartsResultControllerPrivate)
@@ -596,9 +601,7 @@ gparts_result_controller_set_result(GPartsResultController *controller, GPartsDa
 
     if (result != NULL)
     {
-        model = GTK_TREE_MODEL(gparts_result_model_new());
-
-        g_object_set(model, "result", result, NULL);
+        model = GTK_TREE_MODEL(gparts_result_model_new(result));
 
         gparts_result_controller_disconnect_columns(controller);
         gparts_result_model_set_columns(result, privat->target);

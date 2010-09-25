@@ -18,14 +18,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gparts-mysql-database.c 
+/*! \file gparts-mysql-database.c
  */
 
 #include <glib-object.h>
 #include <gmodule.h>
 #include <mysql.h>
-
-#include "misc-object.h"
 
 #include "gparts-database-result.h"
 #include "gparts-database.h"
@@ -48,9 +46,6 @@ gparts_mysql_database_class_init(gpointer g_class, gpointer g_class_data);
 
 static void
 gparts_mysql_database_connect(GPartsDatabase *database, connect_data *data, GError **error);
-
-static void
-gparts_mysql_database_database_init(GPartsDatabaseInterface *iface);
 
 static void
 gparts_mysql_database_disconnect(GPartsDatabase *database, GError **error);
@@ -85,6 +80,7 @@ static void
 gparts_mysql_database_class_init(gpointer g_class, gpointer g_class_data)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(g_class);
+    GPartsDatabaseClass *klasse = GPARTS_DATABASE_CLASS(g_class);
 
     g_type_class_add_private(
         g_class,
@@ -94,6 +90,10 @@ gparts_mysql_database_class_init(gpointer g_class, gpointer g_class_data)
     object_class->finalize     = gparts_mysql_database_finalize;
     object_class->get_property = gparts_mysql_database_get_property;
     object_class->set_property = gparts_mysql_database_set_property;
+
+    klasse->connect    = gparts_mysql_database_connect;
+    klasse->disconnect = gparts_mysql_database_disconnect;
+    klasse->query      = gparts_mysql_database_query;
 
     g_signal_new(
         "database-connected",
@@ -180,18 +180,6 @@ gparts_mysql_database_connect(GPartsDatabase *database, connect_data *data, GErr
     }
 }
 
-/*! \brief
- *
- *  \param [in] iface
- */
-static void
-gparts_mysql_database_database_init(GPartsDatabaseInterface *iface)
-{
-    iface->connect    = gparts_mysql_database_connect;
-    iface->disconnect = gparts_mysql_database_disconnect;
-    iface->query      = gparts_mysql_database_query;
-}
-
 /*! \brief Disconnects from the MySQL database.
  *
  *  \param [in]  database The database to disconnect from.
@@ -237,7 +225,6 @@ gparts_mysql_database_finalize(GObject *object)
 {
     g_debug("gparts_mysql_database_finalize()");
 
-    
     misc_object_chain_finalize(object);
 }
 
@@ -249,9 +236,9 @@ gparts_mysql_database_get_property( GObject* object, guint property_id, GValue* 
 GType
 gparts_mysql_database_get_type( void )
 {
-    static GType type = 0;
+    static GType type = G_TYPE_INVALID;
 
-    if (type == 0)
+    if (type == G_TYPE_INVALID)
     {
         static const GTypeInfo tinfo = {
             sizeof(GPartsMySQLDatabaseClass),
@@ -266,27 +253,12 @@ gparts_mysql_database_get_type( void )
             NULL
             };
 
-        static const GInterfaceInfo iinfo = {
-            (GInterfaceInitFunc) gparts_mysql_database_database_init,
-            NULL,
-            NULL
-            };
-
         type = g_type_register_static(
-            G_TYPE_OBJECT,
+            GPARTS_TYPE_DATABASE,
             "gparts-mysql-database",
             &tinfo,
             0
             );
-
-        if (type != G_TYPE_INVALID)
-        {
-            g_type_add_interface_static(
-                type,
-                GPARTS_TYPE_DATABASE,
-                &iinfo
-                );
-        }
     }
 
     return type;

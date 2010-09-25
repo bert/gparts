@@ -31,16 +31,19 @@
 typedef struct _GPartsMySQLDatabase GPartsMySQLDatabase;
 typedef struct _GPartsMySQLDatabaseClass GPartsMySQLDatabaseClass;
 
+/*! \extends GPartsDatabase */
 struct _GPartsMySQLDatabase
 {
-    GObject parent;
+    GPartsDatabase parent;
 };
 
+/*! \private */
 struct _GPartsMySQLDatabaseClass
 {
-    GObjectClass parent;
+    GPartsDatabaseClass parent;
 };
 
+/*! \private */
 GType
 gparts_mysql_database_get_type(void);
 

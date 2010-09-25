@@ -20,20 +20,28 @@
 
 /*! \file gparts-database-result.h
  *
- *  \brief An interface for database results.
+ *  \brief An abstract base class for database results.
  */
 
 #define GPARTS_TYPE_DATABASE_RESULT (gparts_database_result_get_type())
-#define GPARTS_DATABASE_RESULT(object) (G_TYPE_CHECK_INSTANCE_CAST((object),GPARTS_TYPE_DATABASE_RESULT,GPartsDatabaseResult))
-#define GPARTS_IS_DATABASE_RESULT(object) (G_TYPE_CHECK_INSTANCE_TYPE((object),GPARTS_TYPE_DATABASE_RESULT))
-#define GPARTS_DATABASE_RESULT_GET_INTERFACE(instance) (G_TYPE_INSTANCE_GET_INTERFACE((instance),GPARTS_TYPE_DATABASE_RESULT,GPartsDatabaseResultInterface))
+#define GPARTS_DATABASE_RESULT(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),GPARTS_TYPE_DATABASE_RESULT,GPartsDatabaseResult))
+#define GPARTS_DATABASE_RESULT_CLASS(cls) (G_TYPE_CHECK_CLASS_CAST((cls),GPARTS_TYPE_DATABASE_RESULT,GPartsDatabaseResultClass))
+#define GPARTS_IS_DATABASE_RESULT(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj),GPARTS_TYPE_DATABASE_RESULT))
+#define GPARTS_IS_DATABASE_RESULT_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),GPARTS_TYPE_DATABASE_RESULT))
+#define GPARTS_DATABASE_RESULT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),GPARTS_TYPE_DATABASE_RESULT,GPartsDatabaseResultClass))
 
 typedef struct _GPartsDatabaseResult GPartsDatabaseResult;
-typedef struct _GPartsDatabaseResultInterface GPartsDatabaseResultInterface;
+typedef struct _GPartsDatabaseResultClass GPartsDatabaseResultClass;
 
-struct _GPartsDatabaseResultInterface
+struct _GPartsDatabaseResult
 {
-    GTypeInterface parent;
+    GObject parent;
+};
+
+/*! \private */
+struct _GPartsDatabaseResultClass
+{
+    GObjectClass parent;
 
     guint (*get_column_count)(GPartsDatabaseResult *result);
     gboolean (*get_column_index)(GPartsDatabaseResult *result, const gchar *name, gint *index);
@@ -42,6 +50,10 @@ struct _GPartsDatabaseResultInterface
     void (*get_field_value)(GPartsDatabaseResult *result, gint row, gint column, GValue *value);
     guint (*get_row_count)(GPartsDatabaseResult *result);
 };
+
+/*! \private */
+GType
+gparts_database_result_get_type(void);
 
 /*! \brief Gets the number of columns in the database result.
  *
@@ -106,7 +118,4 @@ gparts_database_result_get_field_value(GPartsDatabaseResult *result, gint row, g
  */
 guint
 gparts_database_result_get_row_count(GPartsDatabaseResult *result);
-
-GType
-gparts_database_result_get_type(void);
 

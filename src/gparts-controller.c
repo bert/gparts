@@ -21,6 +21,11 @@
 /*! \file gparts-controller.c
  */
 
+#include <gtk/gtk.h>
+
+#include "gparts-database-result.h"
+#include "gparts-database.h"
+
 #include "gparts.h"
 
 

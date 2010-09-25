@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gparts-database.c 
+/*! \file gparts-database.c
  */
 
 #include <glib-object.h>
@@ -31,69 +31,80 @@ gparts_database_base_init(gpointer g_class)
 {
 }
 
+static void
+gparts_database_class_init(gpointer g_class, gpointer g_class_data)
+{
+}
+
 void
 gparts_database_connect(GPartsDatabase *database, connect_data* data, GError **error)
 {
-    GPartsDatabaseInterface *iface = GPARTS_DATABASE_GET_INTERFACE(database);
+    if (database != NULL)
+    {
+        GPartsDatabaseClass *klasse = GPARTS_DATABASE_GET_CLASS(database);
 
-    if (iface == NULL)
-    {
-        g_critical("Unable to get GPartsDatabaseInteface from parameter");
-    }
-    else if (iface->connect == NULL)
-    {
-        g_critical("GPartsDatabaseInterface contains NULL connect() function pointer");
-    }
-    else
-    {
-        iface->connect(database, data, error);
+        if (klasse == NULL)
+        {
+            g_critical("Unable to get GPartsDatabaseClass from parameter");
+        }
+        else if (klasse->connect == NULL)
+        {
+            g_critical("GPartsDatabaseClass contains NULL connect() function pointer");
+        }
+        else
+        {
+            klasse->connect(database, data, error);
+        }
     }
 }
 
 void
 gparts_database_disconnect(GPartsDatabase *database, GError **error)
 {
-    GPartsDatabaseInterface *iface = GPARTS_DATABASE_GET_INTERFACE(database);
+    if (database != NULL)
+    {
+        GPartsDatabaseClass *klasse = GPARTS_DATABASE_GET_CLASS(database);
 
-    if (iface == NULL)
-    {
-        g_critical("Unable to get GPartsDatabaseInteface from parameter");
-    }
-    else if (iface->disconnect == NULL)
-    {
-        g_critical("GPartsDatabaseInterface contains NULL disconnect() function pointer");
-    }
-    else
-    {
-        iface->disconnect(database, error);
+        if (klasse == NULL)
+        {
+            g_critical("Unable to get GPartsDatabaseClass from parameter");
+        }
+        else if (klasse->disconnect == NULL)
+        {
+            g_critical("GPartsDatabaseClass contains NULL disconnect() function pointer");
+        }
+        else
+        {
+            klasse->disconnect(database, error);
+        }
     }
 }
 
 GType
 gparts_database_get_type(void)
 {
-    static GType type = 0;
+    static GType type = G_TYPE_INVALID;
 
-    if (type == 0)
+    if (type == G_TYPE_INVALID)
     {
-        static const GTypeInfo info = {
-            sizeof(GPartsDatabaseInterface),
-            gparts_database_base_init,
-            NULL,
-            NULL,
-            NULL,
-            NULL,
-            0,
-            0,
-            NULL,
-            NULL
+        static const GTypeInfo tinfo = {
+            sizeof(GPartsDatabaseClass),    /* class_size */
+            gparts_database_base_init,      /* base_init */
+            NULL,                           /* base_finalize */
+            gparts_database_class_init,     /* class_init */
+            NULL,                           /* class_finalize */
+            NULL,                           /* class_data */
+            sizeof(GPartsDatabase),         /* instance_size */
+            0,                              /* n_preallocs */
+            NULL,                           /* instance_init */
+            NULL                            /* value_table */
             };
 
         type = g_type_register_static(
-            G_TYPE_INTERFACE,
+            G_TYPE_OBJECT,
             "gparts-database",
-            &info,
-            0
+            &tinfo,
+            G_TYPE_FLAG_ABSTRACT
             );
     }
 
@@ -103,20 +114,24 @@ gparts_database_get_type(void)
 GPartsDatabaseResult*
 gparts_database_query(GPartsDatabase *database, const gchar *query, GError **error)
 {
-    GPartsDatabaseInterface *iface = GPARTS_DATABASE_GET_INTERFACE(database);
     GPartsDatabaseResult* result = NULL;
 
-    if (iface == NULL)
+    if (database != NULL)
     {
-        g_critical("Unable to get GPartsDatabaseInteface from parameter");
-    }
-    else if (iface->query == NULL)
-    {
-        g_critical("GPartsDatabaseInterface contains NULL query() function pointer");
-    }
-    else
-    {
-        result = iface->query(database, query, error);
+        GPartsDatabaseClass *klasse = GPARTS_DATABASE_GET_CLASS(database);
+
+        if (klasse == NULL)
+        {
+            g_critical("Unable to get GPartsDatabaseClass from parameter");
+        }
+        else if (klasse->query == NULL)
+        {
+            g_critical("GPartsDatabaseClass contains NULL query() function pointer");
+        }
+        else
+        {
+            result = klasse->query(database, query, error);
+        }
     }
 
     return result;

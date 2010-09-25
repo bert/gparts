@@ -20,25 +20,34 @@
 
 /*! \file gparts-database.h
  *
- *! \brief An interface to abstract database implementations.
+ *! \brief An abstract base class for database implementations.
  *
- *  This interface abstracts database implementations, allowing the application
+ *  This base class abstracts database implementations, allowing the application
  *  to use different databases such as MySQL, PostreSQL, and SQLite.
  */
 
 #define GPARTS_TYPE_DATABASE (gparts_database_get_type())
-#define GPARTS_DATABASE(object) (G_TYPE_CHECK_INSTANCE_CAST((object),GPARTS_TYPE_DATABASE,GPartsDatabase))
-#define GPARTS_IS_DATABASE(object) (G_TYPE_CHECK_INSTANCE_TYPE((object),GPARTS_TYPE_DATABASE))
-#define GPARTS_DATABASE_GET_INTERFACE(instance) (G_TYPE_INSTANCE_GET_INTERFACE((instance),GPARTS_TYPE_DATABASE,GPartsDatabaseInterface))
+#define GPARTS_DATABASE(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),GPARTS_TYPE_DATABASE,GPartsDatabase))
+#define GPARTS_DATABASE_CLASS(cls) (G_TYPE_CHECK_CLASS_CAST((cls),GPARTS_TYPE_DATABASE,GPartsDatabaseClass))
+#define GPARTS_IS_DATABASE(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj),GPARTS_TYPE_DATABASE))
+#define GPARTS_IS_DATABASE_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),GPARTS_TYPE_DATABASE))
+#define GPARTS_DATABASE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),GPARTS_TYPE_DATABASE,GPartsDatabaseClass))
 
+/*! \todo Move to a boxed type in another file */
 typedef struct _connect_data connect_data;
 
 typedef struct _GPartsDatabase GPartsDatabase;
-typedef struct _GPartsDatabaseInterface GPartsDatabaseInterface;
+typedef struct _GPartsDatabaseClass GPartsDatabaseClass;
 
-struct _GPartsDatabaseInterface
+struct _GPartsDatabase
 {
-    GTypeInterface parent;
+    GObject parent;
+};
+
+/*! \private */
+struct _GPartsDatabaseClass
+{
+    GObjectClass parent;
 
     void (*connect)(GPartsDatabase *database, connect_data* data, GError **error);
     void (*disconnect)(GPartsDatabase *database, GError **error);
@@ -54,6 +63,10 @@ struct _connect_data
     gchar *database_name;
     gchar *filename;
 };
+
+/*! \private */
+GType
+gparts_database_get_type(void);
 
 /*! \brief Establishes a connection to the database.
  *
@@ -72,9 +85,6 @@ gparts_database_connect(GPartsDatabase *database, connect_data* data, GError **e
 void
 gparts_database_disconnect(GPartsDatabase *database, GError **error);
 
-GType
-gparts_database_get_type(void);
-
 /*! \brief Query the database
  *
  *  \param [in] database The database to query.
@@ -85,8 +95,4 @@ gparts_database_get_type(void);
  */
 GPartsDatabaseResult*
 gparts_database_query(GPartsDatabase *database, const gchar *query, GError **error);
-
-/* TODO Move elsewhere */
-void
-gparts_database_register(const gchar *name, GType type);
 

@@ -33,9 +33,6 @@
 #define GPARTS_IS_CATEGORY_MODEL_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),GPARTS_TYPE_CATEGORY_MODEL))
 #define GPARTS_CATEGORY_MODEL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),GPARTS_TYPE_CATEGORY_MODEL,GPartsCategoryModelClass))
 
-typedef struct _GPartsCategoryModel GPartsCategoryModel;
-typedef struct _GPartsCategoryModelClass GPartsCategoryModelClass;
-
 struct _GPartsCategoryModel
 {
     GObject parent;
@@ -61,7 +58,7 @@ gparts_category_model_new(GPartsDatabase *database);
  *  longer needed.
  */
 gchar*
-gparts_category_model_get_field(GPartsCategoryModel* model, GtkTreeIter *iter, const gchar *name);
+gparts_category_model_get_field(GPartsCategoryModel *model, GtkTreeIter *iter, const gchar *name);
 
 /*! TODO Finish
  */

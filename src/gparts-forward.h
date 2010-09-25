@@ -29,6 +29,9 @@ typedef struct _GPartsClass GPartsClass;
 typedef struct _GPartsCategoryController GPartsCategoryController;
 typedef struct _GPartsCategoryControllerClass GPartsCategoryControllerClass;
 
+typedef struct _GPartsCategoryModel GPartsCategoryModel;
+typedef struct _GPartsCategoryModelClass GPartsCategoryModelClass;
+
 typedef struct _GPartsController GPartsController;
 typedef struct _GPartsControllerClass GPartsControllerClass;
 

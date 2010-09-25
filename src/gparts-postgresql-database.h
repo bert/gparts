@@ -31,16 +31,19 @@
 typedef struct _GPartsPostgreSQLDatabase GPartsPostgreSQLDatabase;
 typedef struct _GPartsPostgreSQLDatabaseClass GPartsPostgreSQLDatabaseClass;
 
+/*! \extends GPartsDatabase */
 struct _GPartsPostgreSQLDatabase
 {
     GObject parent;
 };
 
+/*! \private */
 struct _GPartsPostgreSQLDatabaseClass
 {
     GObjectClass parent;
 };
 
+/*! \private */
 GType
 gparts_postgresql_database_get_type(void);
 

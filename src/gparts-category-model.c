@@ -26,14 +26,13 @@
  *  in a tree structure.
  */
 
-#include <gtk/gtk.h>
 #include <string.h>
-
-#include "misc-object.h"
+#include <gtk/gtk.h>
 
 #include "gparts-database-result.h"
 #include "gparts-database.h"
-#include "gparts-category-model.h"
+
+#include "gparts.h"
 
 enum
 {

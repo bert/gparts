@@ -42,7 +42,7 @@ GType
 gparts_result_model_get_type(void);
 
 GPartsResultModel*
-gparts_result_model_new(void);
+gparts_result_model_new(GPartsDatabaseResult *result);
 
 gboolean
 gparts_result_model_get_column_index(GPartsResultModel *result_model, const gchar *name, gint *index);
@@ -52,4 +52,13 @@ gparts_result_model_get_field(GPartsResultModel *model, GtkTreeIter *iter, const
 
 void
 gparts_result_model_set_columns(GPartsDatabaseResult *result, GtkTreeView *tree_view);
+
+/*! \brief Set the database result for this model
+ *
+ *  \param [in] model
+ *  \param [in] result
+ */
+void
+gparts_result_model_set_result(GPartsResultModel *model, GPartsDatabaseResult *result);
+
 

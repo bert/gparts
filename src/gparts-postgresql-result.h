@@ -19,6 +19,8 @@
  */
 
 /*! \file gparts-postgresql-result.h
+ *
+ *  \brief A wrapper for PostgreSQL database results.
  */
 
 #define GPARTS_TYPE_POSTGRESQL_RESULT (gparts_postgresql_result_get_type())
@@ -31,16 +33,29 @@
 typedef struct _GPartsPostgreSQLResult GPartsPostgreSQLResult;
 typedef struct _GPartsPostgreSQLResultClass GPartsPostgreSQLResultClass;
 
+/*! \extends GPartsDatabaseResult */
 struct _GPartsPostgreSQLResult
 {
     GObject parent;
 };
 
+/*! \private */
 struct _GPartsPostgreSQLResultClass
 {
     GObjectClass parent;
 };
 
+/*! \private */
 GType
 gparts_postgresql_result_get_type(void);
+
+/*! \brief Create a new wrapper around a PostgreSQL result.
+ *
+ *  When no longer needed, call g_object_unref() on the returned pointer.
+ *
+ *  \param [in] result The result from the PostgreSQL database query.
+ *  \return A pointer to a new GPartsPostgreSQLResult object.
+ */
+GPartsPostgreSQLResult*
+gparts_postgresql_result_new(PQResult *result);
 

@@ -76,6 +76,7 @@ static void
 gparts_mysql_result_class_init(gpointer g_class, gpointer g_class_data)
 {
     GObjectClass* object_class = G_OBJECT_CLASS(g_class);
+    GPartsDatabaseResultClass *klasse = GPARTS_DATABASE_RESULT_CLASS(g_class);
 
     g_type_class_add_private(
         g_class,
@@ -83,21 +84,13 @@ gparts_mysql_result_class_init(gpointer g_class, gpointer g_class_data)
         );
 
     object_class->finalize = gparts_mysql_result_finalize;
-}
 
-/*! \brief Initialize the GPartsDatabaseResult interface.
- *
- *  \param [in] iface The interface to initialize.
- */
-static void
-gparts_mysql_result_database_init(GPartsDatabaseResultInterface *iface)
-{
-    iface->get_column_count = gparts_mysql_result_get_column_count;
-    iface->get_column_index = gparts_mysql_result_get_column_index;
-    iface->get_column_type  = gparts_mysql_result_get_column_type;
-    iface->get_column_value = gparts_mysql_result_get_column_value;
-    iface->get_field_value  = gparts_mysql_result_get_field_value;
-    iface->get_row_count    = gparts_mysql_result_get_row_count;
+    klasse->get_column_count = gparts_mysql_result_get_column_count;
+    klasse->get_column_index = gparts_mysql_result_get_column_index;
+    klasse->get_column_type  = gparts_mysql_result_get_column_type;
+    klasse->get_column_value = gparts_mysql_result_get_column_value;
+    klasse->get_field_value  = gparts_mysql_result_get_field_value;
+    klasse->get_row_count    = gparts_mysql_result_get_row_count;
 }
 
 /*! \brief Deallocate all resources.
@@ -109,9 +102,14 @@ gparts_mysql_result_database_init(GPartsDatabaseResultInterface *iface)
 static void
 gparts_mysql_result_finalize(GObject *object)
 {
-    GPartsMySQLResultPrivate *private = GPARTS_MYSQL_RESULT_GET_PRIVATE(object);
+    GPartsMySQLResultPrivate *privat = GPARTS_MYSQL_RESULT_GET_PRIVATE(object);
 
-    mysql_free_result(private->result);
+    if (privat != NULL)
+    {
+        mysql_free_result(privat->result);
+    }
+
+    misc_object_chain_finalize(object);
 }
 
 /*! \brief Gets the number of columns in the database result.
@@ -122,9 +120,15 @@ gparts_mysql_result_finalize(GObject *object)
 static guint
 gparts_mysql_result_get_column_count(GPartsDatabaseResult *result)
 {
-    GPartsMySQLResultPrivate *private = GPARTS_MYSQL_RESULT_GET_PRIVATE(result);
+    guint column_count = 0;
+    GPartsMySQLResultPrivate *privat = GPARTS_MYSQL_RESULT_GET_PRIVATE(result);
 
-    return mysql_num_fields(private->result);
+    if (privat != NULL)
+    {
+        column_count = mysql_num_fields(privat->result);
+    }
+
+    return column_count;
 }
 
 /*! \brief Untested WIP.
@@ -162,25 +166,28 @@ gparts_mysql_result_get_column_index(GPartsDatabaseResult *result, const gchar *
 static GType
 gparts_mysql_result_get_column_type(GPartsDatabaseResult *result, gint column)
 {
-    GPartsMySQLResultPrivate *private = GPARTS_MYSQL_RESULT_GET_PRIVATE(result);
+    GPartsMySQLResultPrivate *privat = GPARTS_MYSQL_RESULT_GET_PRIVATE(result);
     GType type = G_TYPE_INVALID;
 
-    if (column < mysql_num_fields(private->result))
+    if (privat != NULL)
     {
-        MYSQL_FIELD *field = mysql_fetch_field_direct(private->result, column);
-
-        switch (field->type)
+        if (column < mysql_num_fields(privat->result))
         {
-            case MYSQL_TYPE_FLOAT:
-                type = GPARTS_TYPE_UNITS;
-                break;
+            MYSQL_FIELD *field = mysql_fetch_field_direct(privat->result, column);
 
-            case MYSQL_TYPE_LONG:
-                type = G_TYPE_INT;
-                break;
+            switch (field->type)
+            {
+                case MYSQL_TYPE_FLOAT:
+                    type = GPARTS_TYPE_UNITS;
+                    break;
 
-            default:
-                type = G_TYPE_STRING;
+                case MYSQL_TYPE_LONG:
+                    type = G_TYPE_INT;
+                    break;
+
+                default:
+                    type = G_TYPE_STRING;
+            }
         }
     }
 
@@ -254,13 +261,16 @@ gparts_mysql_result_get_column_in_units(const gchar *name, gdouble value)
 static void
 gparts_mysql_result_get_column_value(GPartsDatabaseResult *result, gint column, GValue *value)
 {
-    GPartsMySQLResultPrivate *private = GPARTS_MYSQL_RESULT_GET_PRIVATE(result);
+    GPartsMySQLResultPrivate *privat = GPARTS_MYSQL_RESULT_GET_PRIVATE(result);
 
-    if (column < mysql_num_fields(private->result))
+    if (privat != NULL)
     {
-        MYSQL_FIELD *field = mysql_fetch_field_direct(private->result, column);
+        if (column < mysql_num_fields(privat->result))
+        {
+            MYSQL_FIELD *field = mysql_fetch_field_direct(privat->result, column);
 
-        g_value_set_string(value, field->name);
+            g_value_set_string(value, field->name);
+        }
     }
 }
 
@@ -341,9 +351,15 @@ gparts_mysql_result_get_field_value(GPartsDatabaseResult *result, gint row, gint
 static guint
 gparts_mysql_result_get_row_count(GPartsDatabaseResult *result)
 {
-    GPartsMySQLResultPrivate *private = GPARTS_MYSQL_RESULT_GET_PRIVATE(result);
+    GPartsMySQLResultPrivate *privat = GPARTS_MYSQL_RESULT_GET_PRIVATE(result);
+    guint row_count = 0;
 
-    return mysql_num_rows(private->result);
+    if (privat != NULL)
+    {
+        row_count = mysql_num_rows(privat->result);
+    }
+
+    return row_count;
 }
 
 /*! \brief Gets the GType of the GPartsMySQLResult class.
@@ -353,9 +369,9 @@ gparts_mysql_result_get_row_count(GPartsDatabaseResult *result)
 GType
 gparts_mysql_result_get_type(void)
 {
-    static GType type = 0;
+    static GType type = G_TYPE_INVALID;
 
-    if ( type == 0 )
+    if (type == G_TYPE_INVALID)
     {
         static const GTypeInfo tinfo = {
             sizeof(GPartsMySQLResultClass),
@@ -370,25 +386,14 @@ gparts_mysql_result_get_type(void)
             NULL
             };
 
-        static const GInterfaceInfo iinfo = {
-            (GInterfaceInitFunc) gparts_mysql_result_database_init,
-            NULL,
-            NULL
-            };
-
         type = g_type_register_static(
-            G_TYPE_OBJECT,
+            GPARTS_TYPE_DATABASE_RESULT,
             "gparts-mysql-result",
             &tinfo,
             0
             );
-
-        g_type_add_interface_static(
-            type,
-            GPARTS_TYPE_DATABASE_RESULT,
-            &iinfo
-            );
     }
+
     return type;
 }
 

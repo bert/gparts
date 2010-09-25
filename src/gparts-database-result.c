@@ -26,27 +26,32 @@
 #include "gparts-database-result.h"
 
 static void
-gparts_database_result_base_init(gpointer g_class)
+gparts_database_result_class_init(gpointer g_class, gpointer g_class_data)
 {
+    GPartsDatabaseResultClass *klasse = GPARTS_DATABASE_RESULT_CLASS(g_class);
 }
 
 guint
 gparts_database_result_get_column_count(GPartsDatabaseResult *result)
 {
     gint column_count = 0;
-    GPartsDatabaseResultInterface *iface = GPARTS_DATABASE_RESULT_GET_INTERFACE(result);
 
-    if (iface == NULL)
+    if (result != NULL)
     {
-        g_critical("Unable to get GPartsDatabaseResultInteface from parameter");
-    }
-    else if (iface->get_column_count == NULL)
-    {
-        g_critical("GPartsDatabaseResultInterface contains NULL get_column_count() function pointer");
-    }
-    else
-    {
-        column_count = iface->get_column_count(result);
+        GPartsDatabaseResultClass *klasse = GPARTS_DATABASE_RESULT_GET_CLASS(result);
+
+        if (klasse == NULL)
+        {
+            g_critical("Unable to get GPartsDatabaseResultClass from parameter");
+        }
+        else if (klasse->get_column_count == NULL)
+        {
+            g_critical("GPartsDatabaseResultClass contains NULL get_column_count() function pointer");
+        }
+        else
+        {
+            column_count = klasse->get_column_count(result);
+        }
     }
 
     return column_count;
@@ -56,19 +61,23 @@ gboolean
 gparts_database_result_get_column_index(GPartsDatabaseResult *result, const gchar *name, gint *index)
 {
     gboolean success = FALSE;
-    GPartsDatabaseResultInterface *iface = GPARTS_DATABASE_RESULT_GET_INTERFACE(result);
 
-    if (iface == NULL)
+    if (result != NULL)
     {
-        g_critical("Unable to get GPartsDatabaseResultInteface from parameter");
-    }
-    else if (iface->get_column_index == NULL)
-    {
-        g_critical("GPartsDatabaseResultInterface contains NULL get_column_index() function pointer");
-    }
-    else
-    {
-        success = iface->get_column_index(result, name, index);
+        GPartsDatabaseResultClass *klasse = GPARTS_DATABASE_RESULT_GET_CLASS(result);
+
+        if (klasse == NULL)
+        {
+            g_critical("Unable to get GPartsDatabaseResultClass from parameter");
+        }
+        else if (klasse->get_column_index == NULL)
+        {
+            g_critical("GPartsDatabaseResultClass contains NULL get_column_index() function pointer");
+        }
+        else
+        {
+            success = klasse->get_column_index(result, name, index);
+        }
     }
 
     return success;
@@ -77,20 +86,24 @@ gparts_database_result_get_column_index(GPartsDatabaseResult *result, const gcha
 GType
 gparts_database_result_get_column_type(GPartsDatabaseResult *result, gint column)
 {
-    GPartsDatabaseResultInterface *iface = GPARTS_DATABASE_RESULT_GET_INTERFACE(result);
     GType type = G_TYPE_INVALID;
 
-    if (iface == NULL)
+    if (result != NULL)
     {
-        g_critical("Unable to get GPartsDatabaseResultInteface from parameter");
-    }
-    else if (iface->get_column_count == NULL)
-    {
-        g_critical("GPartsDatabaseResultInterface contains NULL get_column_type() function pointer");
-    }
-    else
-    {
-        type = iface->get_column_type(result, column);
+        GPartsDatabaseResultClass *klasse = GPARTS_DATABASE_RESULT_GET_CLASS(result);
+
+        if (klasse == NULL)
+        {
+            g_critical("Unable to get GPartsDatabaseResultClass from parameter");
+        }
+        else if (klasse->get_column_count == NULL)
+        {
+            g_critical("GPartsDatabaseResultClass contains NULL get_column_type() function pointer");
+        }
+        else
+        {
+            type = klasse->get_column_type(result, column);
+        }
     }
 
     return type;
@@ -99,58 +112,68 @@ gparts_database_result_get_column_type(GPartsDatabaseResult *result, gint column
 void
 gparts_database_result_get_column_value(GPartsDatabaseResult *result, gint column, GValue *value)
 {
-    GPartsDatabaseResultInterface *iface = GPARTS_DATABASE_RESULT_GET_INTERFACE(result);
+    if (result != NULL)
+    {
+        GPartsDatabaseResultClass *klasse = GPARTS_DATABASE_RESULT_GET_CLASS(result);
 
-    if (iface == NULL)
-    {
-        g_critical("Unable to get GPartsDatabaseResultInteface from parameter");
-    }
-    else if (iface->get_column_value == NULL)
-    {
-        g_critical("GPartsDatabaseResultInterface contains NULL get_column_value() function pointer");
-    }
-    else
-    {
-        iface->get_column_value(result, column, value);
+        if (klasse == NULL)
+        {
+            g_critical("Unable to get GPartsDatabaseResultClass from parameter");
+        }
+        else if (klasse->get_column_value == NULL)
+        {
+            g_critical("GPartsDatabaseResultClass contains NULL get_column_value() function pointer");
+        }
+        else
+        {
+            klasse->get_column_value(result, column, value);
+        }
     }
 }
 
 void
 gparts_database_result_get_field_value(GPartsDatabaseResult *result, gint row, gint column, GValue *value)
 {
-    GPartsDatabaseResultInterface *iface = GPARTS_DATABASE_RESULT_GET_INTERFACE(result);
+    if (result != NULL)
+    {
+        GPartsDatabaseResultClass *klasse = GPARTS_DATABASE_RESULT_GET_CLASS(result);
 
-    if (iface == NULL)
-    {
-        g_critical("Unable to get GPartsDatabaseResultInteface from parameter");
-    }
-    else if (iface->get_field_value == NULL)
-    {
-        g_critical("GPartsDatabaseResultInterface contains NULL get_field_value() function pointer");
-    }
-    else
-    {
-        iface->get_field_value(result, row, column, value);
+        if (klasse == NULL)
+        {
+            g_critical("Unable to get GPartsDatabaseResultClass from parameter");
+        }
+        else if (klasse->get_field_value == NULL)
+        {
+            g_critical("GPartsDatabaseResultClass contains NULL get_field_value() function pointer");
+        }
+        else
+        {
+            klasse->get_field_value(result, row, column, value);
+        }
     }
 }
 
 guint
 gparts_database_result_get_row_count(GPartsDatabaseResult *result)
 {
-    GPartsDatabaseResultInterface *iface = GPARTS_DATABASE_RESULT_GET_INTERFACE(result);
     guint row_count = 0;
 
-    if (iface == NULL)
+    if (result != NULL)
     {
-        g_critical("Unable to get GPartsDatabaseResultInteface from parameter");
-    }
-    else if (iface->get_row_count == NULL)
-    {
-        g_critical("GPartsDatabaseResultInterface contains NULL get_row_count() function pointer");
-    }
-    else
-    {
-        row_count = iface->get_row_count(result);
+        GPartsDatabaseResultClass *klasse = GPARTS_DATABASE_RESULT_GET_CLASS(result);
+
+        if (klasse == NULL)
+        {
+            g_critical("Unable to get GPartsDatabaseResultClass from parameter");
+        }
+        else if (klasse->get_row_count == NULL)
+        {
+            g_critical("GPartsDatabaseResultClass contains NULL get_row_count() function pointer");
+        }
+        else
+        {
+            row_count = klasse->get_row_count(result);
+        }
     }
 
     return row_count;
@@ -159,28 +182,28 @@ gparts_database_result_get_row_count(GPartsDatabaseResult *result)
 GType
 gparts_database_result_get_type(void)
 {
-    static GType type = 0;
+    static GType type = G_TYPE_INVALID;
 
-    if (type == 0)
+    if (type == G_TYPE_INVALID)
     {
-        static const GTypeInfo info = {
-            sizeof(GPartsDatabaseResultInterface),
-            gparts_database_result_base_init,
-            NULL,
-            NULL,
-            NULL,
-            NULL,
-            0,
-            0,
-            NULL,
-            NULL
+        static const GTypeInfo tinfo = {
+            sizeof(GPartsDatabaseResultClass),    /* class_size */
+            NULL,                                 /* base_init */
+            NULL,                                 /* base_finalize */
+            gparts_database_result_class_init,    /* class_init */
+            NULL,                                 /* class_finalize */
+            NULL,                                 /* class_data */
+            sizeof(GPartsDatabaseResult),         /* instance_size */
+            0,                                    /* n_preallocs */
+            NULL,                                 /* instance_init */
+            NULL                                  /* value_table */
             };
 
         type = g_type_register_static(
-            G_TYPE_INTERFACE,
-            "gparts-database-result",
-            &info,
-            0
+            G_TYPE_OBJECT,
+            "GPartsDatabaseResult",
+            &tinfo,
+            G_TYPE_FLAG_ABSTRACT
             );
     }
 

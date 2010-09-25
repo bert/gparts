@@ -21,6 +21,11 @@
 /*! \file gparts-result-model.c
  */
 
+#include <glib-object.h>
+
+#include "gparts-database-result.h"
+#include "gparts-database.h"
+
 #include "gparts.h"
 
 #define GPARTS_RESULT_MODEL_GET_PRIVATE(object) G_TYPE_INSTANCE_GET_PRIVATE(object,GPARTS_TYPE_RESULT_MODEL,GPartsResultModelPrivate)
@@ -93,9 +98,6 @@ static void
 gparts_result_model_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
 
 static void
-gparts_result_model_set_result(GObject *object, GObject *value);
-
-static void
 gparts_result_model_tree_model_init(GtkTreeModelIface *iface);
 
 static void
@@ -120,7 +122,7 @@ gparts_result_model_class_init(gpointer g_class, gpointer g_class_data)
             "result",
             "",
             "",
-            G_TYPE_OBJECT,
+            GPARTS_TYPE_DATABASE_RESULT,
             G_PARAM_READWRITE
             )
         );
@@ -129,9 +131,7 @@ gparts_result_model_class_init(gpointer g_class, gpointer g_class_data)
 static void
 gparts_result_model_dispose(GObject *object)
 {
-    g_debug("gparts_result_model_dispose()");
-
-    gparts_result_model_set_result(object, NULL);
+    gparts_result_model_set_result(GPARTS_RESULT_MODEL(object), NULL);
 
     misc_object_chain_dispose(object);
 }
@@ -139,11 +139,7 @@ gparts_result_model_dispose(GObject *object)
 static void
 gparts_result_model_finalize(GObject *object)
 {
-    g_debug("gparts_result_model_finalize()");
-
     misc_object_chain_finalize(object);
-    //GObjectClass *parent_class = g_type_class_peek_parent(GPARTS_RESULT_MODEL_GET_CLASS(object));
-    //G_OBJECT_CLASS(parent_class)->finalize(object);
 }
 
 gboolean
@@ -163,23 +159,29 @@ gparts_result_model_get_column_index(GPartsResultModel *result_model, const gcha
 static GType
 gparts_result_model_get_column_type(GtkTreeModel *tree_model, gint index)
 {
-    GPartsResultModelPrivate *private = GPARTS_RESULT_MODEL_GET_PRIVATE(tree_model);
+    GPartsResultModelPrivate *privat = GPARTS_RESULT_MODEL_GET_PRIVATE(tree_model);
+    GType type = G_TYPE_INVALID;
 
-    return gparts_database_result_get_column_type(private->result, index);
+    if (privat != NULL)
+    {
+        type = gparts_database_result_get_column_type(privat->result, index);
+    }
+
+    return type;
 }
 
 gchar*
 gparts_result_model_get_field(GPartsResultModel *model, GtkTreeIter *iter, const gchar *name)
 {
-    GPartsResultModelPrivate *private = GPARTS_RESULT_MODEL_GET_PRIVATE(model);
+    GPartsResultModelPrivate *privat = GPARTS_RESULT_MODEL_GET_PRIVATE(model);
     gchar *result = NULL;
 
-    if (private->result != NULL)
+    if ((privat != NULL) && (privat->result != NULL))
     {
         gint index;
         gboolean success;
 
-        success = gparts_database_result_get_column_index(private->result, name, &index);
+        success = gparts_database_result_get_column_index(privat->result, name, &index);
 
         if (success)
         {
@@ -188,7 +190,7 @@ gparts_result_model_get_field(GPartsResultModel *model, GtkTreeIter *iter, const
             GValue value = {0};
 
             gparts_database_result_get_field_value(
-                private->result,
+                privat->result,
                 GPOINTER_TO_UINT(iter->user_data),
                 index,
                 &value
@@ -420,9 +422,12 @@ gparts_result_model_get_value(GtkTreeModel *tree_model, GtkTreeIter *iter, gint 
 static void
 gparts_result_model_instance_init(GTypeInstance* instance, gpointer g_class)
 {
-    GPartsResultModelPrivate *private = GPARTS_RESULT_MODEL_GET_PRIVATE(instance);
+    GPartsResultModelPrivate *privat = GPARTS_RESULT_MODEL_GET_PRIVATE(instance);
 
-    private->stamp = g_random_int();
+    if (privat != NULL)
+    {
+        privat->stamp = g_random_int();
+    }
 }
 
 /*! \brief Gets an iterator to a list's first child.
@@ -440,17 +445,22 @@ gparts_result_model_instance_init(GTypeInstance* instance, gpointer g_class)
 /*static*/ gboolean
 gparts_result_model_iter_children(GtkTreeModel *tree_model, GtkTreeIter *iter, GtkTreeIter *parent)
 {
+    gboolean success = FALSE;
+
     if (parent == NULL)
     {
-        GPartsResultModelPrivate *private = GPARTS_RESULT_MODEL_GET_PRIVATE(tree_model);
+        GPartsResultModelPrivate *privat = GPARTS_RESULT_MODEL_GET_PRIVATE(tree_model);
 
-        iter->stamp = private->stamp;
-        iter->user_data = GINT_TO_POINTER(0);
+        if (privat != NULL)
+        {
+            iter->stamp = privat->stamp;
+            iter->user_data = GINT_TO_POINTER(0);
 
-        return TRUE;
+            success = TRUE;
+        }
     }
 
-    return FALSE;
+    return success;
 }
 
 /*! \brief Determines if a node has children.
@@ -518,9 +528,12 @@ gparts_result_model_iter_n_children(GtkTreeModel *tree_model, GtkTreeIter *iter)
 
     if (iter == NULL)
     {
-        GPartsResultModelPrivate *private = GPARTS_RESULT_MODEL_GET_PRIVATE(tree_model);
+        GPartsResultModelPrivate *privat = GPARTS_RESULT_MODEL_GET_PRIVATE(tree_model);
 
-        rows = gparts_database_result_get_row_count(private->result);
+        if (privat != NULL)
+        {
+            rows = gparts_database_result_get_row_count(privat->result);
+        }
     }
 
     return rows;
@@ -542,23 +555,29 @@ gparts_result_model_iter_n_children(GtkTreeModel *tree_model, GtkTreeIter *iter)
 static gboolean
 gparts_result_model_iter_nth_child(GtkTreeModel *tree_model, GtkTreeIter *iter, GtkTreeIter *parent, gint n)
 {
+    gboolean success = FALSE;
+
     g_assert(iter != NULL);
 
     if (parent == NULL)
     {
-        GPartsResultModelPrivate *private = GPARTS_RESULT_MODEL_GET_PRIVATE(tree_model);
-        guint rows = gparts_database_result_get_row_count(private->result);
+        GPartsResultModelPrivate *privat = GPARTS_RESULT_MODEL_GET_PRIVATE(tree_model);
 
-        if (n < rows)
+        if (privat != NULL)
         {
-            iter->stamp = private->stamp;
-            iter->user_data = GINT_TO_POINTER(n);
+            guint rows = gparts_database_result_get_row_count(privat->result);
 
-            return TRUE;
+            if (n < rows)
+            {
+                iter->stamp = privat->stamp;
+                iter->user_data = GINT_TO_POINTER(n);
+
+                success = TRUE;
+            }
         }
     }
 
-    return FALSE;
+    return success;
 }
 
 /*! \brief Obtains the parent node of a child node.
@@ -582,9 +601,13 @@ gparts_result_model_iter_parent(GtkTreeModel *tree_model, GtkTreeIter *iter, Gtk
  *  \return A new GPartsResultModel.
  */
 GPartsResultModel *
-gparts_result_model_new(void)
+gparts_result_model_new(GPartsDatabaseResult *result)
 {
-    return g_object_new(GPARTS_TYPE_RESULT_MODEL, NULL);
+    return g_object_new(
+        GPARTS_TYPE_RESULT_MODEL,
+        "result", result,
+        NULL
+        );
 }
 
 /*! \brief Adjusts the GtkTreeView's columns to match the database result.
@@ -670,7 +693,7 @@ gparts_result_model_set_columns(GPartsDatabaseResult *result, GtkTreeView *tree_
 
     column = gtk_tree_view_get_column(tree_view, columns);
 
-    while(column != NULL)
+    while (column != NULL)
     {
         gtk_tree_view_remove_column(tree_view, column);
 
@@ -690,7 +713,7 @@ gparts_result_model_set_property(GObject *object, guint property_id, const GValu
     switch ( property_id )
     {
         case GPARTS_RESULT_MODEL_PROPID_RESULT:
-            gparts_result_model_set_result(object, g_value_get_object(value));
+            gparts_result_model_set_result(GPARTS_RESULT_MODEL(object), GPARTS_DATABASE_RESULT(g_value_get_object(value)));
             break;
 
         default:
@@ -704,21 +727,26 @@ gparts_result_model_set_property(GObject *object, guint property_id, const GValu
  *
  *
  */
-static void
-gparts_result_model_set_result(GObject *object, GObject *value)
+void
+gparts_result_model_set_result(GPartsResultModel *model, GPartsDatabaseResult *result)
 {
-    GPartsResultModelPrivate *private = GPARTS_RESULT_MODEL_GET_PRIVATE(object);
+    GPartsResultModelPrivate *privat = GPARTS_RESULT_MODEL_GET_PRIVATE(model);
 
-    if (private->result != NULL)
+    if (privat != NULL)
     {
-        g_object_unref(private->result);
-    }
+        if (privat->result != NULL)
+        {
+            g_object_unref(privat->result);
+        }
 
-    private->result = GPARTS_DATABASE_RESULT(value);
+        privat->result = result;
 
-    if (private->result != NULL)
-    {
-        g_object_ref(private->result);
+        if (privat->result != NULL)
+        {
+            g_object_ref(privat->result);
+        }
+
+        g_object_notify(G_OBJECT(model), "result");
     }
 }
 

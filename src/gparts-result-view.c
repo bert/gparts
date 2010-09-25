@@ -23,6 +23,11 @@
 
 #include <string.h>
 
+#include <glib-object.h>
+
+#include "gparts-database-result.h"
+#include "gparts-database.h"
+
 #include "gparts.h"
 
 #define GPARTS_RESULT_VIEW_GET_PRIVATE(object) G_TYPE_INSTANCE_GET_PRIVATE(object,GPARTS_TYPE_RESULT_VIEW,GPartsResultViewPrivate)

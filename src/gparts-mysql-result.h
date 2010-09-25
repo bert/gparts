@@ -31,16 +31,19 @@
 typedef struct _GPartsMySQLResult GPartsMySQLResult;
 typedef struct _GPartsMySQLResultClass GPartsMySQLResultClass;
 
+/*! \extends GPartsDatabaseResult */
 struct _GPartsMySQLResult
 {
-    GObject parent;
+    GPartsDatabaseResult parent;
 };
 
+/*! \private */
 struct _GPartsMySQLResultClass
 {
-    GObjectClass parent;
+    GPartsDatabaseResultClass parent;
 };
 
+/*! \private */
 GType
 gparts_mysql_result_get_type(void);
 
