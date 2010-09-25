@@ -26,10 +26,13 @@
 #include <mysql.h>
 
 #include "gparts-database-result.h"
-#include "gparts-mysql-result.h"
 #include "gparts-database.h"
-#include "gparts-mysql-database.h"
+#include "gparts-database-factory.h"
 #include "gparts-database-type.h"
+
+#include "gparts-mysql-result.h"
+#include "gparts-mysql-database.h"
+#include "gparts-mysql-factory.h"
 
 const gchar*
 g_module_check_init(GModule *module)
@@ -39,6 +42,7 @@ g_module_check_init(GModule *module)
     g_debug("Hello from indise");
 
     GPARTS_TYPE_MYSQL_DATABASE;
+    GPARTS_TYPE_MYSQL_FACTORY;
     GPARTS_TYPE_MYSQL_RESULT;
 
     return NULL;

@@ -261,6 +261,7 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         GPARTS_TYPE_LOGIN_CTRL,
         "connect-action",    GTK_ACTION(gtk_builder_get_object(private->builder, "database-connect")),
         "disconnect-action", GTK_ACTION(gtk_builder_get_object(private->builder, "database-disconnect")),
+        "drop-action",       GTK_ACTION(gtk_builder_get_object(private->builder, "database-drop")),
         "refresh-action",    GTK_ACTION(gtk_builder_get_object(private->builder, "view-refresh")),
         NULL
         );

@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gparts-login-ctrl.c 
+/*! \file gparts-login-ctrl.c
  */
 
 #include <string.h>
@@ -39,6 +39,7 @@ enum
 
     GPARTS_LOGIN_CTRL_PROPID_CONNECT_ACTION,
     GPARTS_LOGIN_CTRL_PROPID_DISCONNECT_ACTION,
+    GPARTS_LOGIN_CTRL_PROPID_DROP_ACTION,
     GPARTS_LOGIN_CTRL_PROPID_REFRESH_ACTION
 };
 
@@ -48,6 +49,7 @@ struct _GPartsLoginCtrlPrivate
 {
     GtkAction      *connect_action;
     GtkAction      *disconnect_action;
+    GtkAction      *drop_action;
     GtkAction      *refresh_action;
 
     GPartsDatabase     *database;
@@ -102,10 +104,19 @@ static void
 gparts_login_ctrl_show_cb(GtkWidget *widget, GPartsLoginCtrl *login_ctrl);
 
 static void
+gparts_login_ctrl_connected_cb(GPartsDatabase *database, GPartsLoginCtrl *login_ctrl);
+
+static void
+gparts_login_ctrl_disconnected_cb(GPartsDatabase *database, GPartsLoginCtrl *login_ctrl);
+
+static void
 gparts_login_ctrl_connect_action_cb(GtkAction *action, GPartsLoginCtrl *login_ctrl);
 
 static void
 gparts_login_ctrl_disconnect_action_cb(GtkAction *action, GPartsLoginCtrl *login_ctrl);
+
+static void
+gparts_login_ctrl_drop_action_cb(GtkAction *action, GPartsLoginCtrl *login_ctrl);
 
 static void
 gparts_login_ctrl_refresh_action_cb(GtkAction *action, GPartsLoginCtrl *login_ctrl);
@@ -304,6 +315,18 @@ gparts_login_ctrl_class_init(gpointer g_class, gpointer g_class_data)
 
     g_object_class_install_property(
         object_class,
+        GPARTS_LOGIN_CTRL_PROPID_DROP_ACTION,
+        g_param_spec_object(
+            "drop-action",
+            "",
+            "",
+            GTK_TYPE_ACTION,
+            G_PARAM_READWRITE
+            )
+        );
+
+    g_object_class_install_property(
+        object_class,
         GPARTS_LOGIN_CTRL_PROPID_REFRESH_ACTION,
         g_param_spec_object(
             "refresh-action",
@@ -459,10 +482,27 @@ gparts_login_ctrl_connect_action_cb(GtkAction *action, GPartsLoginCtrl *login_ct
     gtk_widget_hide(GTK_WIDGET(privat->login_dialog));
 }
 
+
 static void
-gparts_login_ctrl_disconnect_action_cb(GtkAction *action, GPartsLoginCtrl *login_ctrl)
+gparts_login_ctrl_disconnect_action_cb(GtkAction *action, GPartsLoginCtrl *controller)
 {
-    gparts_login_ctrl_set_database(login_ctrl, NULL);
+    gparts_login_ctrl_disconnect_database(controller);
+}
+
+void
+gparts_login_ctrl_disconnect_database(GPartsLoginCtrl *controller)
+{
+    gparts_login_ctrl_set_database(controller, NULL);
+}
+
+static void
+gparts_login_ctrl_connected_cb(GPartsDatabase *database, GPartsLoginCtrl *login_ctrl)
+{
+}
+
+static void
+gparts_login_ctrl_disconnected_cb(GPartsDatabase *database, GPartsLoginCtrl *login_ctrl)
+{
 }
 
 static void
@@ -471,6 +511,43 @@ gparts_login_ctrl_dispose(GObject *object)
     gparts_login_ctrl_set_database(GPARTS_LOGIN_CTRL(object), NULL);
 
     misc_object_chain_dispose(object);
+}
+
+static void
+gparts_login_ctrl_drop_action_cb(GtkAction *action, GPartsLoginCtrl *controller)
+{
+    gparts_login_ctrl_drop_database(controller);
+}
+
+void
+gparts_login_ctrl_drop_database(GPartsLoginCtrl *controller)
+{
+    GPartsLoginCtrlPrivate *privat = GPARTS_LOGIN_CTRL_GET_PRIVATE(controller);
+
+    if ((privat != NULL) && (privat->database != NULL))
+    {
+        GError *error = NULL;
+
+        gparts_database_drop(privat->database, &error);
+
+        if (error != NULL)
+        {
+            GtkWidget *error_dialog = gtk_message_dialog_new(
+                GTK_WINDOW(privat->login_dialog),
+                GTK_DIALOG_MODAL,
+                GTK_MESSAGE_ERROR,
+                GTK_BUTTONS_CLOSE,
+                "%s",
+                error->message
+                );
+
+            gtk_dialog_run(GTK_DIALOG(error_dialog));
+
+            gtk_widget_destroy(error_dialog);
+
+            g_clear_error(&error);
+        }
+    }
 }
 
 /*! \brief Deallocate all resources.
@@ -692,6 +769,10 @@ gparts_login_ctrl_set_property(GObject *object, guint property_id, const GValue 
             gparts_login_ctrl_set_disconnect_action(login_ctrl, g_value_get_object(value));
             break;
 
+        case GPARTS_LOGIN_CTRL_PROPID_DROP_ACTION:
+            gparts_login_ctrl_set_drop_action(login_ctrl, g_value_get_object(value));
+            break;
+
         case GPARTS_LOGIN_CTRL_PROPID_REFRESH_ACTION:
             gparts_login_ctrl_set_refresh_action(login_ctrl, g_value_get_object(value));
             break;
@@ -710,6 +791,18 @@ gparts_login_ctrl_set_database(GPartsLoginCtrl *ctrl, GPartsDatabase *database)
     {
         if (privat->database != NULL)
         {
+            g_signal_handlers_disconnect_by_func(
+                privat->database,
+                G_CALLBACK(gparts_login_ctrl_connected_cb),
+                ctrl
+                );
+
+            g_signal_handlers_disconnect_by_func(
+                privat->database,
+                G_CALLBACK(gparts_login_ctrl_disconnected_cb),
+                ctrl
+                );
+
             g_object_unref(privat->database);
         }
 
@@ -718,11 +811,37 @@ gparts_login_ctrl_set_database(GPartsLoginCtrl *ctrl, GPartsDatabase *database)
         if (privat->database != NULL)
         {
             g_object_ref(privat->database);
+
+            g_signal_connect(
+                privat->database,
+                "database-connected",
+                G_CALLBACK(gparts_login_ctrl_connected_cb),
+                ctrl
+                );
+
+            g_signal_connect(
+                privat->database,
+                "database-disconnected",
+                G_CALLBACK(gparts_login_ctrl_disconnected_cb),
+                ctrl
+                );
         }
 
         if (privat->disconnect_action != NULL)
         {
             gtk_action_set_sensitive(privat->disconnect_action, (privat->database != NULL));
+        }
+
+        if (privat->drop_action != NULL)
+        {
+            if (privat->database != NULL)
+            {
+                gtk_action_set_sensitive(privat->drop_action, gparts_database_droppable(privat->database));
+            }
+            else
+            {
+                gtk_action_set_sensitive(privat->drop_action, FALSE);
+            }
         }
 
         if (privat->refresh_action != NULL)
@@ -731,6 +850,54 @@ gparts_login_ctrl_set_database(GPartsLoginCtrl *ctrl, GPartsDatabase *database)
         }
 
         g_object_notify(G_OBJECT(ctrl), "database");
+    }
+}
+
+void
+gparts_login_ctrl_set_drop_action(GPartsLoginCtrl *login_ctrl, GtkAction *action)
+{
+    GPartsLoginCtrlPrivate *privat = GPARTS_LOGIN_CTRL_GET_PRIVATE(login_ctrl);
+
+    if (privat != NULL)
+    {
+        if (privat->drop_action != action)
+        {
+            if (privat->drop_action != NULL)
+            {
+                g_signal_handlers_disconnect_by_func(
+                    privat->drop_action,
+                    G_CALLBACK(gparts_login_ctrl_drop_action_cb),
+                    login_ctrl
+                    );
+
+                g_object_unref(privat->drop_action);
+            }
+
+            privat->drop_action = action;
+
+            if (privat->drop_action != NULL)
+            {
+                g_object_ref(privat->drop_action);
+
+                g_signal_connect(
+                    privat->drop_action,
+                    "activate",
+                    G_CALLBACK(gparts_login_ctrl_drop_action_cb),
+                    login_ctrl
+                    );
+
+                if (privat->database != NULL)
+                {
+                    gtk_action_set_sensitive(privat->drop_action, gparts_database_droppable(privat->database));
+                }
+                else
+                {
+                    gtk_action_set_sensitive(privat->drop_action, FALSE);
+                }
+            }
+
+            g_object_notify(G_OBJECT(login_ctrl), "drop-action");
+        }
     }
 }
 

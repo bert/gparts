@@ -27,6 +27,14 @@
 #include "gparts-database.h"
 
 static void
+gparts_database_drop_base(GPartsDatabase *database, GError **error);
+
+static gboolean
+gparts_database_droppable_base(const GPartsDatabase *database);
+
+
+
+static void
 gparts_database_base_init(gpointer g_class)
 {
 }
@@ -34,6 +42,10 @@ gparts_database_base_init(gpointer g_class)
 static void
 gparts_database_class_init(gpointer g_class, gpointer g_class_data)
 {
+    GPartsDatabaseClass *klasse = GPARTS_DATABASE_CLASS(g_class);
+
+    klasse->drop      = gparts_database_drop_base;
+    klasse->droppable = gparts_database_droppable_base;
 }
 
 void
@@ -78,6 +90,72 @@ gparts_database_disconnect(GPartsDatabase *database, GError **error)
             klasse->disconnect(database, error);
         }
     }
+}
+
+void
+gparts_database_drop(GPartsDatabase *database, GError **error)
+{
+    if (database != NULL)
+    {
+        GPartsDatabaseClass *klasse = GPARTS_DATABASE_GET_CLASS(database);
+
+        if (klasse == NULL)
+        {
+            g_critical("Unable to get GPartsDatabaseClass from parameter");
+        }
+        else if (klasse->drop == NULL)
+        {
+            g_critical("GPartsDatabaseClass contains NULL drop() function pointer");
+        }
+        else
+        {
+            klasse->drop(database, error);
+        }
+    }
+}
+
+static void
+gparts_database_drop_base(GPartsDatabase *database, GError **error)
+{
+    g_set_error(
+        error,
+        g_quark_from_static_string( "gparts-database-error" ),
+        0,
+        "%s",
+        "Drop database functionality not implemented"
+        );
+}
+
+gboolean
+gparts_database_droppable(const GPartsDatabase *database)
+{
+    gboolean droppable = FALSE;
+
+    if (database != NULL)
+    {
+        GPartsDatabaseClass *klasse = GPARTS_DATABASE_GET_CLASS(database);
+
+        if (klasse == NULL)
+        {
+            g_critical("Unable to get GPartsDatabaseClass from parameter");
+        }
+        else if (klasse->droppable == NULL)
+        {
+            g_critical("GPartsDatabaseClass contains NULL droppable() function pointer");
+        }
+        else
+        {
+            droppable = klasse->droppable(database);
+        }
+    }
+
+    return droppable;
+}
+
+static gboolean
+gparts_database_droppable_base(const GPartsDatabase *database)
+{
+    return FALSE;
 }
 
 GType

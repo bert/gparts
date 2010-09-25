@@ -36,43 +36,68 @@ struct _GPartsLoginCtrl
     GObject parent;
 };
 
+/*! \private */
 struct _GPartsLoginCtrlClass
 {
     GObjectClass parent;
 };
 
+/*! \private */
 GType
 gparts_login_ctrl_get_type(void);
 
+/*! \brief Disconnect the database, just as if the user clicked the menu item.
+ *
+ *  \param [in] controller The controller.
+ */
+void
+gparts_login_ctrl_disconnect_database(GPartsLoginCtrl *controller);
+
+/*! \brief Drop the database, just as if the user clicked the menu item.
+ *
+ *  \param [in] controller The controller.
+ */
+void
+gparts_login_ctrl_drop_database(GPartsLoginCtrl *controller);
+
 /*! \brief Gets the database currently associated with this controller.
  *
- *  \param [in] login_ctrl The login controller.
+ *  \param [in] controller The controller.
  *  \return The database associated with this ctrl.  If no database, then NULL.
  */
 GPartsDatabase*
-gparts_login_ctrl_get_database(GPartsLoginCtrl *login_ctrl);
+gparts_login_ctrl_get_database(GPartsLoginCtrl *controller);
 
 /*! \brief Sets the action to connect to a database.
  *
- *  \param [in] login_ctrl The login controller.
+ *  \param [in] controller The controller.
  *  \param [in] action The action that triggers the connect.
  */
 void
-gparts_login_ctrl_set_connect_action(GPartsLoginCtrl *login_ctrl, GtkAction *action);
+gparts_login_ctrl_set_connect_action(GPartsLoginCtrl *controller, GtkAction *action);
 
 /*! \brief Sets the action to disconnect from the database.
  *
- *  \param [in] login_ctrl The login controller.
+ *  \param [in] controller The controller.
  *  \param [in] action The action that triggers the disconnect.
  */
 void
-gparts_login_ctrl_set_disconnect_action(GPartsLoginCtrl *login_ctrl, GtkAction *action);
+gparts_login_ctrl_set_disconnect_action(GPartsLoginCtrl *controller, GtkAction *action);
+
+/*! \brief Sets the action to drop the database.
+ *
+ *  \param [in] controller The controller.
+ *  \param [in] action The action that triggers the drop.
+ */
+void
+gparts_login_ctrl_set_drop_action(GPartsLoginCtrl *controller, GtkAction *action);
+
 
 /*! \brief Sets the action to refresh all database views.
  *
- *  \param [in] login_ctrl The login controller.
+ *  \param [in] controller The controller.
  *  \param [in] action The action that triggers the refresh.
  */
 void
-gparts_login_ctrl_set_refresh_action(GPartsLoginCtrl *login_ctrl, GtkAction *action);
+gparts_login_ctrl_set_refresh_action(GPartsLoginCtrl *controller, GtkAction *action);
 

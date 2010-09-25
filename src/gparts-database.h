@@ -53,6 +53,9 @@ struct _GPartsDatabaseClass
     void (*disconnect)(GPartsDatabase *database, GError **error);
     GPartsDatabaseResult* (*query)(GPartsDatabase *database, const gchar *query, GError **error);
     const gchar* (*get_name)(GPartsDatabase *database);
+
+    gboolean (*droppable)(const GPartsDatabase *database);
+    void (*drop)(GPartsDatabase *database, GError **error);
 };
 
 struct _connect_data
@@ -84,6 +87,36 @@ gparts_database_connect(GPartsDatabase *database, connect_data* data, GError **e
  */
 void
 gparts_database_disconnect(GPartsDatabase *database, GError **error);
+
+/*! \brief Drop the database
+ *
+ *  Deletes everything and disconnects.
+ *
+ *  Base class functionality returns an error.
+ *
+ *  \param [in] database The database to drop.
+ *  \param [in] error The error, if any, using the GError protocol.
+ */
+void
+gparts_database_drop(GPartsDatabase *database, GError **error);
+
+/*! \brief Determine if the database can be dropped
+ *
+ *  The intended use of this function is for disabling UI elements
+ *
+ *  Implelemtations of this function should typically check the following items:
+ *  - User permissions
+ *  - Database provides the capability
+ *  - Database is connected
+ *
+ *  Base class functionality returns FALSE.
+ *
+ *  \param [in] database The database to test for drop capability
+ *  \retval TRUE the database can be dropped.
+ *  \retval FALSE the database cannot be dropped, is disconnected, or an error
+ */
+gboolean
+gparts_database_droppable(const GPartsDatabase *database);
 
 /*! \brief Query the database
  *

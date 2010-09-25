@@ -33,6 +33,7 @@ gparts_SOURCES = \
 	gparts-customize-ctrl.c \
 	gparts-customize-model.c \
 	gparts-database.c \
+	gparts-database-factory.c \
 	gparts-database-result.c \
 	gparts-database-type.c \
 	gparts-login-ctrl.c \
@@ -82,6 +83,7 @@ EXTRA_LTLIBRARIES = \
 
 libgparts_mysql_la_SOURCES = \
 	gparts-mysql-database.c \
+	gparts-mysql-factory.c \
 	gparts-mysql-module.c \
 	gparts-mysql-result.c
 libgparts_mysql_la_CFLAGS = $(AM_CFLAGS) $(GLIB_CFLAGS) $(MYSQL_CFLAGS)
