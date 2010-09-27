@@ -29,6 +29,8 @@ xml_DATA = \
 gparts_SOURCES = \
 	gparts-category-model.c \
 	gparts-category-controller.c \
+	gparts-connect-controller.c \
+	gparts-connect-data.c \
 	gparts-controller.c \
 	gparts-customize-ctrl.c \
 	gparts-customize-model.c \

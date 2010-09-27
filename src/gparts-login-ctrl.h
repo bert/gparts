@@ -46,6 +46,13 @@ struct _GPartsLoginCtrlClass
 GType
 gparts_login_ctrl_get_type(void);
 
+/*! \brief Connects to a database, just as if the user clicked the menu item.
+ *
+ *  \param [in] controller The controller.
+ */
+void
+gparts_login_ctrl_connect_database(GPartsLoginCtrl *controller);
+
 /*! \brief Disconnect the database, just as if the user clicked the menu item.
  *
  *  \param [in] controller The controller.

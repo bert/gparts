@@ -27,7 +27,6 @@
                     <object class="GtkAction" id="database-drop">
                         <property name="name">database-drop</property>
                         <property name="label">Drop</property>
-                        <property name="sensitive">FALSE</property>
                     </object>
                 </child>
                 <child>
