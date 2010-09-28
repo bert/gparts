@@ -25,6 +25,8 @@
 #include <gmodule.h>
 #include <mysql.h>
 
+#include "gparts-connect-data.h"
+
 #include "gparts-database-result.h"
 #include "gparts-database.h"
 #include "gparts-mysql-result.h"
@@ -45,7 +47,7 @@ static void
 gparts_mysql_database_class_init(gpointer g_class, gpointer g_class_data);
 
 static void
-gparts_mysql_database_connect(GPartsDatabase *database, connect_data *data, GError **error);
+gparts_mysql_database_connect(GPartsDatabase *database, GPartsConnectData *data, GError **error);
 
 static void
 gparts_mysql_database_disconnect(GPartsDatabase *database, GError **error);
@@ -130,7 +132,7 @@ gparts_mysql_database_class_init(gpointer g_class, gpointer g_class_data)
  *  \param [in] error
  */
 static void
-gparts_mysql_database_connect(GPartsDatabase *database, connect_data *data, GError **error)
+gparts_mysql_database_connect(GPartsDatabase *database, GPartsConnectData *data, GError **error)
 {
     GError *local_error = NULL;
     GPartsMySQLDatabasePrivate* private;
@@ -149,10 +151,10 @@ gparts_mysql_database_connect(GPartsDatabase *database, connect_data *data, GErr
 
         result = mysql_real_connect(
             private->mysql,
-            data->host_name,
-            data->user_name,
+            data->hostname,
+            data->username,
             data->password,
-            data->database_name,
+            data->database,
             0,
             NULL,
             CLIENT_MULTI_STATEMENTS | CLIENT_MULTI_RESULTS

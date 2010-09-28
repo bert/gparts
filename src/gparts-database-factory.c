@@ -23,6 +23,8 @@
 
 #include <glib-object.h>
 
+#include "gparts-connect-data.h"
+
 #include "gparts-database-result.h"
 #include "gparts-database.h"
 #include "gparts-database-factory.h"

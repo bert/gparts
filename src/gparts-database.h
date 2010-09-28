@@ -33,9 +33,6 @@
 #define GPARTS_IS_DATABASE_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),GPARTS_TYPE_DATABASE))
 #define GPARTS_DATABASE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),GPARTS_TYPE_DATABASE,GPartsDatabaseClass))
 
-/*! \todo Move to a boxed type in another file */
-typedef struct _connect_data connect_data;
-
 typedef struct _GPartsDatabase GPartsDatabase;
 typedef struct _GPartsDatabaseClass GPartsDatabaseClass;
 
@@ -49,22 +46,13 @@ struct _GPartsDatabaseClass
 {
     GObjectClass parent;
 
-    void (*connect)(GPartsDatabase *database, connect_data* data, GError **error);
+    void (*connect)(GPartsDatabase *database, GPartsConnectData* data, GError **error);
     void (*disconnect)(GPartsDatabase *database, GError **error);
     GPartsDatabaseResult* (*query)(GPartsDatabase *database, const gchar *query, GError **error);
     const gchar* (*get_name)(GPartsDatabase *database);
 
     gboolean (*droppable)(const GPartsDatabase *database);
     void (*drop)(GPartsDatabase *database, GError **error);
-};
-
-struct _connect_data
-{
-    gchar *host_name;
-    gchar *user_name;
-    gchar *password;
-    gchar *database_name;
-    gchar *filename;
 };
 
 /*! \private */
@@ -78,7 +66,7 @@ gparts_database_get_type(void);
  *  \param [out] error An error, if any, using the GError protocol.
  */
 void
-gparts_database_connect(GPartsDatabase *database, connect_data* data, GError **error);
+gparts_database_connect(GPartsDatabase *database, GPartsConnectData* data, GError **error);
 
 /*! \brief Establishes a connection to the database.
  *

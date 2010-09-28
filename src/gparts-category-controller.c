@@ -24,6 +24,8 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
+#include "gparts-connect-data.h"
+
 #include "gparts-database-result.h"
 #include "gparts-database.h"
 

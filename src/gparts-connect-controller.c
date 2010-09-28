@@ -502,19 +502,19 @@ gparts_connect_controller_set_connect_data(GPartsConnectController *controller, 
 void
 gparts_connect_controller_set_database_types(GPartsConnectController *controller, const gchar **types)
 {
-    if (types != NULL)
-    {
-        GPartsConnectControllerPrivate *privat = GPARTS_CONNECT_CONTROLLER_GET_PRIVATE(controller);
+    GPartsConnectControllerPrivate *privat = GPARTS_CONNECT_CONTROLLER_GET_PRIVATE(controller);
 
-        if (privat != NULL)
+    if (privat != NULL)
+    {
+        gtk_list_store_clear(
+            GTK_LIST_STORE(gtk_combo_box_get_model(privat->engine_combo))
+            );
+
+        /* gtk_combo_box_get_model() does not increment the reference count */
+
+        if (types != NULL)
         {
             const gchar **temp = types;
-
-            gtk_list_store_clear(
-                GTK_LIST_STORE(gtk_combo_box_get_model(privat->engine_combo))
-                );
-
-            /* gtk_combo_box_get_model() does not increment the reference count */
 
             while (*temp != NULL)
             {

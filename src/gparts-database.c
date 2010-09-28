@@ -23,6 +23,8 @@
 
 #include <glib-object.h>
 
+#include "gparts-connect-data.h"
+
 #include "gparts-database-result.h"
 #include "gparts-database.h"
 
@@ -49,7 +51,7 @@ gparts_database_class_init(gpointer g_class, gpointer g_class_data)
 }
 
 void
-gparts_database_connect(GPartsDatabase *database, connect_data* data, GError **error)
+gparts_database_connect(GPartsDatabase *database, GPartsConnectData* data, GError **error)
 {
     if (database != NULL)
     {

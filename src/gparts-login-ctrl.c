@@ -26,12 +26,13 @@
 
 #include "misc-object.h"
 
+#include "gparts-connect-data.h"
+
 #include "gparts-database-result.h"
 #include "gparts-database.h"
 #include "gparts-database-type.h"
 #include "gparts-login-ctrl.h"
 
-#include "gparts-connect-data.h"
 #include "gparts-connect-controller.h"
 
 #define GPARTS_LOGIN_CTRL_GET_PRIVATE(object) G_TYPE_INSTANCE_GET_PRIVATE(object,GPARTS_TYPE_LOGIN_CTRL,GPartsLoginCtrlPrivate)
@@ -282,17 +283,11 @@ gparts_login_ctrl_connect_database(GPartsLoginCtrl *controller)
             if (data != NULL)
             {
                 GPartsDatabase *database;
-                connect_data data2;
                 GError *error = NULL;
-
-                data2.user_name     = data->username;
-                data2.password      = data->password;
-                data2.host_name     = data->hostname;
-                data2.database_name = data->database;
 
                 database = g_object_new(g_type_from_name("gparts-mysql-database"), NULL);
 
-                gparts_database_connect(database, &data2, &error);
+                gparts_database_connect(database, data, &error);
 
                 gparts_connect_data_free(data);
 
