@@ -124,9 +124,9 @@ gparts_connect_controller_class_init(gpointer g_class, gpointer g_class_data)
         object_class,
         GPARTS_CONNECT_CONTROLLER_PROPID_CONNECT_DATA,
         g_param_spec_boxed(
-            "connect-action",
-            "Connect Action",
-            "Connect Action",
+            "connect-data",
+            "Connect Data",
+            "Connect Data",
             GPARTS_TYPE_CONNECT_DATA,
             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )

@@ -36,13 +36,13 @@ typedef struct _GPartsSQLiteResultClass GPartsSQLiteResultClass;
 /*! \extends GPartsDatabaseResult */
 struct _GPartsSQLiteResult
 {
-    GObject parent;
+    GPartsDatabaseResult parent;
 };
 
 /*! \private */
 struct _GPartsSQLiteResultClass
 {
-    GObjectClass parent;
+    GPartsDatabaseResultClass parent;
 };
 
 /*! \private */

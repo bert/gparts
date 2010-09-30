@@ -285,7 +285,7 @@ gparts_login_ctrl_connect_database(GPartsLoginCtrl *controller)
                 GPartsDatabase *database;
                 GError *error = NULL;
 
-                database = g_object_new(g_type_from_name("gparts-mysql-database"), NULL);
+                database = g_object_new(g_type_from_name("gparts-sqlite-database"), NULL);
 
                 gparts_database_connect(database, data, &error);
 
@@ -507,6 +507,7 @@ gparts_login_ctrl_instance_init(GTypeInstance *instance, gpointer g_class)
     /** TODO Move elsewhere */
 
     gparts_database_type_load_module(privat->database_type, "libgparts-mysql.la", NULL);
+    gparts_database_type_load_module(privat->database_type, "libgparts-sqlite.la", NULL);
 
     /* TODO Test code / Remove before flight */
 

@@ -100,6 +100,18 @@ AC_SUBST(POSTGRESQL_CFLAGS)
 AC_SUBST(POSTGRESQL_LIBS)
 AC_SUBST(POSTGRESQL_LDADD)
 
+##  SQLite
+##
+##  Building the interface library for SQLite is optional.
+##
+SQLITE_VERSION=`$PKG_CONFIG sqlite3 --version`
+SQLITE_CFLAGS=`$PKG_CONFIG sqlite3 --cflags`
+SQLITE_LIBS=`$PKG_CONFIG sqlite3 --libs`
+SQLITE_LDADD='libgparts-sqlite.la'
+AC_SUBST(SQLITE_CFLAGS)
+AC_SUBST(SQLITE_LIBS)
+AC_SUBST(SQLITE_LDADD)
+
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([
     Makefile
@@ -130,4 +142,8 @@ AC_MSG_RESULT([
 
     PostgreSQL
         Installed Version        $POSTGRESQL_VERSION
+
+    SQLite
+        Installed Version        $SQLITE_VERSION
+
 ])

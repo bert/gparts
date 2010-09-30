@@ -36,13 +36,13 @@ typedef struct _GPartsPostgreSQLResultClass GPartsPostgreSQLResultClass;
 /*! \extends GPartsDatabaseResult */
 struct _GPartsPostgreSQLResult
 {
-    GObject parent;
+    GPartsDatabaseResult parent;
 };
 
 /*! \private */
 struct _GPartsPostgreSQLResultClass
 {
-    GObjectClass parent;
+    GPartsDatabaseResultClass parent;
 };
 
 /*! \private */

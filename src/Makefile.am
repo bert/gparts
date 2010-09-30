@@ -29,6 +29,7 @@ xml_DATA = \
 gparts_SOURCES = \
 	gparts-category-model.c \
 	gparts-category-controller.c \
+	gparts-column-data.c \
 	gparts-connect-controller.c \
 	gparts-connect-data.c \
 	gparts-controller.c \
@@ -75,11 +76,11 @@ noinst_LTLIBRARIES = \
 # build.
 
 lib_LTLIBRARIES = \
-	libgparts-mysql.la
+	libgparts-mysql.la \
+	libgparts-sqlite.la
 
 EXTRA_LTLIBRARIES = \
-	libgparts-postgresql.la \
-	libgparts-sqlite.la
+	libgparts-postgresql.la
 
 # A dynamically loadable library providing MySQL support.
 
@@ -104,6 +105,7 @@ libgparts_postgresql_la_LIBADD = $(POSTGRESQL_LIBS)
 
 libgparts_sqlite_la_SOURCES = \
 	gparts-sqlite-database.c \
+	gparts-sqlite-factory.c \
 	gparts-sqlite-module.c \
 	gparts-sqlite-result.c
 libgparts_sqlite_la_CFLAGS = $(AM_CFLAGS) $(GLIB_CFLAGS) $(SQLITE_CFLAGS)
