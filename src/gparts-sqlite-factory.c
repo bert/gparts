@@ -22,6 +22,7 @@
  */
 
 #include <sqlite3.h>
+#include <string.h>
 
 #include "gparts.h"
 
@@ -38,6 +39,9 @@ gparts_sqlite_factory_get_flags(const GPartsDatabaseFactory *factory);
 static gchar*
 gparts_sqlite_factory_get_name(const GPartsDatabaseFactory *factory);
 
+static gboolean
+gparts_sqlite_factory_validate_connect_data(const GPartsDatabaseFactory *factory, const GPartsConnectData *data);
+
 
 
 static void
@@ -50,9 +54,10 @@ gparts_sqlite_factory_class_init(gpointer g_class, gpointer g_class_data)
 {
     GPartsDatabaseFactoryClass *klasse = GPARTS_DATABASE_FACTORY_CLASS(g_class);
 
-    klasse->create_database = gparts_sqlite_factory_create_database;
-    klasse->get_flags       = gparts_sqlite_factory_get_flags;
-    klasse->get_name        = gparts_sqlite_factory_get_name;
+    klasse->create_database       = gparts_sqlite_factory_create_database;
+    klasse->get_flags             = gparts_sqlite_factory_get_flags;
+    klasse->get_name              = gparts_sqlite_factory_get_name;
+    klasse->validate_connect_data = gparts_sqlite_factory_validate_connect_data;
 }
 
 static GPartsDatabase*
@@ -108,5 +113,11 @@ GPartsSQLiteFactory*
 gparts_sqlite_factory_new(void)
 {
     return GPARTS_SQLITE_FACTORY(g_object_new(GPARTS_TYPE_SQLITE_FACTORY, NULL));
+}
+
+static gboolean
+gparts_sqlite_factory_validate_connect_data(const GPartsDatabaseFactory *factory, const GPartsConnectData *data)
+{
+    return ((data != NULL) && (data->filename != NULL) && (strlen(data->filename) > 0));
 }
 

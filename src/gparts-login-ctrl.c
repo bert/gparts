@@ -74,17 +74,25 @@ gparts_login_ctrl_set_database(GPartsLoginCtrl *ctrl, GPartsDatabase *database);
 static void
 gparts_login_ctrl_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
 
-/**** Signal handlers ****/
-
+static void
+gparts_login_ctrl_update_flags(GPartsLoginCtrl *ctrl);
 
 static void
-gparts_login_ctrl_clicked_cb(GtkTreeSelection *selection, GPartsLoginCtrl *login_ctrl);
+gparts_login_ctrl_update_valid(GPartsLoginCtrl *ctrl);
+
+/**** Signal handlers ****/
+
+static void
+gparts_login_ctrl_connect_data_changed_cb(GPartsConnectController *connect, GParamSpec *pspec, GPartsLoginCtrl *ctrl);
 
 static void
 gparts_login_ctrl_connect_action_cb(GtkAction *action, GPartsLoginCtrl *login_ctrl);
 
 static void
 gparts_login_ctrl_connected_cb(GPartsDatabase *database, GPartsLoginCtrl *login_ctrl);
+
+static void
+gparts_login_ctrl_database_type_changed_cb(GPartsConnectController *connect, GParamSpec *pspec, GPartsLoginCtrl *login);
 
 static void
 gparts_login_ctrl_disconnect_action_cb(GtkAction *action, GPartsLoginCtrl *login_ctrl);
@@ -97,9 +105,6 @@ gparts_login_ctrl_drop_action_cb(GtkAction *action, GPartsLoginCtrl *login_ctrl)
 
 static void
 gparts_login_ctrl_refresh_action_cb(GtkAction *action, GPartsLoginCtrl *login_ctrl);
-
-static void
-gparts_login_ctrl_show_cb(GtkWidget *widget, GPartsLoginCtrl *login_ctrl);
 
 
 
@@ -197,35 +202,15 @@ gparts_login_ctrl_class_init(gpointer g_class, gpointer g_class_data)
 
 
 static void
-gparts_login_ctrl_changed_cb(GPartsConnectController *connect, GParamSpec *pspec, GPartsLoginCtrl *login)
-{
-    if (connect != NULL)
-    {
-        gint flags = 0;
-        GPartsLoginCtrlPrivate *privat = GPARTS_LOGIN_CTRL_GET_PRIVATE(login);
-
-        if (privat != NULL)
-        {
-            GPartsDatabaseFactory *factory;
-            gchar *name;
-
-            name = gparts_connect_controller_get_database_type(connect);
-
-            factory = gparts_database_type_get_factory(privat->database_type, name);
-            g_free(name);
-
-            flags = gparts_database_factory_get_flags(factory);
-            g_object_unref(factory);
-        }
-
-        gparts_connect_controller_set_flags(connect, flags);
-    }
-}
-
-static void
 gparts_login_ctrl_connect_action_cb(GtkAction *action, GPartsLoginCtrl *controller)
 {
     gparts_login_ctrl_connect_database(controller);
+}
+
+static void
+gparts_login_ctrl_connect_data_changed_cb(GPartsConnectController *connect, GParamSpec *pspec, GPartsLoginCtrl *ctrl)
+{
+    gparts_login_ctrl_update_valid(ctrl);
 }
 
 void
@@ -303,10 +288,18 @@ gparts_login_ctrl_connect_database(GPartsLoginCtrl *controller)
                 g_object_unref(database);
             }
         }
+
+        gparts_connect_controller_clear_password(privat->ctrl);
     }
 
 }
 
+static void
+gparts_login_ctrl_database_type_changed_cb(GPartsConnectController *connect, GParamSpec *pspec, GPartsLoginCtrl *controller)
+{
+    gparts_login_ctrl_update_flags(controller);
+    gparts_login_ctrl_update_valid(controller);
+}
 
 static void
 gparts_login_ctrl_disconnect_action_cb(GtkAction *action, GPartsLoginCtrl *controller)
@@ -425,6 +418,7 @@ gparts_login_ctrl_get_type(void)
             0
             );
     }
+
     return type;
 }
 
@@ -479,11 +473,17 @@ gparts_login_ctrl_instance_init(GTypeInstance *instance, gpointer g_class)
 
     privat->ctrl = gparts_connect_controller_new();
 
+    g_signal_connect(
+        privat->ctrl,
+        "notify::connect-data",
+        G_CALLBACK(gparts_login_ctrl_connect_data_changed_cb),
+        instance
+        );
 
     g_signal_connect(
         privat->ctrl,
-        "notify",
-        G_CALLBACK(gparts_login_ctrl_changed_cb),
+        "notify::database-type",
+        G_CALLBACK(gparts_login_ctrl_database_type_changed_cb),
         instance
         );
 
@@ -791,6 +791,70 @@ gparts_login_ctrl_set_refresh_action(GPartsLoginCtrl *ctrl, GtkAction *action)
         }
 
         g_object_notify(G_OBJECT(ctrl), "refresh-action");
+    }
+}
+
+static void
+gparts_login_ctrl_update_flags(GPartsLoginCtrl *controller)
+{
+    GPartsLoginCtrlPrivate *privat = GPARTS_LOGIN_CTRL_GET_PRIVATE(controller);
+
+    if (privat != NULL)
+    {
+        GPartsDatabaseFactory *factory = NULL;
+        gint flags = 0;
+
+        if (privat->database_type != NULL)
+        {
+            gchar *name = gparts_connect_controller_get_database_type(privat->ctrl);
+
+            factory = gparts_database_type_get_factory(privat->database_type, name);
+            g_free(name);
+        }
+
+        if (factory != NULL)
+        {
+            GPartsConnectData *data = gparts_connect_controller_get_connect_data(privat->ctrl);
+
+            flags = gparts_database_factory_get_flags(factory);
+            gparts_connect_data_free(data);
+
+            g_object_unref(factory);
+        }
+
+        gparts_connect_controller_set_flags(privat->ctrl, flags);
+    }
+}
+
+static void
+gparts_login_ctrl_update_valid(GPartsLoginCtrl *controller)
+{
+    GPartsLoginCtrlPrivate *privat = GPARTS_LOGIN_CTRL_GET_PRIVATE(controller);
+
+    if (privat != NULL)
+    {
+        GPartsDatabaseFactory *factory = NULL;
+        gboolean valid = FALSE;
+
+        if (privat->database_type != NULL)
+        {
+            gchar *name = gparts_connect_controller_get_database_type(privat->ctrl);
+
+            factory = gparts_database_type_get_factory(privat->database_type, name);
+            g_free(name);
+        }
+
+        if (factory != NULL)
+        {
+            GPartsConnectData *data = gparts_connect_controller_get_connect_data(privat->ctrl);
+
+            valid = gparts_database_factory_validate_connect_data(factory, data);
+            gparts_connect_data_free(data);
+
+            g_object_unref(factory);
+        }
+
+        gparts_connect_controller_set_valid(privat->ctrl, valid);
     }
 }
 

@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gparts-main.h
+/*! \file gpartsui-forward.h
  *
  *  \brief Application controller for gEDA Part Manager.
  */

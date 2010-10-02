@@ -43,63 +43,129 @@ struct _GPartsConnectControllerClass
 GType
 gparts_connect_controller_get_type(void);
 
-/*! \brief Gets the connect data from the dialog
+/*! \brief Clears the password entry widget
+ *
+ *  \public
+ *  \memberof _GPartsConnectController
+ *
+ *  \param [in] controller This controller.
+ */
+void
+gparts_connect_controller_clear_password(GPartsConnectController *controller);
+
+/*! \brief Gets the connect-data from the dialog
+ *
+ *  \public
+ *  \memberof _GPartsConnectController
  *
  *  When no longer needed, call gparts_connect_data_free() on the returned pointer.
  *
- *  \param [in] controller The controller.
- *  \return The connect data from the dialog box.
+ *  \param [in] controller This controller.
+ *  \return The connect-data from the dialog box.
  */
 GPartsConnectData*
 gparts_connect_controller_get_connect_data(GPartsConnectController *controller);
 
 /*! \brief Gets the currently selected database type
  *
+ *  \public
+ *  \memberof _GPartsConnectController
+ *
+ *  The return value will be one of the strings in the database-types property.
  *
  *  When no longer needed, call g_free() on the returned pointer.
  *
- *  \param [in] controller The controller.
- *  \return A string containg the database type.
+ *  \param [in] controller This controller.
+ *  \return A string containg the current database type.
  */
 gchar*
 gparts_connect_controller_get_database_type(GPartsConnectController *controller);
 
 /*! \brief Create a new connect dialog controller.
  *
+ *  \public
+ *  \memberof _GPartsConnectController
+ *
  *  \return A new connect dialog controller.
  */
 GPartsConnectController*
 gparts_connect_controller_new(void);
 
-/*! \brief
+/*! \brief Run the modal dialog
  *
- *  \param [in] controller
+ *  \public
+ *  \memberof _GPartsConnectController
+ *
+ *  \param [in] controller This controller.
+ *  \retval GTK_RESPONSE_CANCEL The user cancelled the operation
+ *  \retval GTK_RESPONSE_HELP   The user clicked the help button
+ *  \retval GTK_RESPONSE_NONE   Dialog was destroyed
+ *  \retval GTK_RESPONSE_OK     The user clicked the ok button
  */
 gint
 gparts_connect_controller_run(GPartsConnectController* controller);
 
-/*! \brief Sets the connect data
+/*! \brief Sets the connect-data
+ *
+ *  \public
+ *  \memberof _GPartsConnectController
+ *
+ *  Populates all the UI widgets with fields from the connect-data.
  *
  *  \param [in] controller The controller.
- *  \param [in] data The action that triggers the connect.
+ *  \param [in] data The connect-data.
  */
 void
 gparts_connect_controller_set_connect_data(GPartsConnectController *controller, const GPartsConnectData *data);
 
-/*! \brief Sets the database types
+/*! \brief Sets the list of database types
+ *
+ *  \public
+ *  \memberof _GPartsConnectController
  *
  *  \param [in] controller The controller.
- *  \param [in] types A list of database types as a NULL terminated list of
- *  strings. (G_TYPE_STRV)
+ *  \param [in] types A NULL terminated list of database type names.
  */
 void
-gparts_connect_controller_set_database_types(GPartsConnectController *controller, const gchar **types);
+gparts_connect_controller_set_database_types(GPartsConnectController *controller, const GStrv types);
 
-/*! \brief Sets the connect data flags
+/*! \brief Sets the connect-data flags
  *
- *  \param [in] controller The controller.
- *  \param [in] flags The connect data flags.
+ *  \public
+ *  \memberof _GPartsConnectController
+ *
+ *  These flags indicate which fields in the connect-data property are used.
+ *  This controller will enable and disable the widgets associated with data
+ *  entry for each field. If the field is used, then this function enables
+ *  the widget. If the field is not used, then this function disables the
+ *  widget.
+ *
+ *  An external mechanism should monitor this controller's properties. When
+ *  state changes occur, the external mechanism should set the connect-data
+ *  flags appropriately.
+ *
+ *  \param [in] controller This controller.
+ *  \param [in] flags The connect-data flags.
  */
 void
 gparts_connect_controller_set_flags(GPartsConnectController *controller, gint flags);
+
+/*! \brief Sets the state of the connect data as valid or invalid.
+ *
+ *  \public
+ *  \memberof _GPartsConnectController
+ *
+ *  This function either enables or disables the dialog box "OK" button. With
+ *  invalid data, the UI prevents the user from proceeding with the operation.
+ *  With valid data, the UI allows the user to proceed with the operation.
+ *
+ *  An external mechanism should monitor the connect-data property for state
+ *  changes. When state changes occur, the external mechanism should validate
+ *  the connect-data and then set this property accordingly.
+ *
+ *  \param [in] controller This controller.
+ *  \param [in] valid Indicates the connect-data property is valid or invalid.
+ */
+void
+gparts_connect_controller_set_valid(GPartsConnectController *controller, gboolean valid);
 

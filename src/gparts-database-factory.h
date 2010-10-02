@@ -43,6 +43,7 @@ struct _GPartsDatabaseFactoryClass
     GPartsDatabase* (*create_database)(GPartsDatabaseFactory *factory, GError **error);
     gchar* (*get_name)(const GPartsDatabaseFactory *factory);
     gint (*get_flags)(const GPartsDatabaseFactory *factory);
+    gboolean (*validate_connect_data)(const GPartsDatabaseFactory *factory, const GPartsConnectData *data);
 };
 
 /*! \private */
@@ -51,6 +52,9 @@ gparts_database_factory_get_type(void);
 
 /*! \brief Create a database interface object
  *
+ *  \public
+ *  \memberof _GPartsDatabaseFactory
+ *
  *  \param [in] factory The factory to create the database.
  *  \return A pointer to the new database interface object.
  */
@@ -58,6 +62,9 @@ GPartsDatabase*
 gparts_database_factory_create_database(GPartsDatabaseFactory *factory, GError **error);
 
 /*! \brief Get the name of the database for the objects produced.
+ *
+ *  \public
+ *  \memberof _GPartsDatabaseFactory
  *
  *  This function does not return NULL and neither should subclass implementations.
  *  When no longer needed, the caller should free the string uing g_free().
@@ -70,6 +77,9 @@ gparts_database_factory_get_name(const GPartsDatabaseFactory *factory);
 
 /*! \brief Get the connect data flags for the database.
  *
+ *  \public
+ *  \memberof _GPartsDatabaseFactory
+ *
  *  These flags indicate which portions of the connect data structure
  *  are used to connect to a database of this type.
  *
@@ -78,4 +88,18 @@ gparts_database_factory_get_name(const GPartsDatabaseFactory *factory);
  */
 gint
 gparts_database_factory_get_flags(const GPartsDatabaseFactory *factory);
+
+/*! \brief Validate connect-data for databases produced by this factory.
+ *
+ *  \public
+ *  \memberof _GPartsDatabaseFactory
+ *
+ *  Performs simple checks on the data in connect-data.
+ *
+ *  \param [in] factory This factory.
+ *  \retval TRUE The connect-data is valid.
+ *  \retval FALSE The connect-data is invalid.
+ */
+gboolean
+gparts_database_factory_validate_connect_data(const GPartsDatabaseFactory *factory, const GPartsConnectData *data);
 

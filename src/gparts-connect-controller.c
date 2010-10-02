@@ -21,8 +21,6 @@
 /*! \file gparts-connect-controller.c
  */
 
-#include <string.h>
-
 #include "gpartsui.h"
 
 
@@ -32,7 +30,9 @@ enum
 {
     GPARTS_CONNECT_CONTROLLER_PROPID_CONNECT_DATA = 1,
     GPARTS_CONNECT_CONTROLLER_PROPID_DATABASE_TYPE,
-    GPARTS_CONNECT_CONTROLLER_PROPID_DATABASE_TYPES
+    GPARTS_CONNECT_CONTROLLER_PROPID_DATABASE_TYPES,
+    GPARTS_CONNECT_CONTROLLER_PROPID_FLAGS,
+    GPARTS_CONNECT_CONTROLLER_PROPID_VALID
 };
 
 typedef struct _GPartsConnectControllerPrivate GPartsConnectControllerPrivate;
@@ -75,6 +75,9 @@ gparts_connect_controller_set_property(GObject *object, guint property_id, const
 
 static void
 gparts_connect_controller_changed_cb(GtkTreeSelection *selection, GPartsConnectController *connect_controller);
+
+static void
+gparts_connect_controller_connect_data_changed_cb(GObject *widget, GParamSpec *pspec, GPartsConnectController *controller);
 
 static void
 gparts_connect_controller_clicked_cb(GtkTreeSelection *selection, GPartsConnectController *connect_controller);
@@ -146,6 +149,49 @@ gparts_connect_controller_class_init(gpointer g_class, gpointer g_class_data)
             G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS
             )
         );
+
+    g_object_class_install_property(
+        object_class,
+        GPARTS_CONNECT_CONTROLLER_PROPID_FLAGS,
+        g_param_spec_int(
+            "flags",
+            "Flags",
+            "Flags",
+            G_MININT,
+            G_MAXINT,
+            0,
+            G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS
+            )
+        );
+
+    g_object_class_install_property(
+        object_class,
+        GPARTS_CONNECT_CONTROLLER_PROPID_VALID,
+        g_param_spec_boolean(
+            "valid",
+            "Valid",
+            "Valid",
+            FALSE,
+            G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS
+            )
+        );
+}
+
+void
+gparts_connect_controller_clear_password(GPartsConnectController *controller)
+{
+    GPartsConnectControllerPrivate *privat = GPARTS_CONNECT_CONTROLLER_GET_PRIVATE(controller);
+
+    if (privat != NULL)
+    {
+        gtk_entry_set_text(privat->password_entry, "");
+    }
+}
+
+static void
+gparts_connect_controller_connect_data_changed_cb(GObject *widget, GParamSpec *pspec, GPartsConnectController *controller)
+{
+    g_object_notify(G_OBJECT(controller), "connect-data");
 }
 
 static void
@@ -247,7 +293,7 @@ gparts_connect_controller_get_database_type(GPartsConnectController *controller)
 
     if (privat != NULL)
     {
-        type = gtk_combo_box_get_active_text(privat->engine_combo);
+        type = g_strdup(gtk_combo_box_get_active_text(privat->engine_combo));
     }
 
     return type;
@@ -287,7 +333,7 @@ gparts_connect_controller_instance_init(GTypeInstance *instance, gpointer g_clas
         GtkTable  *table;
 
         privat->file_dialog = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(
-            "Select File",
+            "Select a Database File",
             NULL,
             GTK_FILE_CHOOSER_ACTION_OPEN,
             GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -399,6 +445,41 @@ gparts_connect_controller_instance_init(GTypeInstance *instance, gpointer g_clas
             );
 
         g_signal_connect(
+            privat->user_name_entry,
+            "notify::text",
+            G_CALLBACK(gparts_connect_controller_connect_data_changed_cb),
+            instance
+            );
+
+        g_signal_connect(
+            privat->password_entry,
+            "notify::text",
+            G_CALLBACK(gparts_connect_controller_connect_data_changed_cb),
+            instance
+            );
+
+        g_signal_connect(
+            privat->server_entry,
+            "notify::text",
+            G_CALLBACK(gparts_connect_controller_connect_data_changed_cb),
+            instance
+            );
+
+        g_signal_connect(
+            privat->database_entry,
+            "notify::text",
+            G_CALLBACK(gparts_connect_controller_connect_data_changed_cb),
+            instance
+            );
+
+        g_signal_connect(
+            privat->filename_entry,
+            "notify::text",
+            G_CALLBACK(gparts_connect_controller_connect_data_changed_cb),
+            instance
+            );
+
+        g_signal_connect(
             privat->button,
             "clicked",
             G_CALLBACK(gparts_connect_controller_select_file_cb),
@@ -417,7 +498,7 @@ gint
 gparts_connect_controller_run(GPartsConnectController* controller)
 {
     GPartsConnectControllerPrivate *privat = GPARTS_CONNECT_CONTROLLER_GET_PRIVATE(controller);
-    gint result = GTK_RESPONSE_CANCEL;
+    gint result = GTK_RESPONSE_NONE;
 
     if (privat != NULL)
     {
@@ -460,30 +541,11 @@ gparts_connect_controller_set_connect_data(GPartsConnectController *controller, 
 
         if (privat != NULL)
         {
-            if (privat->user_name_entry != NULL)
-            {
-                gtk_entry_set_text(privat->user_name_entry, data->username);
-            }
-
-            if (privat->password_entry != NULL)
-            {
-                gtk_entry_set_text(privat->password_entry, data->password);
-            }
-
-            if (privat->server_entry != NULL)
-            {
-                gtk_entry_set_text(privat->server_entry, data->hostname);
-            }
-
-            if (privat->database_entry != NULL)
-            {
-                gtk_entry_set_text(privat->database_entry, data->database);
-            }
-
-            if (privat->filename_entry != NULL)
-            {
-                gtk_entry_set_text(privat->filename_entry, data->filename);
-            }
+            gtk_entry_set_text(privat->user_name_entry, data->username);
+            gtk_entry_set_text(privat->password_entry, data->password);
+            gtk_entry_set_text(privat->server_entry, data->hostname);
+            gtk_entry_set_text(privat->database_entry, data->database);
+            gtk_entry_set_text(privat->filename_entry, data->filename);
 
             g_object_notify(G_OBJECT(controller), "connect-data");
         }
@@ -491,7 +553,7 @@ gparts_connect_controller_set_connect_data(GPartsConnectController *controller, 
 }
 
 void
-gparts_connect_controller_set_database_types(GPartsConnectController *controller, const gchar **types)
+gparts_connect_controller_set_database_types(GPartsConnectController *controller, const GStrv types)
 {
     GPartsConnectControllerPrivate *privat = GPARTS_CONNECT_CONTROLLER_GET_PRIVATE(controller);
 
@@ -505,7 +567,7 @@ gparts_connect_controller_set_database_types(GPartsConnectController *controller
 
         if (types != NULL)
         {
-            const gchar **temp = types;
+            GStrv temp = types;
 
             while (*temp != NULL)
             {
@@ -535,6 +597,14 @@ gparts_connect_controller_set_property(GObject *object, guint property_id, const
 
         case GPARTS_CONNECT_CONTROLLER_PROPID_DATABASE_TYPES:
             gparts_connect_controller_set_database_types(controller, g_value_get_boxed(value));
+            break;
+
+        case GPARTS_CONNECT_CONTROLLER_PROPID_FLAGS:
+            gparts_connect_controller_set_flags(controller, g_value_get_int(value));
+            break;
+
+        case GPARTS_CONNECT_CONTROLLER_PROPID_VALID:
+            gparts_connect_controller_set_valid(controller, g_value_get_boolean(value));
             break;
 
         default:
@@ -578,5 +648,24 @@ gparts_connect_controller_set_flags(GPartsConnectController *controller, gint fl
             GTK_WIDGET(privat->button),
             (flags & GPARTS_DATABASE_TYPE_FLAGS_USES_FILENAME)
             );
+
+        g_object_notify(G_OBJECT(controller), "flags");
     }
 }
+
+void
+gparts_connect_controller_set_valid(GPartsConnectController *controller, gboolean valid)
+{
+    GPartsConnectControllerPrivate *privat = GPARTS_CONNECT_CONTROLLER_GET_PRIVATE(controller);
+
+    if (privat != NULL)
+    {
+        gtk_widget_set_sensitive(
+            gtk_dialog_get_widget_for_response(privat->login_dialog, GTK_RESPONSE_OK),
+            valid
+            );
+
+        g_object_notify(G_OBJECT(controller), "valid");
+    }
+}
+

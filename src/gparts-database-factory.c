@@ -32,6 +32,8 @@ gparts_database_factory_get_flags_base(const GPartsDatabaseFactory *factory);
 static gchar*
 gparts_database_factory_get_name_base(const GPartsDatabaseFactory *factory);
 
+static gboolean
+gparts_database_factory_validate_connect_data_base(const GPartsDatabaseFactory *factory, const GPartsConnectData *data);
 
 
 static void
@@ -44,9 +46,10 @@ gparts_database_factory_class_init(gpointer g_class, gpointer g_class_data)
 {
     GPartsDatabaseFactoryClass *klasse = GPARTS_DATABASE_FACTORY_CLASS(g_class);
 
-    klasse->create_database = gparts_database_factory_create_database_base;
-    klasse->get_flags       = gparts_database_factory_get_flags_base;
-    klasse->get_name        = gparts_database_factory_get_name_base;
+    klasse->create_database       = gparts_database_factory_create_database_base;
+    klasse->get_flags             = gparts_database_factory_get_flags_base;
+    klasse->get_name              = gparts_database_factory_get_name_base;
+    klasse->validate_connect_data = gparts_database_factory_validate_connect_data_base;
 }
 
 GPartsDatabase*
@@ -188,5 +191,37 @@ gparts_database_factory_get_type(void)
     }
 
     return type;
+}
+
+gboolean
+gparts_database_factory_validate_connect_data(const GPartsDatabaseFactory *factory, const GPartsConnectData *data)
+{
+    gboolean valid = FALSE;
+
+    if (factory != NULL)
+    {
+        GPartsDatabaseFactoryClass *klasse = GPARTS_DATABASE_FACTORY_GET_CLASS(factory);
+
+        if (klasse == NULL)
+        {
+            g_critical("Unable to get GPartsDatabaseFactoryClass from parameter");
+        }
+        else if (klasse->validate_connect_data == NULL)
+        {
+            g_critical("GPartsDatabaseFactoryClass contains NULL validate_connect_data() function pointer");
+        }
+        else
+        {
+            valid = klasse->validate_connect_data(factory, data);
+        }
+    }
+
+    return valid;
+}
+
+static gboolean
+gparts_database_factory_validate_connect_data_base(const GPartsDatabaseFactory *factory, const GPartsConnectData *data)
+{
+    return FALSE;
 }
 
