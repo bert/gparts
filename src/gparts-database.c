@@ -21,12 +21,7 @@
 /*! \file gparts-database.c
  */
 
-#include <glib-object.h>
-
-#include "gparts-connect-data.h"
-
-#include "gparts-database-result.h"
-#include "gparts-database.h"
+#include "gparts.h"
 
 static void
 gparts_database_drop_base(GPartsDatabase *database, GError **error);

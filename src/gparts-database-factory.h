@@ -30,9 +30,6 @@
 #define GPARTS_IS_DATABASE_FACTORY_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),GPARTS_TYPE_DATABASE_FACTORY))
 #define GPARTS_DATABASE_FACTORY_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),GPARTS_TYPE_DATABASE_FACTORY,GPartsDatabaseFactoryClass))
 
-typedef struct _GPartsDatabaseFactory GPartsDatabaseFactory;
-typedef struct _GPartsDatabaseFactoryClass GPartsDatabaseFactoryClass;
-
 struct _GPartsDatabaseFactory
 {
     GObject parent;
@@ -45,6 +42,7 @@ struct _GPartsDatabaseFactoryClass
 
     GPartsDatabase* (*create_database)(GPartsDatabaseFactory *factory, GError **error);
     gchar* (*get_name)(const GPartsDatabaseFactory *factory);
+    gint (*get_flags)(const GPartsDatabaseFactory *factory);
 };
 
 /*! \private */
@@ -69,4 +67,15 @@ gparts_database_factory_create_database(GPartsDatabaseFactory *factory, GError *
  */
 gchar*
 gparts_database_factory_get_name(const GPartsDatabaseFactory *factory);
+
+/*! \brief Get the connect data flags for the database.
+ *
+ *  These flags indicate which portions of the connect data structure
+ *  are used to connect to a database of this type.
+ *
+ *  \param [in] factory This factory.
+ *  \return The connect data flags for the database.
+ */
+gint
+gparts_database_factory_get_flags(const GPartsDatabaseFactory *factory);
 

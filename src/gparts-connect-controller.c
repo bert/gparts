@@ -22,18 +22,9 @@
  */
 
 #include <string.h>
-#include <gtk/gtk.h>
 
-#include "misc-object.h"
+#include "gpartsui.h"
 
-#include "gparts-connect-data.h"
-
-#include "gparts-database-result.h"
-#include "gparts-database.h"
-#include "gparts-database-type.h"
-#include "gparts-login-ctrl.h"
-
-#include "gparts-connect-controller.h"
 
 #define GPARTS_CONNECT_CONTROLLER_GET_PRIVATE(object) G_TYPE_INSTANCE_GET_PRIVATE(object,GPARTS_TYPE_CONNECT_CONTROLLER,GPartsConnectControllerPrivate)
 
@@ -551,3 +542,41 @@ gparts_connect_controller_set_property(GObject *object, guint property_id, const
     }
 }
 
+void
+gparts_connect_controller_set_flags(GPartsConnectController *controller, gint flags)
+{
+    GPartsConnectControllerPrivate *privat = GPARTS_CONNECT_CONTROLLER_GET_PRIVATE(controller);
+
+    if (privat != NULL)
+    {
+        gtk_widget_set_sensitive(
+            GTK_WIDGET(privat->user_name_entry),
+            (flags & GPARTS_DATABASE_TYPE_FLAGS_USES_USERNAME)
+            );
+
+        gtk_widget_set_sensitive(
+            GTK_WIDGET(privat->password_entry),
+            (flags & GPARTS_DATABASE_TYPE_FLAGS_USES_PASSWORD)
+            );
+
+        gtk_widget_set_sensitive(
+            GTK_WIDGET(privat->server_entry),
+            (flags & GPARTS_DATABASE_TYPE_FLAGS_USES_SERVER)
+            );
+
+        gtk_widget_set_sensitive(
+            GTK_WIDGET(privat->database_entry),
+            (flags & GPARTS_DATABASE_TYPE_FLAGS_USES_DATABASE)
+            );
+
+        gtk_widget_set_sensitive(
+            GTK_WIDGET(privat->filename_entry),
+            (flags & GPARTS_DATABASE_TYPE_FLAGS_USES_FILENAME)
+            );
+
+        gtk_widget_set_sensitive(
+            GTK_WIDGET(privat->button),
+            (flags & GPARTS_DATABASE_TYPE_FLAGS_USES_FILENAME)
+            );
+    }
+}

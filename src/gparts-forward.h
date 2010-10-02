@@ -18,32 +18,23 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gparts-main.h
+/*! \file gparts-forward.h
  *
- *  \brief Application controller for gEDA Part Manager.
+ *  \brief Forward declarations for the part manager
  */
 
-typedef struct _GParts GParts;
-typedef struct _GPartsClass GPartsClass;
+typedef struct _GPartsConfig GPartsConfig;
+typedef struct _GPartsConfigClass GPartsConfigClass;
 
-typedef struct _GPartsCategoryController GPartsCategoryController;
-typedef struct _GPartsCategoryControllerClass GPartsCategoryControllerClass;
+typedef struct _GPartsDatabase GPartsDatabase;
+typedef struct _GPartsDatabaseClass GPartsDatabaseClass;
 
-typedef struct _GPartsCategoryModel GPartsCategoryModel;
-typedef struct _GPartsCategoryModelClass GPartsCategoryModelClass;
+typedef struct _GPartsDatabaseFactory GPartsDatabaseFactory;
+typedef struct _GPartsDatabaseFactoryClass GPartsDatabaseFactoryClass;
 
-typedef struct _GPartsController GPartsController;
-typedef struct _GPartsControllerClass GPartsControllerClass;
+typedef struct _GPartsDatabaseResult GPartsDatabaseResult;
+typedef struct _GPartsDatabaseResultClass GPartsDatabaseResultClass;
 
-typedef struct _GPartsPreviewCtrl GPartsPreviewCtrl;
-typedef struct _GPartsPreviewCtrlClass GPartsPreviewCtrlClass;
-
-typedef struct _GPartsResultController GPartsResultController;
-typedef struct _GPartsResultControllerClass GPartsResultControllerClass;
-
-typedef struct _GPartsResultModel GPartsResultModel;
-typedef struct _GPartsResultModelClass GPartsResultModelClass;
-
-typedef struct _GPartsResultView GPartsResultView;
-typedef struct _GPartsResultViewClass GPartsResultViewClass;
+typedef struct _GPartsDatabaseType GPartsDatabaseType;
+typedef struct _GPartsDatabaseTypeClass GPartsDatabaseTypeClass;
 

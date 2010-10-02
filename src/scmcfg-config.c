@@ -32,6 +32,8 @@
 
 #include "scmcfg-dirs.h"
 
+#include "gparts.h"
+
 #define ENABLED "enabled"
 
 static void*
@@ -54,7 +56,7 @@ SCM_DEFINE(always_promote_attributes, "always-promote-attributes", 1, 0, 0, (SCM
     if (config != NULL)
     {
         int    index;
-        GArray *list = g_array_new(TRUE, FALSE, sizeof(char*)); 
+        GArray *list = g_array_new(TRUE, FALSE, sizeof(char*));
         SCM    temp = a;
 
         while (temp != SCM_EOL)
@@ -129,6 +131,28 @@ SCM_DEFINE(component_library, "component-library", 1, 1, 0, (SCM a, SCM b), "")
         sch_loader_add_component_library(loader, library);
 
         free(library);
+    }
+
+    return SCM_BOOL_F;
+}
+
+SCM_DEFINE(database_interface, "database-interface", 1, 0, 0, (SCM a), "")
+{
+    GPartsConfig *config = gparts_config_new();
+
+    if (config != NULL)
+    {
+        GPartsDatabaseType *type = gparts_config_get_database_types(config);
+
+        if (type != NULL)
+        {
+            char *name = scm_to_locale_string(a);
+
+            gparts_database_type_load_module(type, name, NULL);
+
+            free(name);
+            g_object_unref(type);
+        }
     }
 
     return SCM_BOOL_F;

@@ -21,14 +21,7 @@
 /*! \file gparts-preview-ctrl.c
  */
 
-#include <glib-object.h>
-
-#include "gparts-connect-data.h"
-
-#include "gparts-database-result.h"
-#include "gparts-database.h"
-
-#include "gparts.h"
+#include "gpartsui.h"
 
 #include "schgui-clipboard.h"
 

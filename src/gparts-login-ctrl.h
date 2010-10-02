@@ -28,9 +28,6 @@
 #define GPARTS_IS_LOGIN_CTRL_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),GPARTS_TYPE_LOGIN_CTRL))
 #define GPARTS_LOGIN_CTRL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),GPARTS_TYPE_LOGIN_CTRL,GPartsLoginCtrlClass))
 
-typedef struct _GPartsLoginCtrl GPartsLoginCtrl;
-typedef struct _GPartsLoginCtrlClass GPartsLoginCtrlClass;
-
 struct _GPartsLoginCtrl
 {
     GObject parent;

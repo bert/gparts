@@ -49,3 +49,6 @@ struct _GPartsMySQLFactoryClass
 GType
 gparts_mysql_factory_get_type(void);
 
+GPartsMySQLFactory*
+gparts_mysql_factory_new(void);
+

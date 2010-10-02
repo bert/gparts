@@ -26,19 +26,16 @@ xml_DATA = \
 	gparts.xml \
 	gsymview.xml
 
+# Would like to move common files into a library, but the dynamically loadable
+# modules have problems with backlinking? or symbols?
+
 gparts_SOURCES = \
 	gparts-category-model.c \
 	gparts-category-controller.c \
-	gparts-column-data.c \
 	gparts-connect-controller.c \
-	gparts-connect-data.c \
 	gparts-controller.c \
 	gparts-customize-ctrl.c \
 	gparts-customize-model.c \
-	gparts-database.c \
-	gparts-database-factory.c \
-	gparts-database-result.c \
-	gparts-database-type.c \
 	gparts-login-ctrl.c \
 	gparts-main.c \
 	gparts-object-list.c \
@@ -48,17 +45,33 @@ gparts_SOURCES = \
 	gparts-result-controller.c \
 	gparts-result-view.c \
 	gparts-state.c \
+	gparts-column-data.c \
+	gparts-config.c \
+	gparts-connect-data.c \
+	gparts-database.c \
+	gparts-database-factory.c \
+	gparts-database-result.c \
+	gparts-database-type.c \
 	gparts-units.c 
 gparts_CFLAGS = $(AM_CFLAGS) $(GMODULE_CFLAGS) $(GTK_CFLAGS)
 gparts_LDADD = $(GMODULE_LIBS) $(GTK_LIBS) libgeom.la libmisc.la libsch.la libschgui.la libscmcfg.la
+
 #gparts_DEPENDENCIES = $(MYSQL_LDADD) $(POSTGRESQL_LDADD) $(SQLITE_LDADD)
 
 
 # A small GUI program for testing the drawing loader and drawing view widget.
 #
 gsymview_SOURCES = \
-	gsymview-main.c
-gsymview_CFLAGS = $(AM_CFLAGS) $(GTK_CFLAGS)
+	gsymview-main.c \
+	gparts-column-data.c \
+	gparts-config.c \
+	gparts-connect-data.c \
+	gparts-database.c \
+	gparts-database-factory.c \
+	gparts-database-result.c \
+	gparts-database-type.c \
+	gparts-units.c 
+gsymview_CFLAGS = $(AM_CFLAGS) $(GTK_CFLAGS) -shared -rdynamic
 gsymview_LDADD = $(GTK_LIBS) libgeom.la libmisc.la libsch.la libschgui.la libscmcfg.la
 
 
@@ -81,6 +94,20 @@ lib_LTLIBRARIES = \
 
 EXTRA_LTLIBRARIES = \
 	libgparts-postgresql.la
+
+#
+
+#libgparts_la_SOURCES = \
+#	gparts-column-data.c \
+#	gparts-config.c \
+#	gparts-connect-data.c \
+#	gparts-database.c \
+#	gparts-database-factory.c \
+#	gparts-database-result.c \
+#	gparts-database-type.c \
+#	gparts-units.c 
+#libgparts_la_CFLAGS = $(AM_CFLAGS) $(GLIB_CFLAGS)
+#libgparts_la_LIBADD = 
 
 # A dynamically loadable library providing MySQL support.
 
@@ -185,5 +212,5 @@ libscmcfg_la_SOURCES = \
 	scmcfg-config.c \
 	scmcfg-dirs.c
 libscmcfg_la_CFLAGS = -Wall $(AM_CFLAGS) $(GTK_CFLAGS) $(GUILE_CFLAGS)
-libscmcfg_la_LIBADD = $(GTK_LIBS) $(GUILE_LIBS) libsch.la libschgui.la
+libscmcfg_la_LIBADD = $(GTK_LIBS) $(GUILE_LIBS)
 

@@ -21,16 +21,10 @@
 /*! \file gparts-sqlite-module.c
  */
 
-#include <glib-object.h>
 #include <gmodule.h>
 #include <sqlite3.h>
 
-#include "gparts-connect-data.h"
-
-#include "gparts-database-result.h"
-#include "gparts-database.h"
-#include "gparts-database-factory.h"
-#include "gparts-database-type.h"
+#include "gparts.h"
 
 #include "gparts-sqlite-result.h"
 #include "gparts-sqlite-database.h"
@@ -40,8 +34,6 @@ const gchar*
 g_module_check_init(GModule *module)
 {
     g_module_make_resident(module);
-
-    g_debug("Hello from indise");
 
     GPARTS_TYPE_SQLITE_DATABASE;
     GPARTS_TYPE_SQLITE_FACTORY;
@@ -55,17 +47,11 @@ gparts_database_register(GPartsDatabaseType *database_type)
 {
     GPartsDatabaseTypeClass *database_type_class = GPARTS_DATABASE_TYPE_GET_CLASS(database_type);
 
-    if (database_type_class != NULL && database_type_class->add_type != NULL)
+    if (database_type_class != NULL && database_type_class->add_factory != NULL)
     {
-        database_type_class->add_type(
+        database_type_class->add_factory(
             database_type,
-            "SQLite",
-            GPARTS_TYPE_SQLITE_DATABASE,
-            ( GPARTS_DATABASE_TYPE_FLAGS_USES_USERNAME |
-              GPARTS_DATABASE_TYPE_FLAGS_USES_PASSWORD |
-              GPARTS_DATABASE_TYPE_FLAGS_USES_SERVER   |
-              GPARTS_DATABASE_TYPE_FLAGS_USES_DATABASE
-              )
+            GPARTS_DATABASE_FACTORY(gparts_sqlite_factory_new())
             );
     }
     else

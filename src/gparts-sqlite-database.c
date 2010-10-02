@@ -21,14 +21,10 @@
 /*! \file gparts-sqlite-database.c
  */
 
-#include <glib-object.h>
-#include <gmodule.h>
 #include <sqlite3.h>
 
-#include "gparts-connect-data.h"
+#include "gparts.h"
 
-#include "gparts-database-result.h"
-#include "gparts-database.h"
 #include "gparts-sqlite-result.h"
 #include "gparts-sqlite-database.h"
 

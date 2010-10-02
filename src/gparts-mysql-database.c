@@ -25,10 +25,8 @@
 #include <gmodule.h>
 #include <mysql.h>
 
-#include "gparts-connect-data.h"
+#include "gparts.h"
 
-#include "gparts-database-result.h"
-#include "gparts-database.h"
 #include "gparts-mysql-result.h"
 #include "gparts-mysql-database.h"
 

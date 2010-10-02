@@ -21,9 +21,7 @@
 /*! \file gparts-database-result.c
  */
 
-#include <glib-object.h>
-
-#include "gparts-database-result.h"
+#include "gparts.h"
 
 static void
 gparts_database_result_class_init(gpointer g_class, gpointer g_class_data)

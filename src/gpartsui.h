@@ -18,29 +18,49 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gparts.h
+/*! \file gparts-main.h
+ *
+ *  \brief Application controller for gEDA Part Manager.
  */
 
 #include <glib.h>
 #include <glib-object.h>
+#include <gtk/gtk.h>
 
 #include "misc-object.h"
 
+#include "sch.h"
+
+#include "schgui-drawing-cfg.h"
+#include "schgui-cairo-drafter.h"
+#include "schgui-drawing-view.h"
+
+#include "gparts.h"
+
 /* Boxed types */
 
-#include "gparts-connect-data.h"
-#include "gparts-column-data.h"
-#include "gparts-units.h"
 
 /* Forward declarations for gparts package */
 
-#include "gparts-forward.h"
+#include "gpartsui-forward.h"
 
-/* Based off GObject */
+#include "gparts-controller.h"
 
-#include "gparts-config.h"
-#include "gparts-database.h"
-#include "gparts-database-factory.h"
-#include "gparts-database-result.h"
-#include "gparts-database-type.h"
+#include "gparts-category-controller.h"
+#include "gparts-category-model.h"
+#include "gparts-connect-controller.h"
+#include "gparts-customize-ctrl.h"
+
+#include "gparts-login-ctrl.h"
+
+#include "gparts-main.h"
+
+#include "gparts-object-list.h"
+
+#include "gparts-preview.h"
+#include "gparts-preview-ctrl.h"
+
+#include "gparts-result-controller.h"
+#include "gparts-result-model.h"
+#include "gparts-result-view.h"
 

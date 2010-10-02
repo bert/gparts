@@ -21,14 +21,9 @@
 /*! \file gparts-main.c
  */
 
-#include <gtk/gtk.h>
+#include <dlfcn.h>
 
-#include "gparts-connect-data.h"
-
-#include "gparts-database-result.h"
-#include "gparts-database.h"
-
-#include "gparts.h"
+#include "gpartsui.h"
 
 #include "scmcfg-config.h"
 
@@ -890,6 +885,8 @@ int main(int argc, char* argv[])
 
     g_type_init();
     gtk_init(&argc, &argv);
+
+    dlopen(NULL, RTLD_NOW | RTLD_GLOBAL);
 
     scmcfg_config_init();
     scmcfg_config_load();

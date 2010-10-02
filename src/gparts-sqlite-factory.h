@@ -49,3 +49,6 @@ struct _GPartsSQLiteFactoryClass
 GType
 gparts_sqlite_factory_get_type(void);
 
+GPartsSQLiteFactory*
+gparts_sqlite_factory_new(void);
+

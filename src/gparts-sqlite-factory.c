@@ -18,17 +18,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gparts-database.c
+/*! \file gparts-sqlite-factory.c
  */
 
-#include <glib-object.h>
 #include <sqlite3.h>
 
-#include "gparts-connect-data.h"
-
-#include "gparts-database-result.h"
-#include "gparts-database.h"
-#include "gparts-database-factory.h"
+#include "gparts.h"
 
 #include "gparts-sqlite-result.h"
 #include "gparts-sqlite-database.h"
@@ -36,6 +31,9 @@
 
 static GPartsDatabase*
 gparts_sqlite_factory_create_database(GPartsDatabaseFactory *factory, GError **error);
+
+static gint
+gparts_sqlite_factory_get_flags(const GPartsDatabaseFactory *factory);
 
 static gchar*
 gparts_sqlite_factory_get_name(const GPartsDatabaseFactory *factory);
@@ -53,21 +51,20 @@ gparts_sqlite_factory_class_init(gpointer g_class, gpointer g_class_data)
     GPartsDatabaseFactoryClass *klasse = GPARTS_DATABASE_FACTORY_CLASS(g_class);
 
     klasse->create_database = gparts_sqlite_factory_create_database;
+    klasse->get_flags       = gparts_sqlite_factory_get_flags;
     klasse->get_name        = gparts_sqlite_factory_get_name;
 }
 
 static GPartsDatabase*
 gparts_sqlite_factory_create_database(GPartsDatabaseFactory *factory, GError **error)
 {
-    g_set_error(
-        error,
-        g_quark_from_static_string( "gparts-database-error" ),
-        0,
-        "%s",
-        "create database functionality not implemented"
-        );
+    return gparts_sqlite_database_new();
+}
 
-    return NULL;
+static gint
+gparts_sqlite_factory_get_flags(const GPartsDatabaseFactory *factory)
+{
+    return GPARTS_DATABASE_TYPE_FLAGS_USES_FILENAME;
 }
 
 static gchar*
@@ -105,5 +102,11 @@ gparts_sqlite_factory_get_type(void)
     }
 
     return type;
+}
+
+GPartsSQLiteFactory*
+gparts_sqlite_factory_new(void)
+{
+    return GPARTS_SQLITE_FACTORY(g_object_new(GPARTS_TYPE_SQLITE_FACTORY, NULL));
 }
 

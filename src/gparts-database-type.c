@@ -21,12 +21,9 @@
 /*! \file gparts-database-type.c
  */
 
-#include <glib-object.h>
 #include <gmodule.h>
 
-#include "misc-object.h"
-
-#include "gparts-database-type.h"
+#include "gparts.h"
 
 #define GPARTS_DATABASE_TYPE_GET_PRIVATE(object) G_TYPE_INSTANCE_GET_PRIVATE(object, GPARTS_TYPE_DATABASE_TYPE, GPartsDatabaseTypePrivate)
 
@@ -37,9 +34,8 @@ typedef struct _GPartsDatabaseTypePrivate GPartsDatabaseTypePrivate;
 
 struct _GPartsDatabaseTypeNode
 {
-    gchar *name;
-    GType type;
-    gint  flags;
+    gchar                 *name;
+    GPartsDatabaseFactory *factory;
 };
 
 struct _GPartsDatabaseTypePrivate
@@ -62,16 +58,24 @@ gparts_database_type_init(GTypeInstance *instance, gpointer g_class);
 /**** ****/
 
 void
-gparts_database_type_add_type(GPartsDatabaseType *database_type, const gchar *name, GType type, gint flags)
+gparts_database_type_add_factory(GPartsDatabaseType *database_type, GPartsDatabaseFactory *factory)
 {
-    GPartsDatabaseTypeNode node;
-    GPartsDatabaseTypePrivate *privat = GPARTS_DATABASE_TYPE_GET_PRIVATE(database_type);
+    if (factory != NULL)
+    {
+        GPartsDatabaseTypePrivate *privat = GPARTS_DATABASE_TYPE_GET_PRIVATE(database_type);
 
-    node.name  = g_strdup(name);
-    node.type  = type;
-    node.flags = flags;
+        if (privat != NULL)
+        {
+            GPartsDatabaseTypeNode node;
 
-    g_array_append_val(privat->modules, node);
+            node.name    = gparts_database_factory_get_name(factory);
+            node.factory = factory;
+
+            g_object_ref(factory);
+
+            g_array_append_val(privat->modules, node);
+        }
+    }
 }
 
 static void
@@ -84,7 +88,7 @@ gparts_database_type_class_init(gpointer g_class, gpointer g_class_data)
     object_class->dispose  = gparts_database_type_dispose;
     object_class->finalize = gparts_database_type_finalize;
 
-    ((GPartsDatabaseTypeClass*)object_class)->add_type = gparts_database_type_add_type;
+    ((GPartsDatabaseTypeClass*)object_class)->add_factory = gparts_database_type_add_factory;
 }
 
 static void
@@ -98,30 +102,74 @@ gparts_database_type_finalize(GObject *object)
 {
     GPartsDatabaseTypePrivate *privat = GPARTS_DATABASE_TYPE_GET_PRIVATE(object);
 
-    g_array_free(privat->modules, TRUE);
+    if (privat != NULL)
+    {
+        g_array_free(privat->modules, TRUE);
+    }
 
     misc_object_chain_finalize(object);
 }
 
-gboolean
-gparts_database_type_get_flags(GPartsDatabaseType *database_type, const gchar *name, gint *flags)
+GPartsDatabaseFactory*
+gparts_database_type_get_factory(GPartsDatabaseType *database_type, const gchar *name)
 {
-    gint index;
-    GPartsDatabaseTypePrivate *privat = GPARTS_DATABASE_TYPE_GET_PRIVATE(database_type);
+    GPartsDatabaseFactory *factory = NULL;
 
-    for (index=0; index<privat->modules->len; index++)
+    if (name != NULL)
     {
-        GPartsDatabaseTypeNode *node = &g_array_index(privat->modules, GPartsDatabaseTypeNode, index);
+        GPartsDatabaseTypePrivate *privat = GPARTS_DATABASE_TYPE_GET_PRIVATE(database_type);
 
-        if (g_strcmp0(name, node->name) == 0)
+        if (privat != NULL)
         {
-            *flags = node->flags;
-            return TRUE;
+            gint index;
+
+            for (index=0; index<privat->modules->len; index++)
+            {
+                GPartsDatabaseTypeNode *node = &g_array_index(privat->modules, GPartsDatabaseTypeNode, index);
+
+                if (g_strcmp0(name, node->name) == 0)
+                {
+                    factory = node->factory;
+
+                    if (factory != NULL)
+                    {
+                        g_object_ref(factory);
+                    }
+
+                    break;
+                }
+            }
         }
     }
 
-    *flags = 0;
-    return FALSE;
+    return factory;
+}
+
+gchar**
+gparts_database_type_get_type_names(GPartsDatabaseType *database_type)
+{
+    GPartsDatabaseTypePrivate *privat = GPARTS_DATABASE_TYPE_GET_PRIVATE(database_type);
+    GPtrArray *result = NULL;
+
+    if (privat != NULL)
+    {
+        gint index;
+
+        result = g_ptr_array_new();
+
+        for (index=0; index<privat->modules->len; index++)
+        {
+            GPartsDatabaseTypeNode *node = &g_array_index(privat->modules, GPartsDatabaseTypeNode, index);
+
+            g_debug("Node name %s", node->name);
+
+            g_ptr_array_add(result, g_strdup(node->name));
+        }
+
+        g_ptr_array_add(result, NULL);
+    }
+
+    return (gchar**) g_ptr_array_free(result, FALSE);
 }
 
 GType
@@ -160,7 +208,10 @@ gparts_database_type_init(GTypeInstance* instance, gpointer g_class)
 {
     GPartsDatabaseTypePrivate *privat = GPARTS_DATABASE_TYPE_GET_PRIVATE(instance);
 
-    privat->modules = g_array_new(FALSE, FALSE, sizeof(GPartsDatabaseTypeNode));
+    if (privat != NULL)
+    {
+        privat->modules = g_array_new(FALSE, FALSE, sizeof(GPartsDatabaseTypeNode));
+    }
 }
 
 
@@ -205,8 +256,6 @@ gparts_database_type_load_module(GPartsDatabaseType *database_type, const gchar 
         GPartsDatabaseInitFunc init_func;
         gboolean success;
 
-        g_array_append_val(privat->modules, module);
-
         success = g_module_symbol(module, "gparts_database_register", (gpointer*) &init_func);
 
         if (success == FALSE)
@@ -227,7 +276,6 @@ gparts_database_type_load_module(GPartsDatabaseType *database_type, const gchar 
 GPartsDatabaseType*
 gparts_database_type_new(void)
 {
-    return g_object_new(GPARTS_TYPE_DATABASE_TYPE, NULL);
+    return GPARTS_DATABASE_TYPE(g_object_new(GPARTS_TYPE_DATABASE_TYPE, NULL));
 }
-
 

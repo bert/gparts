@@ -21,16 +21,13 @@
 /*! \file gparts-database.c
  */
 
-#include <glib-object.h>
-
-#include "gparts-connect-data.h"
-
-#include "gparts-database-result.h"
-#include "gparts-database.h"
-#include "gparts-database-factory.h"
+#include "gparts.h"
 
 static GPartsDatabase*
 gparts_database_factory_create_database_base(GPartsDatabaseFactory *factory, GError **error);
+
+static gint
+gparts_database_factory_get_flags_base(const GPartsDatabaseFactory *factory);
 
 static gchar*
 gparts_database_factory_get_name_base(const GPartsDatabaseFactory *factory);
@@ -47,8 +44,9 @@ gparts_database_factory_class_init(gpointer g_class, gpointer g_class_data)
 {
     GPartsDatabaseFactoryClass *klasse = GPARTS_DATABASE_FACTORY_CLASS(g_class);
 
-    klasse->create_database = gparts_database_factory_create_database;
-    klasse->get_name        = gparts_database_factory_get_name;
+    klasse->create_database = gparts_database_factory_create_database_base;
+    klasse->get_flags       = gparts_database_factory_get_flags_base;
+    klasse->get_name        = gparts_database_factory_get_name_base;
 }
 
 GPartsDatabase*
@@ -90,6 +88,39 @@ gparts_database_factory_create_database_base(GPartsDatabaseFactory *factory, GEr
 
     return NULL;
 }
+
+gint
+gparts_database_factory_get_flags(const GPartsDatabaseFactory *factory)
+{
+    gint flags = 0;
+
+    if (factory != NULL)
+    {
+        GPartsDatabaseFactoryClass *klasse = GPARTS_DATABASE_FACTORY_GET_CLASS(factory);
+
+        if (klasse == NULL)
+        {
+            g_critical("Unable to get GPartsDatabaseFactoryClass from parameter");
+        }
+        else if (klasse->get_flags == NULL)
+        {
+            g_critical("GPartsDatabaseFactoryClass contains NULL get_flags() function pointer");
+        }
+        else
+        {
+            flags = klasse->get_flags(factory);
+        }
+    }
+
+    return flags;
+}
+
+static gint
+gparts_database_factory_get_flags_base(const GPartsDatabaseFactory *factory)
+{
+    return 0;
+}
+
 
 gchar*
 gparts_database_factory_get_name(const GPartsDatabaseFactory *factory)

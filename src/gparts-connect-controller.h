@@ -28,9 +28,6 @@
 #define GPARTS_IS_CONNECT_CONTROLLER_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),GPARTS_TYPE_CONNECT_CONTROLLER))
 #define GPARTS_CONNECT_CONTROLLER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),GPARTS_TYPE_CONNECT_CONTROLLER,GPartsConnectControllerClass))
 
-typedef struct _GPartsConnectController GPartsConnectController;
-typedef struct _GPartsConnectControllerClass GPartsConnectControllerClass;
-
 struct _GPartsConnectController
 {
     GObject parent;
@@ -97,4 +94,12 @@ gparts_connect_controller_set_connect_data(GPartsConnectController *controller, 
  */
 void
 gparts_connect_controller_set_database_types(GPartsConnectController *controller, const gchar **types);
+
+/*! \brief Sets the connect data flags
+ *
+ *  \param [in] controller The controller.
+ *  \param [in] flags The connect data flags.
+ */
+void
+gparts_connect_controller_set_flags(GPartsConnectController *controller, gint flags);
 

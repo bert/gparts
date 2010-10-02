@@ -22,18 +22,8 @@
  */
 
 #include <string.h>
-#include <gtk/gtk.h>
 
-#include "misc-object.h"
-
-#include "gparts-connect-data.h"
-
-#include "gparts-database-result.h"
-#include "gparts-database.h"
-#include "gparts-database-type.h"
-#include "gparts-login-ctrl.h"
-
-#include "gparts-connect-controller.h"
+#include "gpartsui.h"
 
 #define GPARTS_LOGIN_CTRL_GET_PRIVATE(object) G_TYPE_INSTANCE_GET_PRIVATE(object,GPARTS_TYPE_LOGIN_CTRL,GPartsLoginCtrlPrivate)
 
@@ -86,8 +76,6 @@ gparts_login_ctrl_set_property(GObject *object, guint property_id, const GValue 
 
 /**** Signal handlers ****/
 
-static void
-gparts_login_ctrl_changed_cb(GtkTreeSelection *selection, GPartsLoginCtrl *login_ctrl);
 
 static void
 gparts_login_ctrl_clicked_cb(GtkTreeSelection *selection, GPartsLoginCtrl *login_ctrl);
@@ -209,55 +197,28 @@ gparts_login_ctrl_class_init(gpointer g_class, gpointer g_class_data)
 
 
 static void
-gparts_login_ctrl_changed_cb(GtkTreeSelection *selection, GPartsLoginCtrl *login_ctrl)
+gparts_login_ctrl_changed_cb(GPartsConnectController *connect, GParamSpec *pspec, GPartsLoginCtrl *login)
 {
-    GPartsLoginCtrlPrivate *privat = GPARTS_LOGIN_CTRL_GET_PRIVATE(login_ctrl);
-
-    if (privat != NULL)
+    if (connect != NULL)
     {
-        gboolean success;
-        gint flags;
+        gint flags = 0;
+        GPartsLoginCtrlPrivate *privat = GPARTS_LOGIN_CTRL_GET_PRIVATE(login);
 
-#if 0
-        gtk_entry_set_text(privat->server_entry, "localhost");
-        gtk_entry_set_text(privat->database_entry, "GParts");
+        if (privat != NULL)
+        {
+            GPartsDatabaseFactory *factory;
+            gchar *name;
 
-        success = gparts_database_type_get_flags(
-            privat->database_type,
-            gtk_combo_box_get_active_text(privat->engine_combo),
-            &flags
-            );
+            name = gparts_connect_controller_get_database_type(connect);
 
-        gtk_widget_set_sensitive(
-            GTK_WIDGET(privat->user_name_entry),
-            success && (flags & GPARTS_DATABASE_TYPE_FLAGS_USES_USERNAME)
-            );
+            factory = gparts_database_type_get_factory(privat->database_type, name);
+            g_free(name);
 
-        gtk_widget_set_sensitive(
-            GTK_WIDGET(privat->password_entry),
-            success && (flags & GPARTS_DATABASE_TYPE_FLAGS_USES_PASSWORD)
-            );
+            flags = gparts_database_factory_get_flags(factory);
+            g_object_unref(factory);
+        }
 
-        gtk_widget_set_sensitive(
-            GTK_WIDGET(privat->server_entry),
-            success && (flags & GPARTS_DATABASE_TYPE_FLAGS_USES_SERVER)
-            );
-
-        gtk_widget_set_sensitive(
-            GTK_WIDGET(privat->database_entry),
-            success && (flags & GPARTS_DATABASE_TYPE_FLAGS_USES_DATABASE)
-            );
-
-        gtk_widget_set_sensitive(
-            GTK_WIDGET(privat->filename_entry),
-            success && (flags & GPARTS_DATABASE_TYPE_FLAGS_USES_FILENAME)
-            );
-
-        gtk_widget_set_sensitive(
-            GTK_WIDGET(privat->button),
-            success && (flags & GPARTS_DATABASE_TYPE_FLAGS_USES_FILENAME)
-            );
-#endif
+        gparts_connect_controller_set_flags(connect, flags);
     }
 }
 
@@ -274,7 +235,20 @@ gparts_login_ctrl_connect_database(GPartsLoginCtrl *controller)
 
     if (privat != NULL)
     {
-        gint result = gparts_connect_controller_run(privat->ctrl);
+        gint result;
+
+        gchar **type_names = NULL;
+
+        if (privat->database_type != NULL)
+        {
+            type_names = gparts_database_type_get_type_names(privat->database_type);
+        }
+
+        gparts_connect_controller_set_database_types(privat->ctrl, type_names);
+
+        g_strfreev(type_names);
+
+        result = gparts_connect_controller_run(privat->ctrl);
 
         if (result == GTK_RESPONSE_OK)
         {
@@ -285,7 +259,19 @@ gparts_login_ctrl_connect_database(GPartsLoginCtrl *controller)
                 GPartsDatabase *database;
                 GError *error = NULL;
 
-                database = g_object_new(g_type_from_name("gparts-sqlite-database"), NULL);
+                {
+                    GPartsDatabaseFactory *factory;
+                    gchar *name;
+
+                    name = gparts_connect_controller_get_database_type(privat->ctrl);
+
+                    factory = gparts_database_type_get_factory(privat->database_type, name);
+                    g_free(name);
+
+                    //database = g_object_new(g_type_from_name("gparts-sqlite-database"), NULL);
+                    database = gparts_database_factory_create_database(factory, NULL);
+                    g_object_unref(factory);
+                }
 
                 gparts_database_connect(database, data, &error);
 
@@ -493,6 +479,14 @@ gparts_login_ctrl_instance_init(GTypeInstance *instance, gpointer g_class)
 
     privat->ctrl = gparts_connect_controller_new();
 
+
+    g_signal_connect(
+        privat->ctrl,
+        "notify",
+        G_CALLBACK(gparts_login_ctrl_changed_cb),
+        instance
+        );
+
     connect_data.hostname = "localhost"; /* g_get_host_name(); */
     connect_data.username = g_get_user_name();
     connect_data.password = NULL;
@@ -501,29 +495,32 @@ gparts_login_ctrl_instance_init(GTypeInstance *instance, gpointer g_class)
 
     gparts_connect_controller_set_connect_data(privat->ctrl, &connect_data);
 
+    {
+        GPartsConfig *config = gparts_config_new();
 
-    privat->database_type = gparts_database_type_new();
+        privat->database_type = gparts_config_get_database_types(config);
+    }
 
     /** TODO Move elsewhere */
 
-    gparts_database_type_load_module(privat->database_type, "libgparts-mysql.la", NULL);
-    gparts_database_type_load_module(privat->database_type, "libgparts-sqlite.la", NULL);
+    //gparts_database_type_load_module(privat->database_type, "libgparts-mysql.la", NULL);
+    //gparts_database_type_load_module(privat->database_type, "libgparts-sqlite.la", NULL);
 
     /* TODO Test code / Remove before flight */
 
-    gparts_database_type_add_type(
-        privat->database_type,
-        "PostgreSQL",
-        G_TYPE_INVALID,
-        GPARTS_DATABASE_TYPE_FLAGS_USES_USERNAME
-        );
+//    gparts_database_type_add_type(
+//        privat->database_type,
+//        "PostgreSQL",
+//        G_TYPE_INVALID,
+//        GPARTS_DATABASE_TYPE_FLAGS_USES_USERNAME
+//        );
 
-    gparts_database_type_add_type(
-        privat->database_type,
-        "SQLite",
-        G_TYPE_INVALID,
-        GPARTS_DATABASE_TYPE_FLAGS_USES_FILENAME
-        );
+//    gparts_database_type_add_type(
+//        privat->database_type,
+//        "SQLite",
+//        G_TYPE_INVALID,
+//        GPARTS_DATABASE_TYPE_FLAGS_USES_FILENAME
+//        );
 }
 
 static void
@@ -744,14 +741,14 @@ gparts_login_ctrl_set_drop_action(GPartsLoginCtrl *login_ctrl, GtkAction *action
                     login_ctrl
                     );
 
-//                if (privat->database != NULL)
-//                {
-//                    gtk_action_set_sensitive(privat->drop_action, gparts_database_droppable(privat->database));
-//                }
-//                else
-//                {
-//                    gtk_action_set_sensitive(privat->drop_action, FALSE);
-//                }
+                if (privat->database != NULL)
+                {
+                    gtk_action_set_sensitive(privat->drop_action, gparts_database_droppable(privat->database));
+                }
+                else
+                {
+                    gtk_action_set_sensitive(privat->drop_action, FALSE);
+                }
             }
 
             g_object_notify(G_OBJECT(login_ctrl), "drop-action");

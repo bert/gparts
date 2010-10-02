@@ -21,12 +21,10 @@
 /*! \file gparts-mysql-result.c
  */
 
-#include <glib-object.h>
 #include <mysql.h>
 
-#include "gparts-units.h"
+#include "gparts.h"
 
-#include "gparts-database-result.h"
 #include "gparts-mysql-result.h"
 
 /*! \file gparts-mysql-result.c

@@ -30,6 +30,7 @@ typedef struct _GPartsPreviewPrivate GPartsPreviewPrivate;
 
 struct _GPartsPreviewPrivate
 {
+    gint dummy;
 };
 
 #define GPARTS_PREVIEW_GET_PRIVATE(object) G_TYPE_INSTANCE_GET_PRIVATE(object, GPARTS_TYPE_PREVIEW, GPartsPreviewPrivate)

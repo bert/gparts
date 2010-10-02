@@ -24,11 +24,7 @@
 #include <glib-object.h>
 #include <mysql.h>
 
-#include "gparts-connect-data.h"
-
-#include "gparts-database-result.h"
-#include "gparts-database.h"
-#include "gparts-database-factory.h"
+#include "gparts.h"
 
 #include "gparts-mysql-result.h"
 #include "gparts-mysql-database.h"
@@ -36,6 +32,9 @@
 
 static GPartsDatabase*
 gparts_mysql_factory_create_database(GPartsDatabaseFactory *factory, GError **error);
+
+static gint
+gparts_mysql_factory_get_flags(const GPartsDatabaseFactory *factory);
 
 static gchar*
 gparts_mysql_factory_get_name(const GPartsDatabaseFactory *factory);
@@ -53,27 +52,41 @@ gparts_mysql_factory_class_init(gpointer g_class, gpointer g_class_data)
     GPartsDatabaseFactoryClass *klasse = GPARTS_DATABASE_FACTORY_CLASS(g_class);
 
     klasse->create_database = gparts_mysql_factory_create_database;
+    klasse->get_flags       = gparts_mysql_factory_get_flags;
     klasse->get_name        = gparts_mysql_factory_get_name;
 }
 
 static GPartsDatabase*
 gparts_mysql_factory_create_database(GPartsDatabaseFactory *factory, GError **error)
 {
-    g_set_error(
-        error,
-        g_quark_from_static_string( "gparts-database-error" ),
-        0,
-        "%s",
-        "create database functionality not implemented"
-        );
+    return gparts_mysql_database_new();
+}
 
-    return NULL;
+static gint
+gparts_mysql_factory_get_flags(const GPartsDatabaseFactory *factory)
+{
+   return
+        GPARTS_DATABASE_TYPE_FLAGS_USES_USERNAME |
+        GPARTS_DATABASE_TYPE_FLAGS_USES_PASSWORD |
+        GPARTS_DATABASE_TYPE_FLAGS_USES_SERVER   |
+        GPARTS_DATABASE_TYPE_FLAGS_USES_DATABASE ;
 }
 
 static gchar*
 gparts_mysql_factory_get_name(const GPartsDatabaseFactory *factory)
 {
-    return g_strdup("MySQL");
+    GString *name   = g_string_new(NULL);
+    glong   version = mysql_get_client_version();
+
+    g_string_printf(
+        name,
+        "MySQL %d.%d.%d",
+        version / 10000,
+        (version / 100) % 100,
+        version % 100
+        );
+
+    return g_string_free(name, FALSE);
 }
 
 GType
@@ -105,5 +118,11 @@ gparts_mysql_factory_get_type(void)
     }
 
     return type;
+}
+
+GPartsMySQLFactory*
+gparts_mysql_factory_new(void)
+{
+    return GPARTS_MYSQL_FACTORY(g_object_new(GPARTS_TYPE_MYSQL_FACTORY, NULL));
 }
 

@@ -39,7 +39,7 @@ sch_fill_style_get_type(void)
 
     if (type == G_TYPE_INVALID)
     {
-        g_boxed_type_register_static(
+        type = g_boxed_type_register_static(
             "SchFillStyle",
             (GBoxedCopyFunc) sch_fill_style_copy,
             (GBoxedFreeFunc) sch_fill_style_free
