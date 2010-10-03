@@ -58,7 +58,6 @@ gparts_LDADD = $(GMODULE_LIBS) $(GTK_LIBS) libgeom.la libmisc.la libsch.la libsc
 
 #gparts_DEPENDENCIES = $(MYSQL_LDADD) $(POSTGRESQL_LDADD) $(SQLITE_LDADD)
 
-
 # A small GUI program for testing the drawing loader and drawing view widget.
 #
 gsymview_SOURCES = \

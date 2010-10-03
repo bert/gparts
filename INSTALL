@@ -1,10 +1,5 @@
-gEDA
+====== REQUIREMENTS ======
 
-GPL Electronic Design Automation
-------------------------------------------------------------------------------
-
-REQUIREMENTS
-------------
 Building GParts requires the following packages:
 
     gcc
@@ -26,16 +21,53 @@ In order to use PostgreSQL, the following packages must be installed:
     libpq-dev
     postgresql
 
+In order to use SQLite, the following packages must be installed:
+
+| sqlite3       | A command line interface for SQLite 3 | Required |
+| sqlite3-0     | SQLite 3 shared library               | Required |
+| sqlite3-0-dbg | SQLite 3 debugging symbols            | Optional |
+| sqlite3-dev   | SQLite 3 development files            | Required |
+| sqlite3-doc   | SQLite 3 documentation                | Optional |
+
 Of course, installing all packages before building allows the application to
 use either database for the back-end.
 
-BUILDING GPARTS
----------------
-TODO: Finish documentation
+====== BUILDING GPARTS ======
+
+In the top directory of the source package, execute the following commands.
+
+    $ ./autogen
+
+    $ ./configure
+
+    $ make
+
+    $ make gparts-mysql.la
+    $ make gparts-sqlite.la
+
+    $ sudo make install
+
+The parts manager needs to know the location of system-gafrc file. The parts
+manager will search for this file, but often cannot locate it. Providing the
+following enviroment variable provides better results.
+
+    $ GEDADATADIR=
+    $ export GEDADATADIR
+
+Similarly, the parts manager must also locate the system-gpartsrc file. Until
+the implementation improves, the location must be specified in an environment
+variable.
+
+    $ GPARTSDATADIR=
+    $ export GPARTSDATADIR
+
+    $ gparts
+
+====== DATABASE CREATION ======
 
 
-DATABASE CREATION (MySQL)
--------------------------
+===== MySQL =====
+
 Install MySQL.
 
     Tested under 5.0.51a-3ubuntu5.1.
@@ -88,11 +120,42 @@ the MySQL prompt.
     mysql> source tmp/parts-bourns.sql
 
 
-DATABASE CREATION (PostgreSQL)
-------------------------------
+===== PostgreSQL =====
+
 TODO: Finish implementation
 
-DATABASE CREATION (SQLite)
-------------------------------
-TODO: Finish implementation
+===== SQLite =====
+
+The source package contains a sample database in the location below. This
+database can be opened from directly within the parts manager.
+
+    gparts/sql/sqlite/sample.db
+
+If required, use the following command line to create a new database or recreate
+the sample database. In this example, the present working directory must be
+gparts/sql/sqlite.
+
+    $ sqlite3 sample.db
+
+After creating the database, read base and part specific tables into the
+database.
+
+    sqlite> .read create-basic.sql
+    sqlite> .read create-categories.sql
+    sqlite> .read create-discretes.sql
+    sqlite> .read create-passives.sql
+
+Read sample packages into the database. Because SQLite does not implement stored
+procedures, a special version of this file resides in the gparts/sql/sqlite
+directory.
+
+    sqlite> .read packages.sql
+
+Read sample symbols into the database.
+
+    sqlite> .read symbols.sql
+
+And finally, exit the command line interface.
+
+    sqlite> .exit
 

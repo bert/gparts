@@ -194,7 +194,7 @@ CREATE TABLE Package (
 CREATE TABLE Symbol (
 
     SymbolID    INTEGER UNSIGNED  NOT NULL AUTO_INCREMENT,
-    SymbolPath  VARCHAR(500)      NOT NULL,
+    SymbolName  VARCHAR(500)      NOT NULL,
     DeviceID    INTEGER UNSIGNED  NOT NULL,
 
     PRIMARY KEY ( SymbolID ),
@@ -301,12 +301,12 @@ CREATE VIEW PackageV AS
 CREATE VIEW SymbolV AS
     SELECT
         SymbolID,
-        SymbolPath,
+        SymbolName,
         DeviceID,
         DeviceName
     FROM Symbol
         JOIN Device USING ( DeviceID )
-    ORDER BY SymbolPath;
+    ORDER BY SymbolName;
 
 DELIMITER $$
 
@@ -449,17 +449,17 @@ END$$
 --
 CREATE PROCEDURE AddSymbol(
     IN DeviceName VARCHAR(500),
-    IN SymbolPath VARCHAR(500)
+    IN SymbolName VARCHAR(500)
     )
 
 BEGIN
     INSERT INTO Symbol (
         DeviceID,
-        SymbolPath
+        SymbolName
         )
     VALUES (
         ( SELECT DeviceID FROM Device WHERE Device.DeviceName = DeviceName ),
-        SymbolPath
+        SymbolName
         );
 END$$
 
@@ -469,7 +469,7 @@ END$$
 -- Detail - The text of the detail (comment).
 --
 CREATE PROCEDURE AddSymbolDetail(
-    IN SymbolPath VARCHAR(500),
+    IN SymbolName VARCHAR(500),
     IN Detail     VARCHAR(500)
     )
 
@@ -479,7 +479,7 @@ BEGIN
         Detail
         )
     VALUES (
-        ( SELECT SymbolID FROM Symbol WHERE Symbol.SymbolPath = SymbolPath ),
+        ( SELECT SymbolID FROM Symbol WHERE Symbol.SymbolName = SymbolName ),
         Detail
         );
 END$$

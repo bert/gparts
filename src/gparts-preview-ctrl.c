@@ -95,7 +95,9 @@ gparts_preview_ctrl_updated_cb(GtkWidget *widget, GPartsPreviewCtrl *controller)
         SchDrawing   *symbol = NULL;
         gchar        *symbol_name;
 
-        symbol_name = gparts_controller_get_field(privat->symbol_source, "SymbolPath");
+        symbol_name = gparts_controller_get_field(privat->symbol_source, "SymbolName");
+
+        g_debug("Symbol name: %s", symbol_name);
 
         if (symbol_name != NULL)
         {
