@@ -142,25 +142,32 @@ gparts_sqlite_result_get_column_count(GPartsDatabaseResult *result)
 static gboolean
 gparts_sqlite_result_get_column_index(GPartsDatabaseResult *result, const gchar *name, gint *index)
 {
-# if 0
-    GPartsSQLiteResultPrivate *private = GPARTS_SQLITE_RESULT_GET_PRIVATE(result);
-    gint index0;
+    gboolean found = FALSE;
+    GPartsSQLiteResultPrivate *privat = GPARTS_SQLITE_RESULT_GET_PRIVATE(result);
 
-    gint column_count = sqlite_num_fields(private->result);
-
-    SQLITE_FIELD *columns = sqlite_fetch_fields(private->result);
-
-    for (index0=0; index0<column_count; index0++)
+    if ((privat != NULL) && (privat->columns != NULL))
     {
-        if (g_strcmp0(columns[index0].name, name) == 0)
+        guint i;
+
+        for (i=0; i<privat->columns->len; i++)
         {
-            *index = index0;
-            return TRUE;
+            GPartsColumnData *data = (GPartsColumnData*) g_ptr_array_index(privat->columns, i);
+
+            if (g_strcmp0(name, data->name) == 0)
+            {
+                if (index != 0)
+                {
+                    *index = i;
+                }
+
+                found = TRUE;
+
+                break;
+            }
         }
     }
 
-#endif
-    return FALSE;
+    return found;
 }
 
 /*! \brief Gets the type of a column.
