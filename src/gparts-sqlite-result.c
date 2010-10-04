@@ -435,6 +435,11 @@ gparts_sqlite_result_process_columns(GPartsSQLiteResult *result, sqlite3_stmt *s
                     data->type = G_TYPE_STRING;
                     break;
 
+                /* NULLs throw a wrench into the gears. Not all rows in */
+                /* a column are required to have the same data type. If */
+                /* a NULL is found, then the data type will be wrong    */
+                /* for oher rows in the column.                         */
+                case SQLITE_NULL:
                 default:
                     data->type = G_TYPE_INVALID;
             }
@@ -471,12 +476,19 @@ gparts_sqlite_result_process_row(GPartsSQLiteResult *result, sqlite3_stmt *stmt)
                     g_value_set_int64(&value, sqlite3_column_int64(stmt, index));
                     break;
 
+                case SQLITE_NULL:
+                    g_value_init(&value, G_TYPE_STRING);
+                    g_value_set_string(&value, "");
+                    break;
+
                 case SQLITE_TEXT:
                     g_value_init(&value, G_TYPE_STRING);
                     g_value_set_string(&value, sqlite3_column_text(stmt, index));
                     break;
 
                 default:
+                    g_value_init(&value, G_TYPE_STRING);
+                    g_value_set_string(&value, "Error");
                     break;
             }
 
