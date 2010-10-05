@@ -28,9 +28,9 @@
 
 /* Boxed types */
 
+#include "gparts-units.h"
 #include "gparts-connect-data.h"
 #include "gparts-column-data.h"
-#include "gparts-units.h"
 
 /* Forward declarations for gparts package */
 

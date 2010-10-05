@@ -24,6 +24,7 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include "gparts-units.h"
 #include "gparts-column-data.h"
 
 GPartsColumnData*

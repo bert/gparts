@@ -192,6 +192,56 @@ gparts_units_free(GPartsUnits *units)
     g_free(units);
 }
 
+GPartsUnitsNewFunc
+gparts_units_get_new_func(const gchar *name)
+{
+    struct entry
+    {
+        const gchar        *name;
+        GPartsUnitsNewFunc func;
+    };
+
+    static const struct entry table[] =
+    {
+        { "Capacitance", gparts_units_new_farads  },
+        { "PD",          gparts_units_new_watts   },
+        { "IC",          gparts_units_new_amps    },
+        { "FT",          gparts_units_new_hertz   },
+        { "Frequency",   gparts_units_new_hertz   },
+        { "Inductance",  gparts_units_new_henrys  },
+        { "IF",          gparts_units_new_amps    },
+        { "Resistance",  gparts_units_new_ohms    },
+        { "Tolerance",   gparts_units_new_pp      },
+        { "Stability",   gparts_units_new_pp      },
+        { "VBR",         gparts_units_new_volts   },
+        { "VZ",          gparts_units_new_volts   },
+        { "VF",          gparts_units_new_volts   },
+        { "VR",          gparts_units_new_volts   },
+        { "VRWM",        gparts_units_new_volts   },
+        { "VZ",          gparts_units_new_volts   },
+        { "MinTemp",     gparts_units_new_celcius },
+        { "MaxTemp",     gparts_units_new_celcius },
+        { NULL,          NULL                     }
+    };
+
+    GPartsUnitsNewFunc func = NULL;
+    const struct entry *t = &table[0];
+
+    while (func == NULL)
+    {
+        if ((t->name == NULL) || (g_strcmp0(t->name, name) == 0))
+        {
+            func = t->func;
+        }
+        else
+        {
+            t++;
+        }
+    }
+
+    return func;
+}
+
 GPartsUnits*
 gparts_units_new_amphours(gdouble amphours)
 {

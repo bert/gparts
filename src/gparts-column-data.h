@@ -30,6 +30,7 @@ struct _GPartsColumnData
 {
     gchar *name;
     GType type;
+    GPartsUnits* (*new_units)(gdouble value);
 };
 
 /*! \private */

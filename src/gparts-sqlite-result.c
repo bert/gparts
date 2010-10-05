@@ -424,15 +424,25 @@ gparts_sqlite_result_process_columns(GPartsSQLiteResult *result, sqlite3_stmt *s
             switch (sqlite3_column_type(stmt, index))
             {
                 case SQLITE_FLOAT:
-                    data->type = G_TYPE_DOUBLE;
+                    data->new_units = gparts_units_get_new_func(data->name);
+                    if (data->new_units != NULL)
+                    {
+                        data->type = GPARTS_TYPE_UNITS;
+                    }
+                    else
+                    {
+                        data->type = G_TYPE_DOUBLE;
+                    }
                     break;
 
                 case SQLITE_INTEGER:
                     data->type = G_TYPE_INT64;
+                    data->new_units = NULL;
                     break;
 
                 case SQLITE_TEXT:
                     data->type = G_TYPE_STRING;
+                    data->new_units = NULL;
                     break;
 
                 /* NULLs throw a wrench into the gears. Not all rows in */
@@ -442,6 +452,7 @@ gparts_sqlite_result_process_columns(GPartsSQLiteResult *result, sqlite3_stmt *s
                 case SQLITE_NULL:
                 default:
                     data->type = G_TYPE_INVALID;
+                    data->new_units = NULL;
             }
 
             g_ptr_array_add(privat->columns, data);
@@ -467,8 +478,20 @@ gparts_sqlite_result_process_row(GPartsSQLiteResult *result, sqlite3_stmt *stmt)
             switch (sqlite3_column_type(stmt, index))
             {
                 case SQLITE_FLOAT:
-                    g_value_init(&value, G_TYPE_DOUBLE);
-                    g_value_set_double(&value, sqlite3_column_double(stmt, index));
+                    {
+                        GPartsColumnData *data = (GPartsColumnData*) g_ptr_array_index(privat->columns, index);
+
+                        if (data->new_units != NULL)
+                        {
+                            g_value_init(&value, GPARTS_TYPE_UNITS);
+                            g_value_take_boxed(&value, data->new_units(sqlite3_column_double(stmt, index)));
+                        }
+                        else
+                        {
+                            g_value_init(&value, G_TYPE_DOUBLE);
+                            g_value_set_double(&value, sqlite3_column_double(stmt, index));
+                        }
+                    }
                     break;
 
                 case SQLITE_INTEGER:

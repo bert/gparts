@@ -36,7 +36,10 @@
 #define GPARTS_TYPE_UNITS (gparts_units_get_type())
 #define GPARTS_UNITS(obj) ((GPartsUnits*)obj)
 
+
 typedef struct _GPartsUnits GPartsUnits;
+
+typedef GPartsUnits* (*GPartsUnitsNewFunc)(gdouble value);
 
 /*! \private */
 GType
@@ -61,6 +64,17 @@ gparts_units_copy(const GPartsUnits *units);
  */
 void
 gparts_units_free(GPartsUnits *units);
+
+/*! \brief Create a new value with a measurement in amphours.
+ *
+ *  When no longer needed, the caller must call gparts_units_free()
+ *  on the returned pointer.
+ *
+ *  \param [in] amphours The value in amphours.
+ *  \return A pointer to a new GPartsUnits boxed type
+ */
+GPartsUnitsNewFunc
+gparts_units_get_new_func(const gchar *name);
 
 /*! \brief Create a new value with a measurement in amphours.
  *
