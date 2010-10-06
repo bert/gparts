@@ -21,24 +21,44 @@
 --
 -- ---------------------------------------------------------------------------
 --
+--  SQL to insert a part into the SQLite database
+--
+--  Since SQLite does not support stored procedures, this file requires a
+--  considerable amount of code to insert a single part. This file serves as
+--  a prototype for an operation that will eventually become part of another
+--  program, likely a library for the part manager application itself.
+--
 -- ---------------------------------------------------------------------------
 
--- diodes 
+BEGIN TRANSACTION;
+
+--  Ensure the company exists in the Company table. If not, insert it. It is
+--  the responsibility of another query to update any other fields besides
+--  the CompanyName.
 
 INSERT INTO Company (CompanyName)
     SELECT ( "Fairchild Semiconductor" ) WHERE NOT EXISTS (
         SELECT * FROM Company WHERE CompanyName = "Fairchild Semiconductor"
         );
 
+-- Ensure the device exists in the Device table.
+
 INSERT INTO Device (DeviceName)
     SELECT ( "npn" ) WHERE NOT EXISTS (
         SELECT * FROM Device WHERE DeviceName = "npn"
         );
 
+--  Ensure the package exists in the Package table. If not, insert it. It is
+--  the responsibility of another query to update any other fields besides the
+--  PackageName.
+
 INSERT INTO Package (PackageName)
     SELECT ( "TO-92" ) WHERE NOT EXISTS (
         SELECT * FROM Package WHERE PackageName = "TO-92"
         );
+
+-- Add the CompanyID and PartNumber to the Part table. If the CompanyID and
+-- PartNumber already exist, do not insert a record.
 
 INSERT INTO Part (CompanyID, PartNumber, DeviceID)
     SELECT 
@@ -46,17 +66,28 @@ INSERT INTO Part (CompanyID, PartNumber, DeviceID)
         "FJN3303",
         (SELECT DeviceID FROM Device WHERE DeviceName = "npn")
     WHERE NOT EXISTS
-        (SELECT * FROM Part WHERE PartNumber = "FJN3303");
+        (SELECT * FROM Part 
+             JOIN Company USING ( CompanyID )
+             WHERE CompanyName = "Fairchild Semiconductor" AND PartNumber = "FJN3303"
+             );
+
+-- Add part specific data to the BJT table. Again, if the entry already exists
+-- no operation is performed.
 
 INSERT INTO BJT (PartID, PackageID, Polarity, IC, FT, PD)
-    VALUES (
+    SELECT
         (SELECT PartID FROM Part WHERE PartNumber = "FJN3303"),
         (SELECT PackageID FROM Package WHERE PackageName = "TO-92"),
         "NPN",
         1.5,        
         4000000,
-        1.1 );
+        1.1
+    WHERE NOT EXISTS
+        (SELECT * FROM BJT 
+             JOIN Part USING ( PartID )
+             JOIN Company USING ( CompanyID )
+             WHERE CompanyName = "Fairchild Semiconductor" AND PartNumber = "FJN3303"
+             );
 
---    WHERE NOT EXISTS
---        (SELECT * FROM Part WHERE PartNumber = "FJN3303");
+COMMIT;
 

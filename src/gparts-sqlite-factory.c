@@ -75,7 +75,15 @@ gparts_sqlite_factory_get_flags(const GPartsDatabaseFactory *factory)
 static gchar*
 gparts_sqlite_factory_get_name(const GPartsDatabaseFactory *factory)
 {
-    return g_strdup("SQLite");
+    GString *name   = g_string_new(NULL);
+
+    g_string_printf(
+        name,
+        "SQLite %s",
+        sqlite3_version
+        );
+
+    return g_string_free(name, FALSE);
 }
 
 GType
