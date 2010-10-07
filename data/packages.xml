@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+<!--
+
+   Adds packaging (case) data to the GParts database.
+
+   PACKAGE NAMES
+   Prefer uppercase in all package names.
+
+   CAPACITORS
+   EIA form factors include the maximum height: 'EIA-7343-43'.
+
+   CHIP COMPONENTS
+   Chip components include the metric designation in parenthesis to reduce
+   confusion. For example, an '0603' package is named '0603(1806)'.
+
+   DIODES
+   The DO-214 packages include the alternate name in parenthesis.  For example
+   'DO-214AB(SMC)'.  This additional information gets presented to the user.
+
+-->
+<data>
+    <package>
+        <package-name>0201(0603)</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>0402(1005)</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>0603(1608)</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>0805(2012)</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>1005(2512)</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>1206(3216)</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>1806(4516)</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>1812(4532)</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>2010(5025)</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>2512(6332)</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>DO-214AA(SMB)</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>DO-214AB(SMC)</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>DO-214AC(SMA)</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>EIA-3216-18</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>EIA-3528-21</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>EIA-7343-20</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>EIA-6032-28</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>EIA-7343-31</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>EIA-7343-43</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>MA-505</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>SC-59</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>SC-70</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>SC-75</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>SC-88A</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>SOD-123</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>SOD-323</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>SOD-523</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>SOD-723</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>SOD-923</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>SOT-23</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>SOT-363</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>SOT-563</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>SOT-723</package-name>
+        <technology>SMT</technology>
+    </package>
+    <package>
+        <package-name>TO-92</package-name>
+        <technology>TH</technology>
+    </package>
+</data>
+

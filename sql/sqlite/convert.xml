@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!-- *************************************************************************
+
+   gEDA - GPL Electronic Design Automation
+   gparts - gEDA Parts Manager
+   Copyright (C) 2010 Edward C. Hennessy
+   Copyright (C) 2010 gEDA Contributors (see ChangeLog for details)
+  
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
+
+******************************************************************************
+
+   An XSLT stylesheet to convert XML import data into SQL suitable for
+   import into a SQLite database.
+
+************************************************************************** -->
+
+<xsl:stylesheet version = "1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+    <xsl:output method="text"/>
+
+    <xsl:template match="/">
+        <xsl:apply-templates select="data/package"/>
+    </xsl:template>
+
+    <!-- Transform a package element into an SQL insert into the Package table -->
+
+    <xsl:template match="package">
+        <xsl:text>INSERT INTO Package ( PackageName, Technology )&#10;    SELECT&#10;        '</xsl:text>
+        <xsl:value-of select="package-name"/>
+        <xsl:text>',&#10;        '</xsl:text>
+        <xsl:value-of select="technology"/>
+        <xsl:text>'&#10;    WHERE NOT EXISTS&#10;        ( SELECT * FROM Package WHERE PackageName = '</xsl:text>
+        <xsl:value-of select="package-name"/>
+        <xsl:text>');&#10;&#10;</xsl:text>
+    </xsl:template>
+
+</xsl:stylesheet>
+
