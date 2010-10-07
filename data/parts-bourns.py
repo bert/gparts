@@ -5,9 +5,8 @@
 ##
 ##############################################################################
 
-print "CALL AddCompany("
-print "    'Bourns'"
-print "    );"
+print "<?xml version=\"1.0\"?>"
+print "<data>"
 print
 
 ##############################################################################
@@ -598,15 +597,14 @@ resistances = [
 
 for package in packages:
     for resistance in resistances:
-        print "CALL AddResistor("
-        print "    'Bourns',"
-        print "    'CR%s-FX-%sELF'," % ( package[0], resistance[0] )
-        print "    '%s'," % package[1]
-        print "    'RESISTOR',"
-        print "    %f," % resistance[1]
-        print "    %f" % 0.01
-        print "    );"
-        print
+        print "    <resistor>"
+        print "        <company-name>Bourns</company-name>"
+        print "        <part-number>CR%s-FX-%sELF</part-number>" % ( package[0], resistance[0] )
+        print "        <package-name>%s</package-name>" % package[1]
+        print "        <device-name>resistor</device-name>"
+        print "        <resistance>%f</resistance>" % resistance[1]
+        print "        <tolerance>%f</tolerance>" % 0.01
+        print "    </resistor>"
 
 ##############################################################################
 ##
@@ -656,12 +654,12 @@ voltages = [
 
 for package in packages:
     for voltage in voltages:
-        print "CALL AddZenerDiode("
-        print "    'Bourns',"
-        print "    'CD%s-Z%s'," % ( package[0], voltage[0] )
-        print "    '%s'," % package[1]
-        print "    'ZENER_DIODE',"
-        print "    %f" % voltage[1]
-        print "    );"
-        print
+        print "    <zener-diode>"
+        print "        <company-name>Bourns</company-name>"
+        print "        <part-number>CD%s-Z%s</part-number>" % ( package[0], voltage[0] )
+        print "        <package-name>%s</package-name>" % package[1]
+        print "        <device-name>zener</device-name>"
+        print "        <zener-voltage>%f</zener-voltage>" % voltage[1]
+        print "    </zener-diode>"
 
+print "</data>"
