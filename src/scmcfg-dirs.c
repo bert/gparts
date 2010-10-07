@@ -119,11 +119,28 @@ scmcfg_dirs_find_gparts_data(void)
 
     if (ddir != NULL)
     {
+        g_debug("Checking GParts path %s", ddir);
+
         if (g_file_test(ddir, G_FILE_TEST_IS_DIR))
         {
             path = g_strdup(ddir);
         }
     }
+
+#ifdef DATADIR
+    if (path == NULL)
+    {
+        path = g_build_filename(DATADIR, PACKAGE_NAME, NULL);
+
+        g_debug("Checking GParts path %s", path);
+
+        if (!g_file_test(path, G_FILE_TEST_IS_DIR))
+        {
+            g_free(path);
+            path = NULL;
+        }
+    }
+#endif
 
     if (path == NULL)
     {
@@ -133,7 +150,7 @@ scmcfg_dirs_find_gparts_data(void)
         {
             path = g_build_filename(*temp, PACKAGE_NAME, NULL);
 
-            g_debug("Checking path %s", path);
+            g_debug("Checking GParts path %s", path);
 
             if (g_file_test(path, G_FILE_TEST_IS_DIR))
             {

@@ -210,6 +210,6 @@ libmisc_la_LIBADD = $(GLIB_LIBS)
 libscmcfg_la_SOURCES = \
 	scmcfg-config.c \
 	scmcfg-dirs.c
-libscmcfg_la_CFLAGS = -Wall $(AM_CFLAGS) $(GTK_CFLAGS) $(GUILE_CFLAGS)
+libscmcfg_la_CFLAGS = -Wall -DDATADIR=\"$(datadir)\" $(AM_CFLAGS) $(GTK_CFLAGS) $(GUILE_CFLAGS)
 libscmcfg_la_LIBADD = $(GTK_LIBS) $(GUILE_LIBS)
 
