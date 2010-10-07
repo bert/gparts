@@ -32,55 +32,107 @@
     <xsl:output method="text"/>
 
     <xsl:template match="/">
+        <xsl:apply-templates select="data/company"/>
         <xsl:apply-templates select="data/package"/>
         <xsl:apply-templates select="data/resistor"/>
+        <xsl:apply-templates select="data/zener-diode"/>
     </xsl:template>
 
-    <!-- Transform a package element into an SQL insert into the Package table -->
+    <!-- Add a company to the database -->
+
+    <xsl:template match="company">
+    </xsl:template>
+
+    <!-- Ensure a company exists in the database -->
+
+    <xsl:template match="company-name">
+        <xsl:text>INSERT INTO Company ( CompanyName )&#10;</xsl:text>
+        <xsl:text>    SELECT&#10;</xsl:text>
+        <xsl:text>        '</xsl:text>
+        <xsl:value-of select="."/>
+        <xsl:text>'&#10;</xsl:text>
+        <xsl:text>    WHERE NOT EXISTS&#10;</xsl:text>
+        <xsl:text>        (SELECT * FROM Company WHERE CompanyName = '</xsl:text>
+        <xsl:value-of select="."/>
+        <xsl:text>');&#10;&#10;</xsl:text>
+    </xsl:template>
+
+    <!-- Ensure a device exists in the database -->
+
+    <xsl:template match="device-name">
+        <xsl:text>INSERT INTO Device ( DeviceName )&#10;</xsl:text>
+        <xsl:text>    SELECT&#10;</xsl:text>
+        <xsl:text>        '</xsl:text>
+        <xsl:value-of select="."/>
+        <xsl:text>'&#10;</xsl:text>
+        <xsl:text>    WHERE NOT EXISTS&#10;</xsl:text>
+        <xsl:text>        (SELECT * FROM Device WHERE DeviceName = '</xsl:text>
+        <xsl:value-of select="."/>
+        <xsl:text>');&#10;&#10;</xsl:text>
+    </xsl:template>
+
+    <!-- Ensure a package exists in the database -->
+
+    <xsl:template match="package-name">
+        <xsl:text>INSERT INTO Package ( PackageName )&#10;</xsl:text>
+        <xsl:text>    SELECT&#10;</xsl:text>
+        <xsl:text>        '</xsl:text>
+        <xsl:value-of select="."/>
+        <xsl:text>'&#10;</xsl:text>
+        <xsl:text>    WHERE NOT EXISTS&#10;</xsl:text>
+        <xsl:text>        (SELECT * FROM Package WHERE PackageName = '</xsl:text>
+        <xsl:value-of select="."/>
+        <xsl:text>');&#10;&#10;</xsl:text>
+    </xsl:template>
+
+    <!-- Add a package to the database -->
 
     <xsl:template match="package">
-        <xsl:text>INSERT INTO Package ( PackageName, Technology )&#10;    SELECT&#10;        '</xsl:text>
+        <xsl:text>INSERT INTO Package ( PackageName, Technology )&#10;</xsl:text>
+        <xsl:text>    SELECT&#10;</xsl:text>
+        <xsl:text>        '</xsl:text>
         <xsl:value-of select="package-name"/>
-        <xsl:text>',&#10;        '</xsl:text>
+        <xsl:text>',&#10;</xsl:text>
+        <xsl:text>        '</xsl:text>
         <xsl:value-of select="technology"/>
-        <xsl:text>'&#10;    WHERE NOT EXISTS&#10;        ( SELECT * FROM Package WHERE PackageName = '</xsl:text>
+        <xsl:text>'&#10;</xsl:text>
+        <xsl:text>    WHERE NOT EXISTS&#10;</xsl:text>
+        <xsl:text>        ( SELECT * FROM Package WHERE PackageName = '</xsl:text>
         <xsl:value-of select="package-name"/>
         <xsl:text>');&#10;&#10;</xsl:text>
     </xsl:template>
 
-    <!-- Transform a resistor element into an SQL insert into the applicable tables -->
-
-    <xsl:template match="resistor">
-
-        <xsl:text>INSERT INTO Company ( CompanyName )&#10;    SELECT&#10;        '</xsl:text>
+    <xsl:template name="part">
+        <xsl:text>INSERT INTO Part (CompanyID, PartNumber, DeviceID)&#10;</xsl:text>
+        <xsl:text>    SELECT &#10;</xsl:text>
+        <xsl:text>        (SELECT CompanyID FROM Company WHERE CompanyName = '</xsl:text>
         <xsl:value-of select="company-name"/>
-        <xsl:text>'&#10;    WHERE NOT EXISTS&#10;        (SELECT * FROM Company WHERE CompanyName = '</xsl:text>
-        <xsl:value-of select="company-name"/>
-        <xsl:text>');&#10;&#10;</xsl:text>
-
-        <xsl:text>INSERT INTO Device ( DeviceName )&#10;    SELECT&#10;        '</xsl:text>
-        <xsl:value-of select="device-name"/>
-        <xsl:text>'&#10;    WHERE NOT EXISTS&#10;        (SELECT * FROM Device WHERE DeviceName = '</xsl:text>
-        <xsl:value-of select="device-name"/>
-        <xsl:text>');&#10;&#10;</xsl:text>
-
-        <xsl:text>INSERT INTO Package ( PackageName )&#10;    SELECT&#10;        '</xsl:text>
-        <xsl:value-of select="package-name"/>
-        <xsl:text>'&#10;    WHERE NOT EXISTS&#10;        (SELECT * FROM Package WHERE PackageName = '</xsl:text>
-        <xsl:value-of select="package-name"/>
-        <xsl:text>');&#10;&#10;</xsl:text>
-
-        <xsl:text>INSERT INTO Part (CompanyID, PartNumber, DeviceID)&#10; SELECT &#10; (SELECT CompanyID FROM Company WHERE CompanyName = '</xsl:text>
-        <xsl:value-of select="company-name"/>
-        <xsl:text>'),&#10; '</xsl:text>
+        <xsl:text>'),&#10;</xsl:text>
+        <xsl:text>        '</xsl:text>
         <xsl:value-of select="part-number"/>
-        <xsl:text>',&#10; (SELECT DeviceID FROM Device WHERE DeviceName = '</xsl:text>
+        <xsl:text>',&#10;</xsl:text>
+        <xsl:text>        (SELECT DeviceID FROM Device WHERE DeviceName = '</xsl:text>
         <xsl:value-of select="device-name"/>
-        <xsl:text>')&#10; WHERE NOT EXISTS&#10; (SELECT * FROM Part&#10; JOIN Company USING ( CompanyID )&#10; WHERE CompanyName = '</xsl:text>
+        <xsl:text>')&#10;</xsl:text>
+        <xsl:text>    WHERE NOT EXISTS&#10;</xsl:text>
+        <xsl:text>        (SELECT * FROM Part&#10;</xsl:text>
+        <xsl:text>            JOIN Company USING ( CompanyID )&#10;</xsl:text>
+        <xsl:text>        WHERE CompanyName = '</xsl:text>
         <xsl:value-of select="company-name"/>
         <xsl:text>' AND PartNumber = '</xsl:text>
         <xsl:value-of select="part-number"/>
-        <xsl:text>'&#10;);&#10;&#10;</xsl:text>
+        <xsl:text>'&#10;</xsl:text>
+        <xsl:text>        );&#10;&#10;</xsl:text>
+    </xsl:template>
+
+    <!-- Add a resistor to the database -->
+
+    <xsl:template match="resistor">
+        <xsl:apply-templates select="company-name"/>
+        <xsl:apply-templates select="device-name"/>
+        <xsl:apply-templates select="package-name"/>
+
+        <xsl:call-template name="part"/>
 
         <xsl:text>INSERT INTO Resistor (PartID, PackageID, Resistance, Tolerance)&#10;</xsl:text>
         <xsl:text>    SELECT&#10;</xsl:text>
@@ -105,7 +157,39 @@
         <xsl:text>' AND PartNumber = '</xsl:text>
         <xsl:value-of select="part-number"/>
         <xsl:text>'&#10;</xsl:text>
-        <xsl:text>             );&#10;</xsl:text>
+        <xsl:text>             );&#10;&#10;</xsl:text>
+    </xsl:template>
+
+    <!-- Add a zener diode to the database -->
+
+    <xsl:template match="zener-diode">
+        <xsl:apply-templates select="company-name"/>
+        <xsl:apply-templates select="device-name"/>
+        <xsl:apply-templates select="package-name"/>
+
+        <xsl:call-template name="part"/>
+
+        <xsl:text>INSERT INTO ZenerDiode (PartID, PackageID, ZenerVoltage)&#10;</xsl:text>
+        <xsl:text>    SELECT&#10;</xsl:text>
+        <xsl:text>        (SELECT PartID FROM Part WHERE PartNumber = '</xsl:text>
+        <xsl:value-of select="part-number"/>
+        <xsl:text>'),&#10;</xsl:text>
+        <xsl:text>        (SELECT PackageID FROM Package WHERE PackageName = '</xsl:text>
+        <xsl:value-of select="package-name"/>
+        <xsl:text>'),&#10;</xsl:text>
+        <xsl:text>        </xsl:text>
+        <xsl:value-of select="zener-voltage"/>
+        <xsl:text>&#10;</xsl:text>
+        <xsl:text>    WHERE NOT EXISTS&#10;</xsl:text>
+        <xsl:text>        (SELECT * FROM ZenerDiode&#10;</xsl:text>
+        <xsl:text>             JOIN Part USING ( PartID )&#10;</xsl:text>
+        <xsl:text>             JOIN Company USING ( CompanyID )&#10;</xsl:text>
+        <xsl:text>             WHERE CompanyName = '</xsl:text>
+        <xsl:value-of select="company-name"/>
+        <xsl:text>' AND PartNumber = '</xsl:text>
+        <xsl:value-of select="part-number"/>
+        <xsl:text>'&#10;</xsl:text>
+        <xsl:text>             );&#10;&#10;</xsl:text>
     </xsl:template>
 
 </xsl:stylesheet>
