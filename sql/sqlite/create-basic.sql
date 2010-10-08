@@ -45,6 +45,7 @@ CREATE TABLE Company (
 
     CompanyID    INTEGER  PRIMARY KEY,
     CompanyName  TEXT     NOT NULL,
+    Website      TEXT,
 
     UNIQUE ( CompanyName )
     );
@@ -214,7 +215,8 @@ CREATE VIEW CategoryV AS
 CREATE VIEW CompanyV AS
     SELECT
         CompanyID,
-        CompanyName
+        CompanyName,
+        Website
     FROM Company
     ORDER BY CompanyName;
 

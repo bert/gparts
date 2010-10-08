@@ -41,6 +41,15 @@
     <!-- Add a company to the database -->
 
     <xsl:template match="company">
+        <xsl:apply-templates select="company-name"/>
+
+        <xsl:text>UPDATE Company&#10;</xsl:text>
+        <xsl:text>    SET Website = '</xsl:text>
+        <xsl:value-of select="website"/>
+        <xsl:text>'&#10;</xsl:text>
+        <xsl:text>    WHERE CompanyName = '</xsl:text>
+        <xsl:value-of select="company-name"/>
+        <xsl:text>';&#10;&#10;</xsl:text>
     </xsl:template>
 
     <!-- Ensure a company exists in the database -->
