@@ -604,6 +604,7 @@ for package in packages:
         print "        <device-name>resistor</device-name>"
         print "        <resistance>%f</resistance>" % resistance[1]
         print "        <tolerance>%f</tolerance>" % 0.01
+        print "        <document category=\"Datasheet\">http://www.bourns.com/data/global/pdfs/CHPREZTR.pdf</document>"
         print "    </resistor>"
 
 ##############################################################################
@@ -660,6 +661,7 @@ for package in packages:
         print "        <package-name>%s</package-name>" % package[1]
         print "        <device-name>zener</device-name>"
         print "        <zener-voltage>%f</zener-voltage>" % voltage[1]
+        print "        <document category=\"Datasheet\">http://www.bourns.com/data/global/pdfs/CD0603_1005-Z.pdf</document>"
         print "    </zener-diode>"
 
 print "</data>"

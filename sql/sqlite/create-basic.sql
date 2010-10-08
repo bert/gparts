@@ -89,8 +89,8 @@ CREATE TABLE Device (
 CREATE TABLE Document (
 
     DocumentID    INTEGER  PRIMARY KEY,
-    Category      TEXT     NOT NULL,
-    Title         TEXT     NOT NULL,
+    Category      TEXT,
+    Title         TEXT,
     SourceURL     TEXT     DEFAULT NULL,
     FileLocation  TEXT     DEFAULT NULL,
 
@@ -241,8 +241,7 @@ CREATE VIEW DocumentV AS
     SELECT
         DocumentID,
         Category,
-        Title,
-        FileLocation
+        SourceURL
     FROM Document
     ORDER BY Category, Title;
 

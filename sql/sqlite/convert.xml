@@ -80,6 +80,49 @@
         <xsl:text>');&#10;&#10;</xsl:text>
     </xsl:template>
 
+    <!-- Add a document to the database -->
+
+    <xsl:template match="document">
+        <xsl:text>INSERT INTO Document ( Category, SourceURL )&#10;</xsl:text>
+        <xsl:text>    SELECT&#10;</xsl:text>
+        <xsl:text>        '</xsl:text>
+        <xsl:value-of select="./@category"/>
+        <xsl:text>',&#10;</xsl:text>
+        <xsl:text>        '</xsl:text>
+        <xsl:value-of select="."/>
+        <xsl:text>'&#10;</xsl:text>
+        <xsl:text>    WHERE NOT EXISTS&#10;</xsl:text>
+        <xsl:text>        (SELECT * FROM Document WHERE SourceURL = '</xsl:text>
+        <xsl:value-of select="."/>
+        <xsl:text>');&#10;&#10;</xsl:text>
+
+        <xsl:text>INSERT INTO DocumentPartJ ( DocumentID, PartID )&#10;</xsl:text>
+        <xsl:text>    SELECT&#10;</xsl:text>
+        <xsl:text>        (SELECT DocumentID FROM Document WHERE SourceURL = '</xsl:text>
+        <xsl:value-of select="."/>
+        <xsl:text>'),&#10;</xsl:text>
+        <xsl:text>        (SELECT PartID FROM Part JOIN Company USING ( CompanyID ) WHERE&#10;</xsl:text>
+        <xsl:text>            CompanyName = '</xsl:text>
+        <xsl:value-of select="../company-name"/>
+        <xsl:text>' AND&#10;</xsl:text>
+        <xsl:text>            PartNumber = '</xsl:text>
+        <xsl:value-of select="../part-number"/>
+        <xsl:text>')&#10;</xsl:text>
+        <xsl:text>    WHERE NOT EXISTS&#10;</xsl:text>
+        <xsl:text>        (SELECT * FROM DocumentPartJ WHERE&#10;</xsl:text>
+        <xsl:text>            DocumentID = (SELECT DocumentID FROM Document WHERE SourceURL = '</xsl:text>
+        <xsl:value-of select="."/>
+        <xsl:text>') AND&#10;</xsl:text>
+        <xsl:text>            PartID = (SELECT PartID FROM Part JOIN Company USING ( CompanyID ) WHERE&#10;</xsl:text>
+        <xsl:text>                CompanyName = '</xsl:text>
+        <xsl:value-of select="../company-name"/>
+        <xsl:text>' AND&#10;</xsl:text>
+        <xsl:text>                PartNumber = '</xsl:text>
+        <xsl:value-of select="../part-number"/>
+        <xsl:text>'));&#10;&#10;</xsl:text>
+    </xsl:template>
+
+
     <!-- Ensure a package exists in the database -->
 
     <xsl:template match="package-name">
@@ -132,6 +175,8 @@
         <xsl:value-of select="part-number"/>
         <xsl:text>'&#10;</xsl:text>
         <xsl:text>        );&#10;&#10;</xsl:text>
+
+        <xsl:apply-templates select="document"/>
     </xsl:template>
 
     <!-- Add a resistor to the database -->
