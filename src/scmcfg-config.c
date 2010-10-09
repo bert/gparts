@@ -473,6 +473,8 @@ scmcfg_config_load_inner_body(void *data)
 {
     scm_c_primitive_load((char*) data);
 
+    g_debug("Loaded %s", (char*) data);
+
     return SCM_BOOL_T;
 }
 

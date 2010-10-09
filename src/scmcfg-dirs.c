@@ -31,7 +31,7 @@
 char*
 scmcfg_dirs_find_geda_config(void)
 {
-    char *ddir = g_getenv("GEDARCDIR");
+    char *ddir = g_getenv("GEDADATARC");
     char *path = NULL;
 
     if (ddir != NULL)
