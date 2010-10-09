@@ -35,8 +35,52 @@
         <xsl:apply-templates select="data/company"/>
         <xsl:apply-templates select="data/package"/>
         <xsl:apply-templates select="data/resistor"/>
+        <xsl:apply-templates select="data/bipolar-transistor"/>
         <xsl:apply-templates select="data/zener-diode"/>
     </xsl:template>
+
+    <!-- Add a bipolar transistor to the database -->
+
+    <xsl:template match="bipolar-transistor">
+        <xsl:apply-templates select="company-name"/>
+        <xsl:apply-templates select="device-name"/>
+        <xsl:apply-templates select="package-name"/>
+
+        <xsl:call-template name="part"/>
+
+        <xsl:text>INSERT INTO BJT (PartID, PackageID, Polarity, IC, FT, PD)&#10;</xsl:text>
+        <xsl:text>    SELECT&#10;</xsl:text>
+        <xsl:text>        (SELECT PartID FROM Part WHERE PartNumber = '</xsl:text>
+        <xsl:value-of select="part-number"/>
+        <xsl:text>'),&#10;</xsl:text>
+        <xsl:text>        (SELECT PackageID FROM Package WHERE PackageName = '</xsl:text>
+        <xsl:value-of select="package-name"/>
+        <xsl:text>'),&#10;</xsl:text>
+        <xsl:text>        '</xsl:text>
+        <xsl:value-of select="polarity"/>
+        <xsl:text>',&#10;</xsl:text>
+        <xsl:text>        </xsl:text>
+        <xsl:value-of select="collector-current"/>
+        <xsl:text>,&#10;</xsl:text>
+        <xsl:text>        </xsl:text>
+        <xsl:value-of select="transition-frequency"/>
+        <xsl:text>,&#10;</xsl:text>
+        <xsl:text>        </xsl:text>
+        <xsl:value-of select="power-dissipation"/>
+        <xsl:text>&#10;</xsl:text>
+        <xsl:text>    WHERE NOT EXISTS&#10;</xsl:text>
+        <xsl:text>        (SELECT * FROM BJT&#10;</xsl:text>
+        <xsl:text>             JOIN Part USING ( PartID )&#10;</xsl:text>
+        <xsl:text>             JOIN Company USING ( CompanyID )&#10;</xsl:text>
+        <xsl:text>             WHERE CompanyName = '</xsl:text>
+        <xsl:value-of select="company-name"/>
+        <xsl:text>' AND PartNumber = '</xsl:text>
+        <xsl:value-of select="part-number"/>
+        <xsl:text>'&#10;</xsl:text>
+        <xsl:text>             );&#10;&#10;</xsl:text>
+
+    </xsl:template>
+
 
     <!-- Add a company to the database -->
 
@@ -213,6 +257,7 @@
         <xsl:text>'&#10;</xsl:text>
         <xsl:text>             );&#10;&#10;</xsl:text>
     </xsl:template>
+
 
     <!-- Add a zener diode to the database -->
 

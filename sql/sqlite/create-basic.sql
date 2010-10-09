@@ -159,7 +159,7 @@ CREATE TABLE Package (
 
     PackageID    INTEGER  PRIMARY KEY,
     PackageName  TEXT     NOT NULL,
-    Technology   TEXT     NOT NULL,
+    Technology   TEXT,
 
     UNIQUE ( PackageName )
     );
