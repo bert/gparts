@@ -42,6 +42,24 @@ scmcfg_dirs_find_geda_config(void)
         }
     }
 
+#ifdef GEDA_RC_DIR
+
+    if (path == NULL)
+    {
+        g_debug("Checking built-in path %s", GEDA_RC_DIR);
+
+        if (g_file_test(GEDA_RC_DIR, G_FILE_TEST_IS_DIR))
+        {
+            path = g_strdup(GEDA_RC_DIR);
+        }
+    }
+
+#else
+
+#warning "No gEDA config directory defined as a build variable (GEDA_RC_DIR)."
+
+#endif
+
     if (path == NULL)
     {
         const char *const *temp = g_get_system_config_dirs();
@@ -86,6 +104,24 @@ scmcfg_dirs_find_geda_data(void)
         }
     }
 
+#ifdef GEDA_DATA_DIR
+
+    if (path == NULL)
+    {
+        g_debug("Checking built-in path %s", GEDA_DATA_DIR);
+
+        if (g_file_test(GEDA_DATA_DIR, G_FILE_TEST_IS_DIR))
+        {
+            path = g_strdup(GEDA_DATA_DIR);
+        }
+    }
+
+#else
+
+#warning "No gEDA data directory defined as a build variable (GEDA_DATA_DIR)."
+
+#endif
+
     if (path == NULL)
     {
         const char *const *temp = g_get_system_data_dirs();
@@ -128,6 +164,7 @@ scmcfg_dirs_find_gparts_data(void)
     }
 
 #ifdef DATADIR
+
     if (path == NULL)
     {
         path = g_build_filename(DATADIR, PACKAGE_NAME, NULL);
@@ -140,6 +177,7 @@ scmcfg_dirs_find_gparts_data(void)
             path = NULL;
         }
     }
+
 #endif
 
     if (path == NULL)

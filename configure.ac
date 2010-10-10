@@ -20,6 +20,21 @@ if test $PKG_CONFIG; then :; else
     AC_MSG_ERROR([Unable to locate pkg-config.  Make sure pkg-config is installed and in the path.])
 fi
 
+##  gEDA
+##
+##  Not all versions of libgeda's libgeda.pc contained the varaibles gedadatarc
+##  and gedarcdir. For versions that did not define these variables, leave the
+##  macro undefined and let the program try and find the right location.
+##
+GEDA_DATA_DIR=`$PKG_CONFIG libgeda --variable=gedadatadir`
+GEDA_RC_DIR=`$PKG_CONFIG libgeda --variable=gedarcdir`
+if test "X$GEDA_DATA_DIR" = "X" ; then :; else
+    AC_DEFINE_UNQUOTED([GEDA_DATA_DIR], ["$GEDA_DATA_DIR"], [Path to gEDA data directory])
+fi
+if test "X$GEDA_RC_DIR" = "X" ; then :; else
+    AC_DEFINE_UNQUOTED([GEDA_RC_DIR], ["$GEDA_RC_DIR"], [Path to gEDA configuration directory])
+fi
+
 ##  GIO
 ##
 GIO_VERSION=`$PKG_CONFIG gio-2.0 --modversion`
