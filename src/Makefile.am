@@ -88,11 +88,14 @@ noinst_LTLIBRARIES = \
 # build.
 
 lib_LTLIBRARIES = \
-	libgparts-mysql.la \
-	libgparts-sqlite.la
+	$(MYSQL_LIB) \
+	$(POSTGRESQL_LIB) \
+	$(SQLITE_LIB)
 
 EXTRA_LTLIBRARIES = \
-	libgparts-postgresql.la
+	libgparts-mysql.la \
+	libgparts-postgresql.la \
+	libgparts-sqlite.la
 
 #
 
@@ -117,6 +120,7 @@ libgparts_mysql_la_SOURCES = \
 	gparts-mysql-result.c
 libgparts_mysql_la_CFLAGS = $(AM_CFLAGS) $(GLIB_CFLAGS) $(MYSQL_CFLAGS)
 libgparts_mysql_la_LIBADD = $(MYSQL_LIBS)
+libgparts_mysql_la_LDFLAGS = -rpath '$(libdir)'
 
 # A dynamically loadable library providing PostgreSQL support.
 
@@ -126,6 +130,7 @@ libgparts_postgresql_la_SOURCES = \
 	gparts-postgresql-result.c
 libgparts_postgresql_la_CFLAGS = $(AM_CFLAGS) $(GLIB_CFLAGS) $(POSTGRESQL_CFLAGS)
 libgparts_postgresql_la_LIBADD = $(POSTGRESQL_LIBS)
+libgparts_postgresql_la_LDFLAGS = -rpath '$(libdir)'
 
 # A dynamically loadable library providing SQLite support.
 
@@ -136,6 +141,7 @@ libgparts_sqlite_la_SOURCES = \
 	gparts-sqlite-result.c
 libgparts_sqlite_la_CFLAGS = $(AM_CFLAGS) $(GLIB_CFLAGS) $(SQLITE_CFLAGS)
 libgparts_sqlite_la_LIBADD = $(SQLITE_LIBS)
+libgparts_sqlite_la_LDFLAGS = -rpath '$(libdir)'
 
 MOSTLYCLEANFILES = core *~
 CLEANFILES = core *~ scmcfg-config.x

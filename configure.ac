@@ -28,10 +28,14 @@ fi
 ##
 GEDA_DATA_DIR=`$PKG_CONFIG libgeda --variable=gedadatadir`
 GEDA_RC_DIR=`$PKG_CONFIG libgeda --variable=gedarcdir`
-if test "X$GEDA_DATA_DIR" = "X" ; then :; else
+if test "X$GEDA_DATA_DIR" = "X"; then
+    AC_MSG_WARN([libgeda data directory (gedadatadir) not available from pkg-config.])
+else
     AC_DEFINE_UNQUOTED([GEDA_DATA_DIR], ["$GEDA_DATA_DIR"], [Path to gEDA data directory])
 fi
-if test "X$GEDA_RC_DIR" = "X" ; then :; else
+if test "X$GEDA_RC_DIR" = "X"; then
+    AC_MSG_WARN([libgeda config directory (gedarcdir) not available from pkg-config.])
+else
     AC_DEFINE_UNQUOTED([GEDA_RC_DIR], ["$GEDA_RC_DIR"], [Path to gEDA configuration directory])
 fi
 
@@ -85,47 +89,82 @@ fi
 ##
 ##  Building the interface library for MySQL is optional.
 ##
-AC_PATH_PROG([MYSQL_CONFIG],'mysql_config')
-if test $MYSQL_CONFIG; then
-    MYSQL_VERSION=`$MYSQL_CONFIG --version`
-    MYSQL_CFLAGS=`$MYSQL_CONFIG --cflags`
-    MYSQL_LIBS=`$MYSQL_CONFIG --libs`
-    MYSQL_LDADD='libgparts-mysql.la'
-else
-    AC_MSG_WARN([Unable to locate mysql_config.  Make sure MySQL development libraries are installed and mysql_config is in the path.])
+AC_ARG_WITH(
+    [mysql],
+    [AS_HELP_STRING([--with-mysql], [Support the MySQL database])],
+    [],
+    [with_mysql=check]
+    )
+
+if test "X$with_mysql" = "Xno"; then :; else
+    AC_PATH_PROG([MYSQL_CONFIG],'mysql_config')
+    if test $MYSQL_CONFIG; then
+        MYSQL_VERSION=`$MYSQL_CONFIG --version`
+        MYSQL_CFLAGS=`$MYSQL_CONFIG --cflags`
+        MYSQL_LIBS=`$MYSQL_CONFIG --libs`
+        MYSQL_LIB='libgparts-mysql.la'
+    else
+        if test "X$with_mysql" = "Xcheck"; then :; else
+            AC_MSG_FAILURE([Unable to locate mysql_config. Make sure MySQL development libraries are installed and mysql_config is in the path.])
+        fi
+    fi
 fi
+
 AC_SUBST(MYSQL_CFLAGS)
 AC_SUBST(MYSQL_LIBS)
-AC_SUBST(MYSQL_LDADD)
+AC_SUBST(MYSQL_LIB)
 
 ##  PostgreSQL
 ##
 ##  Building the interface library for PostgreSQL is optional.
 ##
-AC_PATH_PROG([POSTGRESQL_CONFIG],'pg_config')
-if test $POSTGRESQL_CONFIG; then
-    POSTGRESQL_VERSION=`$POSTGRESQL_CONFIG --version`
-    POSTGRESQL_CFLAGS=`$POSTGRESQL_CONFIG --cflags`
-    POSTGRESQL_LIBS=`$POSTGRESQL_CONFIG --libs`
-#    PG_LDADD='libgparts-postgresql.la'
-else
-    AC_MSG_WARN([Unable to locate pg_config.  Make sure PostgreSQL development libraries are installed and pg_config is in the path.])
+AC_ARG_WITH(
+    [postgresql],
+    [AS_HELP_STRING([--with-postgresql], [support the PostgreSQL database])],
+    [],
+    [with_postgresql=check]
+    )
+
+if test "X$with_postgresql" = "Xno"; then :; else
+    AC_PATH_PROG([POSTGRESQL_CONFIG],'pg_config')
+    if test $POSTGRESQL_CONFIG; then
+        POSTGRESQL_VERSION=`$POSTGRESQL_CONFIG --version`
+        POSTGRESQL_CFLAGS=`$POSTGRESQL_CONFIG --cflags`
+        POSTGRESQL_LIBS=`$POSTGRESQL_CONFIG --libs`
+        POSTGRESQL_LIB='libgparts-postgresql.la'
+    else
+        if test "X$with_postgresql" = "Xcheck"; then :; else
+            AC_MSG_FAILURE([Unable to locate pg_config. Make sure PostgreSQL development libraries are installed and pg_config is in the path.])
+        fi
+    fi
 fi
+
 AC_SUBST(POSTGRESQL_CFLAGS)
 AC_SUBST(POSTGRESQL_LIBS)
-AC_SUBST(POSTGRESQL_LDADD)
+AC_SUBST(POSTGRESQL_LIB)
 
 ##  SQLite
 ##
 ##  Building the interface library for SQLite is optional.
 ##
-SQLITE_VERSION=`$PKG_CONFIG sqlite3 --version`
-SQLITE_CFLAGS=`$PKG_CONFIG sqlite3 --cflags`
-SQLITE_LIBS=`$PKG_CONFIG sqlite3 --libs`
-SQLITE_LDADD='libgparts-sqlite.la'
+AC_ARG_WITH(
+    [sqlite],
+    [AS_HELP_STRING([--with-sqlite], [Support the SQLite database])],
+    [],
+    [with_sqlite=check]
+    )
+
+if test "X$with_sqlite" = "Xno"; then :; else
+    SQLITE_VERSION=`$PKG_CONFIG sqlite3 --version`
+    SQLITE_CFLAGS=`$PKG_CONFIG sqlite3 --cflags`
+    SQLITE_LIBS=`$PKG_CONFIG sqlite3 --libs`
+    SQLITE_LIB='libgparts-sqlite.la'
+fi
+
 AC_SUBST(SQLITE_CFLAGS)
 AC_SUBST(SQLITE_LIBS)
-AC_SUBST(SQLITE_LDADD)
+AC_SUBST(SQLITE_LIB)
+
 
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([
@@ -162,3 +201,4 @@ AC_MSG_RESULT([
         Installed Version        $SQLITE_VERSION
 
 ])
+
