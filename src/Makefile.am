@@ -36,7 +36,6 @@ gparts_SOURCES = \
 	gparts-controller.c \
 	gparts-customize-ctrl.c \
 	gparts-customize-model.c \
-	gparts-login-ctrl.c \
 	gparts-main.c \
 	gparts-object-list.c \
 	gparts-preview.c \
@@ -52,7 +51,10 @@ gparts_SOURCES = \
 	gparts-database-factory.c \
 	gparts-database-result.c \
 	gparts-database-type.c \
-	gparts-units.c 
+	gparts-units.c \
+	gpartsui-connect-model.c \
+	gpartsui-database-controller.c \
+	gpartsui-database-model.c
 gparts_CFLAGS = $(AM_CFLAGS) $(GMODULE_CFLAGS) $(GTK_CFLAGS)
 gparts_LDADD = $(GMODULE_LIBS) $(GTK_LIBS) libgeom.la libmisc.la libsch.la libschgui.la libscmcfg.la
 

@@ -38,9 +38,6 @@ typedef struct _GPartsConnectControllerClass GPartsConnectControllerClass;
 typedef struct _GPartsController GPartsController;
 typedef struct _GPartsControllerClass GPartsControllerClass;
 
-typedef struct _GPartsLoginCtrl GPartsLoginCtrl;
-typedef struct _GPartsLoginCtrlClass GPartsLoginCtrlClass;
-
 typedef struct _GPartsPreviewCtrl GPartsPreviewCtrl;
 typedef struct _GPartsPreviewCtrlClass GPartsPreviewCtrlClass;
 
@@ -52,4 +49,13 @@ typedef struct _GPartsResultModelClass GPartsResultModelClass;
 
 typedef struct _GPartsResultView GPartsResultView;
 typedef struct _GPartsResultViewClass GPartsResultViewClass;
+
+typedef struct _GPartsUIConnectModel GPartsUIConnectModel;
+typedef struct _GPartsUIConnectModelClass GPartsUIConnectModelClass;
+
+typedef struct _GPartsUIDatabaseController GPartsUIDatabaseController;
+typedef struct _GPartsUIDatabaseControllerClass GPartsUIDatabaseControllerClass;
+
+typedef struct _GPartsUIDatabaseModel GPartsUIDatabaseModel;
+typedef struct _GPartsUIDatabaseModelClass GPartsUIDatabaseModelClass;
 

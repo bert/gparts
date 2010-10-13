@@ -1,7 +1,7 @@
 /* gEDA - GPL Electronic Design Automation
  * gparts - gEDA Parts Manager
- * Copyright (C) 2009 Edward C. Hennessy
- * Copyright (C) 2009 gEDA Contributors (see ChangeLog for details)
+ * Copyright (C) 2010 Edward C. Hennessy
+ * Copyright (C) 2010 gEDA Contributors (see ChangeLog for details)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,51 +18,51 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gparts-login-ctrl.h
+/*! \file gparts-database-controller.h
  */
 
-#define GPARTS_TYPE_LOGIN_CTRL (gparts_login_ctrl_get_type())
-#define GPARTS_LOGIN_CTRL(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),GPARTS_TYPE_LOGIN_CTRL,GPartsLoginCtrl))
-#define GPARTS_LOGIN_CTRL_CLASS(cls) (G_TYPE_CHECK_CLASS_CAST((cls),GPARTS_TYPE_LOGIN_CTRL,GPartsLoginCtrlClass))
-#define GPARTS_IS_LOGIN_CTRL(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj),GPARTS_TYPE_LOGIN_CTRL))
-#define GPARTS_IS_LOGIN_CTRL_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),GPARTS_TYPE_LOGIN_CTRL))
-#define GPARTS_LOGIN_CTRL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),GPARTS_TYPE_LOGIN_CTRL,GPartsLoginCtrlClass))
+#define GPARTSUI_TYPE_DATABASE_CONTROLLER (gpartsui_database_controller_get_type())
+#define GPARTSUI_DATABASE_CONTROLLER(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),GPARTSUI_TYPE_DATABASE_CONTROLLER,GPartsUIDatabaseController))
+#define GPARTSUI_DATABASE_CONTROLLER_CLASS(cls) (G_TYPE_CHECK_CLASS_CAST((cls),GPARTSUI_TYPE_DATABASE_CONTROLLER,GPartsUIDatabaseControllerClass))
+#define GPARTSUI_IS_DATABASE_CONTROLLER(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj),GPARTSUI_TYPE_DATABASE_CONTROLLER))
+#define GPARTSUI_IS_DATABASE_CONTROLLER_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),GPARTSUI_TYPE_DATABASE_CONTROLLER))
+#define GPARTSUI_DATABASE_CONTROLLER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),GPARTSUI_TYPE_DATABASE_CONTROLLER,GPartsUIDatabaseControllerClass))
 
-struct _GPartsLoginCtrl
+struct _GPartsUIDatabaseController
 {
     GObject parent;
 };
 
 /*! \private */
-struct _GPartsLoginCtrlClass
+struct _GPartsUIDatabaseControllerClass
 {
     GObjectClass parent;
 };
 
 /*! \private */
 GType
-gparts_login_ctrl_get_type(void);
+gpartsui_database_controller_get_type(void);
 
 /*! \brief Connects to a database, just as if the user clicked the menu item.
  *
  *  \param [in] controller The controller.
  */
 void
-gparts_login_ctrl_connect_database(GPartsLoginCtrl *controller);
+gpartsui_database_controller_connect_database(GPartsUIDatabaseController *controller);
 
 /*! \brief Disconnect the database, just as if the user clicked the menu item.
  *
  *  \param [in] controller The controller.
  */
 void
-gparts_login_ctrl_disconnect_database(GPartsLoginCtrl *controller);
+gpartsui_database_controller_disconnect_database(GPartsUIDatabaseController *controller);
 
 /*! \brief Drop the database, just as if the user clicked the menu item.
  *
  *  \param [in] controller The controller.
  */
 void
-gparts_login_ctrl_drop_database(GPartsLoginCtrl *controller);
+gpartsui_database_controller_drop_database(GPartsUIDatabaseController *controller);
 
 /*! \brief Gets the database currently associated with this controller.
  *
@@ -70,7 +70,7 @@ gparts_login_ctrl_drop_database(GPartsLoginCtrl *controller);
  *  \return The database associated with this ctrl.  If no database, then NULL.
  */
 GPartsDatabase*
-gparts_login_ctrl_get_database(GPartsLoginCtrl *controller);
+gpartsui_database_controller_get_database(GPartsUIDatabaseController *controller);
 
 /*! \brief Sets the action to connect to a database.
  *
@@ -78,7 +78,7 @@ gparts_login_ctrl_get_database(GPartsLoginCtrl *controller);
  *  \param [in] action The action that triggers the connect.
  */
 void
-gparts_login_ctrl_set_connect_action(GPartsLoginCtrl *controller, GtkAction *action);
+gpartsui_database_controller_set_connect_action(GPartsUIDatabaseController *controller, GtkAction *action);
 
 /*! \brief Sets the action to disconnect from the database.
  *
@@ -86,7 +86,7 @@ gparts_login_ctrl_set_connect_action(GPartsLoginCtrl *controller, GtkAction *act
  *  \param [in] action The action that triggers the disconnect.
  */
 void
-gparts_login_ctrl_set_disconnect_action(GPartsLoginCtrl *controller, GtkAction *action);
+gpartsui_database_controller_set_disconnect_action(GPartsUIDatabaseController *controller, GtkAction *action);
 
 /*! \brief Sets the action to drop the database.
  *
@@ -94,7 +94,7 @@ gparts_login_ctrl_set_disconnect_action(GPartsLoginCtrl *controller, GtkAction *
  *  \param [in] action The action that triggers the drop.
  */
 void
-gparts_login_ctrl_set_drop_action(GPartsLoginCtrl *controller, GtkAction *action);
+gpartsui_database_controller_set_drop_action(GPartsUIDatabaseController *controller, GtkAction *action);
 
 
 /*! \brief Sets the action to refresh all database views.
@@ -103,5 +103,5 @@ gparts_login_ctrl_set_drop_action(GPartsLoginCtrl *controller, GtkAction *action
  *  \param [in] action The action that triggers the refresh.
  */
 void
-gparts_login_ctrl_set_refresh_action(GPartsLoginCtrl *controller, GtkAction *action);
+gpartsui_database_controller_set_refresh_action(GPartsUIDatabaseController *controller, GtkAction *action);
 

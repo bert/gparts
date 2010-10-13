@@ -73,7 +73,7 @@ gparts_result_controller_set_customize_ctrl(GPartsResultController *controller, 
  *  \param [in] database The database to use for subsequent operations.
  */
 void
-gparts_result_controller_set_database_ctrl(GPartsResultController *controller, GPartsLoginCtrl *database);
+gparts_result_controller_set_database_ctrl(GPartsResultController *controller, GPartsUIDatabaseController *database);
 
 /*! \brief Sets the source view for data used by field expansion.
  *

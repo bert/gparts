@@ -43,8 +43,8 @@ typedef struct _GPartsResultControllerPrivate GPartsResultControllerPrivate;
 
 struct _GPartsResultControllerPrivate
 {
-    GPartsCustomizeCtrl *customize_ctrl;
-    GPartsLoginCtrl     *login_ctrl;
+    GPartsCustomizeCtrl        *customize_ctrl;
+    GPartsUIDatabaseController *login_ctrl;
 
     GtkTreeSelection   *selection;
     GObject            *source;
@@ -462,7 +462,7 @@ gparts_result_controller_refresh(GPartsResultController *controller)
 
     if (privat->login_ctrl != NULL)
     {
-        database = gparts_login_ctrl_get_database(privat->login_ctrl);
+        database = gpartsui_database_controller_get_database(privat->login_ctrl);
     }
 
     if (database != NULL &&
@@ -696,7 +696,7 @@ gparts_result_controller_set_customize_ctrl(GPartsResultController *controller, 
 }
 
 void
-gparts_result_controller_set_login_ctrl(GPartsResultController *controller, GPartsLoginCtrl *login_ctrl)
+gparts_result_controller_set_login_ctrl(GPartsResultController *controller, GPartsUIDatabaseController *login_ctrl)
 {
     GPartsResultControllerPrivate *privat = GPARTS_RESULT_CONTROLLER_GET_PRIVATE(controller);
 

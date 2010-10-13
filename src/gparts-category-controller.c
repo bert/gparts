@@ -35,9 +35,9 @@ typedef struct _GPartsCategoryControllerPrivate GPartsCategoryControllerPrivate;
 
 struct _GPartsCategoryControllerPrivate
 {
-    GPartsLoginCtrl  *database_controller;
-    GtkTreeSelection *selection;
-    GtkTreeView      *target;
+    GPartsUIDatabaseController *database_controller;
+    GtkTreeSelection           *selection;
+    GtkTreeView                *target;
 };
 
 #define GPARTS_CATEGORY_CONTROLLER_GET_PRIVATE(object) G_TYPE_INSTANCE_GET_PRIVATE(object,GPARTS_TYPE_CATEGORY_CONTROLLER,GPartsCategoryControllerPrivate)
@@ -68,7 +68,7 @@ static void
 gparts_category_controller_changed_cb(GtkTreeSelection *selection, GPartsCategoryController *controller);
 
 static void
-gparts_category_controller_database_controller_notify_cb(GPartsLoginCtrl *database, GParamSpec *pspec, GPartsCategoryController *controller);
+gparts_category_controller_database_controller_notify_cb(GPartsUIDatabaseController *database, GParamSpec *pspec, GPartsCategoryController *controller);
 
 /* \todo Support this function */
 static void
@@ -102,7 +102,7 @@ gparts_category_controller_class_init(gpointer g_class, gpointer g_class_data)
             "database-controller",
             "",
             "",
-            GPARTS_TYPE_LOGIN_CTRL,
+            GPARTSUI_TYPE_DATABASE_CONTROLLER,
             G_PARAM_READWRITE
             )
         );
@@ -133,7 +133,7 @@ gparts_category_controller_class_init(gpointer g_class, gpointer g_class_data)
 }
 
 static void
-gparts_category_controller_database_controller_notify_cb(GPartsLoginCtrl *database, GParamSpec *pspec, GPartsCategoryController *controller)
+gparts_category_controller_database_controller_notify_cb(GPartsUIDatabaseController *database, GParamSpec *pspec, GPartsCategoryController *controller)
 {
     gparts_category_controller_update(controller);
 }
@@ -234,7 +234,7 @@ gparts_category_controller_set_property(GObject *object, guint property_id, cons
 }
 
 void
-gparts_category_controller_set_database_controller(GPartsCategoryController *controller, GPartsLoginCtrl *database)
+gparts_category_controller_set_database_controller(GPartsCategoryController *controller, GPartsUIDatabaseController *database)
 {
     GPartsCategoryControllerPrivate *privat = GPARTS_CATEGORY_CONTROLLER_GET_PRIVATE(controller);
 
@@ -329,7 +329,7 @@ gparts_category_controller_update(GPartsCategoryController *controller)
 
         if (privat->database_controller != NULL)
         {
-            database = gparts_login_ctrl_get_database(privat->database_controller);
+            database = gpartsui_database_controller_get_database(privat->database_controller);
         }
 
         if (database != NULL)

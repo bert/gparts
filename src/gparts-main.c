@@ -255,7 +255,7 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         );
 
     GObject *login_ctrl = g_object_new(
-        GPARTS_TYPE_LOGIN_CTRL,
+        GPARTSUI_TYPE_DATABASE_CONTROLLER,
         "connect-action",    GTK_ACTION(gtk_builder_get_object(private->builder, "database-connect")),
         "disconnect-action", GTK_ACTION(gtk_builder_get_object(private->builder, "database-disconnect")),
         "drop-action",       GTK_ACTION(gtk_builder_get_object(private->builder, "database-drop")),

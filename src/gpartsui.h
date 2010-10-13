@@ -51,7 +51,7 @@
 #include "gparts-connect-controller.h"
 #include "gparts-customize-ctrl.h"
 
-#include "gparts-login-ctrl.h"
+
 
 #include "gparts-main.h"
 
@@ -63,4 +63,9 @@
 #include "gparts-result-controller.h"
 #include "gparts-result-model.h"
 #include "gparts-result-view.h"
+
+#include "gpartsui-connect-model.h"
+
+#include "gpartsui-database-controller.h"
+#include "gpartsui-database-model.h"
 
