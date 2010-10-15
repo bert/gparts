@@ -23,11 +23,25 @@
 
 #include "gparts.h"
 
+enum
+{
+    GPARTS_DATABASE_CONNECTED = 1
+};
+
+gboolean
+gparts_database_connected_base(const GPartsDatabase *database);
+
 static void
 gparts_database_drop_base(GPartsDatabase *database, GError **error);
 
 static gboolean
 gparts_database_droppable_base(const GPartsDatabase *database);
+
+static void
+gparts_database_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
+
+static void
+gparts_database_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
 
 
 
@@ -41,8 +55,24 @@ gparts_database_class_init(gpointer g_class, gpointer g_class_data)
 {
     GPartsDatabaseClass *klasse = GPARTS_DATABASE_CLASS(g_class);
 
+    klasse->parent.get_property = gparts_database_get_property;
+    klasse->parent.set_property = gparts_database_set_property;
+
+    klasse->connected = gparts_database_connected;
     klasse->drop      = gparts_database_drop_base;
     klasse->droppable = gparts_database_droppable_base;
+
+    g_object_class_install_property(
+        G_OBJECT_CLASS(klasse),
+        GPARTS_DATABASE_CONNECTED,
+        g_param_spec_boolean(
+            "connected",
+            "Connected",
+            "Connected",
+            FALSE,
+            G_PARAM_READABLE | G_PARAM_STATIC_STRINGS
+            )
+        );
 }
 
 void
@@ -65,6 +95,38 @@ gparts_database_connect(GPartsDatabase *database, GPartsConnectData* data, GErro
             klasse->connect(database, data, error);
         }
     }
+}
+
+gboolean
+gparts_database_connected(const GPartsDatabase *database)
+{
+    gboolean connected = FALSE;
+
+    if (database != NULL)
+    {
+        GPartsDatabaseClass *klasse = GPARTS_DATABASE_GET_CLASS(database);
+
+        if (klasse == NULL)
+        {
+            g_critical("Unable to get GPartsDatabaseClass from parameter");
+        }
+        else if (klasse->connected == NULL)
+        {
+            g_critical("GPartsDatabaseClass contains NULL connected() function pointer");
+        }
+        else
+        {
+            connected = klasse->connected(database);
+        }
+    }
+
+    return connected;
+}
+
+gboolean
+gparts_database_connected_base(const GPartsDatabase *database)
+{
+    return FALSE;
 }
 
 void
@@ -155,6 +217,26 @@ gparts_database_droppable_base(const GPartsDatabase *database)
     return FALSE;
 }
 
+static void
+gparts_database_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
+{
+    GPartsDatabase *database = GPARTS_DATABASE(object);
+
+    if (database != NULL)
+    {
+        switch ( property_id )
+        {
+            case GPARTS_DATABASE_CONNECTED:
+                g_value_set_boolean(value, gparts_database_connected(database));
+                break;
+
+            default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+        }
+    }
+}
+
+
 GType
 gparts_database_get_type(void)
 {
@@ -210,5 +292,20 @@ gparts_database_query(GPartsDatabase *database, const gchar *query, GError **err
     }
 
     return result;
+}
+
+static void
+gparts_database_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec)
+{
+    GPartsDatabase *database = GPARTS_DATABASE(object);
+
+    if (database != NULL)
+    {
+        switch (property_id)
+        {
+            default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
+        }
+    }
 }
 

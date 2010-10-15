@@ -45,6 +45,9 @@ gparts_sqlite_database_class_init(gpointer g_class, gpointer g_class_data);
 static void
 gparts_sqlite_database_connect(GPartsDatabase *database, GPartsConnectData *data, GError **error);
 
+static gboolean
+gparts_sqlite_database_connected(const GPartsDatabase *database);
+
 static void
 gparts_sqlite_database_disconnect(GPartsDatabase *database, GError **error);
 
@@ -90,43 +93,12 @@ gparts_sqlite_database_class_init(gpointer g_class, gpointer g_class_data)
     object_class->set_property = gparts_sqlite_database_set_property;
 
     klasse->connect    = gparts_sqlite_database_connect;
+    klasse->connected  = gparts_sqlite_database_connected;
     klasse->disconnect = gparts_sqlite_database_disconnect;
     klasse->query      = gparts_sqlite_database_query;
-
-    g_signal_new(
-        "database-connected",
-        G_TYPE_FROM_CLASS( g_class ),
-        G_SIGNAL_RUN_FIRST,
-        0,
-        NULL,
-        NULL,
-        g_cclosure_marshal_VOID__VOID,
-        G_TYPE_NONE,
-        0
-        );
-
-    g_signal_new(
-        "database-disconnected",
-        G_TYPE_FROM_CLASS( g_class ),
-        G_SIGNAL_RUN_FIRST,
-        0,
-        NULL,
-        NULL,
-        g_cclosure_marshal_VOID__VOID,
-        G_TYPE_NONE,
-        0
-        );
 }
 
 
-/** \brief Connects to the SQLite database.
- *
- *  Connects to an existing SQLite database.
- *
- *  \param [in] database
- *  \param [in] data
- *  \param [in] error
- */
 static void
 gparts_sqlite_database_connect(GPartsDatabase *database, GPartsConnectData *data, GError **error)
 {
@@ -154,21 +126,32 @@ gparts_sqlite_database_connect(GPartsDatabase *database, GPartsConnectData *data
         }
     }
 
-    if ( local_error == NULL )
-    {
-        g_signal_emit_by_name(database, "database-connected");
-    }
-    else
+    g_object_notify(G_OBJECT(database), "connected");
+
+    if (local_error != NULL)
     {
         g_propagate_error(error, local_error);
     }
 }
 
-/*! \brief Disconnects from the SQLite database.
- *
- *  \param [in]  database The database to disconnect from.
- *  \param [out] error    An error, if any, using the GError protocol.
- */
+static gboolean
+gparts_sqlite_database_connected(const GPartsDatabase *database)
+{
+    gboolean connected = FALSE;
+
+    if (database != NULL)
+    {
+        GPartsSQLiteDatabasePrivate* privat = GPARTS_SQLITE_DATABASE_GET_PRIVATE(database);
+
+        if (privat != NULL)
+        {
+            connected = (privat->sqlite != NULL);
+        }
+    }
+
+    return connected;
+}
+
 static void
 gparts_sqlite_database_disconnect(GPartsDatabase *database, GError **error)
 {
@@ -179,7 +162,7 @@ gparts_sqlite_database_disconnect(GPartsDatabase *database, GError **error)
         sqlite3_close(privat->sqlite);
         privat->sqlite = NULL;
 
-        g_signal_emit_by_name(database, "database-disconnected");
+        g_object_notify(G_OBJECT(database), "connected");
     }
 }
 
@@ -279,6 +262,8 @@ gparts_sqlite_database_query(GPartsDatabase *database, const gchar *query, GErro
 
     if (privat->sqlite == NULL)
     {
+        g_debug("No database");
+
         return NULL;
     }
 

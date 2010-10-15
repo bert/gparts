@@ -27,7 +27,7 @@
 
 enum
 {
-    GPARTS_CATEGORY_CONTROLLER_PROPID_DATABASE_CONTROLLER = 1,
+    GPARTS_CATEGORY_CONTROLLER_PROPID_DATABASE_MODEL = 1,
     GPARTS_CATEGORY_CONTROLLER_PROPID_TARGET
 };
 
@@ -35,9 +35,9 @@ typedef struct _GPartsCategoryControllerPrivate GPartsCategoryControllerPrivate;
 
 struct _GPartsCategoryControllerPrivate
 {
-    GPartsUIDatabaseController *database_controller;
-    GtkTreeSelection           *selection;
-    GtkTreeView                *target;
+    GPartsUIDatabaseModel *database_model;
+    GtkTreeSelection      *selection;
+    GtkTreeView           *target;
 };
 
 #define GPARTS_CATEGORY_CONTROLLER_GET_PRIVATE(object) G_TYPE_INSTANCE_GET_PRIVATE(object,GPARTS_TYPE_CATEGORY_CONTROLLER,GPartsCategoryControllerPrivate)
@@ -97,12 +97,12 @@ gparts_category_controller_class_init(gpointer g_class, gpointer g_class_data)
 
     g_object_class_install_property(
         object_class,
-        GPARTS_CATEGORY_CONTROLLER_PROPID_DATABASE_CONTROLLER,
+        GPARTS_CATEGORY_CONTROLLER_PROPID_DATABASE_MODEL,
         g_param_spec_object(
-            "database-controller",
+            "database-model",
             "",
             "",
-            GPARTSUI_TYPE_DATABASE_CONTROLLER,
+            GPARTSUI_TYPE_DATABASE_MODEL,
             G_PARAM_READWRITE
             )
         );
@@ -133,7 +133,7 @@ gparts_category_controller_class_init(gpointer g_class, gpointer g_class_data)
 }
 
 static void
-gparts_category_controller_database_controller_notify_cb(GPartsUIDatabaseController *database, GParamSpec *pspec, GPartsCategoryController *controller)
+gparts_category_controller_database_model_notify_cb(GPartsUIDatabaseModel *database, GParamSpec *pspec, GPartsCategoryController *controller)
 {
     gparts_category_controller_update(controller);
 }
@@ -143,7 +143,7 @@ gparts_category_controller_dispose(GObject *object)
 {
     GPartsCategoryController *controller = GPARTS_CATEGORY_CONTROLLER(object);
 
-    gparts_category_controller_set_database_controller(controller, NULL);
+    gparts_category_controller_set_database_model(controller, NULL);
     gparts_category_controller_set_target(controller, NULL);
 
     misc_object_chain_dispose(object);
@@ -220,8 +220,8 @@ gparts_category_controller_set_property(GObject *object, guint property_id, cons
 
     switch (property_id)
     {
-        case GPARTS_CATEGORY_CONTROLLER_PROPID_DATABASE_CONTROLLER:
-            gparts_category_controller_set_database_controller(controller, g_value_get_object(value));
+        case GPARTS_CATEGORY_CONTROLLER_PROPID_DATABASE_MODEL:
+            gparts_category_controller_set_database_model(controller, g_value_get_object(value));
             break;
 
         case GPARTS_CATEGORY_CONTROLLER_PROPID_TARGET:
@@ -234,40 +234,40 @@ gparts_category_controller_set_property(GObject *object, guint property_id, cons
 }
 
 void
-gparts_category_controller_set_database_controller(GPartsCategoryController *controller, GPartsUIDatabaseController *database)
+gparts_category_controller_set_database_model(GPartsCategoryController *controller, GPartsUIDatabaseModel *database)
 {
     GPartsCategoryControllerPrivate *privat = GPARTS_CATEGORY_CONTROLLER_GET_PRIVATE(controller);
 
-    if (privat->database_controller != database)
+    if (privat != NULL)
     {
-        if (privat->database_controller != NULL)
+        if (privat->database_model != NULL)
         {
             g_signal_handlers_disconnect_by_func(
-                privat->database_controller,
-                G_CALLBACK(gparts_category_controller_database_controller_notify_cb),
+                privat->database_model,
+                G_CALLBACK(gparts_category_controller_database_model_notify_cb),
                 controller
                 );
 
-            g_object_unref(privat->database_controller);
+            g_object_unref(privat->database_model);
         }
 
-        privat->database_controller = database;
+        privat->database_model = database;
 
-        if (privat->database_controller != NULL)
+        if (privat->database_model != NULL)
         {
-            g_object_ref(privat->database_controller);
+            g_object_ref(privat->database_model);
 
             g_signal_connect(
-                privat->database_controller,
+                privat->database_model,
                 "notify::database",
-                G_CALLBACK(gparts_category_controller_database_controller_notify_cb),
+                G_CALLBACK(gparts_category_controller_database_model_notify_cb),
                 controller
                 );
         }
 
         gparts_category_controller_update(controller);
 
-        g_object_notify(controller, "database-controller");
+        g_object_notify(controller, "database-model");
     }
 }
 
@@ -327,9 +327,9 @@ gparts_category_controller_update(GPartsCategoryController *controller)
         GPartsCategoryModel *model = NULL;
         GPartsDatabase *database = NULL;
 
-        if (privat->database_controller != NULL)
+        if (privat->database_model != NULL)
         {
-            database = gpartsui_database_controller_get_database(privat->database_controller);
+            database = gpartsui_database_model_get_database(privat->database_model);
         }
 
         if (database != NULL)

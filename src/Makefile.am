@@ -52,6 +52,7 @@ gparts_SOURCES = \
 	gparts-database-result.c \
 	gparts-database-type.c \
 	gparts-units.c \
+	gpartsui-connect-controller.c \
 	gpartsui-connect-model.c \
 	gpartsui-database-controller.c \
 	gpartsui-database-model.c

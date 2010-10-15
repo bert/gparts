@@ -254,9 +254,30 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         NULL
         );
 
+    GObject *database_model = g_object_new(
+        GPARTSUI_TYPE_DATABASE_MODEL,
+        NULL
+        );
+
+    GObject *connect_model = g_object_new(
+        GPARTSUI_TYPE_CONNECT_MODEL,
+        "database-model",    database_model,
+        "username",          "ehennes",
+        "hostname",          "localhost",
+        "database-name",     "GParts",
+        NULL
+        );
+
+    GObject *connect_controller = g_object_new(
+        GPARTSUI_TYPE_CONNECT_CONTROLLER,
+        "connect-action",    GTK_ACTION(gtk_builder_get_object(private->builder, "database-connect")),
+        "connect-model",     connect_model,
+        NULL
+        );
+
     GObject *login_ctrl = g_object_new(
         GPARTSUI_TYPE_DATABASE_CONTROLLER,
-        "connect-action",    GTK_ACTION(gtk_builder_get_object(private->builder, "database-connect")),
+        "database-model",    database_model,
         "disconnect-action", GTK_ACTION(gtk_builder_get_object(private->builder, "database-disconnect")),
         "drop-action",       GTK_ACTION(gtk_builder_get_object(private->builder, "database-drop")),
         "refresh-action",    GTK_ACTION(gtk_builder_get_object(private->builder, "view-refresh")),
@@ -267,7 +288,7 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
 
     GObject *category_controller = g_object_new(
         GPARTS_TYPE_CATEGORY_CONTROLLER,
-        "database-controller", login_ctrl,
+        "database-model", database_model,
         "target",              GTK_TREE_VIEW(gtk_builder_get_object(private->builder, "category-view")),
         NULL
         );
@@ -275,7 +296,7 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
     GObject *part_controller = g_object_new(
         GPARTS_TYPE_RESULT_CONTROLLER,
         "customize-ctrl", customize_ctrl,
-        "database-ctrl",  login_ctrl,
+        "database-model", database_model,
         "edit-action",    GTK_ACTION(gtk_builder_get_object(private->builder, "view-edit")),
         "source",         category_controller,
         "target",         GTK_TREE_VIEW(gtk_builder_get_object(private->builder, "parts-tree-view")),
@@ -287,7 +308,7 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
     GObject *symbol_controller = g_object_new(
         GPARTS_TYPE_RESULT_CONTROLLER,
         "customize-ctrl", customize_ctrl,
-        "database-ctrl",  login_ctrl,
+        "database-model", database_model,
         "source",              part_controller,
         "target",              GTK_TREE_VIEW(gtk_builder_get_object(private->builder, "symbols-tree-view")),
         "template",            "SELECT * FROM %s WHERE DeviceID = $(DeviceID)",
@@ -298,7 +319,7 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
     g_object_new(
         GPARTS_TYPE_RESULT_CONTROLLER,
         "customize-ctrl", customize_ctrl,
-        "database-ctrl",  login_ctrl,
+        "database-model", database_model,
         "target",              GTK_TREE_VIEW(gtk_builder_get_object(private->builder, "companies-view")),
         "template",            "SELECT * FROM %s",
         "view-name",           "CompanyV",
@@ -308,7 +329,7 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
     g_object_new(
         GPARTS_TYPE_RESULT_CONTROLLER,
         "customize-ctrl", customize_ctrl,
-        "database-ctrl",  login_ctrl,
+        "database-model", database_model,
         "target",              GTK_TREE_VIEW(gtk_builder_get_object(private->builder, "devices-view")),
         "template",            "SELECT * FROM %s",
         "view-name",           "DeviceV",
@@ -318,7 +339,7 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
     g_object_new(
         GPARTS_TYPE_RESULT_CONTROLLER,
         "customize-ctrl", customize_ctrl,
-        "database-ctrl",  login_ctrl,
+        "database-model", database_model,
         "target",              GTK_TREE_VIEW(gtk_builder_get_object(private->builder, "documentation-view")),
         "template",            "SELECT * FROM %s",
         "view-name",           "DocumentV",
@@ -328,7 +349,7 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
     g_object_new(
         GPARTS_TYPE_RESULT_CONTROLLER,
         "customize-ctrl", customize_ctrl,
-        "database-ctrl",  login_ctrl,
+        "database-model", database_model,
         "target",               GTK_TREE_VIEW(gtk_builder_get_object(private->builder, "footprints-view")),
         "template",             "SELECT * FROM %s",
         "view-name",            "FootprintV",
@@ -338,7 +359,7 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
     g_object_new(
         GPARTS_TYPE_RESULT_CONTROLLER,
         "customize-ctrl", customize_ctrl,
-        "database-ctrl",  login_ctrl,
+        "database-model", database_model,
         "target",               GTK_TREE_VIEW(gtk_builder_get_object(private->builder, "packages-view")),
         "template",             "SELECT * FROM %s",
         "view-name",            "PackageV",
@@ -348,7 +369,7 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
     GObject *symbol_controller2 = g_object_new(
         GPARTS_TYPE_RESULT_CONTROLLER,
         "customize-ctrl", customize_ctrl,
-        "database-ctrl",  login_ctrl,
+        "database-model", database_model,
         "target",              GTK_TREE_VIEW(gtk_builder_get_object(private->builder, "symbols-view")),
         "template",            "SELECT * FROM %s",
         "view-name",           "SymbolV",
@@ -358,7 +379,7 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
     g_object_new(
         GPARTS_TYPE_RESULT_CONTROLLER,
         "customize-ctrl", customize_ctrl,
-        "database-ctrl",  login_ctrl,
+        "database-model", database_model,
         "source",              symbol_controller2,
         "target",              GTK_TREE_VIEW(gtk_builder_get_object(private->builder, "symbol-details-view")),
         "template",            "SELECT * FROM %s WHERE SymbolID = $(SymbolID)",
@@ -415,8 +436,6 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         GPARTS(instance),
         GTK_NOTEBOOK(gtk_builder_get_object(private->builder, "notebook"))
         );
-
-        //"customize-dialog", NULL,
 
     gtk_widget_show(widget);
 }

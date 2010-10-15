@@ -70,3 +70,5 @@ gparts_category_controller_set_database(GPartsCategoryController *query, GPartsD
 void
 gparts_category_controller_set_target(GPartsCategoryController *query, GtkTreeView *target);
 
+void
+gparts_category_controller_set_database_model(GPartsCategoryController *controller, GPartsUIDatabaseModel *database);

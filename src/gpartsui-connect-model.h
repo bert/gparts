@@ -193,6 +193,14 @@ gpartsui_connect_model_get_username(const GPartsUIConnectModel *model);
 gboolean
 gpartsui_connect_model_get_username_valid(const GPartsUIConnectModel *model);
 
+/*! \brief Set the name of the database
+ *
+ *  \param [in] model
+ *  \param [in] database The database name to use.
+ */
+void
+gpartsui_connect_model_set_database_name(GPartsUIConnectModel *model, const gchar *database);
+
 /*! \brief Set database presentation model.
  *
  *  \param [in] cmodel The database connect presentation model.
@@ -209,6 +217,7 @@ gpartsui_connect_model_set_database_model(GPartsUIConnectModel *cmodel, GPartsUI
 void
 gpartsui_connect_model_set_database_type(GPartsUIConnectModel *model, const gchar *name);
 
+
 /*! \brief Set the filename for loading a file based database
  *
  *  \param [in] model
@@ -216,7 +225,6 @@ gpartsui_connect_model_set_database_type(GPartsUIConnectModel *model, const gcha
  */
 void
 gpartsui_connect_model_set_filename(GPartsUIConnectModel *model, const gchar *filename);
-
 
 /*! \brief Set the hostname for connecting to the database
  *

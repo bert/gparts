@@ -44,6 +44,7 @@ struct _GPartsDatabaseClass
     GObjectClass parent;
 
     void (*connect)(GPartsDatabase *database, GPartsConnectData* data, GError **error);
+    gboolean (*connected)(const GPartsDatabase *database);
     void (*disconnect)(GPartsDatabase *database, GError **error);
     GPartsDatabaseResult* (*query)(GPartsDatabase *database, const gchar *query, GError **error);
     const gchar* (*get_name)(GPartsDatabase *database);
@@ -64,6 +65,13 @@ gparts_database_get_type(void);
  */
 void
 gparts_database_connect(GPartsDatabase *database, GPartsConnectData* data, GError **error);
+
+/*! \brief Determine if the database is connected or not.
+ *
+ *  \param [in] database The database test for a connection.
+ */
+gboolean
+gparts_database_connected(const GPartsDatabase *database);
 
 /*! \brief Establishes a connection to the database.
  *

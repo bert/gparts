@@ -631,7 +631,7 @@ gparts_connect_controller_set_flags(GPartsConnectController *controller, gint fl
 
         gtk_widget_set_sensitive(
             GTK_WIDGET(privat->server_entry),
-            (flags & GPARTS_DATABASE_TYPE_FLAGS_USES_HOSTNAME)
+            (flags & GPARTS_DATABASE_TYPE_FLAGS_USES_SERVER)
             );
 
         gtk_widget_set_sensitive(

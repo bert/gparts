@@ -43,42 +43,42 @@ struct _GPartsUIDatabaseControllerClass
 GType
 gpartsui_database_controller_get_type(void);
 
-/*! \brief Connects to a database, just as if the user clicked the menu item.
- *
- *  \param [in] controller The controller.
- */
-void
-gpartsui_database_controller_connect_database(GPartsUIDatabaseController *controller);
-
 /*! \brief Disconnect the database, just as if the user clicked the menu item.
  *
  *  \param [in] controller The controller.
  */
 void
-gpartsui_database_controller_disconnect_database(GPartsUIDatabaseController *controller);
+gpartsui_database_controller_disconnect(GPartsUIDatabaseController *controller);
 
 /*! \brief Drop the database, just as if the user clicked the menu item.
  *
  *  \param [in] controller The controller.
  */
 void
-gpartsui_database_controller_drop_database(GPartsUIDatabaseController *controller);
+gpartsui_database_controller_drop(GPartsUIDatabaseController *controller);
 
-/*! \brief Gets the database currently associated with this controller.
+/*! \brief Gets the database model currently associated with this controller.
  *
  *  \param [in] controller The controller.
- *  \return The database associated with this ctrl.  If no database, then NULL.
+ *  \return The database model associated with this controller.  If no database, then NULL.
  */
-GPartsDatabase*
-gpartsui_database_controller_get_database(GPartsUIDatabaseController *controller);
+GPartsUIDatabaseModel*
+gpartsui_database_controller_get_database_model(GPartsUIDatabaseController *controller);
 
-/*! \brief Sets the action to connect to a database.
+/*! \brief Refresh the database views, just as if the user clicked the menu item.
  *
  *  \param [in] controller The controller.
- *  \param [in] action The action that triggers the connect.
  */
 void
-gpartsui_database_controller_set_connect_action(GPartsUIDatabaseController *controller, GtkAction *action);
+gpartsui_database_controller_refresh(GPartsUIDatabaseController *controller);
+
+/*! \brief Gets the database model currently associated with this controller.
+ *
+ *  \param [in] controller The controller.
+ *  \param [in] model The database model to associated with this controller.  If no database, then NULL.
+ */
+void
+gpartsui_database_controller_set_database_model(GPartsUIDatabaseController *ctrl, GPartsUIDatabaseModel *model);
 
 /*! \brief Sets the action to disconnect from the database.
  *

@@ -30,7 +30,7 @@
 enum
 {
     GPARTS_RESULT_CONTROLLER_PROPID_CUSTOMIZE_CTRL = 1,
-    GPARTS_RESULT_CONTROLLER_PROPID_DATABASE_CTRL,
+    GPARTS_RESULT_CONTROLLER_PROPID_DATABASE_MODEL,
 
     GPARTS_RESULT_CONTROLLER_PROPID_SOURCE,
     GPARTS_RESULT_CONTROLLER_PROPID_TARGET,
@@ -43,19 +43,19 @@ typedef struct _GPartsResultControllerPrivate GPartsResultControllerPrivate;
 
 struct _GPartsResultControllerPrivate
 {
-    GPartsCustomizeCtrl        *customize_ctrl;
-    GPartsUIDatabaseController *login_ctrl;
+    GPartsCustomizeCtrl   *customize_ctrl;
+    GPartsUIDatabaseModel *database_model;
 
-    GtkTreeSelection   *selection;
-    GObject            *source;
-    GtkTreeView        *target;
-    gchar              *template;
-    gchar              *view_name;
+    GtkTreeSelection      *selection;
+    GObject               *source;
+    GtkTreeView           *target;
+    gchar                 *template;
+    gchar                 *view_name;
 
-    GtkAction          *edit_action;
+    GtkAction             *edit_action;
 
-    gchar              *sort_column;
-    gint               sort_order;
+    gchar                 *sort_column;
+    gint                  sort_order;
 };
 
 static gchar*
@@ -152,12 +152,12 @@ gparts_result_controller_class_init(gpointer g_class, gpointer g_class_data)
 
     g_object_class_install_property(
         object_class,
-        GPARTS_RESULT_CONTROLLER_PROPID_DATABASE_CTRL,
+        GPARTS_RESULT_CONTROLLER_PROPID_DATABASE_MODEL,
         g_param_spec_object(
-            "database-ctrl",
+            "database-model",
             "",
             "",
-            G_TYPE_OBJECT,
+            GPARTSUI_TYPE_DATABASE_MODEL,
             G_PARAM_READWRITE
             )
         );
@@ -308,6 +308,8 @@ gparts_result_controller_connect_columns(GPartsResultController *controller)
 static void
 gparts_result_controller_database_controller_notify_cb(GPartsDatabase *database, GParamSpec *pspec, GPartsResultController *controller)
 {
+    g_debug("Database changed");
+
     gparts_result_controller_refresh(controller);
 }
 
@@ -337,7 +339,7 @@ gparts_result_controller_dispose(GObject *object)
 {
     GPartsResultController *controller = GPARTS_RESULT_CONTROLLER(object);
 
-    gparts_result_controller_set_login_ctrl(controller, NULL);
+    gparts_result_controller_set_database_model(controller, NULL);
     gparts_result_controller_set_target(controller, NULL);
 
     misc_object_chain_dispose(object);
@@ -460,10 +462,12 @@ gparts_result_controller_refresh(GPartsResultController *controller)
     GPartsResultControllerPrivate *privat = GPARTS_RESULT_CONTROLLER_GET_PRIVATE(controller);
     GPartsDatabaseResult *result = NULL;
 
-    if (privat->login_ctrl != NULL)
+    if (privat->database_model != NULL)
     {
-        database = gpartsui_database_controller_get_database(privat->login_ctrl);
+        database = gpartsui_database_model_get_database(privat->database_model);
     }
+
+    g_debug("    Database %p", database);
 
     if (database != NULL &&
         privat->target != NULL &&
@@ -476,6 +480,8 @@ gparts_result_controller_refresh(GPartsResultController *controller)
         {
             result = gparts_database_query(database, query, NULL);
             g_free(query);
+
+            g_debug("    Result   %p", result);
         }
     }
 
@@ -553,8 +559,8 @@ gparts_result_controller_set_property(GObject *object, guint property_id, const 
             gparts_result_controller_set_customize_ctrl(controller, g_value_get_object(value));
             break;
 
-        case GPARTS_RESULT_CONTROLLER_PROPID_DATABASE_CTRL:
-            gparts_result_controller_set_login_ctrl(controller, g_value_get_object(value));
+        case GPARTS_RESULT_CONTROLLER_PROPID_DATABASE_MODEL:
+            gparts_result_controller_set_database_model(controller, g_value_get_object(value));
             break;
 
         case GPARTS_RESULT_CONTROLLER_PROPID_SOURCE:
@@ -690,57 +696,64 @@ gparts_result_controller_set_customize_ctrl(GPartsResultController *controller, 
             g_object_ref(privat->customize_ctrl);
         }
 
-        g_object_notify(controller, "customize-ctrl");
+        g_object_notify(G_OBJECT(controller), "customize-ctrl");
     }
 
 }
 
 void
-gparts_result_controller_set_login_ctrl(GPartsResultController *controller, GPartsUIDatabaseController *login_ctrl)
+gparts_result_controller_set_database_model(GPartsResultController *controller, GPartsUIDatabaseModel *model)
 {
     GPartsResultControllerPrivate *privat = GPARTS_RESULT_CONTROLLER_GET_PRIVATE(controller);
 
-    if (privat->login_ctrl != login_ctrl)
+    if (privat != NULL)
     {
-        if (privat->login_ctrl != NULL)
+        if (privat->database_model != NULL)
         {
             g_signal_handlers_disconnect_by_func(
-                privat->login_ctrl,
+                privat->database_model,
                 G_CALLBACK(gparts_result_controller_database_controller_notify_cb),
                 controller
                 );
 
             g_signal_handlers_disconnect_by_func(
-                privat->login_ctrl,
+                privat->database_model,
                 G_CALLBACK(gparts_result_controller_refresh_cb),
                 controller
                 );
 
-            g_object_unref(privat->login_ctrl);
+            g_object_unref(privat->database_model);
         }
 
-        privat->login_ctrl = login_ctrl;
+        privat->database_model = model;
 
-        if (privat->login_ctrl != NULL)
+        if (privat->database_model != NULL)
         {
-            g_object_ref(privat->login_ctrl);
+            g_object_ref(privat->database_model);
 
             g_signal_connect(
-                privat->login_ctrl,
+                privat->database_model,
+                "notify::connected",
+                G_CALLBACK(gparts_result_controller_database_controller_notify_cb),
+                controller
+                );
+
+            g_signal_connect(
+                privat->database_model,
                 "notify::database",
                 G_CALLBACK(gparts_result_controller_database_controller_notify_cb),
                 controller
                 );
 
             g_signal_connect(
-                privat->login_ctrl,
+                privat->database_model,
                 "refresh",
                 G_CALLBACK(gparts_result_controller_refresh_cb),
                 controller
                 );
         }
 
-        g_object_notify(controller, "database-ctrl");
+        g_object_notify(controller, "database-model");
 
         gparts_result_controller_refresh(controller);
     }

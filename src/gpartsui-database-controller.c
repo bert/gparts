@@ -29,9 +29,8 @@
 
 enum
 {
-    GPARTSUI_DATABASE_CONTROLLER_PROPID_DATABASE = 1,
+    GPARTSUI_DATABASE_CONTROLLER_PROPID_DATABASE_MODEL = 1,
 
-    GPARTSUI_DATABASE_CONTROLLER_PROPID_CONNECT_ACTION,
     GPARTSUI_DATABASE_CONTROLLER_PROPID_DISCONNECT_ACTION,
     GPARTSUI_DATABASE_CONTROLLER_PROPID_DROP_ACTION,
     GPARTSUI_DATABASE_CONTROLLER_PROPID_REFRESH_ACTION
@@ -41,15 +40,11 @@ typedef struct _GPartsUIDatabaseControllerPrivate GPartsUIDatabaseControllerPriv
 
 struct _GPartsUIDatabaseControllerPrivate
 {
-    GtkAction      *connect_action;
-    GtkAction      *disconnect_action;
-    GtkAction      *drop_action;
-    GtkAction      *refresh_action;
+    GPartsUIDatabaseModel *database_model;
 
-    GPartsDatabase     *database;
-    GPartsDatabaseType *database_type;
-
-    GPartsConnectController *ctrl;
+    GtkAction             *disconnect_action;
+    GtkAction             *drop_action;
+    GtkAction             *refresh_action;
 };
 
 
@@ -83,36 +78,28 @@ gpartsui_database_controller_update_valid(GPartsUIDatabaseController *ctrl);
 /**** Signal handlers ****/
 
 static void
-gpartsui_database_controller_connect_data_changed_cb(GPartsConnectController *connect, GParamSpec *pspec, GPartsUIDatabaseController *ctrl);
+gpartsui_database_controller_all_notify_cb(GPartsUIDatabaseModel *model, GParamSpec *param, GPartsUIDatabaseController *controller);
 
 static void
-gpartsui_database_controller_connect_action_cb(GtkAction *action, GPartsUIDatabaseController *database_controller);
+gpartsui_database_controller_disconnect_action_cb(GtkAction *action, GPartsUIDatabaseController *controller);
 
 static void
-gpartsui_database_controller_connected_cb(GPartsDatabase *database, GPartsUIDatabaseController *database_controller);
+gpartsui_database_controller_drop_action_cb(GtkAction *action, GPartsUIDatabaseController *controller);
 
 static void
-gpartsui_database_controller_database_type_changed_cb(GPartsConnectController *connect, GParamSpec *pspec, GPartsUIDatabaseController *login);
+gpartsui_database_controller_refresh_action_cb(GtkAction *action, GPartsUIDatabaseController *controller);
 
 static void
-gpartsui_database_controller_disconnect_action_cb(GtkAction *action, GPartsUIDatabaseController *database_controller);
+gpartsui_database_controller_update_all_actions(GPartsUIDatabaseController *controller);
+
+
 
 static void
-gpartsui_database_controller_disconnected_cb(GPartsDatabase *database, GPartsUIDatabaseController *database_controller);
+gpartsui_database_controller_all_notify_cb(GPartsUIDatabaseModel *model, GParamSpec *param, GPartsUIDatabaseController *controller)
+{
+    gpartsui_database_controller_update_all_actions(controller);
+}
 
-static void
-gpartsui_database_controller_drop_action_cb(GtkAction *action, GPartsUIDatabaseController *database_controller);
-
-static void
-gpartsui_database_controller_refresh_action_cb(GtkAction *action, GPartsUIDatabaseController *database_controller);
-
-
-
-/*! \brief Initialize class data.
- *
- *  \param [in] g_class
- *  \param [in] g_class_data
- */
 static void
 gpartsui_database_controller_class_init(gpointer g_class, gpointer g_class_data)
 {
@@ -128,25 +115,13 @@ gpartsui_database_controller_class_init(gpointer g_class, gpointer g_class_data)
 
     g_object_class_install_property(
         object_class,
-        GPARTSUI_DATABASE_CONTROLLER_PROPID_CONNECT_ACTION,
+        GPARTSUI_DATABASE_CONTROLLER_PROPID_DATABASE_MODEL,
         g_param_spec_object(
-            "connect-action",
-            "",
-            "",
-            GTK_TYPE_ACTION,
-            G_PARAM_READWRITE
-            )
-        );
-
-    g_object_class_install_property(
-        object_class,
-        GPARTSUI_DATABASE_CONTROLLER_PROPID_DATABASE,
-        g_param_spec_object(
-            "database",
-            "",
-            "",
-            GPARTS_TYPE_DATABASE,
-            G_PARAM_READABLE
+            "database-model",
+            "Database Model",
+            "Database Model",
+            GPARTSUI_TYPE_DATABASE_MODEL,
+            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
 
@@ -155,10 +130,10 @@ gpartsui_database_controller_class_init(gpointer g_class, gpointer g_class_data)
         GPARTSUI_DATABASE_CONTROLLER_PROPID_DISCONNECT_ACTION,
         g_param_spec_object(
             "disconnect-action",
-            "",
-            "",
+            "Disconnect Action",
+            "Disconnect Action",
             GTK_TYPE_ACTION,
-            G_PARAM_READWRITE
+            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
 
@@ -167,10 +142,10 @@ gpartsui_database_controller_class_init(gpointer g_class, gpointer g_class_data)
         GPARTSUI_DATABASE_CONTROLLER_PROPID_DROP_ACTION,
         g_param_spec_object(
             "drop-action",
-            "",
-            "",
+            "Drop Action",
+            "Drop Action",
             GTK_TYPE_ACTION,
-            G_PARAM_READWRITE
+            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
 
@@ -182,181 +157,26 @@ gpartsui_database_controller_class_init(gpointer g_class, gpointer g_class_data)
             "",
             "",
             GTK_TYPE_ACTION,
-            G_PARAM_READWRITE
+            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
-
-    g_signal_new(
-        "refresh",
-        G_TYPE_FROM_CLASS(g_class),
-        G_SIGNAL_RUN_FIRST,
-        0,
-        NULL,
-        NULL,
-        g_cclosure_marshal_VOID__VOID,
-        G_TYPE_NONE,
-        0
-        );
-}
-
-
-
-static void
-gpartsui_database_controller_connect_action_cb(GtkAction *action, GPartsUIDatabaseController *controller)
-{
-    gpartsui_database_controller_connect_database(controller);
-}
-
-static void
-gpartsui_database_controller_connect_data_changed_cb(GPartsConnectController *connect, GParamSpec *pspec, GPartsUIDatabaseController *ctrl)
-{
-    gpartsui_database_controller_update_valid(ctrl);
 }
 
 void
-gpartsui_database_controller_connect_database(GPartsUIDatabaseController *controller)
+gpartsui_database_controller_disconnect(GPartsUIDatabaseController *controller)
 {
     GPartsUIDatabaseControllerPrivate *privat = GPARTSUI_DATABASE_CONTROLLER_GET_PRIVATE(controller);
 
-    if (privat != NULL)
-    {
-        gint result;
-
-        gchar **type_names = NULL;
-
-        if (privat->database_type != NULL)
-        {
-            type_names = gparts_database_type_get_type_names(privat->database_type);
-        }
-
-        gparts_connect_controller_set_database_types(privat->ctrl, type_names);
-
-        g_strfreev(type_names);
-
-        result = gparts_connect_controller_run(privat->ctrl);
-
-        if (result == GTK_RESPONSE_OK)
-        {
-            GPartsConnectData *data = gparts_connect_controller_get_connect_data(privat->ctrl);
-
-            if (data != NULL)
-            {
-                GPartsDatabase *database;
-                GError *error = NULL;
-
-                {
-                    GPartsDatabaseFactory *factory;
-                    gchar *name;
-
-                    name = gparts_connect_controller_get_database_type(privat->ctrl);
-
-                    factory = gparts_database_type_get_factory(privat->database_type, name);
-                    g_free(name);
-
-                    //database = g_object_new(g_type_from_name("gparts-sqlite-database"), NULL);
-                    database = gparts_database_factory_create_database(factory, NULL);
-                    g_object_unref(factory);
-                }
-
-                gparts_database_connect(database, data, &error);
-
-                gparts_connect_data_free(data);
-
-                if (error != NULL)
-                {
-                    GtkWidget *error_dialog = gtk_message_dialog_new(
-                        NULL, /* GTK_WINDOW(privat->login_dialog), */
-                        GTK_DIALOG_MODAL,
-                        GTK_MESSAGE_ERROR,
-                        GTK_BUTTONS_CLOSE,
-                        "%s",
-                        error->message
-                        );
-
-                    gtk_dialog_run(GTK_DIALOG(error_dialog));
-
-                    gtk_widget_destroy(error_dialog);
-
-                    g_critical("%s", error->message);
-                    g_clear_error(&error);
-                }
-                else
-                {
-                    gpartsui_database_controller_set_database(controller, database);
-                }
-
-                g_object_unref(database);
-            }
-        }
-
-        gparts_connect_controller_clear_password(privat->ctrl);
-    }
-
-}
-
-static void
-gpartsui_database_controller_database_type_changed_cb(GPartsConnectController *connect, GParamSpec *pspec, GPartsUIDatabaseController *controller)
-{
-    gpartsui_database_controller_update_flags(controller);
-    gpartsui_database_controller_update_valid(controller);
-}
-
-static void
-gpartsui_database_controller_disconnect_action_cb(GtkAction *action, GPartsUIDatabaseController *controller)
-{
-    gpartsui_database_controller_disconnect_database(controller);
-}
-
-void
-gpartsui_database_controller_disconnect_database(GPartsUIDatabaseController *controller)
-{
-    gpartsui_database_controller_set_database(controller, NULL);
-}
-
-static void
-gpartsui_database_controller_connected_cb(GPartsDatabase *database, GPartsUIDatabaseController *database_controller)
-{
-}
-
-static void
-gpartsui_database_controller_disconnected_cb(GPartsDatabase *database, GPartsUIDatabaseController *database_controller)
-{
-}
-
-static void
-gpartsui_database_controller_dispose(GObject *object)
-{
-    gpartsui_database_controller_set_database(GPARTSUI_DATABASE_CONTROLLER(object), NULL);
-
-    gpartsui_database_controller_set_connect_action(GPARTSUI_DATABASE_CONTROLLER(object), NULL);
-    gpartsui_database_controller_set_disconnect_action(GPARTSUI_DATABASE_CONTROLLER(object), NULL);
-    gpartsui_database_controller_set_drop_action(GPARTSUI_DATABASE_CONTROLLER(object), NULL);
-    gpartsui_database_controller_set_refresh_action(GPARTSUI_DATABASE_CONTROLLER(object), NULL);
-
-    misc_object_chain_dispose(object);
-}
-
-static void
-gpartsui_database_controller_drop_action_cb(GtkAction *action, GPartsUIDatabaseController *controller)
-{
-    gpartsui_database_controller_drop_database(controller);
-}
-
-void
-gpartsui_database_controller_drop_database(GPartsUIDatabaseController *controller)
-{
-    GPartsUIDatabaseControllerPrivate *privat = GPARTSUI_DATABASE_CONTROLLER_GET_PRIVATE(controller);
-
-    if ((privat != NULL) && (privat->database != NULL))
+    if ((privat != NULL) && (privat->database_model != NULL))
     {
         GError *error = NULL;
 
-        gparts_database_drop(privat->database, &error);
+        gpartsui_database_model_disconnect(privat->database_model, &error);
 
         if (error != NULL)
         {
             GtkWidget *error_dialog = gtk_message_dialog_new(
-                NULL, /* GTK_WINDOW(privat->login_dialog), */
+                NULL,
                 GTK_DIALOG_MODAL,
                 GTK_MESSAGE_ERROR,
                 GTK_BUTTONS_CLOSE,
@@ -373,12 +193,66 @@ gpartsui_database_controller_drop_database(GPartsUIDatabaseController *controlle
     }
 }
 
-/*! \brief Deallocate all resources.
- *
- *  This function performs the second and last stage of object destruction.
- *
- *  \param [in] object The object to finalize.
- */
+static void
+gpartsui_database_controller_disconnect_action_cb(GtkAction *action, GPartsUIDatabaseController *controller)
+{
+    gpartsui_database_controller_disconnect(controller);
+}
+
+static void
+gpartsui_database_controller_dispose(GObject *object)
+{
+    GPartsUIDatabaseController *controller = GPARTSUI_DATABASE_CONTROLLER(object);
+
+    if (controller != NULL)
+    {
+        gpartsui_database_controller_set_database_model(controller, NULL);
+
+        gpartsui_database_controller_set_disconnect_action(controller, NULL);
+        gpartsui_database_controller_set_drop_action(controller, NULL);
+        gpartsui_database_controller_set_refresh_action(controller, NULL);
+    }
+
+    misc_object_chain_dispose(object);
+}
+
+void
+gpartsui_database_controller_drop(GPartsUIDatabaseController *controller)
+{
+    GPartsUIDatabaseControllerPrivate *privat = GPARTSUI_DATABASE_CONTROLLER_GET_PRIVATE(controller);
+
+    if ((privat != NULL) && (privat->database_model != NULL))
+    {
+        GError *error = NULL;
+
+        gpartsui_database_model_drop(privat->database_model, &error);
+
+        if (error != NULL)
+        {
+            GtkWidget *error_dialog = gtk_message_dialog_new(
+                NULL,
+                GTK_DIALOG_MODAL,
+                GTK_MESSAGE_ERROR,
+                GTK_BUTTONS_CLOSE,
+                "%s",
+                error->message
+                );
+
+            gtk_dialog_run(GTK_DIALOG(error_dialog));
+
+            gtk_widget_destroy(error_dialog);
+
+            g_clear_error(&error);
+        }
+    }
+}
+
+static void
+gpartsui_database_controller_drop_action_cb(GtkAction *action, GPartsUIDatabaseController *controller)
+{
+    gpartsui_database_controller_drop(controller);
+}
+
 static void
 gpartsui_database_controller_finalize(GObject *object)
 {
@@ -387,10 +261,6 @@ gpartsui_database_controller_finalize(GObject *object)
     misc_object_chain_finalize(object);
 }
 
-/*! \brief Gets the GType of the GPartsUIDatabaseController class.
- *
- *  \return The GType of the GPartsUIDatabaseController class.
- */
 GType
 gpartsui_database_controller_get_type(void)
 {
@@ -413,7 +283,7 @@ gpartsui_database_controller_get_type(void)
 
         type = g_type_register_static(
             G_TYPE_OBJECT,
-            "gparts-database-ctrl",
+            "gpartsui-database-controller",
             &tinfo,
             0
             );
@@ -422,18 +292,18 @@ gpartsui_database_controller_get_type(void)
     return type;
 }
 
-GPartsDatabase*
-gpartsui_database_controller_get_database(GPartsUIDatabaseController *database_controller)
+GPartsUIDatabaseModel*
+gpartsui_database_controller_get_database_model(GPartsUIDatabaseController *controller)
 {
-    GPartsDatabase *database = NULL;
-    GPartsUIDatabaseControllerPrivate *privat = GPARTSUI_DATABASE_CONTROLLER_GET_PRIVATE(database_controller);
+    GPartsUIDatabaseModel *database_model = NULL;
+    GPartsUIDatabaseControllerPrivate *privat = GPARTSUI_DATABASE_CONTROLLER_GET_PRIVATE(controller);
 
     if (privat != NULL)
     {
-        database = privat->database;
+        database_model = privat->database_model;
     }
 
-    return database;
+    return database_model;
 }
 
 static void
@@ -443,16 +313,16 @@ gpartsui_database_controller_get_property(GObject *object, guint property_id, GV
 
     switch (property_id)
     {
-        case GPARTSUI_DATABASE_CONTROLLER_PROPID_CONNECT_ACTION:
-            g_value_set_object(value, privat->connect_action);
-            break;
-
-        case GPARTSUI_DATABASE_CONTROLLER_PROPID_DATABASE:
-            g_value_set_object(value, gpartsui_database_controller_get_database(GPARTSUI_DATABASE_CONTROLLER(object)));
+        case GPARTSUI_DATABASE_CONTROLLER_PROPID_DATABASE_MODEL:
+            g_value_set_object(value, gpartsui_database_controller_get_database_model(GPARTSUI_DATABASE_CONTROLLER(object)));
             break;
 
         case GPARTSUI_DATABASE_CONTROLLER_PROPID_DISCONNECT_ACTION:
             g_value_set_object(value, privat->disconnect_action);
+            break;
+
+        case GPARTSUI_DATABASE_CONTROLLER_PROPID_DROP_ACTION:
+            g_value_set_object(value, privat->drop_action);
             break;
 
         case GPARTSUI_DATABASE_CONTROLLER_PROPID_REFRESH_ACTION:
@@ -468,112 +338,29 @@ static void
 gpartsui_database_controller_instance_init(GTypeInstance *instance, gpointer g_class)
 {
     GPartsUIDatabaseControllerPrivate *privat = GPARTSUI_DATABASE_CONTROLLER_GET_PRIVATE(instance);
+}
 
-    GPartsConnectData connect_data;
+void
+gpartsui_database_controller_refresh(GPartsUIDatabaseController *controller)
+{
+    GPartsUIDatabaseControllerPrivate *privat = GPARTSUI_DATABASE_CONTROLLER_GET_PRIVATE(controller);
 
-    privat->ctrl = gparts_connect_controller_new();
-
-    g_signal_connect(
-        privat->ctrl,
-        "notify::connect-data",
-        G_CALLBACK(gpartsui_database_controller_connect_data_changed_cb),
-        instance
-        );
-
-    g_signal_connect(
-        privat->ctrl,
-        "notify::database-type",
-        G_CALLBACK(gpartsui_database_controller_database_type_changed_cb),
-        instance
-        );
-
-    connect_data.hostname = "localhost"; /* g_get_host_name(); */
-    connect_data.username = g_get_user_name();
-    connect_data.password = NULL;
-    connect_data.database = "GParts";
-    connect_data.filename = NULL;
-
-    gparts_connect_controller_set_connect_data(privat->ctrl, &connect_data);
-
+    if (privat != NULL)
     {
-        GPartsConfig *config = gparts_config_new();
-
-        privat->database_type = gparts_config_get_database_types(config);
+        gpartsui_database_model_refresh(privat->database_model);
     }
-
-    /** TODO Move elsewhere */
-
-    //gpartsui_database_type_load_module(privat->database_type, "libgparts-mysql.la", NULL);
-    //gpartsui_database_type_load_module(privat->database_type, "libgparts-sqlite.la", NULL);
-
-    /* TODO Test code / Remove before flight */
-
-//    gpartsui_database_type_add_type(
-//        privat->database_type,
-//        "PostgreSQL",
-//        G_TYPE_INVALID,
-//        GPARTSUI_DATABASE_TYPE_FLAGS_USES_USERNAME
-//        );
-
-//    gpartsui_database_type_add_type(
-//        privat->database_type,
-//        "SQLite",
-//        G_TYPE_INVALID,
-//        GPARTSUI_DATABASE_TYPE_FLAGS_USES_FILENAME
-//        );
 }
 
 static void
-gpartsui_database_controller_refresh_action_cb(GtkAction *action, GPartsUIDatabaseController *database_controller)
+gpartsui_database_controller_refresh_action_cb(GtkAction *action, GPartsUIDatabaseController *controller)
 {
-    GPartsUIDatabaseControllerPrivate *privat = GPARTSUI_DATABASE_CONTROLLER_GET_PRIVATE(database_controller);
-
-    if (privat != NULL && privat->database != NULL)
-    {
-        g_signal_emit_by_name(database_controller, "refresh");
-    }
+    gpartsui_database_controller_refresh(controller);
 }
 
 void
-gpartsui_database_controller_set_connect_action(GPartsUIDatabaseController *database_controller, GtkAction *action)
+gpartsui_database_controller_set_disconnect_action(GPartsUIDatabaseController *controller, GtkAction *action)
 {
-    GPartsUIDatabaseControllerPrivate *privat = GPARTSUI_DATABASE_CONTROLLER_GET_PRIVATE(database_controller);
-
-    if (privat->connect_action != action)
-    {
-        if (privat->connect_action != NULL)
-        {
-            g_signal_handlers_disconnect_by_func(
-                privat->connect_action,
-                G_CALLBACK(gpartsui_database_controller_connect_action_cb),
-                database_controller
-                );
-
-            g_object_unref(privat->connect_action);
-        }
-
-        privat->connect_action = action;
-
-        if (privat->connect_action != NULL)
-        {
-            g_object_ref(privat->connect_action);
-
-            g_signal_connect(
-                privat->connect_action,
-                "activate",
-                G_CALLBACK(gpartsui_database_controller_connect_action_cb),
-                database_controller
-                );
-        }
-
-        g_object_notify(G_OBJECT(database_controller), "connect-action");
-    }
-}
-
-void
-gpartsui_database_controller_set_disconnect_action(GPartsUIDatabaseController *database_controller, GtkAction *action)
-{
-    GPartsUIDatabaseControllerPrivate *privat = GPARTSUI_DATABASE_CONTROLLER_GET_PRIVATE(database_controller);
+    GPartsUIDatabaseControllerPrivate *privat = GPARTSUI_DATABASE_CONTROLLER_GET_PRIVATE(controller);
 
     if (privat->disconnect_action != action)
     {
@@ -582,7 +369,7 @@ gpartsui_database_controller_set_disconnect_action(GPartsUIDatabaseController *d
             g_signal_handlers_disconnect_by_func(
                 privat->disconnect_action,
                 G_CALLBACK(gpartsui_database_controller_disconnect_action_cb),
-                database_controller
+                controller
                 );
 
             g_object_unref(privat->disconnect_action);
@@ -598,14 +385,16 @@ gpartsui_database_controller_set_disconnect_action(GPartsUIDatabaseController *d
                 privat->disconnect_action,
                 "activate",
                 G_CALLBACK(gpartsui_database_controller_disconnect_action_cb),
-                database_controller
+                controller
                 );
 
-            //gtk_action_set_sensitive(privat->disconnect_action, (privat->database != NULL));
-            gtk_action_set_sensitive(privat->disconnect_action, TRUE);
+            gtk_action_set_sensitive(
+                privat->disconnect_action,
+                gpartsui_database_model_get_disconnect_sensitive(privat->database_model)
+                );
         }
 
-        g_object_notify(G_OBJECT(database_controller), "disconnect-action");
+        g_object_notify(G_OBJECT(controller), "disconnect-action");
     }
 }
 
@@ -616,8 +405,8 @@ gpartsui_database_controller_set_property(GObject *object, guint property_id, co
 
     switch (property_id)
     {
-        case GPARTSUI_DATABASE_CONTROLLER_PROPID_CONNECT_ACTION:
-            gpartsui_database_controller_set_connect_action(controller, GTK_ACTION(g_value_get_object(value)));
+        case GPARTSUI_DATABASE_CONTROLLER_PROPID_DATABASE_MODEL:
+            gpartsui_database_controller_set_database_model(controller, GPARTSUI_DATABASE_MODEL(g_value_get_object(value)));
             break;
 
         case GPARTSUI_DATABASE_CONTROLLER_PROPID_DISCONNECT_ACTION:
@@ -637,81 +426,48 @@ gpartsui_database_controller_set_property(GObject *object, guint property_id, co
     }
 }
 
-static void
-gpartsui_database_controller_set_database(GPartsUIDatabaseController *ctrl, GPartsDatabase *database)
+void
+gpartsui_database_controller_set_database_model(GPartsUIDatabaseController *controller, GPartsUIDatabaseModel *model)
 {
-    GPartsUIDatabaseControllerPrivate *privat = GPARTSUI_DATABASE_CONTROLLER_GET_PRIVATE(ctrl);
+    GPartsUIDatabaseControllerPrivate *privat = GPARTSUI_DATABASE_CONTROLLER_GET_PRIVATE(controller);
 
-    if (privat->database != database)
+    if (privat != NULL)
     {
-        if (privat->database != NULL)
+        if (privat->database_model != NULL)
         {
             g_signal_handlers_disconnect_by_func(
-                privat->database,
-                G_CALLBACK(gpartsui_database_controller_connected_cb),
-                ctrl
+                privat->database_model,
+                G_CALLBACK(gpartsui_database_controller_all_notify_cb),
+                controller
                 );
 
-            g_signal_handlers_disconnect_by_func(
-                privat->database,
-                G_CALLBACK(gpartsui_database_controller_disconnected_cb),
-                ctrl
-                );
-
-            g_object_unref(privat->database);
+            g_object_unref(privat->database_model);
         }
 
-        privat->database = database;
+        privat->database_model = model;
 
-        if (privat->database != NULL)
+        if (privat->database_model != NULL)
         {
-            g_object_ref(privat->database);
+            g_object_ref(privat->database_model);
 
             g_signal_connect(
-                privat->database,
-                "database-connected",
-                G_CALLBACK(gpartsui_database_controller_connected_cb),
-                ctrl
-                );
-
-            g_signal_connect(
-                privat->database,
-                "database-disconnected",
-                G_CALLBACK(gpartsui_database_controller_disconnected_cb),
-                ctrl
+                privat->database_model,
+                "notify",
+                G_CALLBACK(gpartsui_database_controller_all_notify_cb),
+                controller
                 );
         }
 
-        if (privat->disconnect_action != NULL)
-        {
-            gtk_action_set_sensitive(privat->disconnect_action, (privat->database != NULL));
-        }
+        gpartsui_database_controller_update_all_actions(controller);
 
-        if (privat->drop_action != NULL)
-        {
-            if (privat->database != NULL)
-            {
-                gtk_action_set_sensitive(privat->drop_action, gparts_database_droppable(privat->database));
-            }
-            else
-            {
-                gtk_action_set_sensitive(privat->drop_action, FALSE);
-            }
-        }
-
-        if (privat->refresh_action != NULL)
-        {
-            gtk_action_set_sensitive(privat->refresh_action, (privat->database != NULL));
-        }
-
-        g_object_notify(G_OBJECT(ctrl), "database");
+        g_object_notify(G_OBJECT(controller), "database-model");
     }
 }
 
 void
-gpartsui_database_controller_set_drop_action(GPartsUIDatabaseController *database_controller, GtkAction *action)
+gpartsui_database_controller_set_drop_action(GPartsUIDatabaseController *controller, GtkAction *action)
 {
-    GPartsUIDatabaseControllerPrivate *privat = GPARTSUI_DATABASE_CONTROLLER_GET_PRIVATE(database_controller);
+    GPartsUIDatabaseControllerPrivate *privat = GPARTSUI_DATABASE_CONTROLLER_GET_PRIVATE(controller);
 
     if (privat != NULL)
     {
@@ -722,7 +478,7 @@ gpartsui_database_controller_set_drop_action(GPartsUIDatabaseController *databas
                 g_signal_handlers_disconnect_by_func(
                     privat->drop_action,
                     G_CALLBACK(gpartsui_database_controller_drop_action_cb),
-                    database_controller
+                    controller
                     );
 
                 g_object_unref(privat->drop_action);
@@ -738,28 +494,24 @@ gpartsui_database_controller_set_drop_action(GPartsUIDatabaseController *databas
                     privat->drop_action,
                     "activate",
                     G_CALLBACK(gpartsui_database_controller_drop_action_cb),
-                    database_controller
+                    controller
                     );
 
-                if (privat->database != NULL)
-                {
-                    gtk_action_set_sensitive(privat->drop_action, gparts_database_droppable(privat->database));
-                }
-                else
-                {
-                    gtk_action_set_sensitive(privat->drop_action, FALSE);
-                }
+            gtk_action_set_sensitive(
+                privat->drop_action,
+                gpartsui_database_model_get_drop_sensitive(privat->database_model)
+                );
             }
 
-            g_object_notify(G_OBJECT(database_controller), "drop-action");
+            g_object_notify(G_OBJECT(controller), "drop-action");
         }
     }
 }
 
 void
-gpartsui_database_controller_set_refresh_action(GPartsUIDatabaseController *ctrl, GtkAction *action)
+gpartsui_database_controller_set_refresh_action(GPartsUIDatabaseController *controller, GtkAction *action)
 {
-    GPartsUIDatabaseControllerPrivate *privat = GPARTSUI_DATABASE_CONTROLLER_GET_PRIVATE(ctrl);
+    GPartsUIDatabaseControllerPrivate *privat = GPARTSUI_DATABASE_CONTROLLER_GET_PRIVATE(controller);
 
     if (privat->refresh_action != action)
     {
@@ -768,7 +520,7 @@ gpartsui_database_controller_set_refresh_action(GPartsUIDatabaseController *ctrl
             g_signal_handlers_disconnect_by_func(
                 privat->refresh_action,
                 G_CALLBACK(gpartsui_database_controller_refresh_action_cb),
-                ctrl
+                controller
                 );
 
             g_object_unref(privat->refresh_action);
@@ -784,77 +536,49 @@ gpartsui_database_controller_set_refresh_action(GPartsUIDatabaseController *ctrl
                 privat->refresh_action,
                 "activate",
                 G_CALLBACK(gpartsui_database_controller_refresh_action_cb),
-                ctrl
+                controller
                 );
 
-            gtk_action_set_sensitive(privat->refresh_action, (privat->database != NULL));
+            gtk_action_set_sensitive(
+                privat->refresh_action,
+                gpartsui_database_model_get_refresh_sensitive(privat->database_model)
+                );
         }
 
-        g_object_notify(G_OBJECT(ctrl), "refresh-action");
+        g_object_notify(G_OBJECT(controller), "refresh-action");
     }
 }
 
 static void
-gpartsui_database_controller_update_flags(GPartsUIDatabaseController *controller)
+gpartsui_database_controller_update_all_actions(GPartsUIDatabaseController *controller)
 {
     GPartsUIDatabaseControllerPrivate *privat = GPARTSUI_DATABASE_CONTROLLER_GET_PRIVATE(controller);
 
     if (privat != NULL)
     {
-        GPartsDatabaseFactory *factory = NULL;
-        gint flags = 0;
-
-        if (privat->database_type != NULL)
+        if (privat->disconnect_action != NULL)
         {
-            gchar *name = gparts_connect_controller_get_database_type(privat->ctrl);
-
-            factory = gparts_database_type_get_factory(privat->database_type, name);
-            g_free(name);
+            gtk_action_set_sensitive(
+                privat->disconnect_action,
+                gpartsui_database_model_get_disconnect_sensitive(privat->database_model)
+                );
         }
 
-        if (factory != NULL)
+        if (privat->drop_action != NULL)
         {
-            GPartsConnectData *data = gparts_connect_controller_get_connect_data(privat->ctrl);
-
-            flags = gparts_database_factory_get_flags(factory);
-            gparts_connect_data_free(data);
-
-            g_object_unref(factory);
+            gtk_action_set_sensitive(
+                privat->drop_action,
+                gpartsui_database_model_get_drop_sensitive(privat->database_model)
+                );
         }
 
-        gparts_connect_controller_set_flags(privat->ctrl, flags);
-    }
-}
-
-static void
-gpartsui_database_controller_update_valid(GPartsUIDatabaseController *controller)
-{
-    GPartsUIDatabaseControllerPrivate *privat = GPARTSUI_DATABASE_CONTROLLER_GET_PRIVATE(controller);
-
-    if (privat != NULL)
-    {
-        GPartsDatabaseFactory *factory = NULL;
-        gboolean valid = FALSE;
-
-        if (privat->database_type != NULL)
+        if (privat->refresh_action != NULL)
         {
-            gchar *name = gparts_connect_controller_get_database_type(privat->ctrl);
-
-            factory = gparts_database_type_get_factory(privat->database_type, name);
-            g_free(name);
+            gtk_action_set_sensitive(
+                privat->refresh_action,
+                gpartsui_database_model_get_refresh_sensitive(privat->database_model)
+                );
         }
-
-        if (factory != NULL)
-        {
-            GPartsConnectData *data = gparts_connect_controller_get_connect_data(privat->ctrl);
-
-            valid = gparts_database_factory_validate_connect_data(factory, data);
-            gparts_connect_data_free(data);
-
-            g_object_unref(factory);
-        }
-
-        gparts_connect_controller_set_valid(privat->ctrl, valid);
     }
 }
 

@@ -50,6 +50,9 @@ typedef struct _GPartsResultModelClass GPartsResultModelClass;
 typedef struct _GPartsResultView GPartsResultView;
 typedef struct _GPartsResultViewClass GPartsResultViewClass;
 
+typedef struct _GPartsUIConnectController GPartsUIConnectController;
+typedef struct _GPartsUIConnectControllerClass GPartsUIConnectControllerClass;
+
 typedef struct _GPartsUIConnectModel GPartsUIConnectModel;
 typedef struct _GPartsUIConnectModelClass GPartsUIConnectModelClass;
 
