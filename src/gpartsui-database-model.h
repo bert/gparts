@@ -85,15 +85,6 @@ gpartsui_database_model_get_drop_sensitive(const GPartsUIDatabaseModel *model);
 GPartsDatabase*
 gpartsui_database_model_get_database(const GPartsUIDatabaseModel *model);
 
-/*! \brief Get the state for the GUI refresh widget.
- *
- *  \param [in] model The database presentation model.
- *  \retval TRUE The GUI control to refresh the database should be enabled.
- *  \retval FALSE The GUI control to refresh the database should be disabled.
- */
-gboolean
-gpartsui_database_model_get_refresh_sensitive(const GPartsUIDatabaseModel *model);
-
 /*! \brief Disconnect from the current database.
  *
  *  \param [in] model The database presentation model.
@@ -117,7 +108,7 @@ gpartsui_database_model_drop(const GPartsUIDatabaseModel *model, GError **error)
  *  \param [in] model The database presentation model.
  */
 void
-gpartsui_database_model_refresh(const GPartsUIDatabaseModel *model);
+gpartsui_database_model_refresh(const GPartsUIDatabaseModel *model, GError **error);
 
 /*! \brief Set the database domain model.
  *
@@ -126,4 +117,14 @@ gpartsui_database_model_refresh(const GPartsUIDatabaseModel *model);
  */
 void
 gpartsui_database_model_set_database(GPartsUIDatabaseModel *model,GPartsDatabase* database);
+
+
+MiscUIActionModel*
+gpartsui_database_model_get_disconnect_action_model(const GPartsUIDatabaseModel *model);
+
+MiscUIActionModel*
+gpartsui_database_model_get_drop_action_model(const GPartsUIDatabaseModel *model);
+
+MiscUIActionModel*
+gpartsui_database_model_get_refresh_action_model(const GPartsUIDatabaseModel *model);
 

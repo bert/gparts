@@ -308,8 +308,6 @@ gparts_result_controller_connect_columns(GPartsResultController *controller)
 static void
 gparts_result_controller_database_controller_notify_cb(GPartsDatabase *database, GParamSpec *pspec, GPartsResultController *controller)
 {
-    g_debug("Database changed");
-
     gparts_result_controller_refresh(controller);
 }
 
@@ -403,8 +401,6 @@ gparts_result_controller_get_table(GPartsResultController *controller)
             name
             );
 
-        g_debug("Table insert %s, %s", name, value);
-
         g_hash_table_insert(table, name, value);
 
         column = gtk_tree_view_get_column(privat->target, index++);
@@ -467,8 +463,6 @@ gparts_result_controller_refresh(GPartsResultController *controller)
         database = gpartsui_database_model_get_database(privat->database_model);
     }
 
-    g_debug("    Database %p", database);
-
     if (database != NULL &&
         privat->target != NULL &&
         privat->template != NULL &&
@@ -480,8 +474,6 @@ gparts_result_controller_refresh(GPartsResultController *controller)
         {
             result = gparts_database_query(database, query, NULL);
             g_free(query);
-
-            g_debug("    Result   %p", result);
         }
     }
 
@@ -516,8 +508,6 @@ static void
 gparts_result_controller_set_edit_action(GPartsResultController *controller, GtkAction *action)
 {
     GPartsResultControllerPrivate *privat = GPARTS_RESULT_CONTROLLER_GET_PRIVATE(controller);
-
-    g_debug("setting the edit action");
 
     if (privat->edit_action != action)
     {
@@ -1062,7 +1052,6 @@ gparts_result_controller_edit_columns_cb(gpointer unused, GPartsResultController
     list = gtk_tree_view_new_with_model(model);
     gtk_tree_selection_set_mode(gtk_tree_view_get_selection(list), GTK_SELECTION_NONE);
     g_object_unref(model);
-    g_debug("List : %p", list);
 
     column = gtk_tree_view_column_new();
     gtk_tree_view_column_set_title(column, "Column");

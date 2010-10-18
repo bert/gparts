@@ -121,6 +121,24 @@
                         <property name="label">Test Popup 2</property>
                     </object>
                 </child>
+                <child>
+                    <object class="GtkAction" id="tools">
+                        <property name="name">tools</property>
+                        <property name="label">Tools</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="tools-open-website">
+                        <property name="name">tools-open-website</property>
+                        <property name="label">Open Website</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="tools-open-webpage">
+                        <property name="name">tools-open-webpage</property>
+                        <property name="label">Open Webpage</property>
+                    </object>
+                </child>
             </object>
         </child>
 
@@ -149,6 +167,10 @@
                     <menuitem action="view-refresh"/>
                     <menuitem action="view-edit"/>
                     <menuitem action="view-customize"/>
+                </menu>
+                <menu action="tools">
+                    <menuitem action="tools-open-website"/>
+                    <menuitem action="tools-open-webpage"/>
                 </menu>
             </menubar>
             <toolbar name="main_toolbar">

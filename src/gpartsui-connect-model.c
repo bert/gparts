@@ -868,7 +868,6 @@ gpartsui_connect_model_set_database_type(GPartsUIConnectModel *model, const gcha
         GPartsDatabaseFactory *factory = gparts_database_type_get_factory(type, name);
 
         gpartsui_connect_model_set_database_factory(model, factory);
-        g_debug("Setting factory");
 
         g_object_unref(factory);
         g_object_unref(type);
@@ -971,10 +970,6 @@ void
 gpartsui_connect_model_set_username(GPartsUIConnectModel *model, const gchar *username)
 {
     GPartsUIConnectModelPrivate *privat = GPARTSUI_CONNECT_MODEL_GET_PRIVATE(model);
-
-    //g_debug("name  = %s", g_type_name(G_TYPE_FROM_INSTANCE(model)));
-    g_debug("Model = %p", model);
-    g_debug("value = %s", username);
 
     if (privat != NULL)
     {

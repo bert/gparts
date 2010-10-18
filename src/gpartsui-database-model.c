@@ -31,7 +31,6 @@ enum
     GPARTSUI_DATABASE_MODEL_DATABASE,
     GPARTSUI_DATABASE_MODEL_DISCONNECT_SENSITIVE,
     GPARTSUI_DATABASE_MODEL_DROP_SENSITIVE,
-    GPARTSUI_DATABASE_MODEL_REFRESH_SENSITIVE
 };
 
 typedef struct _GPartsUIDatabaseModelPrivate GPartsUIDatabaseModelPrivate;
@@ -39,6 +38,10 @@ typedef struct _GPartsUIDatabaseModelPrivate GPartsUIDatabaseModelPrivate;
 struct _GPartsUIDatabaseModelPrivate
 {
     GPartsDatabase *database;
+
+    MiscUIActionModel *disconnect_model;
+    MiscUIActionModel *drop_model;
+    MiscUIActionModel *refresh_model;
 };
 
 static void
@@ -59,6 +62,8 @@ gpartsui_database_model_instance_init(GTypeInstance *instance, gpointer g_class)
 static void
 gpartsui_database_model_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
 
+static void
+gpartsui_database_model_update_all(GPartsUIDatabaseModel *model);
 
 
 static void
@@ -97,42 +102,6 @@ gpartsui_database_model_class_init(gpointer g_class, gpointer g_class_data)
             )
         );
 
-    g_object_class_install_property(
-        klasse,
-        GPARTSUI_DATABASE_MODEL_DISCONNECT_SENSITIVE,
-        g_param_spec_boolean(
-            "disconnect-sensitive",
-            "Disconnect Sensitive",
-            "Disconnect Sensitive",
-            FALSE,
-            G_PARAM_READABLE | G_PARAM_STATIC_STRINGS
-            )
-        );
-
-    g_object_class_install_property(
-        klasse,
-        GPARTSUI_DATABASE_MODEL_DROP_SENSITIVE,
-        g_param_spec_boolean(
-            "drop-sensitive",
-            "Drop Sensitive",
-            "Drop Sensitive",
-            FALSE,
-            G_PARAM_READABLE | G_PARAM_STATIC_STRINGS
-            )
-        );
-
-    g_object_class_install_property(
-        klasse,
-        GPARTSUI_DATABASE_MODEL_REFRESH_SENSITIVE,
-        g_param_spec_boolean(
-            "refresh-sensitive",
-            "Refresh Sensitive",
-            "Refresh Sensitive",
-            FALSE,
-            G_PARAM_READABLE | G_PARAM_STATIC_STRINGS
-            )
-        );
-
     g_signal_new(
         "refresh",
         G_TYPE_FROM_CLASS(g_class),
@@ -150,8 +119,8 @@ static void
 gpartsui_database_model_connected_notify_cb(GPartsDatabase *database, GParamSpec *param, GPartsUIDatabaseModel *model)
 {
     g_object_notify(G_OBJECT(model), "connected");
-    g_object_notify(G_OBJECT(model), "disconnect-sensitive");
-    g_object_notify(G_OBJECT(model), "drop-sensitive");
+
+    gpartsui_database_model_update_all(model);
 }
 
 void
@@ -225,10 +194,10 @@ gpartsui_database_model_get_database(const GPartsUIDatabaseModel *model)
     return database;
 }
 
-gboolean
-gpartsui_database_model_get_disconnect_sensitive(const GPartsUIDatabaseModel *model)
+MiscUIActionModel*
+gpartsui_database_model_get_disconnect_action_model(const GPartsUIDatabaseModel *model)
 {
-    gboolean sensitive = FALSE;
+    MiscUIActionModel *action_model = NULL;
 
     if (model != NULL)
     {
@@ -236,17 +205,22 @@ gpartsui_database_model_get_disconnect_sensitive(const GPartsUIDatabaseModel *mo
 
         if (privat != NULL)
         {
-            sensitive = gparts_database_connected(privat->database);
+            action_model = privat->disconnect_model;
+
+            if (action_model != NULL)
+            {
+                g_object_ref(action_model);
+            }
         }
     }
 
-    return sensitive;
+    return action_model;
 }
 
-gboolean
-gpartsui_database_model_get_drop_sensitive(const GPartsUIDatabaseModel *model)
+MiscUIActionModel*
+gpartsui_database_model_get_drop_action_model(const GPartsUIDatabaseModel *model)
 {
-    gboolean sensitive = FALSE;
+    MiscUIActionModel *action_model = NULL;
 
     if (model != NULL)
     {
@@ -254,12 +228,18 @@ gpartsui_database_model_get_drop_sensitive(const GPartsUIDatabaseModel *model)
 
         if (privat != NULL)
         {
-            sensitive = gparts_database_droppable(privat->database);
+            action_model = privat->drop_model;
+
+            if (action_model != NULL)
+            {
+                g_object_ref(action_model);
+            }
         }
     }
 
-    return sensitive;
+    return action_model;
 }
+
 
 static void
 gpartsui_database_model_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
@@ -278,24 +258,16 @@ gpartsui_database_model_get_property(GObject *object, guint property_id, GValue 
                 g_value_take_object(value, gpartsui_database_model_get_database(model));
                 break;
 
-            case GPARTSUI_DATABASE_MODEL_DISCONNECT_SENSITIVE:
-                g_value_set_boolean(value, gpartsui_database_model_get_disconnect_sensitive(model));
-                break;
-
-            case GPARTSUI_DATABASE_MODEL_DROP_SENSITIVE:
-                g_value_set_boolean(value, gpartsui_database_model_get_drop_sensitive(model));
-                break;
-
             default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
         }
     }
 }
 
-gboolean
-gpartsui_database_model_get_refresh_sensitive(const GPartsUIDatabaseModel *model)
+MiscUIActionModel*
+gpartsui_database_model_get_refresh_action_model(const GPartsUIDatabaseModel *model)
 {
-    gboolean sensitive = FALSE;
+    MiscUIActionModel *action_model = NULL;
 
     if (model != NULL)
     {
@@ -303,11 +275,16 @@ gpartsui_database_model_get_refresh_sensitive(const GPartsUIDatabaseModel *model
 
         if (privat != NULL)
         {
-            sensitive = gparts_database_connected(privat->database);
+            action_model = privat->refresh_model;
+
+            if (action_model != NULL)
+            {
+                g_object_ref(action_model);
+            }
         }
     }
 
-    return sensitive;
+    return action_model;
 }
 
 GType
@@ -345,6 +322,36 @@ static void
 gpartsui_database_model_instance_init(GTypeInstance* instance, gpointer g_class)
 {
     GPartsUIDatabaseModelPrivate *privat = GPARTSUI_DATABASE_MODEL_GET_PRIVATE(instance);
+
+    if (privat != NULL)
+    {
+        privat->disconnect_model = MISCUI_ACTION_MODEL(g_object_new(
+            MISCUI_TYPE_ACTION_MODEL,
+            "function",  gpartsui_database_model_disconnect,
+            "label",     "Disconnect",
+            "object",    instance,
+            "sensitive", FALSE,
+            NULL
+            ));
+
+        privat->drop_model = MISCUI_ACTION_MODEL(g_object_new(
+            MISCUI_TYPE_ACTION_MODEL,
+            "function",  gpartsui_database_model_drop,
+            "label",     "Drop",
+            "object",    instance,
+            "sensitive", FALSE,
+            NULL
+            ));
+
+        privat->refresh_model = MISCUI_ACTION_MODEL(g_object_new(
+            MISCUI_TYPE_ACTION_MODEL,
+            "function",  gpartsui_database_model_refresh,
+            "label",     "Refresh",
+            "object",    instance,
+            "sensitive", FALSE,
+            NULL
+            ));
+    }
 }
 
 GPartsUIDatabaseModel*
@@ -354,7 +361,7 @@ gpartsui_database_model_new(void)
 }
 
 void
-gpartsui_database_model_refresh(const GPartsUIDatabaseModel *model)
+gpartsui_database_model_refresh(const GPartsUIDatabaseModel *model, GError **error)
 {
     g_signal_emit_by_name(model, "refresh");
 }
@@ -393,8 +400,8 @@ gpartsui_database_model_set_database(GPartsUIDatabaseModel *model, GPartsDatabas
 
         g_object_notify(G_OBJECT(model), "database");
         g_object_notify(G_OBJECT(model), "connected");
-        g_object_notify(G_OBJECT(model), "disconnect-sensitive");
-        g_object_notify(G_OBJECT(model), "drop-sensitive");
+
+        gpartsui_database_model_update_all(model);
     }
 }
 
@@ -417,3 +424,28 @@ gpartsui_database_model_set_property(GObject *object, guint property_id, const G
     }
 }
 
+static void
+gpartsui_database_model_update_all(GPartsUIDatabaseModel *model)
+{
+    GPartsUIDatabaseModelPrivate *privat = GPARTSUI_DATABASE_MODEL_GET_PRIVATE(model);
+
+    if (privat != NULL)
+    {
+        gboolean connected = gparts_database_connected(privat->database);
+
+        miscui_action_model_set_sensitive(
+            privat->disconnect_model,
+            connected
+            );
+
+        miscui_action_model_set_sensitive(
+            privat->drop_model,
+            connected
+            );
+
+        miscui_action_model_set_sensitive(
+            privat->refresh_model,
+            connected
+            );
+    }
+}

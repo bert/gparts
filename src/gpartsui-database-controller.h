@@ -43,20 +43,6 @@ struct _GPartsUIDatabaseControllerClass
 GType
 gpartsui_database_controller_get_type(void);
 
-/*! \brief Disconnect the database, just as if the user clicked the menu item.
- *
- *  \param [in] controller The controller.
- */
-void
-gpartsui_database_controller_disconnect(GPartsUIDatabaseController *controller);
-
-/*! \brief Drop the database, just as if the user clicked the menu item.
- *
- *  \param [in] controller The controller.
- */
-void
-gpartsui_database_controller_drop(GPartsUIDatabaseController *controller);
-
 /*! \brief Gets the database model currently associated with this controller.
  *
  *  \param [in] controller The controller.
@@ -65,12 +51,14 @@ gpartsui_database_controller_drop(GPartsUIDatabaseController *controller);
 GPartsUIDatabaseModel*
 gpartsui_database_controller_get_database_model(GPartsUIDatabaseController *controller);
 
-/*! \brief Refresh the database views, just as if the user clicked the menu item.
- *
- *  \param [in] controller The controller.
- */
-void
-gpartsui_database_controller_refresh(GPartsUIDatabaseController *controller);
+GtkAction*
+gpartsui_database_controller_get_disconnect_action(const GPartsUIDatabaseController *controller);
+
+GtkAction*
+gpartsui_database_controller_get_drop_action(const GPartsUIDatabaseController *controller);
+
+GtkAction*
+gpartsui_database_controller_get_refresh_action(const GPartsUIDatabaseController *controller);
 
 /*! \brief Gets the database model currently associated with this controller.
  *

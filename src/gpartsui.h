@@ -29,6 +29,8 @@
 
 #include "misc-object.h"
 
+#include "miscui.h"
+
 #include "sch.h"
 
 #include "schgui-drawing-cfg.h"

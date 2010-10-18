@@ -55,7 +55,9 @@ gparts_SOURCES = \
 	gpartsui-connect-controller.c \
 	gpartsui-connect-model.c \
 	gpartsui-database-controller.c \
-	gpartsui-database-model.c
+	gpartsui-database-model.c \
+	miscui-action-controller.c \
+	miscui-action-model.c
 gparts_CFLAGS = $(AM_CFLAGS) $(GMODULE_CFLAGS) $(GTK_CFLAGS)
 gparts_LDADD = $(GMODULE_LIBS) $(GTK_LIBS) libgeom.la libmisc.la libsch.la libschgui.la libscmcfg.la
 
