@@ -206,6 +206,7 @@ gparts_units_get_new_func(const gchar *name)
         { "Capacitance", gparts_units_new_farads  },
         { "PD",          gparts_units_new_watts   },
         { "IC",          gparts_units_new_amps    },
+        { "ID",          gparts_units_new_amps    },
         { "FT",          gparts_units_new_hertz   },
         { "Frequency",   gparts_units_new_hertz   },
         { "Inductance",  gparts_units_new_henrys  },
@@ -214,6 +215,8 @@ gparts_units_get_new_func(const gchar *name)
         { "Tolerance",   gparts_units_new_pp      },
         { "Stability",   gparts_units_new_pp      },
         { "VBR",         gparts_units_new_volts   },
+        { "VGS",         gparts_units_new_volts   },
+        { "VDSS",        gparts_units_new_volts   },
         { "VZ",          gparts_units_new_volts   },
         { "VF",          gparts_units_new_volts   },
         { "VR",          gparts_units_new_volts   },
@@ -221,7 +224,7 @@ gparts_units_get_new_func(const gchar *name)
         { "VZ",          gparts_units_new_volts   },
         { "MinTemp",     gparts_units_new_celcius },
         { "MaxTemp",     gparts_units_new_celcius },
-        { NULL,          NULL                     }
+        { NULL,          gparts_units_new_none    }
     };
 
     GPartsUnitsNewFunc func = NULL;

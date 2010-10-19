@@ -45,6 +45,19 @@ CREATE TABLE Diode (
 
     );
 
+
+CREATE TABLE MOSFET (
+
+    PartID                   INTEGER PRIMARY KEY,
+    PackageID                INTEGER NOT NULL,
+    Polarity                 TEXT,
+    MaxDrainSourceVoltage    FLOAT,
+    MaxDrainCurrent          FLOAT,
+    TypGateThresholdVoltage  FLOAT,
+    PowerDissipation         FLOAT
+
+    );
+
 -- Create a table for TVS diodes.
 --
 -- TODO What is the best way to indicate bidirectional or unidirectional?  The
@@ -97,6 +110,25 @@ CREATE VIEW DiodeV AS
         Diode.AveForwardCurrent AS 'IF',
         Device.DeviceID
     FROM Diode
+        JOIN Part USING ( PartID )
+        JOIN Package USING ( PackageID )
+        JOIN Company USING ( CompanyID )
+        JOIN Device USING ( DeviceID );
+
+CREATE VIEW MOSFETV AS
+    SELECT
+        Part.PartID,
+        Company.CompanyName,
+        Part.PartNumber,
+        Package.PackageName,
+        MOSFET.Polarity,
+        MOSFET.MaxDrainSourceVoltage   AS 'VDSS',
+        MOSFET.MaxDrainCurrent         AS 'ID',       
+        MOSFET.TypGateThresholdVoltage AS 'VGS',
+        MOSFET.PowerDissipation        AS 'PD',
+        Device.DeviceID,
+        Device.DeviceName
+    FROM MOSFET 
         JOIN Part USING ( PartID )
         JOIN Package USING ( PackageID )
         JOIN Company USING ( CompanyID )

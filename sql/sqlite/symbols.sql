@@ -58,6 +58,33 @@ INSERT INTO Symbol (SymbolName, DeviceID)
     WHERE NOT EXISTS
         (SELECT * FROM Symbol WHERE SymbolName = "diode-3.sym");
 
+-- n type mosfets
+
+INSERT INTO Device (DeviceName)
+    SELECT ( "nmos" ) WHERE NOT EXISTS (
+        SELECT * FROM Device WHERE DeviceName = "nmos"
+        );
+
+INSERT INTO Symbol (SymbolName, DeviceID)
+    SELECT 
+        "nmos-1.sym",
+        (SELECT DeviceID FROM Device WHERE DeviceName = "nmos")
+    WHERE NOT EXISTS
+        (SELECT * FROM Symbol WHERE SymbolName = "nmos-1.sym");
+
+INSERT INTO Symbol (SymbolName, DeviceID)
+    SELECT 
+        "nmos-2.sym",
+        (SELECT DeviceID FROM Device WHERE DeviceName = "nmos")
+    WHERE NOT EXISTS
+        (SELECT * FROM Symbol WHERE SymbolName = "nmos-2.sym");
+
+INSERT INTO Symbol (SymbolName, DeviceID)
+    SELECT 
+        "nmos-3.sym",
+        (SELECT DeviceID FROM Device WHERE DeviceName = "nmos")
+    WHERE NOT EXISTS
+        (SELECT * FROM Symbol WHERE SymbolName = "mos-3.sym");
 
 -- npn transistors
 
@@ -87,6 +114,33 @@ INSERT INTO Symbol (SymbolName, DeviceID)
     WHERE NOT EXISTS
         (SELECT * FROM Symbol WHERE SymbolName = "npn-3.sym");
 
+-- p type mosfets
+
+INSERT INTO Device (DeviceName)
+    SELECT ( "pmos" ) WHERE NOT EXISTS (
+        SELECT * FROM Device WHERE DeviceName = "pmos"
+        );
+
+INSERT INTO Symbol (SymbolName, DeviceID)
+    SELECT 
+        "pmos-1.sym",
+        (SELECT DeviceID FROM Device WHERE DeviceName = "pmos")
+    WHERE NOT EXISTS
+        (SELECT * FROM Symbol WHERE SymbolName = "pmos-1.sym");
+
+INSERT INTO Symbol (SymbolName, DeviceID)
+    SELECT 
+        "pmos-2.sym",
+        (SELECT DeviceID FROM Device WHERE DeviceName = "pmos")
+    WHERE NOT EXISTS
+        (SELECT * FROM Symbol WHERE SymbolName = "pmos-2.sym");
+
+INSERT INTO Symbol (SymbolName, DeviceID)
+    SELECT 
+        "pmos-3.sym",
+        (SELECT DeviceID FROM Device WHERE DeviceName = "pmos")
+    WHERE NOT EXISTS
+        (SELECT * FROM Symbol WHERE SymbolName = "pos-3.sym");
 
 -- pnp transistors
 

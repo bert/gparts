@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<data>
+    <mosfet>
+        <company-name>RHOM</company-name>
+        <part-number>RSU002N06</part-number>
+        <device-name>nmos</device-name>
+        <polarity>N</polarity>
+        <max-drain-source-voltage>60</max-drain-source-voltage>
+        <max-drain-current>0.25</max-drain-current>
+        <typ-gate-threshold-voltage>NULL</typ-gate-threshold-voltage>
+        <power-dissipation>0.2</power-dissipation>
+        <package-name>SOT-323</package-name>
+        <document category="Datasheet">http://www.rohm.com/products/databook/tr/pdf/rsu002n06.pdf</document>
+    </mosfet>
+</data>

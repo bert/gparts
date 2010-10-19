@@ -36,6 +36,7 @@
         <xsl:apply-templates select="data/package"/>
         <xsl:apply-templates select="data/resistor"/>
         <xsl:apply-templates select="data/bipolar-transistor"/>
+        <xsl:apply-templates select="data/mosfet"/>
         <xsl:apply-templates select="data/zener-diode"/>
     </xsl:template>
 
@@ -164,6 +165,50 @@
         <xsl:text>                PartNumber = '</xsl:text>
         <xsl:value-of select="../part-number"/>
         <xsl:text>'));&#10;&#10;</xsl:text>
+    </xsl:template>
+
+    <!-- Add a MOSFET to the database -->
+
+    <xsl:template match="mosfet">
+        <xsl:apply-templates select="company-name"/>
+        <xsl:apply-templates select="device-name"/>
+        <xsl:apply-templates select="package-name"/>
+
+        <xsl:call-template name="part"/>
+
+        <xsl:text>INSERT INTO MOSFET (PartID, PackageID, Polarity, MaxDrainSourceVoltage, MaxDrainCurrent, TypGateThresholdVoltage, PowerDissipation)&#10;</xsl:text>
+        <xsl:text>    SELECT&#10;</xsl:text>
+        <xsl:text>        (SELECT PartID FROM Part WHERE PartNumber = '</xsl:text>
+        <xsl:value-of select="part-number"/>
+        <xsl:text>'),&#10;</xsl:text>
+        <xsl:text>        (SELECT PackageID FROM Package WHERE PackageName = '</xsl:text>
+        <xsl:value-of select="package-name"/>
+        <xsl:text>'),&#10;</xsl:text>
+        <xsl:text>        '</xsl:text>
+        <xsl:value-of select="polarity"/>
+        <xsl:text>',&#10;</xsl:text>
+        <xsl:text>        </xsl:text>
+        <xsl:value-of select="max-drain-source-voltage"/>
+        <xsl:text>,&#10;</xsl:text>
+        <xsl:text>        </xsl:text>
+        <xsl:value-of select="max-drain-current"/>
+        <xsl:text>,&#10;</xsl:text>
+        <xsl:text>        </xsl:text>
+        <xsl:value-of select="typ-gate-threshold-voltage"/>
+        <xsl:text>,&#10;</xsl:text>
+        <xsl:text>        </xsl:text>
+        <xsl:value-of select="power-dissipation"/>
+        <xsl:text>&#10;</xsl:text>
+        <xsl:text>    WHERE NOT EXISTS&#10;</xsl:text>
+        <xsl:text>        (SELECT * FROM MOSFET&#10;</xsl:text>
+        <xsl:text>             JOIN Part USING ( PartID )&#10;</xsl:text>
+        <xsl:text>             JOIN Company USING ( CompanyID )&#10;</xsl:text>
+        <xsl:text>             WHERE CompanyName = '</xsl:text>
+        <xsl:value-of select="company-name"/>
+        <xsl:text>' AND PartNumber = '</xsl:text>
+        <xsl:value-of select="part-number"/>
+        <xsl:text>'&#10;</xsl:text>
+        <xsl:text>             );&#10;&#10;</xsl:text>
     </xsl:template>
 
 

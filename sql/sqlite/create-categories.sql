@@ -70,8 +70,14 @@ INSERT INTO Category (CategoryName, ViewName, ParentID) VALUES(
     );
 
 INSERT INTO Category (CategoryName, ViewName, ParentID) VALUES(
-    "BJT",
+    "BJTs",
     "BJTV",
+    (SELECT CategoryID FROM Category WHERE CategoryName = "Transistors")
+    );
+
+INSERT INTO Category (CategoryName, ViewName, ParentID) VALUES(
+    "MOSFETs",
+    "MOSFETV",
     (SELECT CategoryID FROM Category WHERE CategoryName = "Transistors")
     );
 
