@@ -44,6 +44,7 @@ struct _GPartsPrivate
     GtkAction        *delete_action;
     GtkAction        *edit_action;
     GtkAction        *insert_action;
+    GtkAction        *open_website_action;
     GtkAction        *paste_action;
 
     GPartsController *current_controller;
@@ -61,6 +62,7 @@ struct _GPartsPrivate
     GPartsUIConnectController  *connect_controller;
     GPartsUIDatabaseController *database_controller;
 
+    GPartsUICompanyModel       *company_model;
     GPartsUIConnectModel       *connect_model;
     GPartsUIDatabaseModel      *database_model;
 };
@@ -276,6 +278,12 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         NULL
         );
 
+    privat->company_model = g_object_new(
+        GPARTSUI_TYPE_COMPANY_MODEL,
+        "database-model",    privat->database_model,
+        NULL
+        );
+
     /**** Presentation Controllers ****/
 
     GObject *connect_controller = g_object_new(
@@ -342,16 +350,6 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         GPARTS_TYPE_RESULT_CONTROLLER,
         "customize-ctrl", customize_ctrl,
         "database-model", privat->database_model,
-        "target",              GTK_TREE_VIEW(gtk_builder_get_object(privat->builder, "companies-view")),
-        "template",            "SELECT * FROM %s",
-        "view-name",           "CompanyV",
-        NULL
-        );
-
-    g_object_new(
-        GPARTS_TYPE_RESULT_CONTROLLER,
-        "customize-ctrl", customize_ctrl,
-        "database-model", privat->database_model,
         "target",              GTK_TREE_VIEW(gtk_builder_get_object(privat->builder, "devices-view")),
         "template",            "SELECT * FROM %s",
         "view-name",           "DeviceV",
@@ -409,6 +407,13 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         NULL
         );
 
+    privat->kludge[0] = g_object_new(
+        GPARTSUI_TYPE_COMPANY_CONTROLLER,
+        "company-model",  privat->company_model,
+        "company-view",   gtk_builder_get_object(privat->builder, "companies-view"),
+        NULL
+        );
+
     privat->kludge[5] = g_object_new(
         GPARTS_TYPE_PREVIEW_CTRL,
         "attrib-source", part_controller,
@@ -444,6 +449,8 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         GTK_ACTION(gtk_builder_get_object(privat->builder, "edit-insert"))
         );
 
+    privat->open_website_action = GTK_ACTION(gtk_builder_get_object(privat->builder, "tools-open-website"));
+
     gparts_set_paste_action(
         GPARTS(instance),
         GTK_ACTION(gtk_builder_get_object(privat->builder, "edit-paste"))
@@ -453,6 +460,8 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         GPARTS(instance),
         GTK_NOTEBOOK(gtk_builder_get_object(privat->builder, "notebook"))
         );
+
+    gparts_set_current_controller(GPARTS(instance), privat->kludge[0]);
 
     gtk_widget_show(widget);
 }
@@ -564,6 +573,7 @@ gparts_set_copy_action(GParts *gparts, GtkAction *action)
         if (privat->current_controller != NULL)
         {
             gparts_controller_set_copy_action(privat->current_controller, privat->copy_action);
+            gparts_controller_set_delete_action(privat->current_controller, privat->delete_action);
         }
         else
         {
@@ -775,6 +785,8 @@ gparts_set_current_controller(GParts *gparts, GPartsController *controller)
         if (privat->current_controller != NULL)
         {
             gparts_controller_set_copy_action(privat->current_controller, NULL);
+            gparts_controller_set_delete_action(privat->current_controller, NULL);
+            gparts_controller_set_open_website_action(privat->current_controller, NULL);
 
             g_object_unref(privat->current_controller);
         }
@@ -786,11 +798,8 @@ gparts_set_current_controller(GParts *gparts, GPartsController *controller)
             g_object_ref(privat->current_controller);
 
             gparts_controller_set_copy_action(privat->current_controller, privat->copy_action);
-        }
-        else
-        {
-            gtk_action_set_label(privat->copy_action, "_Copy");
-            gtk_action_set_sensitive(privat->copy_action, FALSE);
+            gparts_controller_set_delete_action(privat->current_controller, privat->delete_action);
+            gparts_controller_set_open_website_action(privat->current_controller, privat->open_website_action);
         }
     }
 }

@@ -52,10 +52,15 @@ gparts_SOURCES = \
 	gparts-database-result.c \
 	gparts-database-type.c \
 	gparts-units.c \
+	gpartsui-company-controller.c \
+	gpartsui-company-model.c \
 	gpartsui-connect-controller.c \
 	gpartsui-connect-model.c \
 	gpartsui-database-controller.c \
 	gpartsui-database-model.c \
+	gpartsui-result-adapter.c \
+	gpartsui-result-controller.c \
+	gpartsui-result-model.c \
 	miscui-action-controller.c \
 	miscui-action-model.c
 gparts_CFLAGS = $(AM_CFLAGS) $(GMODULE_CFLAGS) $(GTK_CFLAGS)

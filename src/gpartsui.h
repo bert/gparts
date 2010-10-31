@@ -66,9 +66,17 @@
 #include "gparts-result-model.h"
 #include "gparts-result-view.h"
 
+#include "gpartsui-company-controller.h"
+#include "gpartsui-company-model.h"
+
 #include "gpartsui-connect-controller.h"
 #include "gpartsui-connect-model.h"
 
 #include "gpartsui-database-controller.h"
 #include "gpartsui-database-model.h"
+
+#include "gpartsui-result-adapter.h"
+
+#include "gpartsui-result-controller.h"
+#include "gpartsui-result-model.h"
 

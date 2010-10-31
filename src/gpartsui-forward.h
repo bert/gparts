@@ -19,8 +19,6 @@
  */
 
 /*! \file gpartsui-forward.h
- *
- *  \brief Application controller for gEDA Part Manager.
  */
 
 typedef struct _GParts GParts;
@@ -50,6 +48,12 @@ typedef struct _GPartsResultModelClass GPartsResultModelClass;
 typedef struct _GPartsResultView GPartsResultView;
 typedef struct _GPartsResultViewClass GPartsResultViewClass;
 
+typedef struct _GPartsUICompanyController GPartsUICompanyController;
+typedef struct _GPartsUICompanyControllerClass GPartsUICompanyControllerClass;
+
+typedef struct _GPartsUICompanyModel GPartsUICompanyModel;
+typedef struct _GPartsUICompanyModelClass GPartsUICompanyModelClass;
+
 typedef struct _GPartsUIConnectController GPartsUIConnectController;
 typedef struct _GPartsUIConnectControllerClass GPartsUIConnectControllerClass;
 
@@ -61,4 +65,13 @@ typedef struct _GPartsUIDatabaseControllerClass GPartsUIDatabaseControllerClass;
 
 typedef struct _GPartsUIDatabaseModel GPartsUIDatabaseModel;
 typedef struct _GPartsUIDatabaseModelClass GPartsUIDatabaseModelClass;
+
+typedef struct _GPartsUIResultAdapter GPartsUIResultAdapter;
+typedef struct _GPartsUIResultAdapterClass GPartsUIResultAdapterClass;
+
+typedef struct _GPartsUIResultController GPartsUIResultController;
+typedef struct _GPartsUIResultControllerClass GPartsUIResultControllerClass;
+
+typedef struct _GPartsUIResultModel GPartsUIResultModel;
+typedef struct _GPartsUIResultModelClass GPartsUIResultModelClass;
 

@@ -65,6 +65,7 @@ struct _GPartsControllerClass
     void (*set_delete_action)(GPartsController *controller, GtkAction *action);
     void (*set_edit_action)(GPartsController *controller, GtkAction *action);
     void (*set_insert_action)(GPartsController *controller, GtkAction *action);
+    void (*set_open_website_action)(GPartsController *controller, GtkAction *action);
     void (*set_paste_action)(GPartsController *controller, GtkAction *action);
 };
 
@@ -141,6 +142,16 @@ gparts_controller_set_edit_action(GPartsController *controller, GtkAction *actio
 void
 gparts_controller_set_insert_action(GPartsController *controller, GtkAction *action);
 
+/*! \brief Set the \a open-website-action for this controller
+ *
+ *  See gparts_controller_set_copy_action() for a detailed description.
+ *
+ *  \param [in] controller A pointer to the controller
+ *  \param [in] action     A pointer to the \a open-website-action
+ */
+void
+gparts_controller_set_open_website_action(GPartsController *controller, GtkAction *action);
+
 /*! \brief Set the \a paste-action for this controller
  *
  *  See gparts_controller_set_copy_action() for a detailed description.
@@ -150,4 +161,5 @@ gparts_controller_set_insert_action(GPartsController *controller, GtkAction *act
  */
 void
 gparts_controller_set_paste_action(GPartsController *controller, GtkAction *action);
+
 
