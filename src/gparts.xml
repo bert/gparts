@@ -131,6 +131,7 @@
                     <object class="GtkAction" id="tools-open-website">
                         <property name="name">tools-open-website</property>
                         <property name="label">Open Website</property>
+                        <property name="stock-id">gtk-home</property>
                     </object>
                 </child>
                 <child>
@@ -181,6 +182,8 @@
                 <toolitem action="edit-insert"/>
                 <toolitem action="edit-delete"/>
                 <toolitem action="edit-edit"/>
+                <separator/>
+                <toolitem action="tools-open-website"/>
             </toolbar>
         </ui>
     </object>
