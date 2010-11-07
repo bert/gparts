@@ -27,3 +27,6 @@ misc_object_chain_dispose(GObject *object);
 void
 misc_object_chain_finalize(GObject *object);
 
+void
+misc_object_unref(gpointer object);
+

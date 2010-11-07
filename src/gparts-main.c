@@ -34,9 +34,6 @@ typedef struct _GPartsPrivate GPartsPrivate;
 struct _GPartsPrivate
 {
     GtkBuilder       *builder;
-    GPartsObjectList *controllers;
-
-    GSList           *controllers2;
 
     GtkNotebook      *notebook;
 
@@ -44,6 +41,7 @@ struct _GPartsPrivate
     GtkAction        *delete_action;
     GtkAction        *edit_action;
     GtkAction        *insert_action;
+    GtkAction        *open_document_action;
     GtkAction        *open_website_action;
     GtkAction        *paste_action;
 
@@ -54,17 +52,13 @@ struct _GPartsPrivate
      */
     GPartsController *kludge[9];
 
-
-    MiscUIActionController *webpage_controller;
-    MiscUIActionController *website_controller;
-
-
     GPartsUIConnectController  *connect_controller;
     GPartsUIDatabaseController *database_controller;
 
     GPartsUICompanyModel       *company_model;
     GPartsUIConnectModel       *connect_model;
     GPartsUIDatabaseModel      *database_model;
+    GPartsUIDocumentModel      *document_model;
 };
 
 /**** Static methods ****/
@@ -90,22 +84,7 @@ static void
 gparts_action_edit_preferences_cb(GtkWidget* widget, gpointer data);
 
 static void
-gparts_set_copy_action(GParts *gparts, GtkAction *action);
-
-static void
 gparts_set_current_controller(GParts *gparts, GPartsController *controller);
-
-static void
-gparts_set_delete_action(GParts *gparts, GtkAction *action);
-
-static void
-gparts_set_edit_action(GParts *gparts, GtkAction *action);
-
-static void
-gparts_set_insert_action(GParts *gparts, GtkAction *action);
-
-static void
-gparts_set_paste_action(GParts *gparts, GtkAction *action);
 
 static void
 gparts_destroy_cb(GtkWidget* widget, gpointer data);
@@ -114,25 +93,6 @@ static void
 gparts_switch_page_cb(GtkNotebook *notebook, GtkNotebookPage *page, gint page_no, gpointer user_data);
 
 
-
-static void
-gparts_append_controller(GParts *gparts, GObject *object)
-{
-    if (object != NULL)
-    {
-        GPartsPrivate *privat = GPARTS_GET_PRIVATE(gparts);
-
-        if (privat != NULL)
-        {
-            if (g_slist_find(privat->controllers2, object) == NULL)
-            {
-                privat->controllers2 = g_slist_append(privat->controllers2, object);
-
-                g_object_ref(object);
-            }
-        }
-    }
-}
 
 static void
 gparts_class_init(gpointer g_class, gpointer g_class_data)
@@ -157,8 +117,18 @@ gparts_dispose(GObject *object)
 {
     GPartsPrivate *privat = GPARTS_GET_PRIVATE(object);
 
-    g_object_unref(privat->builder);
-    g_object_unref(privat->controllers);
+    if (privat != NULL)
+    {
+        misc_object_unref(privat->copy_action);
+        misc_object_unref(privat->delete_action);
+        misc_object_unref(privat->edit_action);
+        misc_object_unref(privat->insert_action);
+        misc_object_unref(privat->open_document_action);
+        misc_object_unref(privat->open_website_action);
+        misc_object_unref(privat->paste_action);
+
+        g_object_unref(privat->builder);
+    }
 
     misc_object_chain_dispose(object);
 }
@@ -251,9 +221,6 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         instance
         );
 
-
-    privat->controllers = GPARTS_OBJECT_LIST(gtk_builder_get_object(privat->builder, "controllers"));
-
     /**** Controllers ****/
 
     GObject *customize_ctrl = g_object_new(
@@ -284,6 +251,42 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         NULL
         );
 
+    privat->document_model = g_object_new(
+        GPARTSUI_TYPE_DOCUMENT_MODEL,
+        "database-model",    privat->database_model,
+        NULL
+        );
+
+    /**** Actions ****/
+
+    privat->copy_action = GTK_ACTION(g_object_ref(
+        gtk_builder_get_object(privat->builder, "edit-copy")
+        ));
+
+    privat->delete_action = GTK_ACTION(g_object_ref(
+        gtk_builder_get_object(privat->builder, "edit-delete")
+        ));
+
+    privat->edit_action = GTK_ACTION(g_object_ref(
+        gtk_builder_get_object(privat->builder, "edit-edit")
+        ));
+
+    privat->insert_action = GTK_ACTION(g_object_ref(
+        gtk_builder_get_object(privat->builder, "edit-insert")
+        ));
+
+    privat->open_document_action = GTK_ACTION(g_object_ref(
+        gtk_builder_get_object(privat->builder, "tools-open-document")
+        ));
+
+    privat->open_website_action = GTK_ACTION(g_object_ref(
+        gtk_builder_get_object(privat->builder, "tools-open-website")
+        ));
+
+    privat->paste_action = GTK_ACTION(g_object_ref(
+        gtk_builder_get_object(privat->builder, "edit-paste")
+        ));
+
     /**** Presentation Controllers ****/
 
     GObject *connect_controller = g_object_new(
@@ -299,18 +302,6 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         "disconnect-action", gtk_builder_get_object(privat->builder, "database-disconnect"),
         "drop-action",       gtk_builder_get_object(privat->builder, "database-drop"),
         "refresh-action",    gtk_builder_get_object(privat->builder, "view-refresh"),
-        NULL
-        );
-
-    privat->webpage_controller = g_object_new(
-        MISCUI_TYPE_ACTION_CONTROLLER,
-        "action", gtk_builder_get_object(privat->builder, "tools-open-webpage"),
-        NULL
-        );
-
-    privat->website_controller = g_object_new(
-        MISCUI_TYPE_ACTION_CONTROLLER,
-        "action", gtk_builder_get_object(privat->builder, "tools-open-website"),
         NULL
         );
 
@@ -353,16 +344,6 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         "target",              GTK_TREE_VIEW(gtk_builder_get_object(privat->builder, "devices-view")),
         "template",            "SELECT * FROM %s",
         "view-name",           "DeviceV",
-        NULL
-        );
-
-    g_object_new(
-        GPARTS_TYPE_RESULT_CONTROLLER,
-        "customize-ctrl", customize_ctrl,
-        "database-model", privat->database_model,
-        "target",              GTK_TREE_VIEW(gtk_builder_get_object(privat->builder, "documentation-view")),
-        "template",            "SELECT * FROM %s",
-        "view-name",           "DocumentV",
         NULL
         );
 
@@ -414,6 +395,13 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         NULL
         );
 
+    privat->kludge[2] = g_object_new(
+        GPARTSUI_TYPE_DOCUMENT_CONTROLLER,
+        "document-model",  privat->document_model,
+        "document-view",   gtk_builder_get_object(privat->builder, "documentation-view"),
+        NULL
+        );
+
     privat->kludge[5] = g_object_new(
         GPARTS_TYPE_PREVIEW_CTRL,
         "attrib-source", part_controller,
@@ -429,33 +417,6 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         NULL
         );
 
-    gparts_set_copy_action(
-        GPARTS(instance),
-        GTK_ACTION(gtk_builder_get_object(privat->builder, "edit-copy"))
-        );
-
-    gparts_set_delete_action(
-        GPARTS(instance),
-        GTK_ACTION(gtk_builder_get_object(privat->builder, "edit-delete"))
-        );
-
-    gparts_set_edit_action(
-        GPARTS(instance),
-        GTK_ACTION(gtk_builder_get_object(privat->builder, "edit-edit"))
-        );
-
-    gparts_set_insert_action(
-        GPARTS(instance),
-        GTK_ACTION(gtk_builder_get_object(privat->builder, "edit-insert"))
-        );
-
-    privat->open_website_action = GTK_ACTION(gtk_builder_get_object(privat->builder, "tools-open-website"));
-
-    gparts_set_paste_action(
-        GPARTS(instance),
-        GTK_ACTION(gtk_builder_get_object(privat->builder, "edit-paste"))
-        );
-
     gparts_set_notebook(
         GPARTS(instance),
         GTK_NOTEBOOK(gtk_builder_get_object(privat->builder, "notebook"))
@@ -464,66 +425,6 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
     gparts_set_current_controller(GPARTS(instance), privat->kludge[0]);
 
     gtk_widget_show(widget);
-}
-
-static void
-gparts_copy_action_cb(GtkAction *action, gpointer user_data)
-{
-    GPartsPrivate *privat = GPARTS_GET_PRIVATE(user_data);
-
-    if (privat != NULL)
-    {
-    }
-}
-
-static void
-gparts_delete_action_cb(GtkAction *action, gpointer user_data)
-{
-    GPartsPrivate *privat = GPARTS_GET_PRIVATE(user_data);
-
-    if (privat != NULL)
-    {
-    }
-}
-
-static void
-gparts_edit_action_cb(GtkAction *action, gpointer user_data)
-{
-    GPartsPrivate *privat = GPARTS_GET_PRIVATE(user_data);
-
-    if (privat != NULL)
-    {
-    }
-}
-
-static void
-gparts_insert_action_cb(GtkAction *action, gpointer user_data)
-{
-    GPartsPrivate *privat = GPARTS_GET_PRIVATE(user_data);
-
-    if (privat != NULL)
-    {
-    }
-}
-
-static void
-gparts_paste_action_cb(GtkAction *action, gpointer user_data)
-{
-    GPartsPrivate *privat = GPARTS_GET_PRIVATE(user_data);
-
-    if (privat != NULL)
-    {
-    }
-}
-
-static void
-gparts_refresh_action_cb(GtkAction *action, gpointer user_data)
-{
-    GPartsPrivate *privat = GPARTS_GET_PRIVATE(user_data);
-
-    if (privat != NULL)
-    {
-    }
 }
 
 static void
@@ -539,243 +440,6 @@ gparts_page_removed_cb(GtkNotebook *notebook, GtkWidget *child, gint page_no, gp
 }
 
 static void
-gparts_set_copy_action(GParts *gparts, GtkAction *action)
-{
-    GPartsPrivate *privat = GPARTS_GET_PRIVATE(gparts);
-
-    if (privat != NULL)
-    {
-        if (privat->copy_action != NULL)
-        {
-            g_signal_handlers_disconnect_by_func(
-                privat->copy_action,
-                G_CALLBACK(gparts_copy_action_cb),
-                gparts
-                );
-
-            g_object_unref(privat->copy_action);
-        }
-
-        privat->copy_action = action;
-
-        if (privat->copy_action != NULL)
-        {
-            g_object_ref(privat->copy_action);
-
-            g_signal_connect(
-                privat->copy_action,
-                "activate",
-                G_CALLBACK(gparts_copy_action_cb),
-                gparts
-                );
-        }
-
-        if (privat->current_controller != NULL)
-        {
-            gparts_controller_set_copy_action(privat->current_controller, privat->copy_action);
-            gparts_controller_set_delete_action(privat->current_controller, privat->delete_action);
-        }
-        else
-        {
-            gtk_action_set_label(privat->copy_action, "_Copy");
-            gtk_action_set_sensitive(privat->copy_action, FALSE);
-        }
-
-        /* g_object_notify(G_OBJECT(gparts), "copy-action"); */
-    }
-}
-
-static void
-gparts_set_delete_action(GParts *gparts, GtkAction *action)
-{
-    GPartsPrivate *privat = GPARTS_GET_PRIVATE(gparts);
-
-    if (privat != NULL)
-    {
-        if (privat->delete_action != NULL)
-        {
-            g_signal_handlers_disconnect_by_func(
-                privat->delete_action,
-                G_CALLBACK(gparts_delete_action_cb),
-                gparts
-                );
-
-            g_object_unref(privat->delete_action);
-        }
-
-        privat->delete_action = action;
-
-        if (privat->delete_action != NULL)
-        {
-            g_object_ref(privat->delete_action);
-
-            g_signal_connect(
-                privat->delete_action,
-                "activate",
-                G_CALLBACK(gparts_delete_action_cb),
-                gparts
-                );
-        }
-
-        if (privat->current_controller != NULL)
-        {
-            gparts_controller_set_delete_action(privat->current_controller, privat->delete_action);
-        }
-        else
-        {
-            gtk_action_set_label(privat->delete_action, "Delete");
-            gtk_action_set_sensitive(privat->delete_action, FALSE);
-        }
-
-        /* g_object_notify(G_OBJECT(gparts), "delete-action"); */
-    }
-}
-
-static void
-gparts_set_edit_action(GParts *gparts, GtkAction *action)
-{
-    GPartsPrivate *privat = GPARTS_GET_PRIVATE(gparts);
-
-    if (privat != NULL)
-    {
-        if (privat->edit_action != NULL)
-        {
-            g_signal_handlers_disconnect_by_func(
-                privat->edit_action,
-                G_CALLBACK(gparts_edit_action_cb),
-                gparts
-                );
-
-            g_object_unref(privat->edit_action);
-        }
-
-        privat->edit_action = action;
-
-        if (privat->edit_action != NULL)
-        {
-            g_object_ref(privat->edit_action);
-
-            g_signal_connect(
-                privat->edit_action,
-                "activate",
-                G_CALLBACK(gparts_edit_action_cb),
-                gparts
-                );
-        }
-
-        if (privat->current_controller != NULL)
-        {
-            gparts_controller_set_edit_action(privat->current_controller, privat->edit_action);
-        }
-        else
-        {
-            gtk_action_set_label(privat->edit_action, "Edit");
-            gtk_action_set_sensitive(privat->edit_action, FALSE);
-        }
-
-        /* g_object_notify(G_OBJECT(gparts), "edit-action"); */
-    }
-}
-
-
-static void
-gparts_set_insert_action(GParts *gparts, GtkAction *action)
-{
-    GPartsPrivate *privat = GPARTS_GET_PRIVATE(gparts);
-
-    if (privat != NULL)
-    {
-        if (privat->insert_action != NULL)
-        {
-            g_signal_handlers_disconnect_by_func(
-                privat->insert_action,
-                G_CALLBACK(gparts_insert_action_cb),
-                gparts
-                );
-
-            g_object_unref(privat->insert_action);
-        }
-
-        privat->insert_action = action;
-
-        if (privat->insert_action != NULL)
-        {
-            g_object_ref(privat->insert_action);
-
-            g_signal_connect(
-                privat->insert_action,
-                "activate",
-                G_CALLBACK(gparts_insert_action_cb),
-                gparts
-                );
-        }
-
-        if (privat->current_controller != NULL)
-        {
-            gparts_controller_set_insert_action(privat->current_controller, privat->insert_action);
-        }
-        else
-        {
-            gtk_action_set_label(privat->insert_action, "Insert");
-            gtk_action_set_sensitive(privat->insert_action, FALSE);
-        }
-
-        /* g_object_notify(G_OBJECT(gparts), "copy-action"); */
-    }
-}
-
-
-static void
-gparts_set_paste_action(GParts *gparts, GtkAction *action)
-{
-    GPartsPrivate *privat = GPARTS_GET_PRIVATE(gparts);
-
-    if (privat != NULL)
-    {
-        if (privat->paste_action != NULL)
-        {
-            g_signal_handlers_disconnect_by_func(
-                privat->paste_action,
-                G_CALLBACK(gparts_paste_action_cb),
-                gparts
-                );
-
-            g_object_unref(privat->paste_action);
-        }
-
-        privat->paste_action = action;
-
-        if (privat->paste_action != NULL)
-        {
-            g_object_ref(privat->paste_action);
-
-            g_signal_connect(
-                privat->paste_action,
-                "activate",
-                G_CALLBACK(gparts_paste_action_cb),
-                gparts
-                );
-        }
-
-        if (privat->current_controller != NULL)
-        {
-            gparts_controller_set_paste_action(privat->current_controller, privat->paste_action);
-        }
-        else
-        {
-            gtk_action_set_label(privat->paste_action, "_Paste");
-            gtk_action_set_sensitive(privat->paste_action, FALSE);
-        }
-
-        /* g_object_notify(G_OBJECT(gparts), "paste-action"); */
-    }
-}
-
-
-
-
-
-static void
 gparts_set_current_controller(GParts *gparts, GPartsController *controller)
 {
     GPartsPrivate *privat = GPARTS_GET_PRIVATE(gparts);
@@ -784,9 +448,10 @@ gparts_set_current_controller(GParts *gparts, GPartsController *controller)
     {
         if (privat->current_controller != NULL)
         {
-            gparts_controller_set_copy_action(privat->current_controller, NULL);
-            gparts_controller_set_delete_action(privat->current_controller, NULL);
-            gparts_controller_set_open_website_action(privat->current_controller, NULL);
+            gpartsui_view_controller_set_copy_action(privat->current_controller, NULL);
+            gpartsui_view_controller_set_delete_action(privat->current_controller, NULL);
+            gpartsui_view_controller_set_open_document_action(privat->current_controller, NULL);
+            gpartsui_view_controller_set_open_website_action(privat->current_controller, NULL);
 
             g_object_unref(privat->current_controller);
         }
@@ -797,9 +462,10 @@ gparts_set_current_controller(GParts *gparts, GPartsController *controller)
         {
             g_object_ref(privat->current_controller);
 
-            gparts_controller_set_copy_action(privat->current_controller, privat->copy_action);
-            gparts_controller_set_delete_action(privat->current_controller, privat->delete_action);
-            gparts_controller_set_open_website_action(privat->current_controller, privat->open_website_action);
+            gpartsui_view_controller_set_copy_action(privat->current_controller, privat->copy_action);
+            gpartsui_view_controller_set_delete_action(privat->current_controller, privat->delete_action);
+            gpartsui_view_controller_set_open_document_action(privat->current_controller, privat->open_document_action);
+            gpartsui_view_controller_set_open_website_action(privat->current_controller, privat->open_website_action);
         }
     }
 }

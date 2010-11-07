@@ -134,10 +134,23 @@
                         <property name="stock-id">gtk-home</property>
                     </object>
                 </child>
+            </object>
+        </child>
+
+        <!-- -->
+
+        <child>
+            <object class="GtkActionGroup" id="view-action-group">
                 <child>
                     <object class="GtkAction" id="tools-open-webpage">
                         <property name="name">tools-open-webpage</property>
                         <property name="label">Open Webpage</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="tools-open-document">
+                        <property name="name">tools-open-document</property>
+                        <property name="label">Open Document</property>
                     </object>
                 </child>
             </object>
@@ -172,6 +185,7 @@
                 <menu action="tools">
                     <menuitem action="tools-open-website"/>
                     <menuitem action="tools-open-webpage"/>
+                    <menuitem action="tools-open-document"/>
                 </menu>
             </menubar>
             <toolbar name="main_toolbar">
@@ -187,6 +201,8 @@
             </toolbar>
         </ui>
     </object>
+
+
 
     <object class="GtkWindow" id="main">
         <child>
@@ -636,164 +652,6 @@
             <action-widget response="3">button_ok</action-widget>
             <action-widget response="-5">button_cancel</action-widget>
         </action-widgets>
-    </object>
-
-
-
-
-    <object class="GtkDialog" id="database-login-mysql">
-        <property name="title">Connect to Database</property>
-        <child internal-child="vbox">
-            <object class="GtkVBox" id="database-login-vbox">
-                <property name="visible">TRUE</property>
-                <child>
-                    <object class="GtkTable" id="database-login-table">
-                        <property name="border_width">10</property>
-                        <property name="column_spacing">5</property>
-                        <property name="n_columns">1</property>
-                        <property name="n_rows">5</property>
-                        <property name="row_spacing">5</property>
-                        <property name="visible">TRUE</property>
-                        <child>
-                            <object class="GtkLabel" id="user-name-label">
-                                <property name="label">User Name</property>
-                                <property name="visible">TRUE</property>
-                            </object>
-                            <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">0</property>
-                            </packing>
-                        </child>
-                        <child>
-                            <object class="GtkEntry" id="user-name-entry">
-                                <property name="text">root</property>
-                                <property name="visible">TRUE</property>
-                            </object>
-                            <packing>
-                                <property name="left-attach">1</property>
-                                <property name="top-attach">0</property>
-                            </packing>
-                        </child>
-                        <child>
-                            <object class="GtkLabel" id="password-label">
-                                <property name="label">Password</property>
-                                <property name="visible">TRUE</property>
-                            </object>
-                            <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">1</property>
-                            </packing>
-                        </child>
-                        <child>
-                            <object class="GtkEntry" id="password-entry">
-                                <property name="visible">TRUE</property>
-                                <property name="visibility">FALSE</property>
-                            </object>
-                            <packing>
-                                <property name="left-attach">1</property>
-                                <property name="top-attach">1</property>
-                            </packing>
-                        </child>
-                        <child>
-                            <object class="GtkLabel" id="server-label">
-                                <property name="label">Server</property>
-                                <property name="visible">TRUE</property>
-                            </object>
-                            <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">2</property>
-                            </packing>
-                        </child>
-                        <child>
-                            <object class="GtkEntry" id="server-entry">
-                                <property name="text">localhost</property>
-                                <property name="visible">TRUE</property>
-                            </object>
-                            <packing>
-                                <property name="left-attach">1</property>
-                                <property name="top-attach">2</property>
-                            </packing>
-                        </child>
-                        <child>
-                            <object class="GtkLabel" id="database-label">
-                                <property name="label">Database</property>
-                                <property name="visible">TRUE</property>
-                            </object>
-                            <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">3</property>
-                            </packing>
-                        </child>
-                        <child>
-                            <object class="GtkEntry" id="database-entry">
-                                <property name="text">GParts</property>
-                                <property name="visible">TRUE</property>
-                            </object>
-                            <packing>
-                                <property name="left-attach">1</property>
-                                <property name="top-attach">3</property>
-                            </packing>
-                        </child>
-                        <child>
-                            <object class="GtkLabel" id="filename-label">
-                                <property name="label">Filename</property>
-                                <property name="visible">TRUE</property>
-                            </object>
-                            <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">4</property>
-                            </packing>
-                        </child>
-                        <child>
-                            <object class="GtkEntry" id="filename-entry">
-                                <property name="text">gparts</property>
-                                <property name="visible">TRUE</property>
-                            </object>
-                            <packing>
-                                <property name="left-attach">1</property>
-                                <property name="top-attach">4</property>
-                            </packing>
-                        </child>
-
-                    </object>
-                </child>
-            </object>
-        </child>
-        <child internal-child="action_area">
-            <object class="GtkHButtonBox" id="buttons">
-                <property name="visible">TRUE</property>
-                <child>
-                    <object class="GtkButton" id="button-help">
-                        <property name="label">gtk-help</property>
-                        <property name="use-stock">TRUE</property>
-                        <property name="visible">TRUE</property>
-                    </object>
-                </child>
-                <child>
-                    <object class="GtkButton" id="button-cancel">
-                        <property name="label">gtk-cancel</property>
-                        <property name="use-stock">TRUE</property>
-                        <property name="visible">TRUE</property>
-                    </object>
-                </child>
-                <child>
-                    <object class="GtkButton" id="button-ok">
-                        <property name="label">gtk-ok</property>
-                        <property name="use-stock">TRUE</property>
-                        <property name="visible">TRUE</property>
-                    </object>
-                </child>
-            </object>
-        </child>
-        <action-widgets>
-            <action-widget response="3">button-ok</action-widget>
-            <action-widget response="-5">button-cancel</action-widget>
-        </action-widgets>
-    </object>
-
-
-    <object class="GPartsObjectList" id="controllers">
-
     </object>
 
 </interface>

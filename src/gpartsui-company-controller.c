@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gparts-controller.c
+/*! \file gpartsui-company-controller.c
  */
 
 #include "gpartsui.h"
@@ -99,7 +99,7 @@ gpartsui_company_controller_changed_selection_cb(GtkTreeSelection *selection, GP
 static void
 gpartsui_company_controller_class_init(gpointer g_class, gpointer g_class_data)
 {
-    GPartsControllerClass *klasse = GPARTS_CONTROLLER_CLASS(g_class);
+    GPartsUIViewControllerClass *klasse = GPARTSUI_VIEW_CONTROLLER_CLASS(g_class);
 
     g_type_class_add_private(g_class, sizeof(GPartsUICompanyControllerPrivate));
 
@@ -190,7 +190,7 @@ gpartsui_company_controller_get_type(void)
             };
 
         type = g_type_register_static(
-            GPARTS_TYPE_CONTROLLER,
+            GPARTSUI_TYPE_VIEW_CONTROLLER,
             "GPartsUICompanyController",
             &tinfo,
             0
@@ -494,8 +494,6 @@ gpartsui_company_controller_update_tree_model(GPartsUICompanyController *control
     {
         GPartsDatabaseResult *database_result;
 
-        g_debug("update tree model");
-
         if (privat->company_tree_model != NULL)
         {
             g_object_unref(privat->company_tree_model);
@@ -540,7 +538,6 @@ gpartsui_company_controller_update_websites(GPartsUICompanyController *controlle
     if (privat != NULL)
     {
         g_strfreev(privat->websites);
-        privat->websites = NULL;
 
         privat->websites = gpartsui_result_adapter_get_fields(privat->company_tree_model, privat->company_selection, 2);
 

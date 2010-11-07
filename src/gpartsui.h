@@ -54,6 +54,8 @@
 #include "gparts-customize-ctrl.h"
 
 
+#include "gpartsui-view-controller.h"
+
 
 #include "gparts-main.h"
 
@@ -75,8 +77,10 @@
 #include "gpartsui-database-controller.h"
 #include "gpartsui-database-model.h"
 
-#include "gpartsui-result-adapter.h"
+#include "gpartsui-document-controller.h"
+#include "gpartsui-document-model.h"
 
+#include "gpartsui-result-adapter.h"
 #include "gpartsui-result-controller.h"
 #include "gpartsui-result-model.h"
 

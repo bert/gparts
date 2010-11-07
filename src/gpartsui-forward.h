@@ -66,6 +66,12 @@ typedef struct _GPartsUIDatabaseControllerClass GPartsUIDatabaseControllerClass;
 typedef struct _GPartsUIDatabaseModel GPartsUIDatabaseModel;
 typedef struct _GPartsUIDatabaseModelClass GPartsUIDatabaseModelClass;
 
+typedef struct _GPartsUIDocumentController GPartsUIDocumentController;
+typedef struct _GPartsUIDocumentControllerClass GPartsUIDocumentControllerClass;
+
+typedef struct _GPartsUIDocumentModel GPartsUIDocumentModel;
+typedef struct _GPartsUIDocumentModelClass GPartsUIDocumentModelClass;
+
 typedef struct _GPartsUIResultAdapter GPartsUIResultAdapter;
 typedef struct _GPartsUIResultAdapterClass GPartsUIResultAdapterClass;
 
@@ -74,4 +80,7 @@ typedef struct _GPartsUIResultControllerClass GPartsUIResultControllerClass;
 
 typedef struct _GPartsUIResultModel GPartsUIResultModel;
 typedef struct _GPartsUIResultModelClass GPartsUIResultModelClass;
+
+typedef struct _GPartsUIViewController GPartsUIViewController;
+typedef struct _GPartsUIViewControllerClass GPartsUIViewControllerClass;
 
