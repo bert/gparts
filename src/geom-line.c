@@ -26,11 +26,13 @@
 #include <string.h>
 
 #include <glib.h>
+#include <glib-object.h>
 
 #include "geom-angle.h"
 #include "geom-bounds.h"
-#include "geom-line.h"
 #include "geom-transform.h"
+
+#include "geom-line.h"
 
 void
 geom_line_bounds(const GeomLine *line, GeomBounds *bounds)
@@ -41,13 +43,42 @@ geom_line_bounds(const GeomLine *line, GeomBounds *bounds)
     }
 }
 
+GeomLine*
+geom_line_copy(const GeomLine *line)
+{
+    return GEOM_LINE(g_memdup(line, sizeof(GeomLine)));
+}
+
+GType
+geom_line_get_type(void)
+{
+    static GType type = G_TYPE_INVALID;
+
+    if (type == G_TYPE_INVALID)
+    {
+        type = g_boxed_type_register_static(
+            "GeomLine",
+            (GBoxedCopyFunc) geom_line_copy,
+            (GBoxedFreeFunc) geom_line_free
+            );
+    }
+
+    return type;
+}
+
+void
+geom_line_free(GeomLine *line)
+{
+    g_free(line);
+}
+
 void
 geom_line_init(GeomLine *line)
 {
     memset(line, 0, sizeof(GeomLine));
 }
 
-double
+gdouble
 geom_line_length(const GeomLine *line)
 {
     return 0;
@@ -59,28 +90,16 @@ geom_line_reverse(GeomLine *line)
 }
 
 void
-geom_line_rotate(GeomLine *line, int angle)
+geom_line_rotate(GeomLine *line, gint angle)
 {
     if (line != NULL)
     {
-        double   radians = geom_angle_radians(angle);
-        GeomLine temp = *line;
-
-        line->x[0] = round(temp.x[0] * cos(radians) - temp.y[0] * sin(radians));
-        line->y[0] = round(temp.x[0] * sin(radians) + temp.y[0] * cos(radians));
-
-        line->x[1] = round(temp.x[1] * cos(radians) - temp.y[1] * sin(radians));
-        line->y[1] = round(temp.x[1] * sin(radians) + temp.y[1] * cos(radians));
+        geom_angle_rotate_points(angle, &(line->x[0]), &(line->y[0]), 2);
     }
 }
 
-/*! \brief Transforms a line segment
- *
- *  \param transform [in] The transform function.
- *  \param line [in,out] The line to transform.
- */
 void
-geom_line_transform(GeomLine *line, const struct _GeomTransform *transform)
+geom_line_transform(GeomLine *line, const GeomTransform *transform)
 {
     if ((line != NULL) && (transform != NULL))
     {
@@ -110,7 +129,7 @@ void geom_transform_lines(GeomTransform *transform, GArray *lines)
 #endif
 
 void
-geom_line_translate(GeomLine *line, int dx, int dy)
+geom_line_translate(GeomLine *line, gint dx, gint dy)
 {
     if (line != NULL)
     {

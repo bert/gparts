@@ -24,7 +24,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <glib-object.h>
+
+#include "geom-angle.h"
 #include "geom-bounds.h"
+#include "geom-transform.h"
+
 #include "geom-box.h"
 
 void
@@ -87,10 +92,59 @@ geom_box_bounds(const GeomBox *box, GeomBounds *bounds)
     }
 }
 
+GeomBox*
+geom_box_copy(const GeomBox *box)
+{
+    return GEOM_BOX(g_memdup(box, sizeof(GeomBox)));
+}
+
+GType
+geom_box_get_type(void)
+{
+    static GType type = G_TYPE_INVALID;
+
+    if (type == G_TYPE_INVALID)
+    {
+        type = g_boxed_type_register_static(
+            "GeomBox",
+            (GBoxedCopyFunc) geom_box_copy,
+            (GBoxedFreeFunc) geom_box_free
+            );
+    }
+
+    return type;
+}
+
+void
+geom_box_free(GeomBox *box)
+{
+    g_free(box);
+}
+
+
 void
 geom_box_init(GeomBox *box)
 {
     memset(box, 0, sizeof(GeomBox));
+}
+
+void
+geom_box_rotate(GeomBox *box, gint angle)
+{
+    if (box != NULL)
+    {
+        geom_angle_rotate_points(angle, &(box->corner_x), &(box->corner_y), 1);
+        geom_angle_rotate_points(angle, &(box->width), &(box->height), 1);
+    }
+}
+
+void
+geom_box_transform(GeomBox *box, const GeomTransform *transform)
+{
+    if ((box != NULL) && (transform != NULL))
+    {
+        /*! \todo implement geom_box_transform */
+    }
 }
 
 void

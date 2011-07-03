@@ -19,6 +19,10 @@
  */
 
 /*! \file geom-angle.h
+ *
+ *  \brief Functions for working with angles
+ *
+ *  \ingroup geom
  */
 
 /*! \brief Convert an angle from radians to degrees
@@ -26,22 +30,32 @@
  * \param [in] angle The angle in radians
  * \return The angle in degrees
  */
-int
-geom_angle_degrees(double angle);
+gint
+geom_angle_degrees(gdouble angle);
 
 /*! \brief Normalize an angle to the range of [0,360)
  *
  * \param [in] angle The angle in degrees
  * \return The normalized angle in the range of [0,360) degrees
  */
-int
-geom_angle_normalize(int angle);
+gint
+geom_angle_normalize(gint angle);
 
 /*! \brief Convert an angle from degrees to radians
  *
  * \param [in] angle The angle in degrees
- * \return The angle in radians 
+ * \return The angle in radians
  */
-double
-geom_angle_radians(int angle);
+gdouble
+geom_angle_radians(gint angle);
+
+/*! \brief Rotate points by the given angle
+ *
+ * \param [in]     angle The angle in degrees
+ * \param [in,out] x     The x coordinates
+ * \param [in,out] y     The y coordinates
+ * \param [in]     n     The number of coordinates
+ */
+void
+geom_angle_rotate_points(gint angle, gint *x, gint *y, gint n);
 

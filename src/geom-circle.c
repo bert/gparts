@@ -25,8 +25,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <glib-object.h>
+
 #include "geom-angle.h"
 #include "geom-bounds.h"
+#include "geom-transform.h"
+
 #include "geom-circle.h"
 
 /*! \brief Calculate the bounding rectangle of the given circle.
@@ -53,6 +57,35 @@ geom_circle_bounds(const GeomCircle *circle, GeomBounds *bounds)
     }
 }
 
+GeomCircle*
+geom_circle_copy(const GeomCircle *circle)
+{
+    return GEOM_CIRCLE(g_memdup(circle, sizeof(GeomCircle)));
+}
+
+GType
+geom_circle_get_type(void)
+{
+    static GType type = G_TYPE_INVALID;
+
+    if (type == G_TYPE_INVALID)
+    {
+        type = g_boxed_type_register_static(
+            "GeomCircle",
+            (GBoxedCopyFunc) geom_circle_copy,
+            (GBoxedFreeFunc) geom_circle_free
+            );
+    }
+
+    return type;
+}
+
+void
+geom_circle_free(GeomCircle *circle)
+{
+    g_free(circle);
+}
+
 void
 geom_circle_init(GeomCircle *circle)
 {
@@ -64,17 +97,15 @@ geom_circle_rotate(GeomCircle *circle, int angle)
 {
     if (circle != NULL)
     {
-        double     radians = geom_angle_radians(angle);
-        GeomCircle temp = *circle;
-
-        circle->center_x = round(temp.center_x * cos(radians) - temp.center_y * sin(radians));
-        circle->center_y = round(temp.center_x * sin(radians) + temp.center_y * cos(radians));
-
-        circle->center_x = round(temp.center_x * cos(radians) - temp.center_y * sin(radians));
-        circle->center_y = round(temp.center_x * sin(radians) + temp.center_y * cos(radians));
+        geom_angle_rotate_points(angle, &(circle->center_x), &(circle->center_y), 1);
     }
 }
 
+void
+geom_circle_transform(GeomCircle *circle, const GeomTransform *transform)
+{
+    /*! \todo implement geom_circle_transform */
+}
 
 void
 geom_circle_translate(GeomCircle *circle, int dx, int dy)

@@ -18,15 +18,23 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file geom.h
+/*! \defgroup geom Geometry
  */
 
-#include "geom-bounds.h"
+/*! \file geom.h
+ *
+ *  \brief An include file for the entire geometry package
+ *
+ *  \ingroup geom
+ */
+
 
 #include "geom-angle.h"
+#include "geom-bounds.h"
+#include "geom-transform.h"
+
 #include "geom-arc.h"
 #include "geom-box.h"
 #include "geom-circle.h"
 #include "geom-line.h"
-#include "geom-transform.h"
 

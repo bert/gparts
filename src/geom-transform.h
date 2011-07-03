@@ -19,16 +19,27 @@
  */
 
 /*! \file geom-transform.h
+ *
+ *  \ingroup geom
  */
+
+#define GEOM_TYPE_TRANSFORM (geom_transform_get_type())
+#define GEOM_TRANSFORM(obj) ((GeomTransform*)obj)
 
 typedef struct _GeomTransform GeomTransform;
 
+/*! \brief A boxed type for containing a affine geometric transform
+ *
+ *  \ingroup geom
+ */
 struct _GeomTransform
 {
     gdouble m[2][3];    /* m[row][column] */
 };
 
 /*! \brief Combines two transformations
+ *
+ *  \memberof _GeomTransform
  *
  *  Combines two matricies using matrix multiplication: a*b.
  *
@@ -40,7 +51,33 @@ struct _GeomTransform
 void
 geom_transform_combine(GeomTransform *result, const GeomTransform *a, const GeomTransform *b);
 
+/*! \brief Makes a copy of a transform.
+ *
+ *  \memberof _GeomTransform
+ *
+ *  \param [in] transform The transform to copy
+ *  \return A dynamically allocated copy of the given transform
+ */
+GeomTransform*
+geom_transform_copy(const GeomTransform *transform);
+
+/*! \brief Free a dynamically allocated transform
+ *
+ *  \memberof _GeomTransform
+ *
+ *  \param [in] transform The transform to free
+ */
+void
+geom_transform_free(GeomTransform *transform);
+
+/* \private */
+GType
+geom_transform_get_type(void);
+
+
 /*! \brief Initialize a transform with the identity matrix.
+ *
+ *  \memberof _GeomTransform
  *
  *  \param transform [out] The transform to initialize with the identity matrix.
  */
@@ -49,6 +86,8 @@ geom_transform_init(GeomTransform *transform);
 
 /*! \brief Calculates the inverse transform
  *
+ *  \memberof _GeomTransform
+ *
  *  \param transform [in]  The given matrix
  *  \param inverse   [out] The inverse of the given matrix.
  */
@@ -56,6 +95,8 @@ void
 geom_transform_invert(const GeomTransform *transform, GeomTransform *inverse);
 
 /*! \brief Transforms a point
+ *
+ *  \memberof _GeomTransform
  *
  *  \param transform [in]     The transform function.
  *  \param x         [in,out] The x coordinate to transform.
@@ -66,13 +107,17 @@ geom_transform_point(const GeomTransform *transform, gint *x, gint *y);
 
 /*! \brief Adds a rotation to the transformation
  *
+ *  \memberof _GeomTransform
+ *
  *  \param transform [in,out] The given matrix
- *  \param angle     [in]     The angle to rotate
+ *  \param angle     [in]     The angle to rotate in radians
  */
 void
 geom_transform_rotate(GeomTransform *transform, gdouble angle);
 
 /*! \brief Adds a scaling to the transformation
+ *
+ *  \memberof _GeomTransform
  *
  *  \param transform [in,out] The given matrix
  *  \param factor    [in]     The amount to scale the transform.  This
@@ -82,6 +127,8 @@ void
 geom_transform_scale(GeomTransform *transform, gdouble factor);
 
 /*! \brief Adds a translation to the transformation
+ *
+ *  \memberof _GeomTransform
  *
  *  \param transform [in,out] The given matrix.
  *  \param dx        [in]     The amount to translate on the x axis.

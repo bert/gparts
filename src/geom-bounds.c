@@ -24,7 +24,15 @@
 #include <limits.h>
 #include <stdlib.h>
 
+#include <glib-object.h>
+
 #include "geom-bounds.h"
+
+GeomBounds*
+geom_bounds_copy(const GeomBounds *bounds)
+{
+    return GEOM_BOUNDS(g_memdup(bounds, sizeof(GeomBounds)));
+}
 
 int
 geom_bounds_empty(const GeomBounds *bounds)
@@ -57,13 +65,36 @@ geom_bounds_expand(GeomBounds *result, const GeomBounds *op, int size)
             result->min_y = op->min_y - size;
             result->max_x = op->max_x + size;
             result->max_y = op->max_y + size;
-        
+
             if (geom_bounds_empty(op))
             {
                 geom_bounds_init(result);
             }
         }
     }
+}
+
+GType
+geom_bounds_get_type(void)
+{
+    static GType type = G_TYPE_INVALID;
+
+    if (type == G_TYPE_INVALID)
+    {
+        type = g_boxed_type_register_static(
+            "GeomBounds",
+            (GBoxedCopyFunc) geom_bounds_copy,
+            (GBoxedFreeFunc) geom_bounds_free
+            );
+    }
+
+    return type;
+}
+
+void
+geom_bounds_free(GeomBounds *bounds)
+{
+    g_free(bounds);
 }
 
 void
@@ -79,7 +110,7 @@ geom_bounds_include(GeomBounds *bounds, const int x[], const int y[], int size)
            {
                bounds->min_x = x[index];
            }
-           
+
            if (x[index] > bounds->max_x)
            {
                bounds->max_x = x[index];
@@ -89,13 +120,13 @@ geom_bounds_include(GeomBounds *bounds, const int x[], const int y[], int size)
            {
                bounds->min_y = y[index];
            }
-           
+
            if (y[index] > bounds->max_y)
            {
                bounds->max_y = y[index];
            }
        }
-   } 
+   }
 }
 
 void
@@ -133,7 +164,7 @@ geom_bounds_union(GeomBounds *result, const GeomBounds *op1, const GeomBounds *o
     {
         result->min_x = op2->min_x;
     }
-    
+
     if (op1->max_x > op2->max_x)
     {
         result->max_x = op1->max_x;
@@ -151,7 +182,7 @@ geom_bounds_union(GeomBounds *result, const GeomBounds *op1, const GeomBounds *o
     {
         result->min_y = op2->min_y;
     }
-    
+
     if (op1->max_y > op2->max_y)
     {
         result->max_y = op1->max_y;

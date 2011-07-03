@@ -22,8 +22,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <glib-object.h>
+
 #include "geom-angle.h"
 #include "geom-bounds.h"
+#include "geom-transform.h"
+
 #include "geom-arc.h"
 
 void
@@ -32,10 +36,10 @@ geom_arc_bounds(const GeomArc *arc, GeomBounds *bounds)
     double radians0 = geom_angle_radians(arc->start);
     double radians1 = geom_angle_radians(arc->start + arc->sweep);
 
-    double x0 = arc->center_x + arc->radius * cos(radians0);    
-    double y0 = arc->center_y + arc->radius * sin(radians0);    
+    double x0 = arc->center_x + arc->radius * cos(radians0);
+    double y0 = arc->center_y + arc->radius * sin(radians0);
 
-    double x1 = arc->center_x + arc->radius * cos(radians1);    
+    double x1 = arc->center_x + arc->radius * cos(radians1);
     double y1 = arc->center_y + arc->radius * sin(radians1);
 
     double start;
@@ -95,10 +99,63 @@ geom_arc_bounds(const GeomArc *arc, GeomBounds *bounds)
     }
 }
 
+GeomArc*
+geom_arc_copy(const GeomArc *arc)
+{
+    return GEOM_ARC(g_memdup(arc, sizeof(GeomArc)));
+}
+
+GType
+geom_arc_get_type(void)
+{
+    static GType type = G_TYPE_INVALID;
+
+    if (type == G_TYPE_INVALID)
+    {
+        type = g_boxed_type_register_static(
+            "GeomArc",
+            (GBoxedCopyFunc) geom_arc_copy,
+            (GBoxedFreeFunc) geom_arc_free
+            );
+    }
+
+    return type;
+}
+
+void
+geom_arc_free(GeomArc *arc)
+{
+    g_free(arc);
+}
+
 void
 geom_arc_init(GeomArc *arc)
 {
     memset(arc, 0, sizeof(GeomArc));
+}
+
+void
+geom_arc_rotate(GeomArc *arc, gint angle)
+{
+    if (arc != NULL)
+    {
+        geom_angle_rotate_points(angle, &(arc->center_x), &(arc->center_y), 1);
+
+        /*! \todo Should the resulting angle be normalized? */
+        arc->start += angle;
+    }
+}
+
+void
+geom_arc_transform(GeomArc *arc, const GeomTransform *transform)
+{
+    if ((arc != NULL) && (transform != NULL))
+    {
+        geom_transform_point(transform, &(arc->center_x), &(arc->center_y));
+
+        /*! \todo Transform the radius */
+        /*! \todo Transform the start angle and sweep */
+    }
 }
 
 void

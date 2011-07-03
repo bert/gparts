@@ -24,14 +24,16 @@
 #include <math.h>
 #include <stdlib.h>
 
-int
-geom_angle_degrees(double angle)
+#include <glib.h>
+
+gint
+geom_angle_degrees(gdouble angle)
 {
     return 180.0 * angle / M_PI;
 }
 
-int
-geom_angle_normalize(int angle)
+gint
+geom_angle_normalize(gint angle)
 {
    if (angle < 0)
    {
@@ -45,9 +47,30 @@ geom_angle_normalize(int angle)
    return angle;
 }
 
-double
-geom_angle_radians(int angle)
+gdouble
+geom_angle_radians(gint angle)
 {
     return M_PI * angle / 180.0;
+}
+
+void
+geom_angle_rotate_points(gint angle, gint *x, gint *y, gint n)
+{
+    gdouble radians = geom_angle_radians(angle);
+    gdouble c = cos(radians);
+    gdouble s = sin(radians);
+    gint    i;
+
+    for (i=0; i<n; i++)
+    {
+        gint tx = *x;
+        gint ty = *y;
+
+        *x = round(tx * c - ty * s);
+        *y = round(tx * s + ty * c);
+
+        x++;
+        y++;
+    }
 }
 

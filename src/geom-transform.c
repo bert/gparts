@@ -23,6 +23,9 @@
 
 #include <math.h>
 #include <glib.h>
+
+#include <glib-object.h>
+
 #include "geom-transform.h"
 
 /*! \brief Combines two transformations
@@ -47,6 +50,35 @@ geom_transform_combine(GeomTransform *result, const GeomTransform *a, const Geom
   result->m[1][0] = a->m[1][0] * b->m[0][0] + a->m[1][1] * b->m[1][0];
   result->m[1][1] = a->m[1][0] * b->m[0][1] + a->m[1][1] * b->m[1][1];
   result->m[1][2] = a->m[1][0] * b->m[0][2] + a->m[1][1] * b->m[1][2] + a->m[1][2];
+}
+
+GeomTransform*
+geom_transform_copy(const GeomTransform *transform)
+{
+    return GEOM_TRANSFORM(g_memdup(transform, sizeof(GeomTransform)));
+}
+
+void
+geom_transform_free(GeomTransform *transform)
+{
+    g_free(transform);
+}
+
+GType
+geom_transform_get_type(void)
+{
+    static GType type = G_TYPE_INVALID;
+
+    if (type == G_TYPE_INVALID)
+    {
+        type = g_boxed_type_register_static(
+            "GeomTransform",
+            (GBoxedCopyFunc) geom_transform_copy,
+            (GBoxedFreeFunc) geom_transform_free
+            );
+    }
+
+    return type;
 }
 
 /*! \brief Initialize a transform with the identity matrix.
@@ -134,7 +166,7 @@ void geom_transform_points(GeomTransform *transform, GArray *points)
 /*! \brief Adds a rotation to the transformation
  *
  *  \param transform [in,out] The given matrix
- *  \param angle [in] The angle to rotate
+ *  \param angle [in] The angle to rotate in radians
  */
 void
 geom_transform_rotate(GeomTransform *transform, gdouble angle)
