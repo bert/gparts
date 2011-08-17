@@ -15,6 +15,7 @@ BUILT_SOURCES = \
 	scmcfg-config.x
 
 bin_PROGRAMS = \
+	gformtest \
 	gparts \
 	gsymview
 
@@ -86,10 +87,20 @@ gsymview_SOURCES = \
 gsymview_CFLAGS = $(AM_CFLAGS) $(GTK_CFLAGS) -shared -rdynamic
 gsymview_LDADD = $(GTK_LIBS) libgeom.la libmisc.la libsch.la libschgui.la libscmcfg.la
 
+# A small GUI program for testing dialog boxes.
+#
+gformtest_SOURCES = \
+	gformtest-main.c
+gformtest_CFLAGS = $(AM_CFLAGS) $(GTK_CFLAGS) -shared -rdynamic
+gformtest_LDADD = $(GTK_LIBS) libmisc.la libgpform.la
+
+
 
 noinst_LTLIBRARIES = \
 	libgeom.la \
+	libgpform.la \
 	libmisc.la \
+	libmiscgui.la \
 	libsch.la \
 	libschgui.la \
 	libscmcfg.la
@@ -207,8 +218,11 @@ libschgui_la_SOURCES = \
 	schgui-drawing-cfg.c \
 	schgui-drawing-view.c
 libschgui_la_CFLAGS = -Wall $(AM_CFLAGS) $(GTK_CFLAGS)
-libschgui_la_LIBADD = $(GTK_LIBS) libsch.la
+libschgui_la_LIBADD = $(GTK_LIBS) libsch.la libmiscgui.la
 
+#
+# This library contains boxed types for working with geometric shapes.
+#
 libgeom_la_SOURCES = \
 	geom-angle.c \
 	geom-arc.c \
@@ -220,11 +234,30 @@ libgeom_la_SOURCES = \
 libgeom_la_CFLAGS = -Wall $(AM_CFLAGS) $(GLIB_CFLAGS)
 libgeom_la_LIBADD = $(GLIB_LIBS)
 
+#
+# This library contains UI elements for data entry.
+#
+libgpform_la_SOURCES = \
+	gpform-factory.c \
+	gpform-ui-combo.c \
+	gpform-ui-dialog.c \
+	gpform-ui-entry.c \
+	gpform-ui-image.c \
+	gpform-ui-label.c
+libgpform_la_CFLAGS = -Wall $(AM_CFLAGS) $(GTK_CFLAGS)
+libgpform_la_LIBADD = $(GTK_LIBS) libmisc.la
+
+
 libmisc_la_SOURCES = \
 	misc-macro.c \
 	misc-object.c
 libmisc_la_CFLAGS = -Wall $(AM_CFLAGS) $(GLIB_CFLAGS)
 libmisc_la_LIBADD = $(GLIB_LIBS)
+
+libmiscgui_la_SOURCES = \
+	miscgui-color.c
+libmiscgui_la_CFLAGS = -Wall $(AM_CFLAGS) $(GTK_CFLAGS)
+libmiscgui_la_LIBADD = $(GTK_LIBS)
 
 libscmcfg_la_SOURCES = \
 	scmcfg-config.c \

@@ -1,4 +1,6 @@
-SUBDIRS = src
+SUBDIRS = \
+	src \
+	xml/forms
 
 ACLOCAL_AMFLAGS = -I m4
 

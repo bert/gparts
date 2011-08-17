@@ -1,0 +1,418 @@
+<?xml version="1.0"?>
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- The dialog must be GPFormUIDialog and its id must be main. -->
+<!-- -->
+<!-- -->
+<!-- The named entity "&omega;" does not work, use "&#x03A9;" instead. -->
+<!-- -->
+
+<interface>
+    <object class="GPFormUIDialog" id="main">
+
+        <property name="title">Add Resistor</property>
+
+        <child internal-child="action_area">
+            <object class="GtkHButtonBox" id="button-box">
+                <child>
+                    <object class="GtkButton" id="button-cancel">
+                        <property name="label">gtk-cancel</property>
+                        <property name="use-stock">TRUE</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkButton" id="button-help">
+                        <property name="label">gtk-help</property>
+                        <property name="use-stock">TRUE</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkButton" id="button-ok">
+                        <property name="label">gtk-ok</property>
+                        <property name="use-stock">TRUE</property>
+                    </object>
+                </child>
+            </object>
+        </child>
+
+        <child internal-child="vbox">
+            <object class="GtkVBox" id="vbox">
+                <child>
+                    <object class="GtkTable" id="table">
+                        <property name="border-width">5</property>
+                        <property name="column-spacing">10</property>
+                        <property name="n_columns">3</property>
+                        <property name="n_rows">3</property>
+                        <property name="row-spacing">8</property>
+
+                        <child>
+                            <object class="GPFormUILabel" id="label-company">
+                                <property name="label">Company</property>
+                                <property name="xalign">0.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">0</property>
+                                <property name="right-attach">1</property>
+                                <property name="top-attach">0</property>
+                                <property name="bottom-attach">1</property>
+                                <property name="x-options">GTK_FILL</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GPFormUIEntry" id="entry-company">
+                            </object>
+                            <packing>
+                                <property name="left-attach">1</property>
+                                <property name="right-attach">4</property>
+                                <property name="top-attach">0</property>
+                                <property name="bottom-attach">1</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkButton" id="button-company">
+                                <property name="label">...</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">4</property>
+                                <property name="right-attach">5</property>
+                                <property name="top-attach">0</property>
+                                <property name="bottom-attach">1</property>
+                                <property name="x-options">GTK_FILL</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+
+
+                        <child>
+                            <object class="GPFormUILabel" id="label-part-number">
+                                <property name="label">Part Number</property>
+                                <property name="xalign">0.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">0</property>
+                                <property name="right-attach">1</property>
+                                <property name="top-attach">1</property>
+                                <property name="bottom-attach">2</property>
+                                <property name="x-options">GTK_FILL</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GPFormUIEntry" id="entry-part-number">
+                            </object>
+                            <packing>
+                                <property name="left-attach">1</property>
+                                <property name="right-attach">4</property>
+                                <property name="top-attach">1</property>
+                                <property name="bottom-attach">2</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+
+                        <!-- Resistance -->
+
+                        <child>
+                            <object class="GPFormUILabel" id="label-resistance">
+                                <property name="label">Resistance</property>
+                                <property name="xalign">0.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">0</property>
+                                <property name="right-attach">1</property>
+                                <property name="top-attach">2</property>
+                                <property name="bottom-attach">3</property>
+                                <property name="x-options">GTK_FILL</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GPFormUIEntry" id="entry-resistance">
+                                <property name="xalign">1.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">1</property>
+                                <property name="right-attach">4</property>
+                                <property name="top-attach">2</property>
+                                <property name="bottom-attach">3</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GPFormUILabel" id="units-resistance">
+                                <property name="label">&#x03A9;</property>
+                                <property name="xalign">0.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">4</property>
+                                <property name="right-attach">5</property>
+                                <property name="top-attach">2</property>
+                                <property name="bottom-attach">3</property>
+                                <property name="x-options">GTK_FILL</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+
+                        <!-- Tolerance -->
+
+                        <child>
+                            <object class="GPFormUILabel" id="label-tolerance">
+                                <property name="label">Tolerance</property>
+                                <property name="xalign">0.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">0</property>
+                                <property name="right-attach">1</property>
+                                <property name="top-attach">3</property>
+                                <property name="bottom-attach">4</property>
+                                <property name="x-options">GTK_FILL</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GPFormUIEntry" id="entry-tolerance">
+                                <property name="xalign">1.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">1</property>
+                                <property name="right-attach">4</property>
+                                <property name="top-attach">3</property>
+                                <property name="bottom-attach">4</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GPFormUILabel" id="units-tolerance">
+                                <property name="label">%</property>
+                                <property name="xalign">0.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">4</property>
+                                <property name="right-attach">5</property>
+                                <property name="top-attach">3</property>
+                                <property name="bottom-attach">4</property>
+                                <property name="x-options">GTK_FILL</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+
+                        <!-- Working Voltage -->
+
+                        <child>
+                            <object class="GPFormUILabel" id="label-working-voltage">
+                                <property name="label">Working Voltage</property>
+                                <property name="xalign">0.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">0</property>
+                                <property name="right-attach">1</property>
+                                <property name="top-attach">4</property>
+                                <property name="bottom-attach">5</property>
+                                <property name="x-options">GTK_FILL</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GPFormUIEntry" id="entry-working-voltage">
+                                <property name="xalign">1.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">1</property>
+                                <property name="right-attach">4</property>
+                                <property name="top-attach">4</property>
+                                <property name="bottom-attach">5</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GPFormUILabel" id="units-working-voltage">
+                                <property name="label">V</property>
+                                <property name="xalign">0.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">4</property>
+                                <property name="right-attach">5</property>
+                                <property name="top-attach">4</property>
+                                <property name="bottom-attach">5</property>
+                                <property name="x-options">GTK_FILL</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+
+                        <!-- Power Dissipation -->
+
+                        <child>
+                            <object class="GPFormUILabel" id="label-power-dissipation">
+                                <property name="label">Power Dissipation (at 70 &#x00B0;C)</property>
+                                <property name="xalign">0.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">0</property>
+                                <property name="right-attach">1</property>
+                                <property name="top-attach">5</property>
+                                <property name="bottom-attach">6</property>
+                                <property name="x-options">GTK_FILL</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GPFormUIEntry" id="entry-power-dissipation">
+                                <property name="xalign">1.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">1</property>
+                                <property name="right-attach">4</property>
+                                <property name="top-attach">5</property>
+                                <property name="bottom-attach">6</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GPFormUILabel" id="units-power-dissipation">
+                                <property name="label">W</property>
+                                <property name="xalign">0.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">4</property>
+                                <property name="right-attach">5</property>
+                                <property name="top-attach">5</property>
+                                <property name="bottom-attach">6</property>
+                                <property name="x-options">GTK_FILL</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+
+
+                        <!-- Operating Temperature Range -->
+
+                        <child>
+                            <object class="GPFormUILabel" id="label-operating-temperature-range">
+                                <property name="label">Operating Temperature Range</property>
+                                <property name="xalign">0.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">0</property>
+                                <property name="right-attach">1</property>
+                                <property name="top-attach">6</property>
+                                <property name="bottom-attach">7</property>
+                                <property name="x-options">GTK_FILL</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GPFormUIEntry" id="entry-operating-temperature-range-min">
+                                <property name="width-chars">6</property>
+                                <property name="xalign">1.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">1</property>
+                                <property name="right-attach">2</property>
+                                <property name="top-attach">6</property>
+                                <property name="bottom-attach">7</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GPFormUILabel" id="label-operating-temperature-range-to">
+                                <property name="label">to</property>
+                                <property name="xalign">0.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">2</property>
+                                <property name="right-attach">3</property>
+                                <property name="top-attach">6</property>
+                                <property name="bottom-attach">7</property>
+                                <property name="x-options">GTK_FILL</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GPFormUIEntry" id="entry-operating-temperature-range-max">
+                                <property name="width-chars">6</property>
+                                <property name="xalign">1.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">3</property>
+                                <property name="right-attach">4</property>
+                                <property name="top-attach">6</property>
+                                <property name="bottom-attach">7</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GPFormUILabel" id="label-operating-temperature-range-units">
+                                <property name="label">&#x00B0;C</property>
+                                <property name="xalign">0.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">4</property>
+                                <property name="right-attach">5</property>
+                                <property name="top-attach">6</property>
+                                <property name="bottom-attach">7</property>
+                                <property name="x-options">GTK_FILL</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+
+                        <!-- Package -->
+
+                        <child>
+                            <object class="GPFormUILabel" id="label-package">
+                                <property name="label">Package</property>
+                                <property name="xalign">0.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">0</property>
+                                <property name="right-attach">1</property>
+                                <property name="top-attach">7</property>
+                                <property name="bottom-attach">8</property>
+                                <property name="x-options">GTK_FILL</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GPFormUIEntry" id="entry-package">
+                                <property name="xalign">1.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">1</property>
+                                <property name="right-attach">4</property>
+                                <property name="top-attach">7</property>
+                                <property name="bottom-attach">8</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkButton" id="button-package">
+                                <property name="label">...</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">4</property>
+                                <property name="right-attach">5</property>
+                                <property name="top-attach">7</property>
+                                <property name="bottom-attach">8</property>
+                                <property name="x-options">GTK_FILL</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+
+
+
+                    </object>
+                </child>
+            </object>
+        </child>
+
+        <action-widgets>
+             <action-widget response="-6">button-cancel</action-widget>
+             <action-widget response="-11">button-help</action-widget>
+             <action-widget response="-5">button-ok</action-widget>
+        </action-widgets>
+
+    </object>
+</interface>
+

@@ -170,6 +170,7 @@ AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([
     Makefile
     src/Makefile
+    xml/forms/Makefile
     ])
 AC_OUTPUT
 

@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- The dialog must be GPFormUIDialog and its id must be main. -->
+<!-- -->
+<!-- -->
+<!-- The named entity "&omega;" does not work, use "&#x03A9;" instead. -->
+<!-- -->
+
+<interface>
+    <object class="GPFormUIDialog" id="main">
+
+        <property name="title">Add Company</property>
+
+        <child internal-child="action_area">
+            <object class="GtkHButtonBox" id="button-box">
+                <child>
+                    <object class="GtkButton" id="button-cancel">
+                        <property name="label">gtk-cancel</property>
+                        <property name="use-stock">TRUE</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkButton" id="button-help">
+                        <property name="label">gtk-help</property>
+                        <property name="use-stock">TRUE</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkButton" id="button-ok">
+                        <property name="label">gtk-ok</property>
+                        <property name="use-stock">TRUE</property>
+                    </object>
+                </child>
+            </object>
+        </child>
+
+        <child internal-child="vbox">
+            <object class="GtkVBox" id="vbox">
+                <child>
+                    <object class="GtkTable" id="table">
+                        <property name="border-width">5</property>
+                        <property name="column-spacing">10</property>
+                        <property name="n_columns">3</property>
+                        <property name="n_rows">3</property>
+                        <property name="row-spacing">8</property>
+
+                        <child>
+                            <object class="GPFormUILabel" id="label-company-id">
+                                <property name="label">Company ID</property>
+                                <property name="xalign">0.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">0</property>
+                                <property name="right-attach">1</property>
+                                <property name="top-attach">0</property>
+                                <property name="bottom-attach">1</property>
+                                <property name="x-options">GTK_FILL</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GPFormUIEntry" id="entry-company-id">
+                                <property name="sensitive">FALSE</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">1</property>
+                                <property name="right-attach">2</property>
+                                <property name="top-attach">0</property>
+                                <property name="bottom-attach">1</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+
+                        <child>
+                            <object class="GPFormUILabel" id="label-company-name">
+                                <property name="label">Company Name</property>
+                                <property name="xalign">0.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">0</property>
+                                <property name="right-attach">1</property>
+                                <property name="top-attach">1</property>
+                                <property name="bottom-attach">2</property>
+                                <property name="x-options">GTK_FILL</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GPFormUIEntry" id="entry-comapny-name">
+                            </object>
+                            <packing>
+                                <property name="left-attach">1</property>
+                                <property name="right-attach">2</property>
+                                <property name="top-attach">1</property>
+                                <property name="bottom-attach">2</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+
+                        <child>
+                            <object class="GPFormUILabel" id="label-company-website">
+                                <property name="label">Website URL</property>
+                                <property name="xalign">0.0</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">0</property>
+                                <property name="right-attach">1</property>
+                                <property name="top-attach">2</property>
+                                <property name="bottom-attach">3</property>
+                                <property name="x-options">GTK_FILL</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GPFormUIEntry" id="label-entry-company-website">
+                            </object>
+                            <packing>
+                                <property name="left-attach">1</property>
+                                <property name="right-attach">2</property>
+                                <property name="top-attach">2</property>
+                                <property name="bottom-attach">3</property>
+                                <property name="y-options">GTK_FILL</property>
+                            </packing>
+                        </child>
+
+                    </object>
+                </child>
+            </object>
+        </child>
+
+        <action-widgets>
+             <action-widget response="-6">button-cancel</action-widget>
+             <action-widget response="-11">button-help</action-widget>
+             <action-widget response="-5">button-ok</action-widget>
+        </action-widgets>
+
+    </object>
+</interface>
+
