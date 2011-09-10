@@ -18,23 +18,25 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \defgroup gpform Parts Manager Forms
+/*! \file gpform-ui-widget.h
  */
 
-/*! \file gpform.h
+#define GPFORM_TYPE_UI_WIDGET (gpform_ui_widget_get_type())
+#define GPFORM_UI_WIDGET(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),GPFORM_TYPE_UI_WIDGET,GPFormUIWidget))
+#define GPFORM_IS_UI_WIDGET(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj),GPFORM_TYPE_UI_WIDGET))
+#define GPFORM_UI_WIDGET_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),GPFORM_TYPE_UI_WIDGET,GPFormUIWidgetInterface))
+
+/*! \private
  */
+struct _GPFormUIWidgetInterface
+{
+    GTypeInterface parent;
+};
 
-#include <gtk/gtk.h>
+/*! \private */
+GType
+gpform_ui_widget_get_type(void);
 
-#include "gpform-forward.h"
-
-#include "gpform-factory.h"
-
-#include "gpform-pm-dialog.h"
-#include "gpform-ui-combo.h"
-#include "gpform-ui-dialog.h"
-#include "gpform-ui-entry.h"
-#include "gpform-ui-image.h"
-#include "gpform-ui-label.h"
-#include "gpform-ui-widget.h"
+void
+gpform_ui_widget_set_model(GPFormUIWidget *widget, GPFormPMDialog *model);
 

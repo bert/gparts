@@ -28,9 +28,6 @@
 #define SCHGUI_IS_CAIRO_FACTORY_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCHGUI_TYPE_CAIRO_FACTORY))
 #define SCHGUI_CAIRO_FACTORY_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCHGUI_TYPE_CAIRO_FACTORY,SchGUICairoFactoryClass))
 
-typedef struct _SchGUICairoFactory SchGUICairoFactory;
-typedef struct _SchGUICairoFactoryClass SchGUICairoFactoryClass;
-
 struct _SchGUICairoFactory
 {
     GObject parent;

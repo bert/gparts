@@ -109,7 +109,7 @@ sch_box_class_init(gpointer g_class, gpointer g_class_data)
         object_class,
         SCH_BOX_X,
         g_param_spec_int(
-            "x",
+            "corner-x",
             "X",
             "X",
             G_MININT,
@@ -123,7 +123,7 @@ sch_box_class_init(gpointer g_class, gpointer g_class_data)
         object_class,
         SCH_BOX_Y,
         g_param_spec_int(
-            "y",
+            "corner-y",
             "Y",
             "",
             G_MININT,
@@ -340,27 +340,27 @@ sch_box_get_property(GObject *object, guint property_id, GValue *value, GParamSp
         switch (property_id)
         {
             case SCH_BOX_X:
-                g_value_set_int(value, privat->box.corner_x);
+                g_value_set_int(value, sch_box_get_corner_x(SCH_BOX(object)));
                 break;
 
             case SCH_BOX_Y:
-                g_value_set_int(value, privat->box.corner_y);
+                g_value_set_int(value, sch_box_get_corner_y(SCH_BOX(object)));
                 break;
 
             case SCH_BOX_WIDTH:
-                g_value_set_int(value, privat->box.width);
+                g_value_set_int(value, sch_box_get_width(SCH_BOX(object)));
                 break;
 
             case SCH_BOX_HEIGHT:
-                g_value_set_int(value, privat->box.height);
+                g_value_set_int(value, sch_box_get_height(SCH_BOX(object)));
                 break;
 
             case SCH_BOX_COLOR:
-                g_value_set_int(value, privat->color);
+                g_value_set_int(value, sch_box_get_color(SCH_BOX(object)));
                 break;
 
             case SCH_BOX_LINE_WIDTH:
-                g_value_set_int(value, privat->line_width);
+                g_value_set_int(value, sch_box_get_line_width(SCH_BOX(object)));
                 break;
 
             case SCH_BOX_CAP_STYLE:
@@ -450,27 +450,27 @@ sch_box_set_property(GObject *object, guint property_id, const GValue *value, GP
         switch (property_id)
         {
             case SCH_BOX_X:
-                privat->box.corner_x = g_value_get_int(value);
+                sch_box_set_corner_x(SCH_BOX(object), g_value_get_int(value));
                 break;
 
             case SCH_BOX_Y:
-                privat->box.corner_y = g_value_get_int(value);
+                sch_box_set_corner_y(SCH_BOX(object), g_value_get_int(value));
                 break;
 
             case SCH_BOX_WIDTH:
-                privat->box.width = g_value_get_int(value);
+                sch_box_set_width(SCH_BOX(object), g_value_get_int(value));
                 break;
 
             case SCH_BOX_HEIGHT:
-                privat->box.height = g_value_get_int(value);
+                sch_box_set_height(SCH_BOX(object), g_value_get_int(value));
                 break;
 
             case SCH_BOX_COLOR:
-                privat->color = g_value_get_int(value);
+                sch_box_set_color(SCH_BOX(object), g_value_get_int(value));
                 break;
 
             case SCH_BOX_LINE_WIDTH:
-                privat->line_width = g_value_get_int(value);
+                sch_box_set_line_width(SCH_BOX(object), g_value_get_int(value));
                 break;
 
             case SCH_BOX_CAP_STYLE:
@@ -519,20 +519,74 @@ sch_box_set_property(GObject *object, guint property_id, const GValue *value, GP
     }
 }
 
-void
-sch_box_get_color(const SchBox *shape, int *index)
+gint
+sch_box_get_corner_x(const SchBox *shape)
 {
-    if (index != NULL)
+    gint corner_x = 0;
+    SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
+
+    if (privat != NULL)
     {
-        SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
-
-        *index = SCH_BOX_DEFAULT_COLOR;
-
-        if (privat != NULL)
-        {
-            *index = privat->color;
-        }
+        corner_x = privat->box.corner_x;
     }
+
+    return corner_x;
+}
+
+gint
+sch_box_get_corner_y(const SchBox *shape)
+{
+    gint corner_y = 0;
+    SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        corner_y = privat->box.corner_y;
+    }
+
+    return corner_y;
+}
+
+gint
+sch_box_get_width(const SchBox *shape)
+{
+    SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
+    gint width = 0;
+
+    if (privat != NULL)
+    {
+        width = privat->box.width;
+    }
+
+    return width;
+}
+
+gint
+sch_box_get_height(const SchBox *shape)
+{
+    gint height = 0;
+    SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        height = privat->box.height;
+    }
+
+    return height;
+}
+
+gint
+sch_box_get_color(const SchBox *shape)
+{
+    gint color = SCH_BOX_DEFAULT_COLOR;
+    SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        color = privat->color;
+    }
+
+    return color;
 }
 
 void
@@ -553,56 +607,54 @@ sch_box_get_box(const SchBox *shape, GeomBox *box)
     }
 }
 
-void
-sch_box_get_line_width(const SchBox *shape, int *width)
+gint
+sch_box_get_line_width(const SchBox *shape)
 {
-    if (width != NULL)
+    SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
+    gint line_width = SCH_BOX_DEFAULT_LINE_WIDTH;
+
+    if (privat != NULL)
     {
-        SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
-
-        *width = SCH_BOX_DEFAULT_LINE_WIDTH;
-
-        if (privat != NULL)
-        {
-            *width = privat->line_width;
-        }
+        line_width = privat->line_width;
     }
+
+    return line_width;
 }
 
-void
-sch_box_get_fill_style(const SchBox *shape, SchFillStyle *style)
+SchFillStyle*
+sch_box_get_fill_style(const SchBox *shape)
 {
-    if (style != NULL)
-    {
-        SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
+    SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
+    SchFillStyle *style = NULL;
 
-        if (privat != NULL)
-        {
-            *style = privat->fill_style;
-        }
-        else
-        {
-            sch_fill_style_init(style);
-        }
+    if (privat != NULL)
+    {
+        style = sch_fill_style_copy(&(privat->fill_style));
     }
+    else
+    {
+        style = sch_fill_style_new();
+    }
+
+    return style;
 }
 
-void
-sch_box_get_line_style(const SchBox *shape, SchLineStyle *style)
+SchLineStyle*
+sch_box_get_line_style(const SchBox *shape)
 {
-    if (style != NULL)
-    {
-        SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
+    SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
+    SchLineStyle *style = NULL;
 
-        if (privat != NULL)
-        {
-            *style = privat->line_style;
-        }
-        else
-        {
-            sch_line_style_init(style);
-        }
+    if (privat != NULL)
+    {
+        style = sch_line_style_copy(&(privat->line_style));
     }
+    else
+    {
+        style = sch_line_style_new();
+    }
+
+    return style;
 }
 
 SchBox*
@@ -669,7 +721,7 @@ sch_box_rotate(SchShape *shape, int angle)
             GeomBox temp = privat->box;
 
             privat->box.corner_x = temp.corner_x - temp.height;
-            privat->box.corner_y = temp.corner_y; 
+            privat->box.corner_y = temp.corner_y;
             privat->box.width    = temp.height;
             privat->box.height   = temp.width;
         }
@@ -678,11 +730,11 @@ sch_box_rotate(SchShape *shape, int angle)
             GeomBox temp = privat->box;
 
             privat->box.corner_x =  temp.corner_y;
-            privat->box.corner_y = -temp.corner_x - temp.width; 
+            privat->box.corner_y = -temp.corner_x - temp.width;
             privat->box.width    =  temp.height;
             privat->box.height   =  temp.width;
         }
-   
+
     }
 }
 
@@ -690,5 +742,109 @@ static void
 sch_box_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error)
 {
     sch_file_format_2_write_box(format, stream, SCH_BOX(shape), error);
+}
+
+void
+sch_box_set_corner_x(SchBox *shape, gint corner_x)
+{
+    SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        privat->box.corner_x = corner_x;
+
+        g_object_notify(G_OBJECT(shape), "corner-x");
+    }
+}
+
+void
+sch_box_set_corner_y(SchBox *shape, gint corner_y)
+{
+    SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        privat->box.corner_y = corner_y;
+
+        g_object_notify(G_OBJECT(shape), "corner-y");
+    }
+}
+
+void
+sch_box_set_width(SchBox *shape, gint width)
+{
+    SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        privat->box.width = width;
+
+        g_object_notify(G_OBJECT(shape), "width");
+    }
+}
+
+void
+sch_box_set_height(SchBox *shape, gint height)
+{
+    SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        privat->box.height = height;
+
+        g_object_notify(G_OBJECT(shape), "height");
+    }
+}
+
+void
+sch_box_set_color(SchBox *shape, gint color)
+{
+    SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        privat->color = color;
+
+        g_object_notify(G_OBJECT(shape), "color");
+    }
+}
+
+void
+sch_box_set_line_width(SchBox *shape, gint line_width)
+{
+    SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        privat->line_width = line_width;
+
+        g_object_notify(G_OBJECT(shape), "line-width");
+    }
+}
+
+void
+sch_box_set_line_style(SchBox *shape, const SchLineStyle *style)
+{
+    SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        privat->line_style = *style;
+
+        g_object_notify(G_OBJECT(shape), "line-style");
+    }
+}
+
+void
+sch_box_set_fill_style(SchBox *shape, const SchFillStyle *style)
+{
+    SchBoxPrivate *privat = SCH_BOX_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        privat->fill_style = *style;
+
+        g_object_notify(G_OBJECT(shape), "fill-style");
+    }
 }
 

@@ -26,14 +26,9 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
- 
-#include "sch.h"
 
-#include "schgui-drawing-cfg.h"
+#include "schgui.h"
 
-#include "schgui-cairo-draw-item.h"
-
-#include "schgui-cairo-box.h"
 
 #define SCHGUI_CAIRO_BOX_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCHGUI_TYPE_CAIRO_BOX,SchGUICairoBoxPrivate))
 
@@ -196,14 +191,14 @@ schgui_cairo_box_new(const SchBox *shape, SchGUIDrawingCfg *config)
 
     if (privat != NULL)
     {
-        GeomBox               box;
-        SchGUIDrawingCfgColor color;
-        SchFillStyle          fill_style;
-        int                   index;
-        double                item_width;
-        int                   shape_width;
+        GeomBox       box;
+        MiscGUIColor  color;
+        SchFillStyle  fill_style;
+        int           index;
+        double        item_width;
+        int           shape_width;
 
-        sch_box_get_color(shape, &index);
+        index = sch_box_get_color(shape);
 
         privat->visible = schgui_drawing_cfg_get_color(config, index, &color);
 
@@ -212,7 +207,7 @@ schgui_cairo_box_new(const SchBox *shape, SchGUIDrawingCfg *config)
         privat->blue  = color.blue;
         privat->alpha = privat->visible ? 1.0 : 0.0;
 
-        sch_box_get_line_width(shape, &shape_width);
+        shape_width = sch_box_get_line_width(shape);
 
         schgui_drawing_cfg_get_output_line_width(config, shape_width, &item_width);
 
@@ -225,7 +220,7 @@ schgui_cairo_box_new(const SchBox *shape, SchGUIDrawingCfg *config)
         privat->width    = box.width;
         privat->height   = box.height;
 
-        sch_box_get_fill_style(shape, &fill_style);
+        //sch_box_get_fill_style(shape, &fill_style);
 
         privat->solid = (fill_style.type == SCH_FILL_STYLE_FILL_TYPE_SOLID);
     }

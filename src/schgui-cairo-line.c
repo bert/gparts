@@ -26,14 +26,9 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
- 
-#include "sch.h"
 
-#include "schgui-drawing-cfg.h"
+#include "schgui.h"
 
-#include "schgui-cairo-draw-item.h"
-
-#include "schgui-cairo-line.h"
 
 #define SCHGUI_CAIRO_LINE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCHGUI_TYPE_CAIRO_LINE,SchGUICairoLinePrivate))
 
@@ -205,7 +200,7 @@ schgui_cairo_line_new(const SchLine *shape, SchGUIDrawingCfg *config)
     if (privat != NULL)
     {
         GeomLine              line;
-        SchGUIDrawingCfgColor color;
+        MiscGUIColor          color;
         int                   index;
         double                item_width;
         int                   shape_width;

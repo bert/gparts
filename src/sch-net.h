@@ -59,3 +59,21 @@ sch_net_get_line(const SchNet *shape, GeomLine *line);
 SchNet*
 sch_net_new(const SchConfig *config);
 
+void
+sch_net_set_color(SchNet *shape, gint color);
+
+void
+sch_net_set_line(SchNet *shape, const GeomLine *line);
+
+void
+sch_net_set_x0(SchNet *shape, gint x0);
+
+void
+sch_net_set_x1(SchNet *shape, gint x1);
+
+void
+sch_net_set_y0(SchNet *shape, gint y0);
+
+void
+sch_net_set_y1(SchNet *shape, gint y1);
+

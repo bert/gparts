@@ -164,11 +164,23 @@ gpform_ui_combo_get_type(void)
             NULL                           /* value_table */
             };
 
+        static const GInterfaceInfo iinfo = {
+            NULL,                                 /* interface_init */
+            NULL,                                 /* interface_finalize */
+            NULL                                  /* interface_data */
+            };
+
         type = g_type_register_static(
             GTK_TYPE_COMBO_BOX,
             "GPFormUICombo",
             &tinfo,
             0
+            );
+
+        g_type_add_interface_static(
+            type,
+            GPFORM_TYPE_UI_WIDGET,
+            &iinfo
             );
     }
 

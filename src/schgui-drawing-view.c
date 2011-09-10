@@ -25,17 +25,13 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
-#include "sch.h"
-
-#include "schgui-drawing-cfg.h"
-#include "schgui-cairo-drafter.h"
-#include "schgui-drawing-view.h"
+#include "schgui.h"
 
 #define SCHGUI_DRAWING_VIEW_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCHGUI_TYPE_DRAWING_VIEW,SchGUIDrawingViewPrivate))
 
 enum
 {
-    SCHGUI_DRAWING_VIEW_DRAFTER = 1,
+    SCHGUI_DRAWING_VIEW_CONFIG = 1,
     SCHGUI_DRAWING_VIEW_DRAWING,
     SCHGUI_DRAWING_VIEW_EXTENTS
 };
@@ -44,7 +40,8 @@ typedef struct _SchGUIDrawingViewPrivate SchGUIDrawingViewPrivate;
 
 struct _SchGUIDrawingViewPrivate
 {
-    SchGUIDrawingCfg   *config;
+    GdkColor           background_color;
+    SchGUIConfig       *config;
     int                extents;
     SchGUICairoDrafter *drafter;
     SchDrawing         *drawing;
@@ -60,7 +57,7 @@ static void
 schgui_drawing_view_init(GTypeInstance *instance, gpointer g_class);
 
 static void
-schgui_drawing_view_set_config(SchGUIDrawingView *widget, SchGUIDrawingCfg *config);
+schgui_drawing_view_set_config(SchGUIDrawingView *widget, SchGUIConfig *config);
 
 static void
 schgui_drawing_view_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
@@ -101,27 +98,27 @@ schgui_drawing_view_append_shape(SchDrawing *drawing, SchShape *shape, SchGUIDra
 static void
 schgui_drawing_view_class_init(gpointer g_class, gpointer g_class_data)
 {
-    GObjectClass *object_class = G_OBJECT_CLASS(g_class);
+    GObjectClass *klasse = G_OBJECT_CLASS(g_class);
 
     g_type_class_add_private(g_class, sizeof(SchGUIDrawingViewPrivate));
 
-    object_class->get_property = schgui_drawing_view_get_property;
-    object_class->set_property = schgui_drawing_view_set_property;
+    klasse->get_property = schgui_drawing_view_get_property;
+    klasse->set_property = schgui_drawing_view_set_property;
 
     g_object_class_install_property(
-        object_class,
-        SCHGUI_DRAWING_VIEW_DRAFTER,
+        klasse,
+        SCHGUI_DRAWING_VIEW_CONFIG,
         g_param_spec_object(
-            "drafter",
-            "Drafter",
-            "Drafter",
-            G_TYPE_OBJECT,
-            G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
+            "config",
+            "Config",
+            "Config",
+            SCHGUI_TYPE_CONFIG,
+            G_PARAM_LAX_VALIDATION | G_PARAM_READABLE | G_PARAM_STATIC_STRINGS
             )
         );
 
     g_object_class_install_property(
-        object_class,
+        klasse,
         SCHGUI_DRAWING_VIEW_DRAWING,
         g_param_spec_object(
             "drawing",
@@ -133,7 +130,7 @@ schgui_drawing_view_class_init(gpointer g_class, gpointer g_class_data)
         );
 
     g_object_class_install_property(
-        object_class,
+        klasse,
         SCHGUI_DRAWING_VIEW_EXTENTS,
         g_param_spec_boolean(
             "extents",
@@ -178,6 +175,25 @@ schgui_drawing_view_configure_event_cb(GtkWidget *widget, GdkEventConfigure *eve
     }
 }
 
+SchGUIConfig*
+schgui_drawing_view_get_config(SchGUIDrawingView *widget)
+{
+    SchGUIConfig *config = NULL;
+    SchGUIDrawingViewPrivate *privat = SCHGUI_DRAWING_VIEW_GET_PRIVATE(widget);
+
+    if (privat != NULL)
+    {
+        config = privat->config;
+
+        if (config != NULL)
+        {
+            g_object_ref(config);
+        }
+    }
+
+    return config;
+}
+
 SchDrawing*
 schgui_drawing_view_get_drawing(SchGUIDrawingView *widget)
 {
@@ -206,8 +222,8 @@ schgui_drawing_view_get_property(GObject *object, guint property_id, GValue *val
     {
         switch (property_id)
         {
-            case SCHGUI_DRAWING_VIEW_DRAFTER:
-                g_value_set_object(value, privat->drafter);
+            case SCHGUI_DRAWING_VIEW_CONFIG:
+                g_value_set_object(value, privat->config);
                 break;
 
             case SCHGUI_DRAWING_VIEW_DRAWING:
@@ -231,7 +247,7 @@ schgui_drawing_view_realize_cb(GtkWidget *widget, gpointer user_data)
 
     if (privat != NULL)
     {
-        schgui_drawing_cfg_get_background_as_gdk_color(privat->config, &color);
+        color = privat->background_color;
     }
     else
     {
@@ -240,7 +256,7 @@ schgui_drawing_view_realize_cb(GtkWidget *widget, gpointer user_data)
         color.blue  = 0;
     }
 
-    gtk_widget_modify_bg(widget, GTK_STATE_NORMAL, &color); 
+    gtk_widget_modify_bg(widget, GTK_STATE_NORMAL, &color);
 }
 
 /*! \brief
@@ -307,18 +323,24 @@ schgui_drawing_view_init(GTypeInstance *instance, gpointer g_class)
 
     if (privat != NULL)
     {
+        SchGUIConfig *config = schgui_config_new();
+
+        g_debug("CONFIG %p", config);
+
         schgui_drawing_view_set_config(
             instance,
-            schgui_drawing_cfg_get_default_display()
+            config
             );
 
         privat->drafter = SCHGUI_CAIRO_DRAFTER(
             g_object_new(
                 SCHGUI_TYPE_CAIRO_DRAFTER,
-                "config", privat->config,
+                "config", schgui_config_get_config_drawing_display(config),
                 NULL
                 )
             );
+
+        g_object_unref(config);
     }
 
     g_signal_connect(
@@ -344,7 +366,38 @@ schgui_drawing_view_init(GTypeInstance *instance, gpointer g_class)
 }
 
 static void
-schgui_drawing_view_set_config(SchGUIDrawingView *widget, SchGUIDrawingCfg *config)
+schgui_drawing_view_set_background_color(SchGUIDrawingView *widget, GdkColor *color)
+{
+    SchGUIDrawingViewPrivate *privat = SCHGUI_DRAWING_VIEW_GET_PRIVATE(widget);
+
+    if (privat != NULL)
+    {
+        if (color != NULL)
+        {
+            privat->background_color = *color;
+        }
+        else
+        {
+            privat->background_color.red   = 0;
+            privat->background_color.green = 0;
+            privat->background_color.blue  = 0;
+        }
+
+        if (gtk_widget_get_realized(GTK_WIDGET(widget)))
+        {
+            gtk_widget_modify_bg(
+                widget,
+                GTK_STATE_NORMAL,
+                &(privat->background_color)
+                );
+        }
+
+        gtk_widget_queue_draw(GTK_WIDGET(widget));
+    }
+}
+
+static void
+schgui_drawing_view_set_config(SchGUIDrawingView *widget, SchGUIConfig *config)
 {
     SchGUIDrawingViewPrivate *privat = SCHGUI_DRAWING_VIEW_GET_PRIVATE(widget);
 
@@ -365,31 +418,6 @@ schgui_drawing_view_set_config(SchGUIDrawingView *widget, SchGUIDrawingCfg *conf
         gtk_widget_queue_draw(GTK_WIDGET(widget));
     }
 }
-
-
-void
-schgui_drawing_view_set_drafter(SchGUIDrawingView *widget, SchGUICairoDrafter *drafter)
-{
-    SchGUIDrawingViewPrivate *privat = SCHGUI_DRAWING_VIEW_GET_PRIVATE(widget);
-
-    if (privat != NULL)
-    {
-        if (privat->drafter != NULL)
-        {
-            g_object_unref(privat->drafter);
-        }
-
-        privat->drafter = drafter;
-
-        if (privat->drafter != NULL)
-        {
-            g_object_ref(privat->drafter);
-        }
-
-        gtk_widget_queue_draw(GTK_WIDGET(widget));
-    }
-}
-
 
 void
 schgui_drawing_view_set_drawing(SchGUIDrawingView *widget, SchDrawing *drawing)
@@ -432,10 +460,6 @@ schgui_drawing_view_set_property(GObject *object, guint property_id, const GValu
 {
     switch (property_id)
     {
-        case SCHGUI_DRAWING_VIEW_DRAFTER:
-            schgui_drawing_view_set_drafter(SCHGUI_DRAWING_VIEW(object), g_value_get_object(value));
-            break;
-
         case SCHGUI_DRAWING_VIEW_DRAWING:
             schgui_drawing_view_set_drawing(SCHGUI_DRAWING_VIEW(object), g_value_get_object(value));
             break;
@@ -473,7 +497,7 @@ schgui_drawing_view_zoom_extents(SchGUIDrawingView *widget)
         schgui_cairo_drafter_zoom_extents(privat->drafter, GTK_WIDGET(widget));
 
         privat->extents = TRUE;
-        g_object_notify(G_OBJECT(widget), "extents"); 
+        g_object_notify(G_OBJECT(widget), "extents");
 
         gtk_widget_queue_draw(GTK_WIDGET(widget));
     }

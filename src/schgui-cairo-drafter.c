@@ -24,23 +24,9 @@
 #include <math.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
- 
-#include "sch.h"
 
-#include "misc-object.h"
+#include "schgui.h"
 
-#include "schgui-drawing-cfg.h"
-
-#include "schgui-cairo-draw-item.h"
-#include "schgui-cairo-draw-list.h"
-
-#include "schgui-cairo-arc.h"
-#include "schgui-cairo-box.h"
-#include "schgui-cairo-circle.h"
-#include "schgui-cairo-line.h"
-
-#include "schgui-cairo-factory.h"
-#include "schgui-cairo-drafter.h"
 
 #define SCHGUI_CAIRO_DRAFTER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCHGUI_TYPE_CAIRO_DRAFTER,SchGUICairoDrafterPrivate))
 

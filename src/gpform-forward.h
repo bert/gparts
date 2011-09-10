@@ -29,6 +29,9 @@
 typedef struct _GPFormFactory GPFormFactory;
 typedef struct _GPFormFactoryClass GPFormFactoryClass;
 
+typedef struct _GPFormPMDialog GPFormPMDialog;
+typedef struct _GPFormPMDialogClass GPFormPMDialogClass;
+
 typedef struct _GPFormUICombo GPFormUICombo;
 typedef struct _GPFormUIComboClass GPFormUIComboClass;
 
@@ -43,4 +46,7 @@ typedef struct _GPFormUIImageClass GPFormUIImageClass;
 
 typedef struct _GPFormUILabel GPFormUILabel;
 typedef struct _GPFormUILabelClass GPFormUILabelClass;
+
+typedef struct _GPFormUIWidget GPFormUIWidget;
+typedef struct _GPFormUIWidgetInterface GPFormUIWidgetInterface;
 

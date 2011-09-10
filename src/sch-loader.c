@@ -440,8 +440,8 @@ static const struct PARAM arc_params[] =
 static const struct PARAM box_params[] =
 {
     { NULL,               1 },
-    { "x",                1 },
-    { "y",                1 },
+    { "corner-x",         1 },
+    { "corner-y",         1 },
     { "width",            1 },
     { "height",           1 },
     { "color",            1 },

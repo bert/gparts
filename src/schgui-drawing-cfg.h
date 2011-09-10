@@ -28,10 +28,6 @@
 #define SCHGUI_IS_DRAWING_CFG_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCHGUI_TYPE_DRAWING_CFG))
 #define SCHGUI_DRAWING_CFG_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCHGUI_TYPE_DRAWING_CFG,SchGUIDrawingCfgClass))
 
-typedef struct _SchGUIDrawingCfg SchGUIDrawingCfg;
-typedef struct _SchGUIDrawingCfgClass SchGUIDrawingCfgClass;
-typedef struct _SchGUIDrawingCfgColor SchGUIDrawingCfgColor;
-
 struct _SchGUIDrawingCfg
 {
     GObject parent;
@@ -42,25 +38,9 @@ struct _SchGUIDrawingCfgClass
     GObjectClass parent;
 };
 
-struct _SchGUIDrawingCfgColor
-{
-    double red;
-    double green;
-    double blue;
-    double alpha;
-};
-
+/*! \private */
 GType
 schgui_drawing_cfg_get_type(void);
-
-void
-schgui_drawing_cfg_get_bus_line_width(SchGUIDrawingCfg *cfg, double *width);
-
-void
-schgui_drawing_cfg_get_net_line_width(SchGUIDrawingCfg *cfg, double *width);
-
-void
-schgui_drawing_cfg_get_pin_line_width(SchGUIDrawingCfg *cfg, double *width);
 
 void
 schgui_drawing_cfg_get_output_line_width(SchGUIDrawingCfg *cfg, int shape_width, double *output_width);
@@ -75,10 +55,10 @@ schgui_drawing_cfg_get_output_line_width(SchGUIDrawingCfg *cfg, int shape_width,
 void
 schgui_drawing_cfg_disable_color(SchGUIDrawingCfg *config, int index);
 
-/*! \brief Get the configured background color 
+/*! \brief Get the configured background color
  *
  *  \param [in]  object This configuration
- *  \param [out] color  The color of the background 
+ *  \param [out] color  The color of the background
  */
 void
 schgui_drawing_cfg_get_background_as_gdk_color(GObject *object, GdkColor *color);
@@ -92,7 +72,7 @@ schgui_drawing_cfg_get_background_as_gdk_color(GObject *object, GdkColor *color)
  *  \return FALSE Shapes of this color index are disabled
  */
 int
-schgui_drawing_cfg_get_color(SchGUIDrawingCfg *config, int index, SchGUIDrawingCfgColor *color);
+schgui_drawing_cfg_get_color(SchGUIDrawingCfg *config, int index, MiscGUIColor *color);
 
 /*! \brief Get a color used for drawing schematic shapes
  *
@@ -144,4 +124,157 @@ schgui_drawing_cfg_set_color_by_gdk_color(SchGUIDrawingCfg *config, int index, c
  */
 void
 schgui_drawing_cfg_set_color_by_name(SchGUIDrawingCfg *config, int index, const char *color);
+
+
+
+
+
+/*! \brief Calculate the line width for a graphic shape
+ *
+ *  \public
+ *  \memberof _SchGUIDrawingCfg
+ *
+ *  \param [in,out] config This configuration
+ *  \param [in]     width  The line width specified by the graphic shape
+ *  \return                The line width to use for drawing the shape
+ */
+gdouble
+schgui_drawing_cfg_calcualte_line_width_graphic(const SchGUIDrawingCfg *config, gint width);
+
+/*! \brief Get the color for the background
+ *
+ *  \public
+ *  \memberof _SchGUIDrawingCfg
+ *
+ *  The caller must use miscgui_color_free on the returned pointer when
+ *  no longer needed.
+ *
+ *  \param [in,out] config This configuration
+ *  \return                The color to use for the background
+ */
+MiscGUIColor*
+schgui_drawing_cfg_get_color_background(const SchGUIDrawingCfg *config);
+
+/*! \brief Get the font string for text shapes
+ *
+ *  \public
+ *  \memberof _SchGUIDrawingCfg
+ *
+ *  The caller must use g_free on the returned string when no longer needed.
+ *
+ *  \param [in,out] config This configuration
+ *  \return                The font string for text shapes.
+ */
+gchar*
+schgui_drawing_cfg_get_font_string(const SchGUIDrawingCfg *config);
+
+/*! \brief Get the line width for bus shapes
+ *
+ *  \public
+ *  \memberof _SchGUIDrawingCfg
+ *
+ *  \param [in,out] config This configuration
+ *  \return                The line width for bus shapes
+ */
+gdouble
+schgui_drawing_cfg_get_line_width_bus(const SchGUIDrawingCfg *config);
+
+/*! \brief Get the minimum line width for graphic shapes
+ *
+ *  \public
+ *  \memberof _SchGUIDrawingCfg
+ *
+ *  \param [in,out] config This configuration
+ *  \return                The minimum line width for graphic shapes
+ */
+gdouble
+schgui_drawing_cfg_get_line_width_graphic_min(const SchGUIDrawingCfg *config);
+
+/*! \brief Get the line width for net shapes
+ *
+ *  \public
+ *  \memberof _SchGUIDrawingCfg
+ *
+ *  \param [in,out] config This configuration
+ *  \return                The line width for net shapes
+ */
+gdouble
+schgui_drawing_cfg_get_line_width_net(const SchGUIDrawingCfg *config);
+
+/*! \brief Get the line width for pin shapes
+ *
+ *  \public
+ *  \memberof _SchGUIDrawingCfg
+ *
+ *  \param [in,out] config This configuration
+ *  \return                The line width for pin shapes
+ */
+gdouble
+schgui_drawing_cfg_get_line_width_pin(const SchGUIDrawingCfg *config);
+
+/*! \brief Set the color for the background
+ *
+ *  \public
+ *  \memberof _SchGUIDrawingCfg
+ *
+ *  \param [in,out] config This configuration
+ *  \param [in]     color  The color to use for the background
+ */
+void
+schgui_drawing_cfg_set_color_background(SchGUIDrawingCfg *config, const MiscGUIColor *color);
+
+/*! \brief Set the font string for text shapes
+ *
+ *  \public
+ *  \memberof _SchGUIDrawingCfg
+ *
+ *  \param [in,out] config This configuration
+ *  \param [in]     width  The font string for text shapes
+ */
+void
+schgui_drawing_cfg_set_font_string(SchGUIDrawingCfg *config, const gchar *string);
+
+/*! \brief Set the line width for bus shapes
+ *
+ *  \public
+ *  \memberof _SchGUIDrawingCfg
+ *
+ *  \param [in,out] config This configuration
+ *  \param [in]     width  The line width for bus shapes
+ */
+void
+schgui_drawing_cfg_set_line_width_bus(SchGUIDrawingCfg *config, gdouble width);
+
+/*! \brief Set the minimum line width for graphic shapes
+ *
+ *  \public
+ *  \memberof _SchGUIDrawingCfg
+ *
+ *  \param [in,out] config This configuration
+ *  \param [in]     width  The minimum line width for graphic shapes
+ */
+void
+schgui_drawing_cfg_set_line_width_graphic_min(SchGUIDrawingCfg *config, gdouble width);
+
+/*! \brief Set the line width for net shapes
+ *
+ *  \public
+ *  \memberof _SchGUIDrawingCfg
+ *
+ *  \param [in,out] config This configuration
+ *  \param [in]     width  The line width for net shapes
+ */
+void
+schgui_drawing_cfg_set_line_width_net(SchGUIDrawingCfg *config, gdouble width);
+
+/*! \brief Set the line width for pin shapes
+ *
+ *  \public
+ *  \memberof _SchGUIDrawingCfg
+ *
+ *  \param [in,out] config This configuration
+ *  \param [in]     width  The line width for pin shapes
+ */
+void
+schgui_drawing_cfg_set_line_width_pin(SchGUIDrawingCfg *config, gdouble width);
 

@@ -18,23 +18,31 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \defgroup gpform Parts Manager Forms
+/*! \file gpform-pm-dialog.h
  */
 
-/*! \file gpform.h
+#define GPFORM_TYPE_PM_DIALOG (gpform_pm_dialog_get_type())
+#define GPFORM_PM_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),GPFORM_TYPE_PM_DIALOG,GPFormUIDialog))
+#define GPFORM_PM_DIALOG_CLASS(cls) (G_TYPE_CHECK_CLASS_CAST((cls),GPFORM_TYPE_PM_DIALOG,GPFormUIDialogClass))
+#define GPFORM_IS_PM_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj),GPFORM_TYPE_PM_DIALOG))
+#define GPFORM_IS_PM_DIALOG_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),GPFORM_TYPE_PM_DIALOG))
+#define GPFORM_PM_DIALOG_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),GPFORM_TYPE_PM_DIALOG,GPFormUIDialogClass))
+
+/*! \extends GObject
  */
+struct _GPFormPMDialog
+{
+    GObject parent;
+};
 
-#include <gtk/gtk.h>
+/*! \private
+ */
+struct _GPFormPMDialogClass
+{
+    GObjectClass parent;
+};
 
-#include "gpform-forward.h"
-
-#include "gpform-factory.h"
-
-#include "gpform-pm-dialog.h"
-#include "gpform-ui-combo.h"
-#include "gpform-ui-dialog.h"
-#include "gpform-ui-entry.h"
-#include "gpform-ui-image.h"
-#include "gpform-ui-label.h"
-#include "gpform-ui-widget.h"
+/*! \private */
+GType
+gpform_pm_dialog_get_type(void);
 

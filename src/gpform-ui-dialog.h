@@ -62,6 +62,17 @@ gpform_ui_dialog_get_type(void);
 gchar*
 gpform_ui_dialog_get_help_spec(const GPFormUIDialog *dialog);
 
+/*! \brief Get the model
+ *
+ *  The caller must use _object_unref on the returned pointer when
+ *  no longer needed.
+ *
+ *  \param [in,out] dialog This dialog
+ *  \return The presentation model for this dialog
+ */
+GPFormPMDialog*
+gpform_ui_dialog_get_model(const GPFormUIDialog *dialog);
+
 /*! \brief Set the model name
  *
  *  The caller must use g_free on the returned string when no longer needed.
@@ -97,7 +108,15 @@ gpform_ui_dialog_get_snapshot(const GPFormUIDialog* dialog);
  *  \param [in] model_name The specification for the help associated with this dialog
  */
 void
-gpform_ui_dialog_set_help_spec(const GPFormUIDialog *dialog, const gchar *help_spec);
+gpform_ui_dialog_set_help_spec(GPFormUIDialog *dialog, const gchar *help_spec);
+
+/*! \brief Set the model
+ *
+ *  \param [in,out] dialog This dialog
+ *  \param [in]     model  The presentation model for this dialog
+ */
+void
+gpform_ui_dialog_set_model(GPFormUIDialog *dialog, GPFormPMDialog *model);
 
 /*! \brief Set the model name
  *
@@ -105,5 +124,5 @@ gpform_ui_dialog_set_help_spec(const GPFormUIDialog *dialog, const gchar *help_s
  *  \param [in] model_name The name of the model associated with this dialog
  */
 void
-gpform_ui_dialog_set_model_name(const GPFormUIDialog *dialog, const gchar *model_name);
+gpform_ui_dialog_set_model_name(GPFormUIDialog *dialog, const gchar *model_name);
 

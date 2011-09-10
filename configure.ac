@@ -76,6 +76,15 @@ GTK_LIBS=`$PKG_CONFIG gtk+-2.0 --libs`
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 
+## XML 
+##
+LIBXML_VERSION=`$PKG_CONFIG libxml-2.0 --modversion`
+LIBXML_CFLAGS=`$PKG_CONFIG libxml-2.0 --cflags`
+LIBXML_LIBS=`$PKG_CONFIG libxml-2.0 --libs`
+AC_SUBST(LIBXML_CFLAGS)
+AC_SUBST(LIBXML_LIBS)
+
+
 ##  Guile
 ##
 AX_CHECK_GUILE([1.8.0])
@@ -188,6 +197,9 @@ AC_MSG_RESULT([
 
     GTK
         Installed Version        $GTK_VERSION
+
+    LIBXML
+        Installed Version        $LIBXML_VERSION
 
     Guile
         Installed Version        $GUILE_VERSION

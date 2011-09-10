@@ -67,4 +67,13 @@ sch_line_style_init(SchLineStyle *style)
     }
 }
 
+SchLineStyle*
+sch_line_style_new(void)
+{
+    SchLineStyle *style = (SchLineStyle*) g_malloc(sizeof(SchLineStyle));
+
+    sch_line_style_init(style);
+
+    return style;
+}
 

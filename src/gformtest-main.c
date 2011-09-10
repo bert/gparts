@@ -25,6 +25,7 @@
 
 #include "misc-object.h"
 
+#include "gpdata.h"
 #include "gpform.h"
 
 static void
@@ -47,7 +48,7 @@ int main(int argc, char* argv[])
 
     if (factory != NULL)
     {
-        dialog = gpform_factory_create_form(factory, "../xml/forms/inductor-add.xml");
+        dialog = gpform_factory_create_form(factory, "../xml/forms/arc-edit.xml");
     }
 
     if (dialog != NULL)
@@ -63,6 +64,8 @@ int main(int argc, char* argv[])
         gtk_widget_show_all(GTK_WIDGET(dialog));
 
         pixbuf = gpform_ui_dialog_get_snapshot(dialog);
+
+        gpform_ui_dialog_set_model(dialog, NULL);
     }
 
     if (pixbuf != NULL)
@@ -79,6 +82,15 @@ int main(int argc, char* argv[])
 
         g_object_unref(pixbuf);
     }
+
+
+    {
+        GPDataFactory *factory = gpdata_factory_new();
+
+        gpdata_factory_create_model(factory, "data-model.xml");
+    }
+
+
 
     gtk_main();
 

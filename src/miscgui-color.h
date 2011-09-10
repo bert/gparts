@@ -21,6 +21,8 @@
 /*! \file miscgui-color.h
  *
  *  \ingroup miscgui
+ *
+ *  The functionality in this module will be available in GTK 3.0.
  */
 
 #define MISCGUI_TYPE_COLOR (miscgui_color_get_type())
@@ -42,6 +44,7 @@ struct _MiscGUIColor
 
 /*! \brief Makes a copy of a line.
  *
+ *  \public
  *  \memberof _MiscGUIColor
  *
  *  \param [in] color The color to copy
@@ -52,6 +55,7 @@ miscgui_color_copy(const MiscGUIColor *color);
 
 /*! \brief Free a dynamically allocated color
  *
+ *  \public
  *  \memberof _MiscGUIColor
  *
  *  \param [in] color The color to free
@@ -65,10 +69,31 @@ miscgui_color_get_type(void);
 
 /*! \brief Initialize a color
  *
+ *  \public
  *  \memberof _MiscGUIColor
  *
  *  \param [in,out] color The color to initialize
  */
 void
 miscgui_color_init(MiscGUIColor *color);
+
+/*! \brief Allocate a new color
+ *
+ *  \public
+ *  \memberof _MiscGUIColor
+ *
+ *  \return A dynamically allocated color
+ */
+MiscGUIColor*
+miscgui_color_new(void);
+
+/*! \brief Allocate a new color given a name
+ *
+ *  \public
+ *  \memberof _MiscGUIColor
+ *
+ *  \return A dynamically allocated color
+ */
+MiscGUIColor*
+miscgui_color_new_from_name(const gchar *name);
 

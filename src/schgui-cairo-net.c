@@ -26,14 +26,9 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
- 
-#include "sch.h"
 
-#include "schgui-drawing-cfg.h"
+#include "schgui.h"
 
-#include "schgui-cairo-draw-item.h"
-
-#include "schgui-cairo-net.h"
 
 #define SCHGUI_CAIRO_NET_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCHGUI_TYPE_CAIRO_NET,SchGUICairoNetPrivate))
 
@@ -41,15 +36,15 @@ typedef struct _SchGUICairoNetPrivate SchGUICairoNetPrivate;
 
 struct _SchGUICairoNetPrivate
 {
-    double red;
-    double green;
-    double blue;
-    double alpha;
+    gdouble red;
+    gdouble green;
+    gdouble blue;
+    gdouble alpha;
 
-    double x[2];
-    double y[2];
+    gdouble x[2];
+    gdouble y[2];
 
-    double width;
+    gdouble line_width;
 
     int    solid;
     int    visible;
@@ -108,9 +103,9 @@ schgui_cairo_net_bounds(SchGUICairoDrawItem *item, cairo_t *cairo, GeomBounds *b
                 temp.max_y = privat->y[0];
             }
 
-            geom_bounds_expand(&temp, &temp, privat->width);
+            geom_bounds_expand(&temp, &temp, privat->line_width);
 
-            geom_bounds_union(bounds, bounds, &temp);            
+            geom_bounds_union(bounds, bounds, &temp);
         }
     }
 
@@ -141,7 +136,7 @@ schgui_cairo_net_draw(SchGUICairoDrawItem *item, cairo_t *cairo)
         {
             cairo_set_source_rgba(cairo, privat->red, privat->green, privat->blue, privat->alpha);
 
-            cairo_set_line_width(cairo, privat->width);
+            cairo_set_line_width(cairo, privat->line_width);
 
             cairo_move_to(cairo, privat->x[0], privat->y[0]);
             cairo_line_to(cairo, privat->x[1], privat->y[1]);
@@ -204,9 +199,8 @@ schgui_cairo_net_new(const SchNet *shape, SchGUIDrawingCfg *config)
     if (privat != NULL)
     {
         GeomLine              line;
-        SchGUIDrawingCfgColor color;
+        MiscGUIColor          color;
         int                   index;
-        double                item_width;
 
         sch_net_get_color(shape, &index);
 
@@ -217,9 +211,7 @@ schgui_cairo_net_new(const SchNet *shape, SchGUIDrawingCfg *config)
         privat->blue  = color.blue;
         privat->alpha = privat->visible ? 1.0 : 0.0;
 
-        schgui_drawing_cfg_get_net_line_width(config, &item_width);
-
-        privat->width = item_width;
+        privat->line_width = schgui_drawing_cfg_get_line_width_net(config);
 
         sch_net_get_line(shape, &line);
 

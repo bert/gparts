@@ -19,6 +19,8 @@
  */
 
 /*! \file sch-line-style.h
+ *
+ *  \ingroup sch
  */
 
 #define SCH_TYPE_LINE_STYLE (sch_line_style_get_type())
@@ -26,6 +28,10 @@
 
 typedef struct _SchLineStyle SchLineStyle;
 
+/*! \brief A boxed type for the style paramters of lines
+ *
+ *  \ingroup sch
+ */
 struct _SchLineStyle
 {
     int cap_style;
@@ -34,33 +40,49 @@ struct _SchLineStyle
     int dash_space;
 };
 
+/*! \private */
 GType
 sch_line_style_get_type(void);
 
 /*! \brief Make a copy of the SchLineStyle
  *
+ *  \memberof _SchLineStyle
+ *
  *  When no longer needed, the caller must call sch_line_style_free()
  *  on the returned pointer.
  *
  *  \param [in] style The SchLineStyle to be copied
- *  \return A pointer to the copied SchLineStyle 
+ *  \return A pointer to the copied SchLineStyle
  */
 SchLineStyle*
 sch_line_style_copy(const SchLineStyle *style);
 
 /*! \brief Free the memory associated with SchLineStyle
  *
+ *  \memberof _SchLineStyle
+ *
  *  When passing in a NULL pointer, this function does nothing.
  *
- *  \param [in] style The SchLineStyle to be freed 
+ *  \param [in] style The SchLineStyle to be freed
  */
 void
 sch_line_style_free(SchLineStyle *style);
 
 /*! \brief Initialize a SchLineStyle to default values
  *
+ *  \memberof _SchLineStyle
+ *
  *  \param [out] style The SchLineStyle to be initialized
  */
 void
 sch_line_style_init(SchLineStyle *style);
+
+/*! \brief Dynamically allocate a SchLineStyle with default values
+ *
+ *  \memberof _SchLineStyle
+ *
+ *  \return The dynamically allocated SchLineStyle
+ */
+SchLineStyle*
+sch_line_style_new(void);
 

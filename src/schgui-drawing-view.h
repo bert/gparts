@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file schgui_drawing_view.h
+/*! \file schgui-drawing-view.h
  */
 
 #define SCHGUI_TYPE_DRAWING_VIEW (schgui_drawing_view_get_type())
@@ -28,23 +28,37 @@
 #define SCHGUI_IS_DRAWING_VIEW_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCHGUI_TYPE_DRAWING_VIEW))
 #define SCHGUI_DRAWING_VIEW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCHGUI_TYPE_DRAWING_VIEW,SchGUIDrawingViewClass))
 
-typedef struct _SchGUIDrawingView SchGUIDrawingView;
-typedef struct _SchGUIDrawingViewClass SchGUIDrawingViewClass;
-
+/*! \extends GtkBin */
 struct _SchGUIDrawingView
 {
     GtkBin parent;
 };
 
+/*! \private */
 struct _SchGUIDrawingViewClass
 {
     GtkBinClass parent;
 };
 
+/*! \private */
 GType
 schgui_drawing_view_get_type(void);
 
+/*! \brief Get the configuration for this view
+ *
+ *  \public
+ *  \memberof _SchGUIDrawingView
+ *
+ *  \param [in] widget This widget.
+ *  \return The drawing
+ */
+SchGUIConfig*
+schgui_drawing_view_get_config(SchGUIDrawingView *widget);
+
 /*! \brief Get the drawing shown in this view
+ *
+ *  \public
+ *  \memberof _SchGUIDrawingView
  *
  *  \param [in] widget This widget.
  *  \return The drawing
@@ -52,18 +66,10 @@ schgui_drawing_view_get_type(void);
 SchDrawing*
 schgui_drawing_view_get_drawing(SchGUIDrawingView *widget);
 
-/*! \brief Set a new drafter fo this widget
- *
- *  Drafters know 'how' to draw the contents of the window. Currently, the drafter
- *  cannot be changed.
- *
- *  \param [in] widget This widget.
- *  \param [in] drafter A new drafter for this widget.
- */
-void
-schgui_drawing_view_set_drafter(SchGUIDrawingView *widget, SchGUICairoDrafter *drafter);
-
 /*! \brief Set the contents of the window to a new drawing.
+ *
+ *  \public
+ *  \memberof _SchGUIDrawingView
  *
  *  \param [in] widget This widget.
  *  \param [in] drawing The new drawing to show in the window.
@@ -72,6 +78,9 @@ void
 schgui_drawing_view_set_drawing(SchGUIDrawingView *widget, SchDrawing *drawing);
 
 /*! \brief Enlarges the drawing to fit the widget.
+ *
+ *  \public
+ *  \memberof _SchGUIDrawingView
  *
  *  \param [in] widget This widget.
  */

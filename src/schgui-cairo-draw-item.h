@@ -30,9 +30,6 @@
 #define SCHGUI_IS_CAIRO_DRAW_ITEM_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCHGUI_TYPE_CAIRO_DRAW_ITEM))
 #define SCHGUI_CAIRO_DRAW_ITEM_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCHGUI_TYPE_CAIRO_DRAW_ITEM,SchGUICairoDrawItemClass))
 
-typedef struct _SchGUICairoDrawItem SchGUICairoDrawItem;
-typedef struct _SchGUICairoDrawItemClass SchGUICairoDrawItemClass;
-
 struct _SchGUICairoDrawItem
 {
     GObject parent;
@@ -61,7 +58,7 @@ schgui_cairo_draw_item_get_type(void);
  *  NOTES
  *  The function cairo_stroke_extents() ignores the current transformation
  *  matrix. So, the current transformation matrix cannot be used to make
- *  drawing item coordinates relative. As a result, all drawing items use 
+ *  drawing item coordinates relative. As a result, all drawing items use
  *  absolute user coordinates.
  *
  *  \param [in]     item   The drawing item
@@ -71,7 +68,7 @@ schgui_cairo_draw_item_get_type(void);
 void
 schgui_cairo_draw_item_bounds(SchGUICairoDrawItem *item, cairo_t *cairo, GeomBounds *bounds);
 
-/*! \brief Draw this item ti the given Cairo context 
+/*! \brief Draw this item ti the given Cairo context
  *
  *  \param [in] item  The drawing item
  *  \param [in] cairo The cairo context to draw upon
@@ -87,7 +84,7 @@ void
 schgui_cairo_draw_item_mirror_y(SchGUICairoDrawItem *item);
 
 
-/*! \brief Rotate the drawing item 
+/*! \brief Rotate the drawing item
  *
  *  \param [in] item  The drawing item
  *  \param [in] dt    The angle, in radians, to rotate by
@@ -95,7 +92,7 @@ schgui_cairo_draw_item_mirror_y(SchGUICairoDrawItem *item);
 void
 schgui_cairo_draw_item_rotate(SchGUICairoDrawItem *item, double dt);
 
-/*! \brief Translate the drawing item 
+/*! \brief Translate the drawing item
  *
  *  \param [in] item The drawing item
  *  \param [in] dx   The distance to translate on the x axis

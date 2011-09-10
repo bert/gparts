@@ -69,3 +69,13 @@ sch_fill_style_init(SchFillStyle *style)
     }
 }
 
+SchFillStyle*
+sch_fill_style_new(void)
+{
+    SchFillStyle *style = (SchFillStyle*) g_malloc(sizeof(SchFillStyle));
+
+    sch_fill_style_init(style);
+
+    return style;
+}
+

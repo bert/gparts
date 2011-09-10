@@ -28,9 +28,6 @@
 #define SCHGUI_IS_CAIRO_ARC_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCHGUI_TYPE_CAIRO_ARC))
 #define SCHGUI_CAIRO_ARC_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCHGUI_TYPE_CAIRO_ARC,SchGUICairoArcClass))
 
-typedef struct _SchGUICairoArc SchGUICairoArc;
-typedef struct _SchGUICairoArcClass SchGUICairoArcClass;
-
 struct _SchGUICairoArc
 {
     SchGUICairoDrawItem parent;

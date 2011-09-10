@@ -18,23 +18,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \defgroup gpform Parts Manager Forms
+/*! \defgroup gpdata Parts Manager Data Models
  */
 
-/*! \file gpform.h
+/*! \file gpdata.h
  */
 
-#include <gtk/gtk.h>
+#include <glib-object.h>
 
-#include "gpform-forward.h"
+#include "gpdata-forward.h"
 
-#include "gpform-factory.h"
+#include "gpdata-factory.h"
 
-#include "gpform-pm-dialog.h"
-#include "gpform-ui-combo.h"
-#include "gpform-ui-dialog.h"
-#include "gpform-ui-entry.h"
-#include "gpform-ui-image.h"
-#include "gpform-ui-label.h"
-#include "gpform-ui-widget.h"
+#include "gpdata-tm-column.h"
+#include "gpdata-tm-table.h"
 

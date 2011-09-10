@@ -26,9 +26,7 @@
 #include <libguile.h>
 #include <gdk/gdk.h>
 
-#include "sch.h"
-
-#include "schgui-drawing-cfg.h"
+#include "schgui.h"
 
 #include "scmcfg-dirs.h"
 

@@ -339,6 +339,58 @@ sch_net_new(const SchConfig *config)
         ));
 }
 
+void
+sch_net_set_x0(SchNet *shape, gint x0)
+{
+    SchNetPrivate *privat = SCH_NET_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        privat->line.x[0] = x0;
+
+        g_object_notify(G_OBJECT(shape), "x0");
+    }
+}
+
+void
+sch_net_set_x1(SchNet *shape, gint x1)
+{
+    SchNetPrivate *privat = SCH_NET_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        privat->line.x[1] = x1;
+
+        g_object_notify(G_OBJECT(shape), "x1");
+    }
+}
+
+void
+sch_net_set_y0(SchNet *shape, gint y0)
+{
+    SchNetPrivate *privat = SCH_NET_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        privat->line.y[0] = y0;
+
+        g_object_notify(G_OBJECT(shape), "y0");
+    }
+}
+
+void
+sch_net_set_y1(SchNet *shape, gint y1)
+{
+    SchNetPrivate *privat = SCH_NET_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        privat->line.y[1] = y1;
+
+        g_object_notify(G_OBJECT(shape), "y1");
+    }
+}
+
 static void
 sch_net_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream, GError **error)
 {

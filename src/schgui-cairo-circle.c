@@ -26,14 +26,9 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
- 
-#include "sch.h"
 
-#include "schgui-drawing-cfg.h"
+#include "schgui.h"
 
-#include "schgui-cairo-draw-item.h"
-
-#include "schgui-cairo-circle.h"
 
 #define SCHGUI_CAIRO_CIRCLE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCHGUI_TYPE_CAIRO_CIRCLE,SchGUICairoCirclePrivate))
 
@@ -194,7 +189,7 @@ schgui_cairo_circle_new(const SchCircle *shape, SchGUIDrawingCfg *config)
     if (privat != NULL)
     {
         GeomCircle            circle;
-        SchGUIDrawingCfgColor color;
+        MiscGUIColor          color;
         SchFillStyle          fill_style;
         int                   index;
         double                item_width;

@@ -28,9 +28,6 @@
 #define SCHGUI_IS_CAIRO_PIN_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCHGUI_TYPE_CAIRO_PIN))
 #define SCHGUI_CAIRO_PIN_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCHGUI_TYPE_CAIRO_PIN,SchGUICairoPinClass))
 
-typedef struct _SchGUICairoPin SchGUICairoPin;
-typedef struct _SchGUICairoPinClass SchGUICairoPinClass;
-
 struct _SchGUICairoPin
 {
     SchGUICairoDrawItem parent;

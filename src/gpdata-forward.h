@@ -18,23 +18,20 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \defgroup gpform Parts Manager Forms
+/*! \file gpdata-forward.h
+ *
+ *  \brief Forward declarations
+ *
+ *  This file contains all typedefs for structures related to GObjects in the
+ *  parts manager data model package.
  */
 
-/*! \file gpform.h
- */
+typedef struct _GPDataFactory GPDataFactory;
+typedef struct _GPDataFactoryClass GPDataFactoryClass;
 
-#include <gtk/gtk.h>
+typedef struct _GPDataTMColumn GPDataTMColumn;
+typedef struct _GPDataTMColumnClass GPDataTMColumnClass;
 
-#include "gpform-forward.h"
-
-#include "gpform-factory.h"
-
-#include "gpform-pm-dialog.h"
-#include "gpform-ui-combo.h"
-#include "gpform-ui-dialog.h"
-#include "gpform-ui-entry.h"
-#include "gpform-ui-image.h"
-#include "gpform-ui-label.h"
-#include "gpform-ui-widget.h"
+typedef struct _GPDataTMTable GPDataTMTable;
+typedef struct _GPDataTMTableClass GPDataTMTableClass;
 

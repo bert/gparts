@@ -26,15 +26,29 @@
 
 #include <gtk/gtk.h>
 
-#include "gpform-forward.h"
+#include "sch.h"
+#include "miscgui.h"
 
-#include "gpform-factory.h"
+#include "schgui-forward.h"
 
-#include "gpform-pm-dialog.h"
-#include "gpform-ui-combo.h"
-#include "gpform-ui-dialog.h"
-#include "gpform-ui-entry.h"
-#include "gpform-ui-image.h"
-#include "gpform-ui-label.h"
-#include "gpform-ui-widget.h"
+#include "schgui-config.h"
+
+#include "schgui-drawing-cfg.h"
+#include "schgui-cairo-drafter.h"
+#include "schgui-drawing-view.h"
+
+#include "schgui-cairo-draw-item.h"
+#include "schgui-cairo-draw-list.h"
+
+#include "schgui-cairo-arc.h"
+#include "schgui-cairo-box.h"
+#include "schgui-cairo-bus.h"
+#include "schgui-cairo-circle.h"
+#include "schgui-cairo-line.h"
+#include "schgui-cairo-net.h"
+#include "schgui-cairo-path.h"
+#include "schgui-cairo-pin.h"
+#include "schgui-cairo-text.h"
+
+#include "schgui-cairo-factory.h"
 

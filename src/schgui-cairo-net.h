@@ -28,9 +28,6 @@
 #define SCHGUI_IS_CAIRO_NET_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCHGUI_TYPE_CAIRO_NET))
 #define SCHGUI_CAIRO_NET_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCHGUI_TYPE_CAIRO_NET,SchGUICairoNetClass))
 
-typedef struct _SchGUICairoNet SchGUICairoNet;
-typedef struct _SchGUICairoNetClass SchGUICairoNetClass;
-
 struct _SchGUICairoNet
 {
     SchGUICairoDrawItem parent;

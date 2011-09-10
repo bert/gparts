@@ -26,25 +26,9 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
- 
-#include "sch.h"
 
-#include "schgui-drawing-cfg.h"
+#include "schgui.h"
 
-#include "schgui-cairo-draw-item.h"
-#include "schgui-cairo-draw-list.h"
-
-#include "schgui-cairo-arc.h"
-#include "schgui-cairo-box.h"
-#include "schgui-cairo-bus.h"
-#include "schgui-cairo-circle.h"
-#include "schgui-cairo-line.h"
-#include "schgui-cairo-net.h"
-#include "schgui-cairo-path.h"
-#include "schgui-cairo-pin.h"
-#include "schgui-cairo-text.h"
-
-#include "schgui-cairo-factory.h"
 
 #define SCHGUI_CAIRO_FACTORY_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCHGUI_TYPE_CAIRO_FACTORY,SchGUICairoFactoryPrivate))
 

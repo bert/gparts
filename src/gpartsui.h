@@ -31,11 +31,7 @@
 
 #include "miscui.h"
 
-#include "sch.h"
-
-#include "schgui-drawing-cfg.h"
-#include "schgui-cairo-drafter.h"
-#include "schgui-drawing-view.h"
+#include "schgui.h"
 
 #include "gparts.h"
 

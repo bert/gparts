@@ -28,9 +28,6 @@
 #define SCHGUI_IS_CAIRO_TEXT_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCHGUI_TYPE_CAIRO_TEXT))
 #define SCHGUI_CAIRO_TEXT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCHGUI_TYPE_CAIRO_TEXT,SchGUICairoTextClass))
 
-typedef struct _SchGUICairoText SchGUICairoText;
-typedef struct _SchGUICairoTextClass SchGUICairoTextClass;
-
 struct _SchGUICairoText
 {
     SchGUICairoDrawItem parent;

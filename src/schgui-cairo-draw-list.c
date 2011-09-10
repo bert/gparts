@@ -24,13 +24,8 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
- 
-#include "misc-object.h"
 
-#include "sch.h"
-
-#include "schgui-cairo-draw-item.h"
-#include "schgui-cairo-draw-list.h"
+#include "schgui.h"
 
 #define SCHGUI_CAIRO_DRAW_LIST_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCHGUI_TYPE_CAIRO_DRAW_LIST,SchGUICairoDrawListPrivate))
 

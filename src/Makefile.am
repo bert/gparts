@@ -92,12 +92,13 @@ gsymview_LDADD = $(GTK_LIBS) libgeom.la libmisc.la libsch.la libschgui.la libscm
 gformtest_SOURCES = \
 	gformtest-main.c
 gformtest_CFLAGS = $(AM_CFLAGS) $(GTK_CFLAGS) -shared -rdynamic
-gformtest_LDADD = $(GTK_LIBS) libmisc.la libgpform.la
+gformtest_LDADD = $(GTK_LIBS) libmisc.la libgpform.la libgpdata.la
 
 
 
 noinst_LTLIBRARIES = \
 	libgeom.la \
+	libgpdata.la \
 	libgpform.la \
 	libmisc.la \
 	libmiscgui.la \
@@ -215,6 +216,7 @@ libschgui_la_SOURCES = \
 	schgui-cairo-pin.c \
 	schgui-cairo-text.c \
 	schgui-clipboard.c \
+	schgui-config.c \
 	schgui-drawing-cfg.c \
 	schgui-drawing-view.c
 libschgui_la_CFLAGS = -Wall $(AM_CFLAGS) $(GTK_CFLAGS)
@@ -235,25 +237,44 @@ libgeom_la_CFLAGS = -Wall $(AM_CFLAGS) $(GLIB_CFLAGS)
 libgeom_la_LIBADD = $(GLIB_LIBS)
 
 #
+# This library contains code for data models
+#
+libgpdata_la_SOURCES = \
+	gpdata-factory.c \
+	gpdata-tm-column.c \
+        gpdata-tm-table.c
+libgpdata_la_CFLAGS = -Wall $(AM_CFLAGS) $(GLIB_CFLAGS) $(LIBXML_CFLAGS)
+libgpdata_la_LIBADD = $(GLIB_LIBS) $(LIBXML_LIBS) libmisc.la
+
+#
 # This library contains UI elements for data entry.
 #
 libgpform_la_SOURCES = \
 	gpform-factory.c \
+	gpform-pm-dialog.c \
 	gpform-ui-combo.c \
 	gpform-ui-dialog.c \
 	gpform-ui-entry.c \
 	gpform-ui-image.c \
-	gpform-ui-label.c
+	gpform-ui-label.c \
+	gpform-ui-widget.c
 libgpform_la_CFLAGS = -Wall $(AM_CFLAGS) $(GTK_CFLAGS)
 libgpform_la_LIBADD = $(GTK_LIBS) libmisc.la
 
-
+#
+# This library contains miscellaneous funtionality that could
+# be used by both command line and GUI applications.
+#
 libmisc_la_SOURCES = \
 	misc-macro.c \
 	misc-object.c
 libmisc_la_CFLAGS = -Wall $(AM_CFLAGS) $(GLIB_CFLAGS)
 libmisc_la_LIBADD = $(GLIB_LIBS)
 
+#
+# This library contains miscellaneous funtionality that would
+# generally be used by GUI applications.
+#
 libmiscgui_la_SOURCES = \
 	miscgui-color.c
 libmiscgui_la_CFLAGS = -Wall $(AM_CFLAGS) $(GTK_CFLAGS)

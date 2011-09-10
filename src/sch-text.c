@@ -96,6 +96,7 @@ sch_text_write(SchShape *shape, SchFileFormat2 *format, SchOutputStream *stream,
 static void
 sch_text_class_init(gpointer g_class, gpointer g_class_data)
 {
+    GError *error = NULL;
     GObjectClass *object_class = G_OBJECT_CLASS(g_class);
     SchTextClass *klasse = SCH_TEXT_CLASS(g_class);
 
@@ -236,6 +237,20 @@ sch_text_class_init(gpointer g_class, gpointer g_class_data)
             G_PARAM_LAX_VALIDATION | G_PARAM_READABLE | G_PARAM_STATIC_STRINGS
             )
         );
+
+    klasse->regex = g_regex_new(
+        "^((?:[ ]*[^= ]+)*)=([^ ].*)",
+        G_REGEX_DOTALL,
+        0,
+        &error
+        );
+
+    if (error != NULL)
+    {
+        g_critical("g_regex_new: %s", error->message);
+
+        g_error_free(error);
+    }
 }
 
 SchText*
@@ -365,6 +380,64 @@ sch_text_get_alignment(const SchText *text)
     return 0;
 }
 
+gchar*
+sch_text_get_attribute_name(const SchText *shape)
+{
+    gchar *name = NULL;
+
+    if (shape != NULL)
+    {
+        SchTextClass *klasse = SCH_TEXT_GET_CLASS(shape);
+
+        if ((klasse != NULL) && (klasse->regex != NULL))
+        {
+            GMatchInfo *match_info;
+            gchar *string = sch_text_get_string(shape);
+
+            g_regex_match(klasse->regex, string, 0, &match_info);
+
+            if (g_match_info_matches(match_info))
+            {
+                name = g_match_info_fetch(match_info, 1);
+            }
+
+            g_match_info_free(match_info);
+            g_free(string);
+        }
+    }
+
+    return name;
+}
+
+gchar*
+sch_text_get_attribute_value(const SchText *shape)
+{
+    gchar *value = NULL;
+
+    if (shape != NULL)
+    {
+        SchTextClass *klasse = SCH_TEXT_GET_CLASS(shape);
+
+        if ((klasse != NULL) && (klasse->regex != NULL))
+        {
+            GMatchInfo *match_info;
+            gchar *string = sch_text_get_string(shape);
+
+            g_regex_match(klasse->regex, string, 0, &match_info);
+
+            if (g_match_info_matches(match_info))
+            {
+                value = g_match_info_fetch(match_info, 2);
+            }
+
+            g_match_info_free(match_info);
+            g_free(string);
+        }
+    }
+
+    return value;
+}
+
 int
 sch_text_get_color(const SchText *shape)
 {
@@ -474,6 +547,33 @@ sch_text_get_show(const SchText *shape)
     }
 
     return show;
+}
+
+gchar*
+sch_text_get_shown_string(const SchText *text)
+{
+    SchTextPrivate *privat = SCH_TEXT_GET_PRIVATE(text);
+    gchar *string = NULL;
+
+    if (privat != NULL)
+    {
+        switch (privat->show_name_value)
+        {
+            case SCH_TEXT_SHOW_VALUE:
+                string = sch_text_get_attribute_value(text);
+                break;
+
+            case SCH_TEXT_SHOW_NAME:
+                string = sch_text_get_attribute_name(text);
+                break;
+
+            case SCH_TEXT_SHOW_ALL:
+            default:
+                string = sch_text_get_string(text);
+        }
+    }
+
+    return string;
 }
 
 char*

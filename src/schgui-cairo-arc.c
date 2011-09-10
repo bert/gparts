@@ -26,14 +26,9 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
- 
-#include "sch.h"
 
-#include "schgui-drawing-cfg.h"
+#include "schgui.h"
 
-#include "schgui-cairo-draw-item.h"
-
-#include "schgui-cairo-arc.h"
 
 #define SCHGUI_CAIRO_ARC_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCHGUI_TYPE_CAIRO_ARC,SchGUICairoArcPrivate))
 
@@ -41,10 +36,7 @@ typedef struct _SchGUICairoArcPrivate SchGUICairoArcPrivate;
 
 struct _SchGUICairoArcPrivate
 {
-    double red;
-    double green;
-    double blue;
-    double alpha;
+    MiscGUIColor color;
 
     double center_x;
     double center_y;
@@ -93,10 +85,10 @@ schgui_cairo_arc_bounds(SchGUICairoDrawItem *item, cairo_t *cairo, GeomBounds *b
             double radians0 = geom_angle_radians(privat->start);
             double radians1 = geom_angle_radians(privat->start + privat->sweep);
 
-            double x0 = privat->center_x + privat->radius * cos(radians0);    
-            double y0 = privat->center_y + privat->radius * sin(radians0);    
+            double x0 = privat->center_x + privat->radius * cos(radians0);
+            double y0 = privat->center_y + privat->radius * sin(radians0);
 
-            double x1 = privat->center_x + privat->radius * cos(radians1);    
+            double x1 = privat->center_x + privat->radius * cos(radians1);
             double y1 = privat->center_y + privat->radius * sin(radians1);
 
             double start;
@@ -183,7 +175,13 @@ schgui_cairo_arc_draw(SchGUICairoDrawItem *item, cairo_t *cairo)
 
         if (privat != NULL)
         {
-            cairo_set_source_rgba(cairo, privat->red, privat->green, privat->blue, privat->alpha);
+            cairo_set_source_rgba(
+                cairo,
+                privat->color.red,
+                privat->color.green,
+                privat->color.blue,
+                privat->color.alpha
+                );
 
             cairo_set_line_width(cairo, privat->width);
 
@@ -248,7 +246,7 @@ schgui_cairo_arc_mirror_y(SchGUICairoDrawItem *item)
     {
         privat->center_x = -privat->center_x;
 
-        privat->start = privat->start + M_PI; 
+        privat->start = privat->start + M_PI;
     }
 }
 
@@ -262,22 +260,22 @@ schgui_cairo_arc_new(const SchArc *shape, SchGUIDrawingCfg *config)
 
     if (privat != NULL)
     {
-        GeomArc               arc;
-        SchGUIDrawingCfgColor color;
-        int                   index;
-        double                item_width;
-        int                   shape_width;
+        GeomArc      arc;
+        MiscGUIColor color;
+        int          index;
+        double       item_width;
+        int          shape_width;
 
-        sch_arc_get_color(shape, &index);
+        index = sch_arc_get_color(shape);
 
         privat->visible = schgui_drawing_cfg_get_color(config, index, &color);
 
-        privat->red   = color.red;
-        privat->green = color.green;
-        privat->blue  = color.blue;
-        privat->alpha = privat->visible ? 1.0 : 0.0;
+        privat->color.red   = color.red;
+        privat->color.green = color.green;
+        privat->color.blue  = color.blue;
+        privat->color.alpha = privat->visible ? 1.0 : 0.0;
 
-        sch_arc_get_line_width(shape, &shape_width);
+        shape_width = sch_arc_get_line_width(shape);
 
         schgui_drawing_cfg_get_output_line_width(config, shape_width, &item_width);
 

@@ -28,9 +28,6 @@
 #define SCHGUI_IS_CAIRO_BUS_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCHGUI_TYPE_CAIRO_BUS))
 #define SCHGUI_CAIRO_BUS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCHGUI_TYPE_CAIRO_BUS,SchGUICairoBusClass))
 
-typedef struct _SchGUICairoBus SchGUICairoBus;
-typedef struct _SchGUICairoBusClass SchGUICairoBusClass;
-
 struct _SchGUICairoBus
 {
     SchGUICairoDrawItem parent;

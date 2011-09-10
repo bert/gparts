@@ -267,20 +267,18 @@ sch_bus_set_property(GObject *object, guint property_id, const GValue *value, GP
     }
 }
 
-void
-sch_bus_get_color(const SchBus *shape, int *index)
+gint
+sch_bus_get_color(const SchBus *shape)
 {
-    if (index != NULL)
+    gint index = SCH_BUS_DEFAULT_COLOR;
+    SchBusPrivate *privat = SCH_BUS_GET_PRIVATE(shape);
+
+    if (privat != NULL)
     {
-        SchBusPrivate *privat = SCH_BUS_GET_PRIVATE(shape);
-
-        *index = SCH_BUS_DEFAULT_COLOR;
-
-        if (privat != NULL)
-        {
-            *index = privat->color;
-        }
+        index = privat->color;
     }
+
+    return index;
 }
 
 void
@@ -309,6 +307,74 @@ sch_bus_new(const SchConfig *config)
         "color", sch_config_get_bus_color(config),
         NULL
         ));
+}
+
+void
+sch_bus_set_line(SchBus *shape, const GeomLine *line)
+{
+    SchBusPrivate *privat = SCH_BUS_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        privat->line = *line;
+
+        g_object_notify(G_OBJECT(shape), "x0");
+        g_object_notify(G_OBJECT(shape), "x1");
+        g_object_notify(G_OBJECT(shape), "y0");
+        g_object_notify(G_OBJECT(shape), "y1");
+    }
+}
+
+void
+sch_bus_set_x0(SchBus *shape, gint x0)
+{
+    SchBusPrivate *privat = SCH_BUS_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        privat->line.x[0] = x0;
+
+        g_object_notify(G_OBJECT(shape), "x0");
+    }
+}
+
+void
+sch_bus_set_x1(SchBus *shape, gint x1)
+{
+    SchBusPrivate *privat = SCH_BUS_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        privat->line.x[1] = x1;
+
+        g_object_notify(G_OBJECT(shape), "x1");
+    }
+}
+
+void
+sch_bus_set_y0(SchBus *shape, gint y0)
+{
+    SchBusPrivate *privat = SCH_BUS_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        privat->line.y[0] = y0;
+
+        g_object_notify(G_OBJECT(shape), "y0");
+    }
+}
+
+void
+sch_bus_set_y1(SchBus *shape, gint y1)
+{
+    SchBusPrivate *privat = SCH_BUS_GET_PRIVATE(shape);
+
+    if (privat != NULL)
+    {
+        privat->line.y[1] = y1;
+
+        g_object_notify(G_OBJECT(shape), "y1");
+    }
 }
 
 static void

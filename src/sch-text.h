@@ -56,53 +56,97 @@ struct _SchText
     SchShape parent;
 };
 
-/*! \private
- */
+/*! \private */
 struct _SchTextClass
 {
     SchShapeClass parent;
+
+    GRegex *regex;
 };
 
+/*! \private */
 GType
 sch_text_get_type(void);
 
 /*! \brief Make a deep copy of the given text object
  *
+ *  \public
+ *  \memberof _SchText
  *
- *  \param [in] text The text object to clone
+ *  \param [in] shape The text object to clone
  *  \return A deep copy of the given text object
  */
 SchText*
-sch_text_clone(const SchText *text);
+sch_text_clone(const SchText *shape);
 
 /*! \brief Get the alignment of the text
  *
+ *  \public
+ *  \memberof _SchText
  *
- *  \param [in] text The text object
+ *  \param [in] shape The text object
  *  \return The alignment of the text
  */
 int
-sch_text_get_alignment(const SchText *text);
+sch_text_get_alignment(const SchText *shape);
 
 /*! \brief Get the angle of the text
  *
+ *  \public
+ *  \memberof _SchText
  *
- *  \param [in] text The text object
+ *  \param [in] shape The text object
  *  \return The angle of the text
  */
 int
-sch_text_get_angle(const SchText *text);
+sch_text_get_angle(const SchText *shape);
+
+/*! \brief Get the attribute name 
+ *
+ *  \public
+ *  \memberof _SchText
+ *
+ *  Get the attribute name for this text object. If this text object
+ *  does not represent an attribute, this function returns NULL.
+ *  When no longer needed, call g_free() on the returned string.
+ *
+ *  \param [in] shape The text object
+ *  \return The attribute name 
+ */
+gchar*
+sch_text_get_attribute_name(const SchText *shape);
+
+/*! \brief Get the attribute value
+ *
+ *  \public
+ *  \memberof _SchText
+ *
+ *  Get the attribute value for this text object. If this text object
+ *  does not represent an attribute, this function returns NULL.
+ *  When no longer needed, call g_free() on the returned string.
+ *
+ *  \param [in] shape The text object
+ *  \return The attribute value 
+ */
+gchar*
+sch_text_get_attribute_value(const SchText *shape);
 
 /*! \brief Get the color of the text
  *
+ *  \public
+ *  \memberof _SchText
  *
- *  \param [in] text The text object
+ *  \param [in] shape The text object
  *  \return The color of the text
  */
 int
 sch_text_get_color(const SchText *shape);
 
 /*! \brief Get the content of the text
+ *
+ *  \deprecated Use get/set string instead
+ *  \public
+ *  \memberof _SchText
  *
  *  When no longer needed, call g_objectunref() on the returned pointer.
  *
@@ -112,10 +156,13 @@ sch_text_get_color(const SchText *shape);
 SchMultiline*
 sch_text_get_multiline(const SchText *text);
 
+
 /*! \brief Get the portion of attributes to show
  *
+ *  \public
+ *  \memberof _SchText
  *
- *  \param [in] text The text object
+ *  \param [in] shape The text object
  *  \return The portion of attributes to show
  */
 int
@@ -123,27 +170,34 @@ sch_text_get_show(const SchText *shape);
 
 /*! \brief Get the point size of the text
  *
+ *  \public
+ *  \memberof _SchText
  *
- *  \param [in] text The text object
+ *  \param [in] shape The text object
  *  \return The point size of the text
  */
 int
-sch_text_get_size(const SchText *text);
+sch_text_get_size(const SchText *shape);
 
 /*! \brief Get all he text as one string
  *
+ *  \public
+ *  \memberof _SchText
+ *
  *  When no longer needed, call g_free() on the returned string.
  *
- *  \param [in] text he text object
+ *  \param [in] shape The text object
  *  \return All the text as one string
  */
 char*
-sch_text_get_string(const SchText *text);
+sch_text_get_string(const SchText *shape);
 
 /*! \brief Get the visiblility of the text
  *
+ *  \public
+ *  \memberof _SchText
  *
- *  \param [in] text The text object
+ *  \param [in] shape The text object
  *  \return zero The text is invisible
  *  \return non-zero The text is visible
  */
@@ -152,23 +206,30 @@ sch_text_get_visible(const SchText *shape);
 
 /*! \brief Get the x coordinate of the text insertion point
  *
+ *  \public
+ *  \memberof _SchText
  *
- *  \param [in] text The text object
+ *  \param [in] shape The text object
  *  \return The x coordinate of the text insertion point
  */
 int
-sch_text_get_x(const SchText *text);
+sch_text_get_x(const SchText *shape);
 
 /*! \brief Get the y coordinate of the text insertion point
  *
+ *  \public
+ *  \memberof _SchText
  *
- *  \param [in] text The text object
+ *  \param [in] shape The text object
  *  \return The y coordinate of the text insertion point
  */
 int
-sch_text_get_y(const SchText *text);
+sch_text_get_y(const SchText *shape);
 
 /*! \brief Create a text object
+ *
+ *  \public
+ *  \memberof _SchText
  *
  *  \param [in] config The configuration
  *  \return The text object
@@ -178,8 +239,10 @@ sch_text_new(const SchConfig *config);
 
 /*! \brief Set the alignment of the text
  *
+ *  \public
+ *  \memberof _SchText
  *
- *  \param [in] text The text object
+ *  \param [in] shape The text object
  *  \param [in] alignment
  */
 void
@@ -187,8 +250,10 @@ sch_text_set_alignment(SchText *shape, int alignment);
 
 /*! \brief Set the angle of the text
  *
+ *  \public
+ *  \memberof _SchText
  *
- *  \param [in] text The text object
+ *  \param [in] shape The text object
  *  \param [in] angle
  */
 void
@@ -196,8 +261,10 @@ sch_text_set_angle(SchText *shape, int angle);
 
 /*! \brief Set the color of the text
  *
+ *  \public
+ *  \memberof _SchText
  *
- *  \param [in] text The text object
+ *  \param [in] shape The text object
  *  \param [in] color The color
  */
 void
@@ -205,6 +272,9 @@ sch_text_set_color(SchText *shape, int color);
  
 /*! \brief
  *
+ *  \deprecated
+ *  \public
+ *  \memberof _SchText
  *
  *  \param [in] text The text object
  *  \return
@@ -214,17 +284,21 @@ sch_text_set_multiline(SchText *text, SchMultiline *multiline);
 
 /*! \brief Set which portions of attributes show
  *
+ *  \public
+ *  \memberof _SchText
  *
- *  \param [in] text The text object
- *  \param [in] The portion of the attribute that is shown
+ *  \param [in] shape The text object
+ *  \param [in] show The portion of the attribute that is shown
  */
 void
 sch_text_set_show(SchText *shape, int show);
 
 /*! \brief Set the point size of the text
  *
+ *  \public
+ *  \memberof _SchText
  *
- *  \param [in] text The text object
+ *  \param [in] shape The text object
  *  \param [in] size The point size of the text
  */
 void
@@ -232,8 +306,10 @@ sch_text_set_size(SchText *shape, int size);
 
 /*! \brief Set all the text as one string
  *
+ *  \public
+ *  \memberof _SchText
  *
- *  \param [in] text The text object
+ *  \param [in] shape The text object
  *  \param [in] string All the text as one string
  */
 void
@@ -241,8 +317,10 @@ sch_text_set_string(SchText *shape, const char *string);
 
 /*! \brief Set the visibility of the text
  *
+ *  \public
+ *  \memberof _SchText
  *
- *  \param [in] text The text object
+ *  \param [in] shape The text object
  *  \param [in] visible Zero is invisible, non-zero is visible
  */
 void
@@ -250,8 +328,10 @@ sch_text_set_visible(SchText *shape, int visible);
 
 /*! \brief Set the x coordinate of the text insertion point
  *
+ *  \public
+ *  \memberof _SchText
  *
- *  \param [in] text The text object
+ *  \param [in] shape The text object
  *  \param [in] x The x coordinate
  */
 void
@@ -259,8 +339,10 @@ sch_text_set_x(SchText *shape, int x);
 
 /*! \brief Set the y coordinate of the text insertion point
  *
+ *  \public
+ *  \memberof _SchText
  *
- *  \param [in] text The text object
+ *  \param [in] shape The text object
  *  \param [in] y The y coordinate
  */
 void

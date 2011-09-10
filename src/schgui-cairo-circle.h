@@ -28,9 +28,6 @@
 #define SCHGUI_IS_CAIRO_CIRCLE_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCHGUI_TYPE_CAIRO_CIRCLE))
 #define SCHGUI_CAIRO_CIRCLE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCHGUI_TYPE_CAIRO_CIRCLE,SchGUICairoCircleClass))
 
-typedef struct _SchGUICairoCircle SchGUICairoCircle;
-typedef struct _SchGUICairoCircleClass SchGUICairoCircleClass;
-
 struct _SchGUICairoCircle
 {
     SchGUICairoDrawItem parent;

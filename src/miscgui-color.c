@@ -27,6 +27,7 @@
 
 #include <glib.h>
 #include <glib-object.h>
+#include <gdk/gdk.h>
 
 #include "miscgui-color.h"
 
@@ -64,5 +65,41 @@ void
 miscgui_color_init(MiscGUIColor *color)
 {
     memset(color, 0, sizeof(MiscGUIColor));
+}
+
+MiscGUIColor*
+miscgui_color_new(void)
+{
+    MiscGUIColor *color = g_new(MiscGUIColor, 1);
+
+    miscgui_color_init(color);
+
+    return color;
+}
+
+MiscGUIColor*
+miscgui_color_new_from_name(const gchar *name)
+{
+    MiscGUIColor *color = NULL;
+
+    if (name != NULL)
+    {
+        gint     success;
+        GdkColor value;
+
+        success = gdk_color_parse(name, &color);
+
+        if (success)
+        {
+            MiscGUIColor *color = miscgui_color_new();
+
+            color->red   = (gdouble) color->red   / 65535.0;
+            color->green = (gdouble) color->green / 65535.0;
+            color->blue  = (gdouble) color->blue  / 65535.0;
+            color->alpha = 1.0;
+        }
+    }
+
+    return color;
 }
 

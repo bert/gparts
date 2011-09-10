@@ -26,14 +26,9 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
- 
-#include "sch.h"
 
-#include "schgui-drawing-cfg.h"
+#include "schgui.h"
 
-#include "schgui-cairo-draw-item.h"
-
-#include "schgui-cairo-text.h"
 
 #define SCHGUI_CAIRO_TEXT_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCHGUI_TYPE_CAIRO_TEXT,SchGUICairoTextPrivate))
 
@@ -70,7 +65,7 @@ static void
 schgui_cairo_text_draw(SchGUICairoDrawItem *item, cairo_t *cairo);
 
 static void
-schgui_cairo_text_mirror_y(SchGUICairoDrawItem *item, double dt);
+schgui_cairo_text_mirror_y(SchGUICairoDrawItem *item);
 
 static void
 schgui_cairo_text_rotate(SchGUICairoDrawItem *item, double dt);
@@ -102,6 +97,7 @@ schgui_cairo_text_class_init(gpointer g_class, gpointer g_class_data)
 
     klasse->bounds    = schgui_cairo_text_bounds;
     klasse->draw      = schgui_cairo_text_draw;
+    klasse->mirror_y  = schgui_cairo_text_mirror_y;
     klasse->rotate    = schgui_cairo_text_rotate;
     klasse->translate = schgui_cairo_text_translate;
 }
@@ -115,12 +111,13 @@ schgui_cairo_text_draw(SchGUICairoDrawItem *item, cairo_t *cairo)
 
         if (privat != NULL)
         {
-            PangoFontMetrics *metrics;
             PangoLayout *layout = pango_cairo_create_layout(cairo);
 
             if (layout != NULL)
             {
-        PangoLayoutIter *iter;
+                PangoLayoutIter *iter;
+                int width;
+
                 cairo_save(cairo);
 
                 cairo_set_source_rgba(cairo, privat->red, privat->green, privat->blue, privat->alpha);
@@ -130,59 +127,73 @@ schgui_cairo_text_draw(SchGUICairoDrawItem *item, cairo_t *cairo)
                 pango_layout_set_spacing(layout, 40000);
                 pango_layout_set_font_description(layout, privat->font_desc);
 
-            PangoFontMetrics *metrics = pango_context_get_metrics(
-                pango_layout_get_context(layout),
-                privat->font_desc,
-                NULL
-                );
-
-
                 pango_layout_set_markup(layout, privat->markup, -1);
 
-            cairo_rotate(cairo, privat->angle);
                 cairo_move_to(cairo, privat->x, privat->y);
+                cairo_rotate(cairo, privat->angle);
                 cairo_scale(cairo, 1, -1);
 
-#if 1
-            switch (privat->alignment)
-            {
-                case 2:
-                case 5:
-                case 8: 
-                /* upper */
-                //cairo_rel_move_to(privat->cairo, 0, -pango_font_metrics_get_ascent(metrics)/(privat->zoom * PANGO_SCALE));
-                //cairo_rel_move_to(privat->cairo, 0, height);
-                break;
+                switch (privat->alignment)
+                {
+                    case 2:
+                    case 5:
+                    case 8: 
+                        /* upper */
+                        break;
 
-                case 1:
-                case 4:
-                case 7:
-                    /* center */
-                    //cairo_rel_move_to(privat->cairo, 0, -pango_font_metrics_get_ascent(metrics)/(privat->zoom * PANGO_SCALE));
-                    //cairo_rel_move_to(privat->cairo, 0, height);
-                    //cairo_rel_move_to(privat->cairo, 0, -pango_font_metrics_get_ascent(metrics) * sch_multiline_lines(multiline)/(2 * privat->zoom * PANGO_SCALE));
-                    //cairo_rel_move_to(privat->cairo, 0, -pango_font_metrics_get_descent(metrics) * (sch_multiline_lines(multiline) - 1)/(2 * privat->zoom * PANGO_SCALE));
-                    break;
+                    case 1:
+                    case 4:
+                    case 7:
+                        /* center */
+                        iter = pango_layout_get_iter(layout);
+                        while (!pango_layout_iter_at_last_line(iter))
+                        {
+                            pango_layout_iter_next_line(iter);
+                        }
+                        cairo_rel_move_to(cairo, 0, -pango_layout_iter_get_baseline(iter) / PANGO_SCALE / 2);
+                        pango_layout_iter_free(iter);
+                        break;
 
-                case 0:
-                case 3:
-                case 6:
-                default:
-                    /* lower */
-                    //cairo_rel_move_to(privat->cairo, 0, -pango_font_metrics_get_ascent(metrics) * sch_multiline_lines(multiline)/(privat->zoom * PANGO_SCALE));
-                    //cairo_rel_move_to(privat->cairo, 0, -pango_font_metrics_get_descent(metrics) * (sch_multiline_lines(multiline)-1)/(privat->zoom * PANGO_SCALE));
-                    //cairo_rel_move_to(privat->cairo, 0, -pango_layout_get_spacing(layout) * (sch_multiline_lines(multiline)-1)/ PANGO_SCALE);
-                    iter = pango_layout_get_iter(layout);
-                    while (!pango_layout_iter_at_last_line(iter))
-                    {
-                        pango_layout_iter_next_line(iter);
-                    }
-                    cairo_rel_move_to(cairo, 0, -pango_layout_iter_get_baseline(iter) / PANGO_SCALE);
-                    pango_layout_iter_free(iter);
-            }
-#endif
+                    case 0:
+                    case 3:
+                    case 6:
+                    default:
+                        /* lower */
+                        iter = pango_layout_get_iter(layout);
+                        while (!pango_layout_iter_at_last_line(iter))
+                        {
+                            pango_layout_iter_next_line(iter);
+                        }
+                        cairo_rel_move_to(cairo, 0, -pango_layout_iter_get_baseline(iter) / PANGO_SCALE);
+                        pango_layout_iter_free(iter);
+                }
 
-            pango_font_metrics_unref(metrics);
+                switch (privat->alignment)
+                {
+
+                    case 3:
+                    case 4:
+                    case 5:
+                        /* center */
+                        pango_layout_get_size(layout, &width, NULL);
+                        cairo_rel_move_to(cairo, -width / PANGO_SCALE / 2, 0);
+                        break;
+
+                    case 6:
+                    case 7:
+                    case 8:
+                        pango_layout_get_size(layout, &width, NULL);
+                        cairo_rel_move_to(cairo, -width / PANGO_SCALE, 0);
+                        /* right */
+                        break;
+
+                    case 0:
+                    case 1:
+                    case 2:
+                    default:
+                        /* left */
+                        ;
+                }
 
                 pango_cairo_show_layout(cairo, layout);
 
@@ -226,13 +237,41 @@ schgui_cairo_text_get_type(void)
 }
 
 static void
-schgui_cairo_text_mirror_y(SchGUICairoDrawItem *item, double dt)
+schgui_cairo_text_mirror_y(SchGUICairoDrawItem *item)
 {
     SchGUICairoTextPrivate *privat = SCHGUI_CAIRO_TEXT_GET_PRIVATE(item);
 
     if (privat != NULL)
     {
         /*! \todo Implement mirror for text */
+
+        privat->x = -privat->x;
+
+        switch (privat->alignment)
+        {
+            case 0:
+                privat->alignment = 6;
+                break;
+
+            case 1:
+                privat->alignment = 7;
+                break;
+
+            case 2:
+                privat->alignment = 8;
+                break;
+
+            case 6:
+                privat->alignment = 0;
+                break;
+
+            case 7:
+                privat->alignment = 1;
+                break;
+
+            case 8:
+                privat->alignment = 2;
+        }
     }
 }
 
@@ -249,9 +288,8 @@ schgui_cairo_text_new(const SchText *shape, SchGUIDrawingCfg *config)
 
         if (privat != NULL)
         {
-            SchGUIDrawingCfgColor color;
+            MiscGUIColor          color;
             int                   index;
-            SchMultiline *multiline = sch_text_get_multiline(shape);
             int                   show;
 
             index = sch_text_get_color(shape);
@@ -272,24 +310,16 @@ schgui_cairo_text_new(const SchText *shape, SchGUIDrawingCfg *config)
 
             pango_font_description_set_size(privat->font_desc, PANGO_SCALE * sch_text_get_size(shape));
 
-
-            show = sch_text_get_show(shape);
-
             {
-                char *temp = sch_multiline_peek_markup(multiline, show);
+                char *temp = sch_text_get_shown_string(shape);
 
                 if (temp == NULL)
                 {
-                    temp = "ERROR";
+                    temp = strdup("ERROR");
                 }
-                 privat->markup = strdup(temp);
-            }
 
-            if (multiline != NULL)
-            {
-                g_object_unref(multiline);
+                privat->markup = temp;
             }
-
         }
     }
 

@@ -24,10 +24,9 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
- 
-#include "sch.h"
 
-#include "schgui-cairo-draw-item.h"
+#include "schgui.h"
+
 
 void
 schgui_cairo_draw_item_bounds(SchGUICairoDrawItem *item, cairo_t *cairo, GeomBounds *bounds)

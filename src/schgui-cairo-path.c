@@ -27,15 +27,8 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
-#include "misc-object.h"
- 
-#include "sch.h"
+#include "schgui.h"
 
-#include "schgui-drawing-cfg.h"
-
-#include "schgui-cairo-draw-item.h"
-
-#include "schgui-cairo-path.h"
 
 #define SCHGUI_CAIRO_PATH_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCHGUI_TYPE_CAIRO_PATH,SchGUICairoPathPrivate))
 
@@ -315,7 +308,7 @@ schgui_cairo_path_new(const SchPath *shape, SchGUIDrawingCfg *config)
     if (privat != NULL)
     {
         GeomLine              line;
-        SchGUIDrawingCfgColor color;
+        MiscGUIColor          color;
 	SchFillStyle          fill_style;
         int                   index;
         double                item_width;

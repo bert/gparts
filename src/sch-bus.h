@@ -42,14 +42,28 @@ struct _SchBusClass
     SchShapeClass parent;
 };
 
+/*! \private
+ */
 GType
 sch_bus_get_type(void);
 
-void
-sch_bus_get_color(const SchBus *shape, int *index);
+gint
+sch_bus_get_color(const SchBus *shape);
 
 void
 sch_bus_get_line(const SchBus *shape, GeomLine *line);
+
+gint
+sch_bus_get_x0(const SchBus *shape);
+
+gint
+sch_bus_get_x1(const SchBus *shape);
+
+gint
+sch_bus_get_y0(const SchBus *shape);
+
+gint
+sch_bus_get_y1(const SchBus *shape);
 
 /*! \brief Create an instance of a bus
  *
@@ -58,4 +72,23 @@ sch_bus_get_line(const SchBus *shape, GeomLine *line);
  */
 SchBus*
 sch_bus_new(const SchConfig *config);
+
+
+void
+sch_bus_set_color(SchBus *shape, gint color);
+
+void
+sch_bus_set_line(SchBus *shape, const GeomLine *line);
+
+void
+sch_bus_set_x0(SchBus *shape, gint x0);
+
+void
+sch_bus_set_x1(SchBus *shape, gint x1);
+
+void
+sch_bus_set_y0(SchBus *shape, gint y0);
+
+void
+sch_bus_set_y1(SchBus *shape, gint y1);
 

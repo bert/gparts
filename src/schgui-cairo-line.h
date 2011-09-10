@@ -28,9 +28,6 @@
 #define SCHGUI_IS_CAIRO_LINE_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),SCHGUI_TYPE_CAIRO_LINE))
 #define SCHGUI_CAIRO_LINE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),SCHGUI_TYPE_CAIRO_LINE,SchGUICairoLineClass))
 
-typedef struct _SchGUICairoLine SchGUICairoLine;
-typedef struct _SchGUICairoLineClass SchGUICairoLineClass;
-
 struct _SchGUICairoLine
 {
     SchGUICairoDrawItem parent;

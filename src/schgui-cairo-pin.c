@@ -26,14 +26,8 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
- 
-#include "sch.h"
 
-#include "schgui-drawing-cfg.h"
-
-#include "schgui-cairo-draw-item.h"
-
-#include "schgui-cairo-pin.h"
+#include "schgui.h"
 
 #define SCHGUI_CAIRO_PIN_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCHGUI_TYPE_CAIRO_PIN,SchGUICairoPinPrivate))
 
@@ -41,18 +35,18 @@ typedef struct _SchGUICairoPinPrivate SchGUICairoPinPrivate;
 
 struct _SchGUICairoPinPrivate
 {
-    double red;
-    double green;
-    double blue;
-    double alpha;
+    gdouble red;
+    gdouble green;
+    gdouble blue;
+    gdouble alpha;
 
-    double x[2];
-    double y[2];
+    gdouble x[2];
+    gdouble y[2];
 
-    double width;
+    gdouble line_width;
 
-    int    solid;
-    int    visible;
+    gint    solid;
+    gint    visible;
 };
 
 static void
@@ -108,9 +102,9 @@ schgui_cairo_pin_bounds(SchGUICairoDrawItem *item, cairo_t *cairo, GeomBounds *b
                 temp.max_y = privat->y[0];
             }
 
-            geom_bounds_expand(&temp, &temp, privat->width);
+            geom_bounds_expand(&temp, &temp, privat->line_width);
 
-            geom_bounds_union(bounds, bounds, &temp);            
+            geom_bounds_union(bounds, bounds, &temp);
         }
     }
 
@@ -141,7 +135,7 @@ schgui_cairo_pin_draw(SchGUICairoPin *shape, cairo_t *cairo)
         {
             cairo_set_source_rgba(cairo, privat->red, privat->green, privat->blue, privat->alpha);
 
-            cairo_set_line_width(cairo, privat->width);
+            cairo_set_line_width(cairo, privat->line_width);
 
             cairo_move_to(cairo, privat->x[0], privat->y[0]);
             cairo_line_to(cairo, privat->x[1], privat->y[1]);
@@ -205,10 +199,9 @@ schgui_cairo_pin_new(const SchPin *shape, SchGUIDrawingCfg *config)
     if (privat != NULL)
     {
         GeomLine              line;
-        SchGUIDrawingCfgColor color;
+        MiscGUIColor          color;
         SchFillStyle          fill_style;
         int                   index;
-        double                item_width;
 
         sch_pin_get_color(shape, &index);
 
@@ -219,9 +212,7 @@ schgui_cairo_pin_new(const SchPin *shape, SchGUIDrawingCfg *config)
         privat->blue  = color.blue;
         privat->alpha = privat->visible ? 1.0 : 0.0;
 
-        schgui_drawing_cfg_get_pin_line_width(config, &item_width);
-
-        privat->width = item_width;
+        privat->line_width = schgui_drawing_cfg_get_line_width_pin(config);
 
         sch_pin_get_line(shape, &line);
 

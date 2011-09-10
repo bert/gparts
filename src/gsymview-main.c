@@ -18,18 +18,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gsymview-main.c 
+/*! \file gsymview-main.c
  */
 
 #include <gtk/gtk.h>
 
 #include "misc-object.h"
 
-#include "sch.h"
 
-#include "schgui-drawing-cfg.h"
-#include "schgui-cairo-drafter.h"
-#include "schgui-drawing-view.h"
+#include "schgui.h"
 
 #include "schgui-clipboard.h"
 
