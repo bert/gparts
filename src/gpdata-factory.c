@@ -23,7 +23,6 @@
 
 #include <glib.h>
 #include <glib-object.h>
-#include <libxml/xmlreader.h>
 
 #include "misc-object.h"
 
@@ -114,7 +113,7 @@ gpdata_factory_create_model(const GPDataFactory *factory, const gchar *filename)
                 NULL
                 );
 
-            g_debug("pathnam %s", pathname);
+            g_debug("pathname %s", pathname);
 
             if (pathname != NULL)
             {

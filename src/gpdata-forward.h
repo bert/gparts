@@ -29,8 +29,26 @@
 typedef struct _GPDataFactory GPDataFactory;
 typedef struct _GPDataFactoryClass GPDataFactoryClass;
 
+typedef struct _GPDataOPBase GPDataOPBase;
+typedef struct _GPDataOPBaseClass GPDataOPBaseClass;
+
+typedef struct _GPDataOPBuildable GPDataOPBuildable;
+typedef struct _GPDataOPBuildableInterface GPDataOPBuildableInterface;
+
 typedef struct _GPDataTMColumn GPDataTMColumn;
 typedef struct _GPDataTMColumnClass GPDataTMColumnClass;
+
+typedef struct _GPDataTMColumnDouble GPDataTMColumnDouble;
+typedef struct _GPDataTMColumnDoubleClass GPDataTMColumnDoubleClass;
+
+typedef struct _GPDataTMColumnInteger GPDataTMColumnInteger;
+typedef struct _GPDataTMColumnIntegerClass GPDataTMColumnIntegerClass;
+
+typedef struct _GPDataTMColumnText GPDataTMColumnText;
+typedef struct _GPDataTMColumnTextClass GPDataTMColumnTextClass;
+
+typedef struct _GPDataTMColumnUnits GPDataTMColumnUnits;
+typedef struct _GPDataTMColumnUnitsClass GPDataTMColumnUnitsClass;
 
 typedef struct _GPDataTMTable GPDataTMTable;
 typedef struct _GPDataTMTableClass GPDataTMTableClass;

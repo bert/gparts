@@ -258,12 +258,20 @@ gpdata_tm_table_get_type(void)
             NULL                           /* value_table */
             };
 
+        static const GInterfaceInfo iinfo = {
+            NULL,                              /* interface_init */
+            NULL,                              /* interface_finalize */
+            NULL                               /* interface_data */
+            };
+
         type = g_type_register_static(
             G_TYPE_OBJECT,
             "GPDataTMTable",
             &tinfo,
             0
             );
+
+        g_type_add_interface_static(type, GPDATA_TYPE_OP_BUILDABLE, &iinfo);
     }
 
     return type;

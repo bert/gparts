@@ -91,7 +91,7 @@ gsymview_LDADD = $(GTK_LIBS) libgeom.la libmisc.la libsch.la libschgui.la libscm
 #
 gformtest_SOURCES = \
 	gformtest-main.c
-gformtest_CFLAGS = $(AM_CFLAGS) $(GTK_CFLAGS) -shared -rdynamic
+gformtest_CFLAGS = $(AM_CFLAGS) $(GTK_CFLAGS) -shared -rdynamic $(LIBXML_CFLAGS)
 gformtest_LDADD = $(GTK_LIBS) libmisc.la libgpform.la libgpdata.la
 
 
@@ -241,7 +241,14 @@ libgeom_la_LIBADD = $(GLIB_LIBS)
 #
 libgpdata_la_SOURCES = \
 	gpdata-factory.c \
+	gpdata-op-base.c \
+	gpdata-op-buildable.c \
+	gpdata-parser-stack.c \
 	gpdata-tm-column.c \
+	gpdata-tm-column-double.c \
+	gpdata-tm-column-integer.c \
+	gpdata-tm-column-text.c \
+	gpdata-tm-column-units.c \
         gpdata-tm-table.c
 libgpdata_la_CFLAGS = -Wall $(AM_CFLAGS) $(GLIB_CFLAGS) $(LIBXML_CFLAGS)
 libgpdata_la_LIBADD = $(GLIB_LIBS) $(LIBXML_LIBS) libmisc.la
@@ -280,6 +287,10 @@ libmiscgui_la_SOURCES = \
 libmiscgui_la_CFLAGS = -Wall $(AM_CFLAGS) $(GTK_CFLAGS)
 libmiscgui_la_LIBADD = $(GTK_LIBS)
 
+#
+# This library contains functionality to configure all other modules from
+# scheme configuration files.
+#
 libscmcfg_la_SOURCES = \
 	scmcfg-config.c \
 	scmcfg-dirs.c

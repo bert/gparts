@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<table>
+    <some-prop>Totally testing this out</some-prop>
+    <another-prop>123</another-prop>
+    <something hello="1234"/>
+</table>

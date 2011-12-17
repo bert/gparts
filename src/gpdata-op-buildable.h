@@ -18,28 +18,19 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \defgroup gpdata Parts Manager Data Models
+/*! \file gpdata-op-buildable.h
  */
 
-/*! \file gpdata.h
- */
+#define GPDATA_TYPE_OP_BUILDABLE (gpdata_op_buildable_get_type())
+#define GPDATA_OP_BUILDABLE(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),GPDATA_TYPE_OP_BUILDABLE,GPDataOPBuildable))
+#define GPDATA_IS_OP_BUILDABLE(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj),GPDATA_TYPE_OP_BUILDABLE))
+#define GPDATA_OP_BUILDABLE_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE((obj),GPDATA_TYPE_OP_BUILDABLE,GPDataOPBuildableInterface))
 
-#include <glib-object.h>
+struct _GPDataOPBuildableInterface
+{
+    GTypeInterface parent;
+};
 
-/*! \todo Remove */
-#include <libxml/xmlreader.h>
-
-#include "gpdata-forward.h"
-
-#include "gpdata-factory.h"
-
-#include "gpdata-op-base.h"
-#include "gpdata-op-buildable.h"
-
-#include "gpdata-tm-column.h"
-#include "gpdata-tm-column-double.h"
-#include "gpdata-tm-column-integer.h"
-#include "gpdata-tm-column-text.h"
-#include "gpdata-tm-column-units.h"
-#include "gpdata-tm-table.h"
+GType
+gpdata_op_buildable_get_type(void);
 

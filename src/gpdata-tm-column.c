@@ -31,7 +31,7 @@
 
 enum
 {
-    GPDATA_TM_COLUMN_NAME = 1,
+    GPDATA_TM_COLUMN_TITLE = 1,
     GPDATA_TM_COLUMN_XALIGN
 };
 
@@ -39,7 +39,7 @@ typedef struct _GPDataTMColumnPrivate GPDataTMColumnPrivate;
 
 struct _GPDataTMColumnPrivate
 {
-    gchar  *name;
+    gchar  *title;
     gfloat xalign;
 };
 
@@ -80,11 +80,11 @@ gpdata_tm_column_class_init(gpointer g_class, gpointer g_class_data)
 
     g_object_class_install_property(
         klasse,
-        GPDATA_TM_COLUMN_NAME,
+        GPDATA_TM_COLUMN_TITLE,
         g_param_spec_string(
-            "name",
-            "Name",
-            "Name",
+            "title",
+            "Title",
+            "Title",
             NULL,
             G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
@@ -118,48 +118,48 @@ gpdata_tm_column_finalize(GObject *object)
 
     if (privat != NULL)
     {
-        g_free(privat->name);
-        privat->name = NULL;
+        g_free(privat->title);
+        privat->title = NULL;
     }
 
     misc_object_chain_finalize(object);
 }
 
-gchar*
-gpdata_tm_column_get_name(const GPDataTMColumn *column)
-{
-    GPDataTMColumnPrivate *privat = GPDATA_TM_COLUMN_GET_PRIVATE(column);
-    gchar *name = NULL;
-
-    if (privat != NULL)
-    {
-        name = g_strdup(privat->name);
-    }
-
-    return name;
-}
-
 static void
 gpdata_tm_column_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
 {
-    GPDataTMColumn *factory = GPDATA_TM_COLUMN(object);
+    GPDataTMColumn *column = GPDATA_TM_COLUMN(object);
 
-    if (factory != NULL)
+    if (column != NULL)
     {
         switch (property_id)
         {
-            case GPDATA_TM_COLUMN_NAME:
-                g_value_take_string(value, gpdata_tm_column_get_name(factory));
+            case GPDATA_TM_COLUMN_TITLE:
+                g_value_take_string(value, gpdata_tm_column_get_title(column));
                 break;
 
             case GPDATA_TM_COLUMN_XALIGN:
-                g_value_set_float(value, gpdata_tm_column_get_xalign(factory));
+                g_value_set_float(value, gpdata_tm_column_get_xalign(column));
                 break;
 
             default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
         }
     }
+}
+
+gchar*
+gpdata_tm_column_get_title(const GPDataTMColumn *column)
+{
+    GPDataTMColumnPrivate *privat = GPDATA_TM_COLUMN_GET_PRIVATE(column);
+    gchar *title = NULL;
+
+    if (privat != NULL)
+    {
+        title = g_strdup(privat->title);
+    }
+
+    return title;
 }
 
 gfloat
@@ -196,12 +196,20 @@ gpdata_tm_column_get_type(void)
             NULL                            /* value_table */
             };
 
+        static const GInterfaceInfo iinfo = {
+            NULL,                              /* interface_init */
+            NULL,                              /* interface_finalize */
+            NULL                               /* interface_data */
+            };
+
         type = g_type_register_static(
             G_TYPE_OBJECT,
             "GPDataTMColumn",
             &tinfo,
             0
             );
+
+        g_type_add_interface_static(type, GPDATA_TYPE_OP_BUILDABLE, &iinfo);
     }
 
     return type;
@@ -214,23 +222,8 @@ gpdata_tm_column_init(GTypeInstance *instance, gpointer g_class)
 
     if (privat != NULL)
     {
-        privat->name   = g_strdup("None");
+        privat->title  = g_strdup("None");
         privat->xalign = 0.0;
-    }
-}
-
-void
-gpdata_tm_column_set_name(GPDataTMColumn *column, const gchar *name)
-{
-    GPDataTMColumnPrivate *privat = GPDATA_TM_COLUMN_GET_PRIVATE(column);
-
-    if (privat != NULL)
-    {
-        g_free(privat->name);
-
-        privat->name = g_strdup(name);
-
-        g_object_notify(G_OBJECT(column), "name");
     }
 }
 
@@ -243,8 +236,8 @@ gpdata_tm_column_set_property(GObject *object, guint property_id, const GValue *
     {
         switch (property_id)
         {
-            case GPDATA_TM_COLUMN_NAME:
-                gpdata_tm_column_set_name(column, g_value_get_string(value));
+            case GPDATA_TM_COLUMN_TITLE:
+                gpdata_tm_column_set_title(column, g_value_get_string(value));
                 break;
 
             case GPDATA_TM_COLUMN_XALIGN:
@@ -254,6 +247,21 @@ gpdata_tm_column_set_property(GObject *object, guint property_id, const GValue *
             default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
         }
+    }
+}
+
+void
+gpdata_tm_column_set_title(GPDataTMColumn *column, const gchar *title)
+{
+    GPDataTMColumnPrivate *privat = GPDATA_TM_COLUMN_GET_PRIVATE(column);
+
+    if (privat != NULL)
+    {
+        g_free(privat->title);
+
+        privat->title = g_strdup(title);
+
+        g_object_notify(G_OBJECT(column), "title");
     }
 }
 

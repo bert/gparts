@@ -44,15 +44,15 @@ struct _GPDataTMColumnClass
 GType
 gpdata_tm_column_get_type(void);
 
-/*! \brief Get the column name as it appears in the UI
+/*! \brief Get the column title as it appears in the UI
  *
  *  The returned string must be freed by the caller using g_free()
  *
  *  \param [in] column This column
- *  \return The name of the column at is appears in the UI [transfer full]
+ *  \return The title of the column at is appears in the UI [transfer full]
  */
 gchar*
-gpdata_tm_column_get_name(const GPDataTMColumn *column);
+gpdata_tm_column_get_title(const GPDataTMColumn *column);
 
 /*! \brief Get the horizontal alignment of column cells
  *
@@ -62,13 +62,13 @@ gpdata_tm_column_get_name(const GPDataTMColumn *column);
 gfloat
 gpdata_tm_column_get_xalign(const GPDataTMColumn *column);
 
-/*! \brief Set the column name as it appears in the UI
+/*! \brief Set the column title as it appears in the UI
  *
  *  \param [in,out] column This column
- *  \param [in] name The name of the column at is appears in the UI
+ *  \param [in] name The title of the column at is appears in the UI
  */
 void
-gpdata_tm_column_set_name(GPDataTMColumn *column, const gchar* name);
+gpdata_tm_column_set_title(GPDataTMColumn *column, const gchar* title);
 
 /*! \brief set the horizontal alignment of column cells
  *
