@@ -69,7 +69,7 @@ miscui_action_model_set_property(GObject *object, guint property_id, const GValu
 
 
 void
-miscui_action_model_activate(MiscUIActionModel *model, GError *error)
+miscui_action_model_activate(MiscUIActionModel *model, GError **error)
 {
     MiscUIActionModelPrivate *privat = MISCUI_ACTION_MODEL_GET_PRIVATE(model);
 

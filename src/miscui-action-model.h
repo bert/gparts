@@ -45,3 +45,18 @@ struct _MiscUIActionModelClass
 GType
 miscui_action_model_get_type(void);
 
+void
+miscui_action_model_activate(MiscUIActionModel *model, GError **error);
+
+gchar*
+miscui_action_model_get_label(const MiscUIActionModel *model);
+
+gboolean
+miscui_action_model_get_sensitive(const MiscUIActionModel *model);
+
+void
+miscui_action_model_set_label(MiscUIActionModel *model, const gchar *label);
+
+void
+miscui_action_model_set_sensitive(MiscUIActionModel *model, gboolean sensitive);
+
