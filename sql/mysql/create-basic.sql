@@ -199,7 +199,7 @@ CREATE TABLE Symbol (
 
     PRIMARY KEY ( SymbolID ),
     FOREIGN KEY ( DeviceID ) REFERENCES Device,
-    UNIQUE ( SymbolPath )
+    UNIQUE ( SymbolName )
     );
 
 
@@ -209,7 +209,7 @@ CREATE TABLE Symbol (
 --
 CREATE TABLE SymbolDetail (
 
-    SymbolID  INTEGER UNSIGNED  NOT NULL AUTO_INCREMENT,
+    SymbolID  INTEGER UNSIGNED  NOT NULL,
     Detail    VARCHAR(500)      NOT NULL,
 
     FOREIGN KEY ( SymbolID ) REFERENCES Symbol,
