@@ -388,12 +388,14 @@ scmcfg_config_load(void)
 static void*
 scmcfg_config_load_inner(void* data)
 {
-    const char *datapath = g_getenv("GEDADATARC");
+    char *datapath = scmcfg_dirs_find_geda_config();
     SCM loaded = SCM_BOOL_F;
 
     if (datapath != NULL)
     {
         char *pathname = g_build_filename(datapath, "system-gafrc", NULL);
+
+        g_debug("Attempting to load %s\n", pathname);
 
         loaded = scm_internal_catch(
             SCM_BOOL_T,
@@ -403,6 +405,7 @@ scmcfg_config_load_inner(void* data)
             NULL
             );
 
+        g_free(datapath);
         g_free(pathname);
     }
 
@@ -443,6 +446,8 @@ scmcfg_config_load_inner(void* data)
     {
         char *pathname = g_build_filename(datapath, "system-gpartsrc", NULL);
 
+        g_debug("Attempting to load %s\n", pathname);
+
         g_free(datapath);
 
         loaded = scm_internal_catch(
@@ -453,6 +458,7 @@ scmcfg_config_load_inner(void* data)
             NULL
             );
 
+        g_free(datapath);
         g_free(pathname);
     }
 
