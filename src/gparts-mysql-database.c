@@ -47,6 +47,9 @@ gparts_mysql_database_class_init(gpointer g_class, gpointer g_class_data);
 static void
 gparts_mysql_database_connect(GPartsDatabase *database, GPartsConnectData *data, GError **error);
 
+static gboolean
+gparts_mysql_database_connected(const GPartsDatabase *database);
+
 static void
 gparts_mysql_database_disconnect(GPartsDatabase *database, GError **error);
 
@@ -92,6 +95,7 @@ gparts_mysql_database_class_init(gpointer g_class, gpointer g_class_data)
     object_class->set_property = gparts_mysql_database_set_property;
 
     klasse->connect    = gparts_mysql_database_connect;
+    klasse->connected  = gparts_mysql_database_connected;
     klasse->disconnect = gparts_mysql_database_disconnect;
     klasse->query      = gparts_mysql_database_query;
 
@@ -179,6 +183,25 @@ gparts_mysql_database_connect(GPartsDatabase *database, GPartsConnectData *data,
         g_propagate_error( error, local_error );
     }
 }
+
+static gboolean
+gparts_mysql_database_connected(const GPartsDatabase *database)
+{
+    gboolean connected = FALSE;
+
+    if (database != NULL)
+    {
+        GPartsMySQLDatabasePrivate* privat = GPARTS_MYSQL_DATABASE_GET_PRIVATE(database);
+
+        if (privat != NULL)
+        {
+            connected = (privat->mysql != NULL);
+        }
+    }
+
+    return connected;
+}
+
 
 /*! \brief Disconnects from the MySQL database.
  *
