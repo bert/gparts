@@ -35,8 +35,8 @@ L 200,850
 T 400 700 8 10 1 1 0 1 1
 refdes=R?
 T 400 500 8 10 1 1 0 1 1
-value=$(value)
+value=$(Resistance)
 T 400 300 8 10 1 1 0 1 1
-footprint=$(footprint)
+footprint=$(PackageName)
 T -5 700 8 10 0 0 0 7 1
 device=RESISTOR
