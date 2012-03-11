@@ -24,6 +24,7 @@
 #include <dlfcn.h>
 
 #include "gpartsui.h"
+#include "gpview.h"
 
 #include "scmcfg-config.h"
 
@@ -46,6 +47,14 @@ struct _GPartsPrivate
     GtkAction        *paste_action;
 
     GPartsController *current_controller;
+
+    GPViewCompanyView *company_view;
+    GPViewCompanyView *symbol_view;
+
+    GtkWidget         *current_view;
+
+
+    GPViewCompanyCtrl *company_ctrl;
 
     /* A temporary measure to map GtkNotebook pages to their respective
      * GPartsControllers.
@@ -90,7 +99,7 @@ static void
 gparts_destroy_cb(GtkWidget* widget, gpointer data);
 
 static void
-gparts_switch_page_cb(GtkNotebook *notebook, GtkNotebookPage *page, gint page_no, gpointer user_data);
+gparts_switch_page_cb(GtkNotebook *notebook, gpointer unused, gint page_no, gpointer user_data);
 
 
 
@@ -195,7 +204,6 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
     privat->builder = gtk_builder_new();
 
     path = g_build_filename(datadir, "xml", "gparts.xml", NULL);
-    g_free(datadir);
 
     status = gtk_builder_add_from_file(
         privat->builder,
@@ -209,6 +217,18 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
     {
        g_error( error->message ) ;
     }
+
+    GtkUIManager *ui_manager = GTK_UI_MANAGER(gtk_builder_get_object(privat->builder, "uimanager"));
+
+    privat->company_ctrl = gpview_company_ctrl_new_with_manager(ui_manager);
+
+    path = g_build_filename(datadir, "xml", "gparts-ui.xml", NULL);
+    g_free(datadir);
+
+    gtk_ui_manager_add_ui_from_file(ui_manager, path, NULL);
+    g_free(path);
+
+    gtk_ui_manager_ensure_update(ui_manager);
 
     gtk_builder_connect_signals(privat->builder, NULL);
 
@@ -388,12 +408,13 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         NULL
         );
 
-    privat->kludge[0] = g_object_new(
+
+    privat->kludge[0] = NULL; /*g_object_new(
         GPARTSUI_TYPE_COMPANY_CONTROLLER,
         "company-model",  privat->company_model,
         "company-view",   gtk_builder_get_object(privat->builder, "companies-view"),
         NULL
-        );
+        );*/
 
     privat->kludge[2] = g_object_new(
         GPARTSUI_TYPE_DOCUMENT_CONTROLLER,
@@ -422,9 +443,48 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         GTK_NOTEBOOK(gtk_builder_get_object(privat->builder, "notebook"))
         );
 
+    privat->company_view = gpview_company_view_new_with_controller(privat->company_ctrl);
+    privat->symbol_view = gpview_symbol_view_new();
+
+    gtk_notebook_prepend_page(
+        privat->notebook,
+        privat->company_view,
+        gtk_label_new("Companies")
+        );
+
+    gtk_notebook_append_page(
+        privat->notebook,
+        privat->symbol_view,
+        gtk_label_new("Symbols")
+        );
+
+    g_object_bind_property(
+        privat->database_model,
+        "database",
+        privat->company_view,
+        "database",
+        G_BINDING_DEFAULT
+        );
+
+    g_object_bind_property(
+        privat->database_model,
+        "database",
+        privat->symbol_view,
+        "database",
+        G_BINDING_DEFAULT
+        );
+
+    g_object_bind_property(
+        privat->database_model,
+        "database",
+        privat->company_ctrl,
+        "database",
+        G_BINDING_DEFAULT
+        );
+
     gparts_set_current_controller(GPARTS(instance), privat->kludge[0]);
 
-    gtk_widget_show(widget);
+    gtk_widget_show_all(widget);
 }
 
 static void
@@ -532,18 +592,43 @@ gparts_set_notebook(GParts *gparts, GtkNotebook *notebook)
     }
 }
 
+
 static void
-gparts_switch_page_cb(GtkNotebook *notebook, GtkNotebookPage *page, gint page_no, gpointer user_data)
+gparts_switch_page_cb(GtkNotebook *notebook, gpointer unused, gint page_no, gpointer user_data)
 {
     GPartsPrivate *privat = GPARTS_GET_PRIVATE(user_data);
 
     if (privat != NULL)
     {
-        g_debug("Switch page %d", page_no);
-
         gparts_set_current_controller(GPARTS(user_data), privat->kludge[page_no]);
+
+        if (page_no >= 0)
+        {
+            GtkWidget *widget = gtk_notebook_get_nth_page(notebook, page_no);
+
+            if (GPVIEW_IS_VIEW_INTERFACE(widget))
+            {
+                gpview_view_interface_activate(GPVIEW_VIEW_INTERFACE(widget));
+            }
+            else if (GPVIEW_IS_VIEW_INTERFACE(privat->current_view))
+            {
+                gpview_view_interface_deactivate(GPVIEW_VIEW_INTERFACE(privat->current_view));
+            }
+
+            privat->current_view = widget;
+        }
+        else
+        {
+            if (GPVIEW_IS_VIEW_INTERFACE(privat->current_view))
+            {
+                gpview_view_interface_deactivate(GPVIEW_VIEW_INTERFACE(privat->current_view));
+            }
+
+            privat->current_view = NULL;
+        }
     }
 }
+
 
 int main(int argc, char* argv[])
 {

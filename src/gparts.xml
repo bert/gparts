@@ -3,6 +3,40 @@
     <object class="GtkUIManager" id="uimanager">
         <child>
             <object class="GtkActionGroup" id="main_action_group">
+
+                <child>
+                    <object class="GtkAction" id="entity">
+                        <property name="name">entity</property>
+                        <property name="label">_Entity</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="entity-create">
+                        <property name="name">entity-create</property>
+                        <property name="label">_New...</property>
+                    </object>
+                </child>
+ 
+                <child>
+                    <object class="GtkAction" id="symbol-create">
+                        <property name="name">symbol-create</property>
+                        <property name="label">Create Symbol</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="symbol-edit">
+                        <property name="name">symbol-edit</property>
+                        <property name="label">Edit Symbol</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkAction" id="symbol-delete">
+                        <property name="name">symbol-delete</property>
+                        <property name="label">Delete Symbol</property>
+                    </object>
+                </child>
+
+
                 <child>
                     <object class="GtkAction" id="database">
                         <property name="name">database</property>
@@ -147,12 +181,6 @@
                         <property name="label">Open Webpage</property>
                     </object>
                 </child>
-                <child>
-                    <object class="GtkAction" id="tools-open-document">
-                        <property name="name">tools-open-document</property>
-                        <property name="label">Open Document</property>
-                    </object>
-                </child>
             </object>
         </child>
 
@@ -182,22 +210,12 @@
                     <menuitem action="view-edit"/>
                     <menuitem action="view-customize"/>
                 </menu>
-                <menu action="tools">
-                    <menuitem action="tools-open-website"/>
-                    <menuitem action="tools-open-webpage"/>
-                    <menuitem action="tools-open-document"/>
-                </menu>
             </menubar>
             <toolbar name="main_toolbar">
                 <toolitem action="database-connect"/>
                 <toolitem action="edit-copy"/>
                 <toolitem action="view-refresh"/>
                 <separator/>
-                <toolitem action="edit-insert"/>
-                <toolitem action="edit-delete"/>
-                <toolitem action="edit-edit"/>
-                <separator/>
-                <toolitem action="tools-open-website"/>
             </toolbar>
         </ui>
     </object>
@@ -235,6 +253,7 @@
 
                         <!-- A window for browsing all the companies in the library -->
 
+                        <!--
                         <child>
                             <object class="GtkScrolledWindow" id="companies-scrolled">
                                 <property name="visible">TRUE</property>
@@ -254,7 +273,7 @@
                                 <property name="label">Companies</property>
                             </object>
                         </child>
-
+                        -->
 
 
                         <!-- A window for browsing all the devices in the library -->
@@ -466,7 +485,7 @@
 
 
                         <!-- A window for browsing all the symbols in the library -->
-
+                        <!--
                         <child>
                             <object class="GtkVPaned" id="symbols-window-vpaned-1">
                                 <property name="visible">TRUE</property>
@@ -517,6 +536,7 @@
                                 <property name="label">Symbols</property>
                             </object>
                         </child>
+                        -->
 
 
                     </object>

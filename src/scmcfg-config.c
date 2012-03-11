@@ -355,6 +355,8 @@ scmcfg_config_init_inner(void* data)
     char *configdir;
     char *datadir;
 
+    SCM scm1;
+
     scm_dynwind_begin(0);
 
     configdir = scmcfg_dirs_find_geda_config();
@@ -368,6 +370,22 @@ scmcfg_config_init_inner(void* data)
     scm_c_define("geda-data-path", scm_from_locale_string(datadir));
     scm_c_define("geda-rc-path", scm_from_locale_string(configdir));
     scm_c_define("path-sep", scm_from_locale_string(G_DIR_SEPARATOR_S));
+
+    g_debug("Here");
+
+    scm1 = scm_c_lookup("%load-path");
+
+    g_debug("Here");
+
+    scm_variable_set_x(
+        scm1,
+        scm_cons(
+            scm_from_locale_string(g_build_filename(datadir,"scheme")),
+            scm_variable_ref(scm1)
+            )
+        );
+
+    g_debug("Here");
 
 #include "scmcfg-config.x"
 
@@ -407,28 +425,6 @@ scmcfg_config_load_inner(void* data)
 
         g_free(datapath);
         g_free(pathname);
-    }
-
-    if (loaded == SCM_BOOL_F)
-    {
-        loaded = scm_internal_catch(
-            SCM_BOOL_T,
-            scmcfg_config_load_inner_body,
-            "/usr/local/share/gEDA/system-gafrc",
-            scmcfg_config_load_inner_handler,
-            NULL
-            );
-    }
-
-    if (loaded == SCM_BOOL_F)
-    {
-        loaded = scm_internal_catch(
-            SCM_BOOL_T,
-            scmcfg_config_load_inner_body,
-            "/usr/local/gEDA/system-gafrc",
-            scmcfg_config_load_inner_handler,
-            NULL
-            );
     }
 
     if (loaded == SCM_BOOL_F)
@@ -475,6 +471,8 @@ scmcfg_config_load_inner(void* data)
 static SCM
 scmcfg_config_load_inner_body(void *data)
 {
+    g_debug("Before Load %s", (char*) data);
+
     scm_c_primitive_load((char*) data);
 
     g_debug("Loaded %s", (char*) data);
@@ -485,10 +483,7 @@ scmcfg_config_load_inner_body(void *data)
 static SCM
 scmcfg_config_load_inner_handler(void *data, SCM key, SCM args)
 {
-    scm_write_line(
-        args,
-        scm_current_output_port()
-        );
+    scm_handle_by_message(NULL, key, args);
 
     return SCM_BOOL_F;
 }

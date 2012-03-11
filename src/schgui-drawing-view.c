@@ -365,6 +365,12 @@ schgui_drawing_view_init(GTypeInstance *instance, gpointer g_class)
         );
 }
 
+SchGUIDrawingView*
+schgui_drawing_view_new(void)
+{
+    return SCHGUI_DRAWING_VIEW(g_object_new(SCHGUI_TYPE_DRAWING_VIEW, NULL));
+}
+
 static void
 schgui_drawing_view_set_background_color(SchGUIDrawingView *widget, GdkColor *color)
 {

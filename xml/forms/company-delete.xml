@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- The dialog must be GPFormUIDialog and its id must be main. -->
+<!-- -->
+<!-- -->
+<!-- The named entity "&omega;" does not work, use "&#x03A9;" instead. -->
+<!-- -->
+
+<interface>
+    <object class="GPFormUIDialog" id="main">
+
+        <property name="title">Delete Company</property>
+
+        <child internal-child="action_area">
+            <object class="GtkHButtonBox" id="button-box">
+                <child>
+                    <object class="GtkButton" id="button-cancel">
+                        <property name="label">gtk-cancel</property>
+                        <property name="use-stock">TRUE</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkButton" id="button-help">
+                        <property name="label">gtk-help</property>
+                        <property name="use-stock">TRUE</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkButton" id="button-ok">
+                        <property name="label">gtk-ok</property>
+                        <property name="use-stock">TRUE</property>
+                    </object>
+                </child>
+            </object>
+        </child>
+
+        <child internal-child="vbox">
+            <object class="GtkVBox" id="vbox">
+                <child>
+                    <object class="GtkLabel" id="label-1">
+                        <property name="label">Are you sure you want to delete the company?</property>
+                        <property name="xalign">0.0</property>
+                        <property name="xpad">10</property>
+                        <property name="ypad">10</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="label-2">
+                        <property name="label">COMPANY NAME</property>
+                        <property name="xalign">0.5</property>
+                        <property name="xpad">10</property>
+                        <property name="ypad">10</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="label-3">
+                        <property name="label">Deleting a company will also delete all parts associated with the company.</property>
+                        <property name="xalign">0.0</property>
+                        <property name="xpad">10</property>
+                        <property name="ypad">10</property>
+                    </object>
+                </child>
+            </object>
+        </child>
+
+        <action-widgets>
+             <action-widget response="-6">button-cancel</action-widget>
+             <action-widget response="-11">button-help</action-widget>
+             <action-widget response="-5">button-ok</action-widget>
+        </action-widgets>
+
+    </object>
+</interface>
+

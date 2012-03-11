@@ -25,6 +25,7 @@ pkgdata_DATA = \
 xmldir = $(pkgdatadir)/xml
 xml_DATA = \
 	gparts.xml \
+	gparts-ui.xml \
 	gsymview.xml
 
 # Would like to move common files into a library, but the dynamically loadable
@@ -68,7 +69,7 @@ gparts_SOURCES = \
 	miscui-action-controller.c \
 	miscui-action-model.c
 gparts_CFLAGS = $(AM_CFLAGS) $(GMODULE_CFLAGS) $(GTK_CFLAGS)
-gparts_LDADD = $(GMODULE_LIBS) $(GTK_LIBS) libgeom.la libmisc.la libsch.la libschgui.la libscmcfg.la
+gparts_LDADD = $(GMODULE_LIBS) $(GTK_LIBS) libgeom.la libgpform.la libgpview.la libmisc.la libsch.la libschgui.la libscmcfg.la
 
 #gparts_DEPENDENCIES = $(MYSQL_LDADD) $(POSTGRESQL_LDADD) $(SQLITE_LDADD)
 
@@ -100,6 +101,7 @@ noinst_LTLIBRARIES = \
 	libgeom.la \
 	libgpdata.la \
 	libgpform.la \
+	libgpview.la \
 	libmisc.la \
 	libmiscgui.la \
 	libsch.la \
@@ -252,6 +254,21 @@ libgpdata_la_SOURCES = \
         gpdata-tm-table.c
 libgpdata_la_CFLAGS = -Wall $(AM_CFLAGS) $(GLIB_CFLAGS) $(LIBXML_CFLAGS)
 libgpdata_la_LIBADD = $(GLIB_LIBS) $(LIBXML_LIBS) libmisc.la
+
+
+#
+# This library contains UI elements for views.
+#
+libgpview_la_SOURCES = \
+	gpview-company-ctrl.c \
+	gpview-company-view.c \
+	gpview-factory.c \
+	gpview-result-adapter.c \
+	gpview-symbol-view.c \
+	gpview-view-interface.c
+libgpview_la_CFLAGS = -Wall $(AM_CFLAGS) $(GTK_CFLAGS)
+libgpview_la_LIBADD = $(GTK_LIBS) libmisc.la libgpform.la
+
 
 #
 # This library contains UI elements for data entry.

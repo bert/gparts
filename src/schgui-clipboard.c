@@ -199,7 +199,7 @@ schgui_clipboard_copy_drawing(SchGUIClipboard *clipboard, SchDrawing *drawing)
 
             gtk_clipboard_set_with_data(
                 privat->clipboard,
-                schgui_clipboard_targets, 
+                schgui_clipboard_targets,
                 SCHGUI_CLIPBOARD_TARGET_COUNT(schgui_clipboard_targets),
                 schgui_clipboard_get_cb,
                 schgui_clipboard_clear_cb,
@@ -222,18 +222,20 @@ schgui_clipboard_get_cb(GtkClipboard *clipboard, GtkSelectionData *data, guint i
 
         sch_drawing_write(privat->drawing, ostream);
 
+        g_debug("Get clipboard target: %d", info);
+
         switch (info)
         {
             case 1:
                 gtk_clipboard_set_text(
-                    clipboard, 
+                    clipboard,
                     g_memory_output_stream_get_data(mstream),
                     g_memory_output_stream_get_data_size(mstream)
                     );
                 break;
 
             case 2:
-                gtk_selection_data_set (
+                gtk_selection_data_set(
                     data,
                     gdk_atom_intern("application/x-geda-schematic", FALSE),
                     8,

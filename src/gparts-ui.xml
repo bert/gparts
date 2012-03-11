@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<ui>
+    <menubar name="main_menu">
+        <menu name="entity" action="entity">
+            <menu name="entity-create" action="entity-create">
+                <menuitem name="company-create" action="company-create"/>
+                <menuitem name="symbol-create" action="symbol-create"/>
+            </menu>
+            <menuitem name="company-edit" action="company-edit"/>
+            <menuitem name="symbol-edit" action="symbol-edit"/>
+            <menuitem name="company-delete" action="company-delete"/>
+            <menuitem name="symbol-delete" action="symbol-delete"/>
+            <menuitem name="company-visit" action="company-visit"/>
+        </menu>
+    </menubar>
+    <toolbar name="main_toolbar">
+        <toolitem action="company-create"/>
+        <toolitem action="company-delete"/>
+        <toolitem action="company-edit"/>
+        <separator/>
+        <toolitem action="company-visit"/>
+    </toolbar>
+</ui>

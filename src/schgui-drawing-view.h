@@ -44,6 +44,9 @@ struct _SchGUIDrawingViewClass
 GType
 schgui_drawing_view_get_type(void);
 
+SchGUIDrawingView*
+schgui_drawing_view_new(void);
+
 /*! \brief Get the configuration for this view
  *
  *  \public
