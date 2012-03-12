@@ -454,7 +454,6 @@ scmcfg_config_load_inner(void* data)
             NULL
             );
 
-        g_free(datapath);
         g_free(pathname);
     }
 
