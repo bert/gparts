@@ -47,7 +47,7 @@ gpview_company_view_get_type(void);
 /*
  */
 GStrv
-gpview_company_view_get_websites(GPViewCompanyCtrl *ctrl);
+gpview_company_view_get_websites(GPViewCompanyView *view);
 
 GPViewCompanyView*
 gpview_company_view_new(void);

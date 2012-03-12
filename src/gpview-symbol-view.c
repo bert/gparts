@@ -34,14 +34,20 @@
 enum
 {
     GPVIEW_SYMBOL_VIEW_DATABASE = 1,
+    GPVIEW_SYMBOL_VIEW_RESULT,
+    GPVIEW_SYMBOL_VIEW_SYMBOL_IDS,
+    GPVIEW_SYMBOL_VIEW_SYMBOL_NAMES
 };
 
 typedef struct _GPViewSymbolViewPrivate GPViewSymbolViewPrivate;
 
 struct _GPViewSymbolViewPrivate
 {
+    GPViewResultAdapter  *adapter;
+    void                 *controller;
     GPartsDatabase       *database;
     GPartsDatabaseResult *result;
+    GtkTreeSelection     *selection;
 
     SchGUIDrawingView    *drawing_view;
     GtkTreeView          *symbol_view;
@@ -60,6 +66,9 @@ static void
 gpview_symbol_view_dispose(GObject *object);
 
 static void
+gpview_symbol_view_finalize(GObject *object);
+
+static void
 gpview_symbol_view_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
 
 static void
@@ -72,7 +81,13 @@ static void
 gpview_symbol_view_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
 
 static void
-gpview_symbol_view_notify_connected_cb(GPartsDatabase *database, GParamSpec *param, GPViewSymbolView *view);
+gpview_symbol_view_set_result(GPViewSymbolView *view, GPartsDatabaseResult *result);
+
+static void
+gpview_symbol_view_update_cb(GObject *unused, GParamSpec *pspec, GPViewSymbolView *view);
+
+static void
+gpview_symbol_view_update2_cb(GObject *unused, GParamSpec *pspec, GPViewSymbolView *view);
 
 
 
@@ -83,11 +98,34 @@ gpview_symbol_view_activate(GPViewViewInterface *widget)
 
     if (view == NULL)
     {
-        g_critical("Unable to");
+        g_critical("Unable to obatain an instance from GPViewViewInterface");
     }
     else
     {
-        g_debug("Activate");
+        GPViewSymbolViewPrivate *privat = GPVIEW_SYMBOL_VIEW_GET_PRIVATE(view);
+
+        if (privat == NULL)
+        {
+            g_critical("Unable to obtain private data for a GPViewSymbolView");
+        }
+        else if (privat->controller == NULL)
+        {
+            g_critical("GPViewSymbolView has a NULL controller");
+        }
+        else
+        {
+            //gpview_symbol_ctrl_set_current_view(privat->controller, view);
+        }
+    }
+}
+
+static void
+gpview_symbol_view_changed_cb(GtkTreeSelection *selection, GPViewCompanyView *view)
+{
+    if (view != NULL)
+    {
+        g_object_notify(G_OBJECT(view), "symbol-ids");
+        g_object_notify(G_OBJECT(view), "symbol-names");
     }
 }
 
@@ -99,6 +137,7 @@ gpview_symbol_view_class_init(gpointer g_class, gpointer g_class_data)
     g_type_class_add_private(g_class, sizeof(GPViewSymbolViewPrivate));
 
     klasse->dispose = gpview_symbol_view_dispose;
+    klasse->finalize = gpview_symbol_view_finalize;
 
     klasse->get_property = gpview_symbol_view_get_property;
     klasse->set_property = gpview_symbol_view_set_property;
@@ -114,7 +153,44 @@ gpview_symbol_view_class_init(gpointer g_class, gpointer g_class_data)
             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
+
+    g_object_class_install_property(
+        klasse,
+        GPVIEW_SYMBOL_VIEW_RESULT,
+        g_param_spec_object(
+            "result",
+            "Result",
+            "Result",
+            GPARTS_TYPE_DATABASE_RESULT,
+            G_PARAM_READABLE | G_PARAM_STATIC_STRINGS
+            )
+        );
+
+    g_object_class_install_property(
+        klasse,
+        GPVIEW_SYMBOL_VIEW_SYMBOL_IDS,
+        g_param_spec_boxed(
+            "symbol-ids",
+            "Symbol IDs",
+            "Symbol IDs",
+            G_TYPE_STRV,
+            G_PARAM_LAX_VALIDATION | G_PARAM_READABLE | G_PARAM_STATIC_STRINGS
+            )
+        );
+
+     g_object_class_install_property(
+        klasse,
+        GPVIEW_SYMBOL_VIEW_SYMBOL_NAMES,
+        g_param_spec_boxed(
+            "symbol-names",
+            "Symbol Names",
+            "Symbol Names",
+            G_TYPE_STRV,
+            G_PARAM_LAX_VALIDATION | G_PARAM_READABLE | G_PARAM_STATIC_STRINGS
+            )
+        );
 }
+
 
 static void
 gpview_symbol_view_deactivate(GPViewViewInterface *widget)
@@ -123,11 +199,24 @@ gpview_symbol_view_deactivate(GPViewViewInterface *widget)
 
     if (view == NULL)
     {
-        g_critical("Unable to");
+        g_critical("Unable to obatain an instance from GPViewViewInterface");
     }
     else
     {
-        g_debug("Dectivate");
+        GPViewSymbolViewPrivate *privat = GPVIEW_SYMBOL_VIEW_GET_PRIVATE(view);
+
+        if (privat == NULL)
+        {
+            g_critical("Unable to obtain private data for a GPViewSymbolView");
+        }
+        else if (privat->controller == NULL)
+        {
+            g_critical("GPViewSymbolView has a NULL controller");
+        }
+        else
+        {
+            //gpview_symbol_ctrl_set_current_view(privat->controller, NULL);
+        }
     }
 }
 
@@ -139,29 +228,152 @@ gpview_symbol_view_dispose(GObject *object)
 
     if (privat != NULL)
     {
+        if (privat->adapter != NULL)
+        {
+            g_object_unref(privat->adapter);
+        }
+
         if (privat->database != NULL)
         {
             g_object_unref(privat->database);
+        }
+
+        if (privat->result != NULL)
+        {
+            g_object_unref(privat->result);
         }
     }
 
     misc_object_chain_dispose(object);
 }
 
+
 static void
-gpview_symbol_view_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
+gpview_symbol_view_finalize(GObject *object)
 {
     GPViewSymbolViewPrivate *privat = GPVIEW_SYMBOL_VIEW_GET_PRIVATE(object);
 
     if (privat != NULL)
     {
+        //g_strfreev(privat->symbol_ids);
+        //g_strfreev(privat->symbol_names);
+    }
+
+    misc_object_chain_finalize(object);
+}
+
+
+GPartsDatabase*
+gpview_symbol_view_get_database(GPViewSymbolView *view)
+{
+    GPViewSymbolViewPrivate *privat = GPVIEW_SYMBOL_VIEW_GET_PRIVATE(view);
+    GPartsDatabase *database = NULL;
+
+    if (privat != NULL)
+    {
+        database = privat->database;
+
+        if (database != NULL)
+        {
+            g_object_ref(G_OBJECT(database));
+        }
+    }
+
+    return database;
+}
+
+
+static void
+gpview_symbol_view_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
+{
+    GPViewSymbolView *view = GPVIEW_SYMBOL_VIEW(object);
+
+    if (view != NULL)
+    {
         switch (property_id)
         {
+            case GPVIEW_SYMBOL_VIEW_DATABASE:
+                g_value_take_object(value, gpview_symbol_view_get_database(view));
+                break;
+
+            case GPVIEW_SYMBOL_VIEW_RESULT:
+                g_value_take_object(value, gpview_symbol_view_get_result(view));
+                break;
+
+            case GPVIEW_SYMBOL_VIEW_SYMBOL_IDS:
+                g_value_take_boxed(value, gpview_symbol_view_get_symbol_ids(view));
+                break;
+
+            case GPVIEW_SYMBOL_VIEW_SYMBOL_NAMES:
+                g_value_take_boxed(value, gpview_symbol_view_get_symbol_names(view));
+                break;
+
             default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
         }
     }
 }
+
+
+GPartsDatabaseResult*
+gpview_symbol_view_get_result(GPViewSymbolView *view)
+{
+    GPViewSymbolViewPrivate *privat = GPVIEW_SYMBOL_VIEW_GET_PRIVATE(view);
+    GPartsDatabaseResult *result = NULL;
+
+    if (privat != NULL)
+    {
+        result = privat->result;
+
+        if (result != NULL)
+        {
+            g_object_ref(G_OBJECT(result));
+        }
+    }
+
+    return result;
+}
+
+
+GStrv
+gpview_symbol_view_get_symbol_ids(GPViewSymbolView *view)
+{
+    GPViewSymbolViewPrivate *privat = GPVIEW_SYMBOL_VIEW_GET_PRIVATE(view);
+    GStrv ids = NULL;
+
+    if (privat != NULL)
+    {
+        gint index;
+
+        if (gpview_result_adapter_get_column_index(privat->adapter, "SymbolId", &index))
+        {
+            ids = gpview_result_adapter_get_fields(privat->adapter, privat->selection, index);
+        }
+    }
+
+    return ids;
+}
+
+
+GStrv
+gpview_symbol_view_get_symbol_names(GPViewSymbolView *view)
+{
+    GPViewSymbolViewPrivate *privat = GPVIEW_SYMBOL_VIEW_GET_PRIVATE(view);
+    GStrv names = NULL;
+
+    if (privat != NULL)
+    {
+        gint index;
+
+        if (gpview_result_adapter_get_column_index(privat->adapter, "SymbolName", &index))
+        {
+            names = gpview_result_adapter_get_fields(privat->adapter, privat->selection, index);
+        }
+    }
+
+    return names;
+}
+
 
 GType
 gpview_symbol_view_get_type(void)
@@ -202,6 +414,7 @@ gpview_symbol_view_get_type(void)
     return type;
 }
 
+
 static void
 gpview_symbol_view_init(GTypeInstance *instance, gpointer g_class)
 {
@@ -211,7 +424,21 @@ gpview_symbol_view_init(GTypeInstance *instance, gpointer g_class)
     {
         GtkWidget *scrolled;
 
-        privat->symbol_view = (GtkTreeView*) gtk_tree_view_new();
+        privat->symbol_view = GTK_TREE_VIEW(gtk_tree_view_new());
+
+        privat->selection = gtk_tree_view_get_selection(privat->symbol_view);
+
+        gtk_tree_selection_set_mode(
+            privat->selection,
+            GTK_SELECTION_MULTIPLE
+            );
+
+        g_signal_connect(
+            privat->selection,
+            "changed",
+            G_CALLBACK(gpview_symbol_view_changed_cb),
+            instance
+            );
 
         scrolled = gtk_scrolled_window_new(
             NULL,    /* hadjustment */
@@ -240,23 +467,40 @@ gpview_symbol_view_init(GTypeInstance *instance, gpointer g_class)
             GTK_CONTAINER(instance),
             GTK_WIDGET(privat->drawing_view)
             );
+
+        /* TODO: Fix default position */
+
+        gtk_paned_set_position(
+            GTK_PANED(instance),
+            600
+            );
+
+        g_signal_connect(
+            instance,
+            "notify::database",
+            G_CALLBACK(gpview_symbol_view_update_cb),
+            instance
+            );
+
+        g_signal_connect(
+            instance,
+            "notify::symbol-names",
+            G_CALLBACK(gpview_symbol_view_update2_cb),
+            instance
+            );
     }
 }
+
 
 static void
 gpview_symbol_view_init_view_interface(gpointer iface, gpointer user_data)
 {
     GPViewViewInterface *iface2 = (GPViewViewInterface*) iface;
 
-    if (iface2 == NULL)
-    {
-    }
-    else
-    {
-        iface2->activate   = gpview_symbol_view_activate;
-        iface2->deactivate = gpview_symbol_view_deactivate;
-    }
+    iface2->activate   = gpview_symbol_view_activate;
+    iface2->deactivate = gpview_symbol_view_deactivate;
 }
+
 
 GPViewSymbolView*
 gpview_symbol_view_new()
@@ -264,47 +508,6 @@ gpview_symbol_view_new()
     return (GPViewSymbolView*) g_object_new(GPVIEW_TYPE_SYMBOL_VIEW, NULL);
 }
 
-static void
-gpview_symbol_view_notify_connected_cb(GPartsDatabase *database, GParamSpec *param, GPViewSymbolView *view)
-{
-    gpview_symbol_view_refresh(view);
-}
-
-void
-gpview_symbol_view_refresh(GPViewSymbolView *view)
-{
-    GPViewSymbolViewPrivate *privat = GPVIEW_SYMBOL_VIEW_GET_PRIVATE(view);
-
-    g_debug("gpview_symbol_view_refresh");
-
-    if (privat != NULL)
-    {
-        if (privat->result != NULL)
-        {
-            g_object_unref(privat->result);
-            privat->result = NULL;
-        }
-
-        if (privat->database != NULL)
-        {
-            GPViewResultAdapter *model = NULL;
-
-            privat->result = gparts_database_query(privat->database, "SELECT * FROM SymbolV", NULL);
-
-            if (privat->result != NULL)
-            {
-                model = gpview_result_adapter_new(privat->result);
-            }
-
-            if (model != NULL)
-            {
-                gpview_result_adapter_adjust_columns(model, privat->symbol_view);
-            }
-
-            gtk_tree_view_set_model(privat->symbol_view, GTK_TREE_MODEL(model));
-        }
-    }
-}
 
 void
 gpview_symbol_view_set_database(GPViewSymbolView *view, GPartsDatabase *database)
@@ -319,7 +522,7 @@ gpview_symbol_view_set_database(GPViewSymbolView *view, GPartsDatabase *database
         {
             g_signal_handlers_disconnect_by_func(
                 privat->database,
-                G_CALLBACK(gpview_symbol_view_notify_connected_cb),
+                G_CALLBACK(gpview_symbol_view_update_cb),
                 view
                 );
 
@@ -330,21 +533,20 @@ gpview_symbol_view_set_database(GPViewSymbolView *view, GPartsDatabase *database
 
         if (privat->database != NULL)
         {
-            g_object_unref(privat->database);
+            g_object_ref(privat->database);
 
             g_signal_connect(
                 privat->database,
                 "notify::connected",
-                G_CALLBACK(gpview_symbol_view_notify_connected_cb),
+                G_CALLBACK(gpview_symbol_view_update_cb),
                 view
                 );
         }
 
         g_object_notify(G_OBJECT(view), "database");
-
-        gpview_symbol_view_refresh(view);
     }
 }
+
 
 static void
 gpview_symbol_view_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec)
@@ -362,6 +564,110 @@ gpview_symbol_view_set_property(GObject *object, guint property_id, const GValue
             default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
         }
+    }
+}
+
+
+static void
+gpview_symbol_view_set_result(GPViewSymbolView *view, GPartsDatabaseResult *result)
+{
+    GPViewSymbolViewPrivate *privat = GPVIEW_SYMBOL_VIEW_GET_PRIVATE(view);
+
+    if (privat != NULL)
+    {
+        if (privat->adapter != NULL)
+        {
+            g_object_unref(privat->adapter);
+        }
+
+        if (privat->result != NULL)
+        {
+            g_object_unref(privat->result);
+        }
+
+        privat->adapter = NULL;
+        privat->result = result;
+
+        if (privat->result != NULL)
+        {
+            g_object_ref(privat->result);
+
+            privat->adapter = gpview_result_adapter_new(privat->result);
+
+            if (privat->adapter != NULL)
+            {
+                gpview_result_adapter_adjust_columns(privat->adapter, privat->symbol_view);
+            }
+
+            gtk_tree_view_set_model(privat->symbol_view, GTK_TREE_MODEL(privat->adapter));
+        }
+
+        g_object_notify(G_OBJECT(view), "symbol-ids");
+        g_object_notify(G_OBJECT(view), "symbol-names");
+        g_object_notify(G_OBJECT(view), "result");
+    }
+}
+
+
+static void
+gpview_symbol_view_update_cb(GObject *unused, GParamSpec *pspec, GPViewSymbolView *view)
+{
+    GPViewSymbolViewPrivate *privat = GPVIEW_SYMBOL_VIEW_GET_PRIVATE(view);
+
+    if (privat != NULL)
+    {
+        if (privat->database != NULL)
+        {
+            GPartsDatabaseResult *result;
+
+            result = gparts_database_query(privat->database, "SELECT * FROM SymbolV", NULL);
+
+            gpview_symbol_view_set_result(view, result);
+
+            if (result != NULL)
+            {
+                g_object_unref(G_OBJECT(result));
+            }
+        }
+    }
+}
+
+static void
+gpview_symbol_view_update2_cb(GObject *unused, GParamSpec *pspec, GPViewSymbolView *view)
+{
+    GPViewSymbolViewPrivate *privat = GPVIEW_SYMBOL_VIEW_GET_PRIVATE(view);
+
+    if (privat != NULL)
+    {
+        GStrv names = gpview_symbol_view_get_symbol_names(view);
+
+        if ((names != NULL) && (g_strv_length(names) == 1))
+        {
+            SchComponent *component = NULL;
+            SchDrawing   *drawing = NULL;
+            SchLoader    *loader = sch_loader_get_default();
+            SchDrawing   *symbol = NULL;
+
+            if (loader != NULL)
+            {
+                symbol = sch_loader_load_symbol(loader, *names, NULL);
+            }
+
+            component = sch_component_instantiate(sch_config_new(), symbol);
+            misc_object_unref(symbol);
+
+            if (component != NULL)
+            {
+                drawing = sch_drawing_new();
+                sch_drawing_append_shape(drawing, SCH_SHAPE(component));
+                g_object_unref(component);
+            }
+
+            schgui_drawing_view_set_drawing(privat->drawing_view, drawing);
+            misc_object_unref(drawing);
+        }
+
+        g_strfreev(names);
     }
 }
 

@@ -297,9 +297,9 @@ gpview_company_view_get_type(void)
 }
 
 GStrv
-gpview_company_view_get_websites(GPViewCompanyCtrl *ctrl)
+gpview_company_view_get_websites(GPViewCompanyView *view)
 {
-    GPViewCompanyViewPrivate *privat = GPVIEW_COMPANY_VIEW_GET_PRIVATE(ctrl);
+    GPViewCompanyViewPrivate *privat = GPVIEW_COMPANY_VIEW_GET_PRIVATE(view);
     GStrv websites = NULL;
 
     if (privat != NULL)

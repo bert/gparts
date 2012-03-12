@@ -200,7 +200,7 @@ gpview_company_ctrl_create_cb(GtkAction *action, GPViewCompanyCtrl *ctrl)
         {
             gtk_widget_show_all(GTK_WIDGET(dialog));
 
-            gint result = gtk_dialog_run(GTK_DIALOG(dialog));
+            /*gint result =*/ gtk_dialog_run(GTK_DIALOG(dialog));
 
             gtk_widget_hide(GTK_WIDGET(dialog));
         }
@@ -240,7 +240,7 @@ gpview_company_ctrl_delete_cb(GtkAction *action, GPViewCompanyCtrl *ctrl)
         {
             gtk_widget_show_all(GTK_WIDGET(dialog));
 
-            gint result = gtk_dialog_run(GTK_DIALOG(dialog));
+            /*gint result =*/ gtk_dialog_run(GTK_DIALOG(dialog));
 
             gtk_widget_hide(GTK_WIDGET(dialog));
         }
