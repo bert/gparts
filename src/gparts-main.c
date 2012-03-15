@@ -48,10 +48,14 @@ struct _GPartsPrivate
 
     GPartsController *current_controller;
 
-    GPViewCompanyView *company_view;
-    GPViewCompanyView *symbol_view;
+    GPViewCompanyView  *company_view;
+    GPViewDeviceView   *device_view;
+    GPViewDocumentView *document_view;
+    GPViewDocumentView *footprint_view;
+    GPViewDocumentView *package_view;
+    GPViewSymbolView   *symbol_view;
 
-    GtkWidget         *current_view;
+    GtkWidget          *current_view;
 
 
     GPViewCompanyCtrl *company_ctrl;
@@ -444,7 +448,35 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         );
 
     privat->company_view = gpview_company_view_new_with_controller(privat->company_ctrl);
+    privat->device_view = gpview_device_view_new();
+    privat->document_view = gpview_document_view_new();
+    privat->footprint_view = gpview_footprint_view_new();
+    privat->package_view = gpview_package_view_new();
     privat->symbol_view = gpview_symbol_view_new();
+
+    gtk_notebook_prepend_page(
+        privat->notebook,
+        privat->package_view,
+        gtk_label_new("Packages")
+        );
+
+    gtk_notebook_prepend_page(
+        privat->notebook,
+        privat->footprint_view,
+        gtk_label_new("Footprints")
+        );
+
+    gtk_notebook_prepend_page(
+        privat->notebook,
+        privat->document_view,
+        gtk_label_new("Documents")
+        );
+
+    gtk_notebook_prepend_page(
+        privat->notebook,
+        privat->device_view,
+        gtk_label_new("Devices")
+        );
 
     gtk_notebook_prepend_page(
         privat->notebook,
@@ -462,6 +494,38 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         privat->database_model,
         "database",
         privat->company_view,
+        "database",
+        G_BINDING_DEFAULT
+        );
+
+    g_object_bind_property(
+        privat->database_model,
+        "database",
+        privat->device_view,
+        "database",
+        G_BINDING_DEFAULT
+        );
+
+    g_object_bind_property(
+        privat->database_model,
+        "database",
+        privat->document_view,
+        "database",
+        G_BINDING_DEFAULT
+        );
+
+    g_object_bind_property(
+        privat->database_model,
+        "database",
+        privat->footprint_view,
+        "database",
+        G_BINDING_DEFAULT
+        );
+
+    g_object_bind_property(
+        privat->database_model,
+        "database",
+        privat->package_view,
         "database",
         G_BINDING_DEFAULT
         );

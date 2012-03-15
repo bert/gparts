@@ -69,7 +69,7 @@ gparts_SOURCES = \
 	miscui-action-controller.c \
 	miscui-action-model.c
 gparts_CFLAGS = $(AM_CFLAGS) $(GMODULE_CFLAGS) $(GTK_CFLAGS)
-gparts_LDADD = $(GMODULE_LIBS) $(GTK_LIBS) libgeom.la libgpform.la libgpview.la libmisc.la libsch.la libschgui.la libscmcfg.la
+gparts_LDADD = $(GMODULE_LIBS) $(GTK_LIBS) -lefence libgeom.la libgpform.la libgpview.la libmisc.la libsch.la libschgui.la libscmcfg.la
 
 #gparts_DEPENDENCIES = $(MYSQL_LDADD) $(POSTGRESQL_LDADD) $(SQLITE_LDADD)
 
@@ -262,6 +262,10 @@ libgpdata_la_LIBADD = $(GLIB_LIBS) $(LIBXML_LIBS) libmisc.la
 libgpview_la_SOURCES = \
 	gpview-company-ctrl.c \
 	gpview-company-view.c \
+	gpview-device-view.c \
+	gpview-document-view.c \
+	gpview-footprint-view.c \
+	gpview-package-view.c \
 	gpview-factory.c \
 	gpview-result-adapter.c \
 	gpview-symbol-view.c \

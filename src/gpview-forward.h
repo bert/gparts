@@ -32,6 +32,18 @@ typedef struct _GPViewCompanyCtrlClass GPViewCompanyCtrlClass;
 typedef struct _GPViewCompanyView GPViewCompanyView;
 typedef struct _GPViewCompanyViewClass GPViewCompanyViewClass;
 
+typedef struct _GPViewDeviceView GPViewDeviceView;
+typedef struct _GPViewDeviceViewClass GPViewDeviceViewClass;
+
+typedef struct _GPViewDocumentView GPViewDocumentView;
+typedef struct _GPViewDocumentViewClass GPViewDocumentViewClass;
+
+typedef struct _GPViewFootprintView GPViewFootprintView;
+typedef struct _GPViewFootprintViewClass GPViewFootprintViewClass;
+
+typedef struct _GPViewPackageView GPViewPackageView;
+typedef struct _GPViewPackageViewClass GPViewPackageViewClass;
+
 typedef struct _GPViewFactory GPViewFactory;
 typedef struct _GPViewFactoryClass GPViewFactoryClass;
 

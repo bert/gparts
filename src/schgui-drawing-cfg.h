@@ -61,7 +61,7 @@ schgui_drawing_cfg_disable_color(SchGUIDrawingCfg *config, int index);
  *  \param [out] color  The color of the background
  */
 void
-schgui_drawing_cfg_get_background_as_gdk_color(GObject *object, GdkColor *color);
+schgui_drawing_cfg_get_background_as_gdk_color(SchGUIDrawingCfg *object, GdkColor *color);
 
 /*! \brief Get a color used for drawing schematic shapes
  *

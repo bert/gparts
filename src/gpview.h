@@ -30,6 +30,10 @@
 
 #include "gpview-company-ctrl.h"
 #include "gpview-company-view.h"
+#include "gpview-device-view.h"
+#include "gpview-document-view.h"
+#include "gpview-footprint-view.h"
+#include "gpview-package-view.h"
 #include "gpview-factory.h"
 #include "gpview-result-adapter.h"
 #include "gpview-symbol-view.h"

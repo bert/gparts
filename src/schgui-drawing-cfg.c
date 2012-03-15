@@ -26,6 +26,7 @@
 #include <gdk/gdk.h>
 
 #include "schgui.h"
+#include "misc-object.h"
 
 #define SCHGUI_DRAWING_CFG_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),SCHGUI_TYPE_DRAWING_CFG,SchGUIDrawingCfgPrivate))
 
@@ -64,7 +65,7 @@ static void
 schgui_drawing_cfg_finalize(GObject *object);
 
 static void
-schgui_drawing_cfg_get_background(GObject *object, GValue *value);
+schgui_drawing_cfg_get_background(SchGUIDrawingCfg *object, GValue *value);
 
 static void
 schgui_drawing_cfg_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
@@ -208,7 +209,7 @@ schgui_drawing_cfg_finalize(GObject *object)
 }
 
 static void
-schgui_drawing_cfg_get_background(GObject *object, GValue *value)
+schgui_drawing_cfg_get_background(SchGUIDrawingCfg *object, GValue *value)
 {
     if (value != NULL)
     {
@@ -232,7 +233,7 @@ schgui_drawing_cfg_get_background(GObject *object, GValue *value)
 }
 
 void
-schgui_drawing_cfg_get_background_as_gdk_color(GObject *object, GdkColor *color)
+schgui_drawing_cfg_get_background_as_gdk_color(SchGUIDrawingCfg *object, GdkColor *color)
 {
     int enabled = FALSE;
 
@@ -259,7 +260,7 @@ schgui_drawing_cfg_get_property(GObject *object, guint property_id, GValue *valu
         switch (property_id)
         {
             case SCHGUI_DRAWING_CFG_BACKGROUND:
-                schgui_drawing_cfg_get_background(object, value);
+                schgui_drawing_cfg_get_background(config, value);
                 break;
 
             case SCHGUI_DRAWING_CFG_COLOR_BACKGROUND:
@@ -369,13 +370,13 @@ schgui_drawing_cfg_set_property(GObject *object, guint property_id, const GValue
 void
 schgui_drawing_cfg_get_display_color(SchGUIDrawingCfg *cfg, int index, double *red, double *green, double *blue)
 {
-    sch_color_get_default(index, red, green, blue);
+    //sch_color_get_default(index, red, green, blue);
 }
 
 void
 schgui_drawing_cfg_get_print_color(SchGUIDrawingCfg *cfg, int index, double *red, double *green, double *blue)
 {
-    sch_color_get_default(index, red, green, blue);
+    //sch_color_get_default(index, red, green, blue);
 }
 
 void
@@ -424,6 +425,7 @@ schgui_drawing_cfg_get_color(SchGUIDrawingCfg *config, int index, MiscGUIColor *
                 enabled = TRUE;
             }
         }
+
     }
 
     return enabled;
@@ -501,115 +503,115 @@ schgui_drawing_cfg_init(GTypeInstance *instance, gpointer g_class)
             );
 
         schgui_drawing_cfg_set_color_by_name(
-            instance,
+            SCHGUI_DRAWING_CFG(instance),
             0,           /* background */
             "#000000"
             );
 
         schgui_drawing_cfg_set_color_by_name(
-            instance,
+            SCHGUI_DRAWING_CFG(instance),
             1,           /* pin */
             "#ffffff"
             );
 
         schgui_drawing_cfg_set_color_by_name(
-            instance,
+            SCHGUI_DRAWING_CFG(instance),
             2,           /* net-endpoint */
             "#ff0000"
             );
 
         schgui_drawing_cfg_set_color_by_name(
-            instance,
+            SCHGUI_DRAWING_CFG(instance),
             3,           /* graphic */
             "#00ff00"
             );
 
         schgui_drawing_cfg_set_color_by_name(
-            instance,
+            SCHGUI_DRAWING_CFG(instance),
             4,           /* net */
             "#0000ff"
             );
 
         schgui_drawing_cfg_set_color_by_name(
-            instance,
+            SCHGUI_DRAWING_CFG(instance),
             5,           /* attribute */
             "#ffff00"
             );
 
         schgui_drawing_cfg_set_color_by_name(
-            instance,
+            SCHGUI_DRAWING_CFG(instance),
             6,           /* logic-bubble */
             "#00ffff"
             );
 
         schgui_drawing_cfg_set_color_by_name(
-            instance,
+            SCHGUI_DRAWING_CFG(instance),
             7,           /* dots-grid */
             "#bebebe"
             );
 
         schgui_drawing_cfg_set_color_by_name(
-            instance,
+            SCHGUI_DRAWING_CFG(instance),
             22,          /* mesh-grid-major */
             "#1e1e1e"
             );
 
         schgui_drawing_cfg_set_color_by_name(
-            instance,
+            SCHGUI_DRAWING_CFG(instance),
             23,          /* mesh-grid-minor */
             "#171717"
             );
 
         schgui_drawing_cfg_set_color_by_name(
-            instance,
+            SCHGUI_DRAWING_CFG(instance),
             8,           /* detached-attribute  */
             "#ff0000"
             );
 
         schgui_drawing_cfg_set_color_by_name(
-            instance,
+            SCHGUI_DRAWING_CFG(instance),
             9,           /* text */
             "#00ff00"
             );
 
         schgui_drawing_cfg_set_color_by_name(
-            instance,
+            SCHGUI_DRAWING_CFG(instance),
             10,          /* bus */
             "#00ff00"
             );
 
         schgui_drawing_cfg_set_color_by_name(
-            instance,
+            SCHGUI_DRAWING_CFG(instance),
             11,          /* select */
             "#ffa500"
             );
 
         schgui_drawing_cfg_set_color_by_name(
-            instance,
+            SCHGUI_DRAWING_CFG(instance),
             12,          /* bounding-box */
             "#ffa500"
             );
 
         schgui_drawing_cfg_set_color_by_name(
-            instance,
+            SCHGUI_DRAWING_CFG(instance),
             13,          /* zoom-box */
             "#00ffff"
             );
 
         schgui_drawing_cfg_set_color_by_name(
-            instance,
+            SCHGUI_DRAWING_CFG(instance),
             14,          /* stroke */
             "#e5e5e5"
             );
 
         schgui_drawing_cfg_set_color_by_name(
-            instance,
+            SCHGUI_DRAWING_CFG(instance),
             15,          /* lock */
             "#bebebe"
             );
 
         schgui_drawing_cfg_set_color_by_name(
-            instance,
+            SCHGUI_DRAWING_CFG(instance),
             21,          /* junction */
             "#ffff00"
             );

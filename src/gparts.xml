@@ -277,7 +277,7 @@
 
 
                         <!-- A window for browsing all the devices in the library -->
-
+                        <!--
                         <child>
                             <object class="GtkScrolledWindow" id="devices-scrolled">
                                 <property name="visible">TRUE</property>
@@ -297,11 +297,10 @@
                                 <property name="label">Devices</property>
                             </object>
                         </child>
-
-
+                        -->
 
                         <!-- A window for browsing all the documentation in the library -->
-
+                        <!--
                         <child>
                             <object class="GtkScrolledWindow" id="documentation-scrolled">
                                 <property name="visible">TRUE</property>
@@ -321,11 +320,11 @@
                                 <property name="label">Documentation</property>
                             </object>
                         </child>
-
+                        -->
 
 
                         <!-- A window for browsing all the footprints in the library -->
-
+                        <!--
                         <child>
                             <object class="GtkHPaned" id="footprints-hpaned">
                                 <property name="visible">TRUE</property>
@@ -357,11 +356,11 @@
                                 <property name="label">Footprints</property>
                             </object>
                         </child>
-
+                        -->
 
 
                         <!-- A window for browsing all the packages in the library -->
-
+                        <!--
                         <child>
                             <object class="GtkHPaned" id="symbols-hpaned">
                                 <property name="visible">TRUE</property>
@@ -400,7 +399,7 @@
                                 <property name="label">Packages</property>
                             </object>
                         </child>
-
+                        -->
 
                         <!-- A window for browsing all the parts in the library -->
 

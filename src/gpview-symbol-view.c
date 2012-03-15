@@ -639,12 +639,12 @@ gpview_symbol_view_update2_cb(GObject *unused, GParamSpec *pspec, GPViewSymbolVi
 
     if (privat != NULL)
     {
+        SchDrawing   *drawing = NULL;
         GStrv names = gpview_symbol_view_get_symbol_names(view);
 
         if ((names != NULL) && (g_strv_length(names) == 1))
         {
             SchComponent *component = NULL;
-            SchDrawing   *drawing = NULL;
             SchLoader    *loader = sch_loader_get_default();
             SchDrawing   *symbol = NULL;
 
@@ -662,11 +662,10 @@ gpview_symbol_view_update2_cb(GObject *unused, GParamSpec *pspec, GPViewSymbolVi
                 sch_drawing_append_shape(drawing, SCH_SHAPE(component));
                 g_object_unref(component);
             }
-
-            schgui_drawing_view_set_drawing(privat->drawing_view, drawing);
-            misc_object_unref(drawing);
         }
 
+        schgui_drawing_view_set_drawing(privat->drawing_view, drawing);
+        misc_object_unref(drawing);
         g_strfreev(names);
     }
 }
