@@ -62,6 +62,9 @@ typedef struct _GPViewFactoryClass GPViewFactoryClass;
 typedef struct _GPViewResultAdapter GPViewResultAdapter;
 typedef struct _GPViewResultAdapterClass GPViewResultAdapterClass;
 
+typedef struct _GPViewSymbolCtrl GPViewSymbolCtrl;
+typedef struct _GPViewSymbolCtrlClass GPViewSymbolCtrlClass;
+
 typedef struct _GPViewSymbolView GPViewSymbolView;
 typedef struct _GPViewSymbolViewClass GPViewSymbolViewClass;
 

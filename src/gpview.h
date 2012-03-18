@@ -40,6 +40,7 @@
 #include "gpview-part-view.h"
 #include "gpview-factory.h"
 #include "gpview-result-adapter.h"
+#include "gpview-symbol-ctrl.h"
 #include "gpview-symbol-view.h"
 #include "gpview-view-interface.h"
 

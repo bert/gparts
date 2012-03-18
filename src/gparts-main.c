@@ -332,6 +332,14 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         gtk_label_new("Symbols")
         );
 
+    g_object_bind_property(
+        privat->database_model,
+        "database",
+        privat->view_factory,
+        "database",
+        G_BINDING_DEFAULT
+        );
+
     gtk_widget_show_all(widget);
 }
 

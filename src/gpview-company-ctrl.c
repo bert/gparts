@@ -636,7 +636,7 @@ gpview_company_ctrl_update_2_cb(GObject *unused, GParamSpec *pspec, GPViewCompan
 }
 
 /* This function sends "failed to create drawable" to the terminal. It
- * is caused by gnome-open.
+ * seems to be caused by gnome-open and a URL to a website.
  */
 static void
 gpview_company_ctrl_visit_cb(GtkAction *action, GPViewCompanyCtrl *ctrl)

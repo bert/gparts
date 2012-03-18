@@ -75,6 +75,9 @@ gpview_symbol_view_get_symbol_ids(GPViewSymbolView *view);
 GStrv
 gpview_symbol_view_get_symbol_names(GPViewSymbolView *view);
 
+void
+gpview_symbol_view_set_controller(GPViewSymbolView *view, GPViewSymbolCtrl *ctrl);
+
 /*! \brief Create a new symbol view
  *
  *  Use g_object_unref() on the returned pointer when no
@@ -84,4 +87,7 @@ gpview_symbol_view_get_symbol_names(GPViewSymbolView *view);
  */
 GPViewSymbolView*
 gpview_symbol_view_new();
+
+GPViewSymbolView*
+gpview_symbol_view_new_with_controller(GPViewSymbolCtrl *ctrl);
 

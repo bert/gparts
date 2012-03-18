@@ -19,12 +19,17 @@
     <toolbar name="main_toolbar">
         <toolitem action="company-create"/>
         <toolitem action="part-create"/>
+        <toolitem action="symbol-create"/>
         <toolitem action="company-delete"/>
         <toolitem action="part-delete"/>
+        <toolitem action="symbol-delete"/>
         <toolitem action="company-edit"/>
         <toolitem action="part-edit"/>
+        <toolitem action="symbol-edit"/>
         <separator/>
-        <toolitem action="company-visit"/>
+        <toolitem action="symbol-open"/>
+        <toolitem action="symbol-scan"/>
         <toolitem action="part-copy"/>
+        <toolitem action="company-visit"/>
     </toolbar>
 </ui>

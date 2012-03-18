@@ -61,6 +61,9 @@ sch_loader_load_drawing(SchLoader *loader, const gchar *filename, GError **error
 SchDrawing*
 sch_loader_load_symbol(SchLoader *loader, const gchar *filename, GError **error);
 
+gchar*
+sch_loader_find_symbol_file(SchLoader *loader, const char *filename);
+
 FILE*
 sch_loader_open_symbol_file(SchLoader *loader, const char *filename, const char *mode);
 

@@ -343,6 +343,36 @@ sch_loader_load_symbol(SchLoader *loader, const gchar *filename, GError **error)
     return drawing;
 }
 
+gchar*
+sch_loader_find_symbol_file(SchLoader *loader, const char *filename)
+{
+    gchar *path = NULL;
+    SchLoaderPrivate *privat = SCH_LOADER_GET_PRIVATE(loader);
+
+    if (privat != NULL)
+    {
+        const char **dir = privat->component_libraries->data;
+
+        while (*dir != NULL)
+        {
+            path = g_build_filename(*dir, filename, NULL);
+
+            if (g_file_test(path, G_FILE_TEST_IS_REGULAR))
+            {
+                break;
+            }
+
+            g_free(path);
+            path = NULL;
+
+            dir++;
+        }
+    }
+
+    return path;
+}
+
+
 FILE*
 sch_loader_open_symbol_file(SchLoader *loader, const char *filename, const char *mode)
 {

@@ -45,6 +45,7 @@ struct _GPViewFactoryPrivate
 
     GPViewCompanyCtrl *company_ctrl;
     GPViewPartCtrl    *part_ctrl;
+    GPViewSymbolCtrl  *symbol_ctrl;
 
     GtkUIManager      *ui_manager;
 };
@@ -196,7 +197,7 @@ gpview_factory_create_symbol_view(GPViewFactory *factory)
 
     if (privat != NULL)
     {
-        view = gpview_symbol_view_new();
+        view = gpview_symbol_view_new_with_controller(privat->symbol_ctrl);
     }
 
     return view;
@@ -258,6 +259,8 @@ gpview_factory_init(GTypeInstance *instance, gpointer g_class)
         privat->company_ctrl = gpview_company_ctrl_new();
 
         privat->part_ctrl = gpview_part_ctrl_new();
+
+        privat->symbol_ctrl = gpview_symbol_ctrl_new();
     }
 }
 
@@ -297,6 +300,8 @@ gpview_factory_set_database(GPViewFactory *view, GPartsDatabase *database)
         {
             g_object_unref(privat->database);
         }
+
+        gpview_symbol_ctrl_set_database(privat->symbol_ctrl, database);
 
         g_object_notify(G_OBJECT(view), "database");
     }
@@ -346,6 +351,7 @@ gpview_factory_set_ui_manager(GPViewFactory *factory, GtkUIManager *manager)
 
         gpview_company_ctrl_set_ui_manager(privat->company_ctrl, manager);
         gpview_part_ctrl_set_ui_manager(privat->part_ctrl, manager);
+        gpview_symbol_ctrl_set_ui_manager(privat->symbol_ctrl, manager);
 
         g_object_notify(G_OBJECT(factory), "ui-manager");
     }

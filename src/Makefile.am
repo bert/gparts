@@ -272,6 +272,7 @@ libgpview_la_SOURCES = \
 	gpview-part-ctrl.c \
 	gpview-part-view.c \
 	gpview-result-adapter.c \
+	gpview-symbol-ctrl.c \
 	gpview-symbol-view.c \
 	gpview-view-interface.c
 libgpview_la_CFLAGS = -Wall $(AM_CFLAGS) $(GTK_CFLAGS)

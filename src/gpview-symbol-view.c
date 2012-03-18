@@ -33,7 +33,8 @@
 
 enum
 {
-    GPVIEW_SYMBOL_VIEW_DATABASE = 1,
+    GPVIEW_SYMBOL_VIEW_CONTROLLER = 1,
+    GPVIEW_SYMBOL_VIEW_DATABASE,
     GPVIEW_SYMBOL_VIEW_RESULT,
     GPVIEW_SYMBOL_VIEW_SYMBOL_IDS,
     GPVIEW_SYMBOL_VIEW_SYMBOL_NAMES
@@ -44,7 +45,7 @@ typedef struct _GPViewSymbolViewPrivate GPViewSymbolViewPrivate;
 struct _GPViewSymbolViewPrivate
 {
     GPViewResultAdapter  *adapter;
-    void                 *controller;
+    GPViewSymbolCtrl     *controller;
     GPartsDatabase       *database;
     GPartsDatabaseResult *result;
     GtkTreeSelection     *selection;
@@ -114,7 +115,7 @@ gpview_symbol_view_activate(GPViewViewInterface *widget)
         }
         else
         {
-            //gpview_symbol_ctrl_set_current_view(privat->controller, view);
+            gpview_symbol_ctrl_set_current_view(privat->controller, view);
         }
     }
 }
@@ -141,6 +142,19 @@ gpview_symbol_view_class_init(gpointer g_class, gpointer g_class_data)
 
     klasse->get_property = gpview_symbol_view_get_property;
     klasse->set_property = gpview_symbol_view_set_property;
+
+    g_object_class_install_property(
+        klasse,
+        GPVIEW_SYMBOL_VIEW_CONTROLLER,
+        g_param_spec_object(
+            "controller",
+            "Controller",
+            "Controller",
+            GPVIEW_TYPE_SYMBOL_CTRL,
+            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
+            )
+        );
+
 
     g_object_class_install_property(
         klasse,
@@ -215,7 +229,7 @@ gpview_symbol_view_deactivate(GPViewViewInterface *widget)
         }
         else
         {
-            //gpview_symbol_ctrl_set_current_view(privat->controller, NULL);
+            gpview_symbol_ctrl_set_current_view(privat->controller, NULL);
         }
     }
 }
@@ -345,7 +359,7 @@ gpview_symbol_view_get_symbol_ids(GPViewSymbolView *view)
     {
         gint index;
 
-        if (gpview_result_adapter_get_column_index(privat->adapter, "SymbolId", &index))
+        if (gpview_result_adapter_get_column_index(privat->adapter, "SymbolID", &index))
         {
             ids = gpview_result_adapter_get_fields(privat->adapter, privat->selection, index);
         }
@@ -505,7 +519,53 @@ gpview_symbol_view_init_view_interface(gpointer iface, gpointer user_data)
 GPViewSymbolView*
 gpview_symbol_view_new()
 {
-    return (GPViewSymbolView*) g_object_new(GPVIEW_TYPE_SYMBOL_VIEW, NULL);
+    return GPVIEW_SYMBOL_VIEW(g_object_new(GPVIEW_TYPE_SYMBOL_VIEW, NULL));
+}
+
+GPViewSymbolView*
+gpview_symbol_view_new_with_controller(GPViewSymbolCtrl *ctrl)
+{
+    return GPVIEW_SYMBOL_VIEW(g_object_new(
+        GPVIEW_TYPE_SYMBOL_VIEW,
+        "controller", ctrl,
+        NULL
+        ));
+}
+
+void
+gpview_symbol_view_set_controller(GPViewSymbolView *view, GPViewSymbolCtrl *ctrl)
+{
+    GPViewSymbolViewPrivate *privat = GPVIEW_SYMBOL_VIEW_GET_PRIVATE(view);
+
+    if (privat != NULL)
+    {
+        if (privat->controller != NULL)
+        {
+            //g_signal_handlers_disconnect_by_func(
+            //    privat->database,
+            //    G_CALLBACK(gpview_company_view_notify_connected_cb),
+            //    view
+            //    );
+
+            g_object_unref(privat->controller);
+        }
+
+        privat->controller = ctrl;
+
+        if (privat->controller != NULL)
+        {
+            g_object_ref(privat->controller);
+
+            //g_signal_connect(
+            //    privat->database,
+            //    "notify::connected",
+            //    G_CALLBACK(gpview_company_view_notify_connected_cb),
+            //    view
+            //    );
+        }
+
+        g_object_notify(G_OBJECT(view), "controller");
+    }
 }
 
 
@@ -557,6 +617,10 @@ gpview_symbol_view_set_property(GObject *object, guint property_id, const GValue
     {
         switch (property_id)
         {
+            case GPVIEW_SYMBOL_VIEW_CONTROLLER:
+                gpview_symbol_view_set_controller(view, g_value_get_object(value));
+                break;
+
             case GPVIEW_SYMBOL_VIEW_DATABASE:
                 gpview_symbol_view_set_database(view, g_value_get_object(value));
                 break;
