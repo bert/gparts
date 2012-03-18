@@ -27,6 +27,7 @@
 #include "gpview.h"
 
 #include "scmcfg-config.h"
+#include "scmcfg-dirs.h"
 
 #define GPARTS_GET_PRIVATE(object) G_TYPE_INSTANCE_GET_PRIVATE(object, GPARTS_TYPE, GPartsPrivate)
 
@@ -38,35 +39,18 @@ struct _GPartsPrivate
 
     GtkNotebook      *notebook;
 
-    GtkAction        *copy_action;
-    GtkAction        *delete_action;
-    GtkAction        *edit_action;
-    GtkAction        *insert_action;
-    GtkAction        *open_document_action;
-    GtkAction        *open_website_action;
-    GtkAction        *paste_action;
 
-    GPartsController *current_controller;
+    GPViewFactory       *view_factory;
 
-    GPViewCompanyView  *company_view;
-    GPViewDeviceView   *device_view;
-    GPViewDocumentView *document_view;
-    GPViewDocumentView *footprint_view;
-    GPViewDocumentView *package_view;
-    GPViewSymbolView   *symbol_view;
+    GPViewCompanyView   *company_view;
+    GPViewDeviceView    *device_view;
+    GPViewDocumentView  *document_view;
+    GPViewFootprintView *footprint_view;
+    GPViewPackageView   *package_view;
+    GPViewPartView      *part_view;
+    GPViewSymbolView    *symbol_view;
 
-    GtkWidget          *current_view;
-
-
-    GPViewCompanyCtrl *company_ctrl;
-
-    /* A temporary measure to map GtkNotebook pages to their respective
-     * GPartsControllers.
-     */
-    GPartsController *kludge[9];
-
-    GPartsUIConnectController  *connect_controller;
-    GPartsUIDatabaseController *database_controller;
+    GtkWidget           *current_view;
 
     GPartsUICompanyModel       *company_model;
     GPartsUIConnectModel       *connect_model;
@@ -132,14 +116,6 @@ gparts_dispose(GObject *object)
 
     if (privat != NULL)
     {
-        misc_object_unref(privat->copy_action);
-        misc_object_unref(privat->delete_action);
-        misc_object_unref(privat->edit_action);
-        misc_object_unref(privat->insert_action);
-        misc_object_unref(privat->open_document_action);
-        misc_object_unref(privat->open_website_action);
-        misc_object_unref(privat->paste_action);
-
         g_object_unref(privat->builder);
     }
 
@@ -205,6 +181,8 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
 
     SCHGUI_TYPE_DRAWING_VIEW;
 
+
+
     privat->builder = gtk_builder_new();
 
     path = g_build_filename(datadir, "xml", "gparts.xml", NULL);
@@ -219,12 +197,12 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
 
     if ( status == 0 )
     {
-       g_error( error->message ) ;
+       g_error("%s", error->message) ;
     }
 
     GtkUIManager *ui_manager = GTK_UI_MANAGER(gtk_builder_get_object(privat->builder, "uimanager"));
 
-    privat->company_ctrl = gpview_company_ctrl_new_with_manager(ui_manager);
+    privat->view_factory = gpview_factory_new_with_ui_manager(ui_manager);
 
     path = g_build_filename(datadir, "xml", "gparts-ui.xml", NULL);
     g_free(datadir);
@@ -281,36 +259,6 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         NULL
         );
 
-    /**** Actions ****/
-
-    privat->copy_action = GTK_ACTION(g_object_ref(
-        gtk_builder_get_object(privat->builder, "edit-copy")
-        ));
-
-    privat->delete_action = GTK_ACTION(g_object_ref(
-        gtk_builder_get_object(privat->builder, "edit-delete")
-        ));
-
-    privat->edit_action = GTK_ACTION(g_object_ref(
-        gtk_builder_get_object(privat->builder, "edit-edit")
-        ));
-
-    privat->insert_action = GTK_ACTION(g_object_ref(
-        gtk_builder_get_object(privat->builder, "edit-insert")
-        ));
-
-    privat->open_document_action = GTK_ACTION(g_object_ref(
-        gtk_builder_get_object(privat->builder, "tools-open-document")
-        ));
-
-    privat->open_website_action = GTK_ACTION(g_object_ref(
-        gtk_builder_get_object(privat->builder, "tools-open-website")
-        ));
-
-    privat->paste_action = GTK_ACTION(g_object_ref(
-        gtk_builder_get_object(privat->builder, "edit-paste")
-        ));
-
     /**** Presentation Controllers ****/
 
     GObject *connect_controller = g_object_new(
@@ -329,224 +277,60 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         NULL
         );
 
-    /**** "High" level controllers ****/
-
-    GObject *category_controller = g_object_new(
-        GPARTS_TYPE_CATEGORY_CONTROLLER,
-        "database-model", privat->database_model,
-        "target",              GTK_TREE_VIEW(gtk_builder_get_object(privat->builder, "category-view")),
-        NULL
-        );
-
-    GObject *part_controller = g_object_new(
-        GPARTS_TYPE_RESULT_CONTROLLER,
-        "customize-ctrl", customize_ctrl,
-        "database-model", privat->database_model,
-        "edit-action",    GTK_ACTION(gtk_builder_get_object(privat->builder, "view-edit")),
-        "source",         category_controller,
-        "target",         GTK_TREE_VIEW(gtk_builder_get_object(privat->builder, "parts-tree-view")),
-        "template",       "SELECT * FROM %s",
-        "view-name",      "$(ViewName)",
-        NULL
-        );
-
-    GObject *symbol_controller = g_object_new(
-        GPARTS_TYPE_RESULT_CONTROLLER,
-        "customize-ctrl", customize_ctrl,
-        "database-model", privat->database_model,
-        "source",              part_controller,
-        "target",              GTK_TREE_VIEW(gtk_builder_get_object(privat->builder, "symbols-tree-view")),
-        "template",            "SELECT * FROM %s WHERE DeviceID = $(DeviceID)",
-        "view-name",           "SymbolV",
-        NULL
-        );
-
-    g_object_new(
-        GPARTS_TYPE_RESULT_CONTROLLER,
-        "customize-ctrl", customize_ctrl,
-        "database-model", privat->database_model,
-        "target",              GTK_TREE_VIEW(gtk_builder_get_object(privat->builder, "devices-view")),
-        "template",            "SELECT * FROM %s",
-        "view-name",           "DeviceV",
-        NULL
-        );
-
-    g_object_new(
-        GPARTS_TYPE_RESULT_CONTROLLER,
-        "customize-ctrl", customize_ctrl,
-        "database-model", privat->database_model,
-        "target",               GTK_TREE_VIEW(gtk_builder_get_object(privat->builder, "footprints-view")),
-        "template",             "SELECT * FROM %s",
-        "view-name",            "FootprintV",
-        NULL
-        );
-
-    g_object_new(
-        GPARTS_TYPE_RESULT_CONTROLLER,
-        "customize-ctrl", customize_ctrl,
-        "database-model", privat->database_model,
-        "target",               GTK_TREE_VIEW(gtk_builder_get_object(privat->builder, "packages-view")),
-        "template",             "SELECT * FROM %s",
-        "view-name",            "PackageV",
-        NULL
-        );
-
-    GObject *symbol_controller2 = g_object_new(
-        GPARTS_TYPE_RESULT_CONTROLLER,
-        "customize-ctrl", customize_ctrl,
-        "database-model", privat->database_model,
-        "target",              GTK_TREE_VIEW(gtk_builder_get_object(privat->builder, "symbols-view")),
-        "template",            "SELECT * FROM %s",
-        "view-name",           "SymbolV",
-        NULL
-        );
-
-    g_object_new(
-        GPARTS_TYPE_RESULT_CONTROLLER,
-        "customize-ctrl", customize_ctrl,
-        "database-model", privat->database_model,
-        "source",              symbol_controller2,
-        "target",              GTK_TREE_VIEW(gtk_builder_get_object(privat->builder, "symbol-details-view")),
-        "template",            "SELECT * FROM %s WHERE SymbolID = $(SymbolID)",
-        "view-name",           "SymbolDetail",
-        NULL
-        );
-
-
-    privat->kludge[0] = NULL; /*g_object_new(
-        GPARTSUI_TYPE_COMPANY_CONTROLLER,
-        "company-model",  privat->company_model,
-        "company-view",   gtk_builder_get_object(privat->builder, "companies-view"),
-        NULL
-        );*/
-
-    privat->kludge[2] = g_object_new(
-        GPARTSUI_TYPE_DOCUMENT_CONTROLLER,
-        "document-model",  privat->document_model,
-        "document-view",   gtk_builder_get_object(privat->builder, "documentation-view"),
-        NULL
-        );
-
-    privat->kludge[5] = g_object_new(
-        GPARTS_TYPE_PREVIEW_CTRL,
-        "attrib-source", part_controller,
-        "symbol-source", symbol_controller,
-        "target",        SCHGUI_DRAWING_VIEW(gtk_builder_get_object(privat->builder, "parts-graphic-view")),
-        NULL
-        );
-
-    g_object_new(
-        GPARTS_TYPE_PREVIEW_CTRL,
-        "symbol-source", symbol_controller2,
-        "target",        SCHGUI_DRAWING_VIEW(gtk_builder_get_object(privat->builder, "symbols-graphic-view")),
-        NULL
-        );
+    privat->company_view = gpview_factory_create_company_view(privat->view_factory);
+    privat->device_view = gpview_factory_create_device_view(privat->view_factory);
+    privat->document_view = gpview_factory_create_document_view(privat->view_factory);
+    privat->footprint_view = gpview_factory_create_footprint_view(privat->view_factory);
+    privat->package_view = gpview_factory_create_package_view(privat->view_factory);
+    privat->part_view = gpview_factory_create_part_view(privat->view_factory);
+    privat->symbol_view = gpview_factory_create_symbol_view(privat->view_factory);
 
     gparts_set_notebook(
         GPARTS(instance),
         GTK_NOTEBOOK(gtk_builder_get_object(privat->builder, "notebook"))
         );
 
-    privat->company_view = gpview_company_view_new_with_controller(privat->company_ctrl);
-    privat->device_view = gpview_device_view_new();
-    privat->document_view = gpview_document_view_new();
-    privat->footprint_view = gpview_footprint_view_new();
-    privat->package_view = gpview_package_view_new();
-    privat->symbol_view = gpview_symbol_view_new();
-
-    gtk_notebook_prepend_page(
+    gtk_notebook_append_page(
         privat->notebook,
-        privat->package_view,
-        gtk_label_new("Packages")
-        );
-
-    gtk_notebook_prepend_page(
-        privat->notebook,
-        privat->footprint_view,
-        gtk_label_new("Footprints")
-        );
-
-    gtk_notebook_prepend_page(
-        privat->notebook,
-        privat->document_view,
-        gtk_label_new("Documents")
-        );
-
-    gtk_notebook_prepend_page(
-        privat->notebook,
-        privat->device_view,
-        gtk_label_new("Devices")
-        );
-
-    gtk_notebook_prepend_page(
-        privat->notebook,
-        privat->company_view,
+        GTK_WIDGET(privat->company_view),
         gtk_label_new("Companies")
         );
 
     gtk_notebook_append_page(
         privat->notebook,
-        privat->symbol_view,
+        GTK_WIDGET(privat->device_view),
+        gtk_label_new("Devices")
+        );
+
+    gtk_notebook_append_page(
+        privat->notebook,
+        GTK_WIDGET(privat->document_view),
+        gtk_label_new("Documents")
+        );
+
+    gtk_notebook_append_page(
+        privat->notebook,
+        GTK_WIDGET(privat->footprint_view),
+        gtk_label_new("Footprints")
+        );
+
+    gtk_notebook_append_page(
+        privat->notebook,
+        GTK_WIDGET(privat->package_view),
+        gtk_label_new("Packages")
+        );
+
+    gtk_notebook_append_page(
+        privat->notebook,
+        GTK_WIDGET(privat->part_view),
+        gtk_label_new("Parts")
+        );
+
+    gtk_notebook_append_page(
+        privat->notebook,
+        GTK_WIDGET(privat->symbol_view),
         gtk_label_new("Symbols")
         );
-
-    g_object_bind_property(
-        privat->database_model,
-        "database",
-        privat->company_view,
-        "database",
-        G_BINDING_DEFAULT
-        );
-
-    g_object_bind_property(
-        privat->database_model,
-        "database",
-        privat->device_view,
-        "database",
-        G_BINDING_DEFAULT
-        );
-
-    g_object_bind_property(
-        privat->database_model,
-        "database",
-        privat->document_view,
-        "database",
-        G_BINDING_DEFAULT
-        );
-
-    g_object_bind_property(
-        privat->database_model,
-        "database",
-        privat->footprint_view,
-        "database",
-        G_BINDING_DEFAULT
-        );
-
-    g_object_bind_property(
-        privat->database_model,
-        "database",
-        privat->package_view,
-        "database",
-        G_BINDING_DEFAULT
-        );
-
-    g_object_bind_property(
-        privat->database_model,
-        "database",
-        privat->symbol_view,
-        "database",
-        G_BINDING_DEFAULT
-        );
-
-    g_object_bind_property(
-        privat->database_model,
-        "database",
-        privat->company_ctrl,
-        "database",
-        G_BINDING_DEFAULT
-        );
-
-    gparts_set_current_controller(GPARTS(instance), privat->kludge[0]);
 
     gtk_widget_show_all(widget);
 }
@@ -554,44 +338,29 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
 static void
 gparts_page_added_cb(GtkNotebook *notebook, GtkWidget *child, gint page_no, gpointer user_data)
 {
+    GPartsPrivate *privat = GPARTS_GET_PRIVATE(user_data);
+
     g_debug("Page added %d", page_no);
+
+    if (privat != NULL)
+    {
+        if (GPVIEW_IS_VIEW_INTERFACE(child))
+        {
+            g_object_bind_property(
+                privat->database_model,
+                "database",
+                child,
+                "database",
+                G_BINDING_DEFAULT
+                );
+        }
+    }
 }
 
 static void
 gparts_page_removed_cb(GtkNotebook *notebook, GtkWidget *child, gint page_no, gpointer user_data)
 {
     g_debug("Page removed %d", page_no);
-}
-
-static void
-gparts_set_current_controller(GParts *gparts, GPartsController *controller)
-{
-    GPartsPrivate *privat = GPARTS_GET_PRIVATE(gparts);
-
-    if (privat != NULL)
-    {
-        if (privat->current_controller != NULL)
-        {
-            gpartsui_view_controller_set_copy_action(privat->current_controller, NULL);
-            gpartsui_view_controller_set_delete_action(privat->current_controller, NULL);
-            gpartsui_view_controller_set_open_document_action(privat->current_controller, NULL);
-            gpartsui_view_controller_set_open_website_action(privat->current_controller, NULL);
-
-            g_object_unref(privat->current_controller);
-        }
-
-        privat->current_controller = controller;
-
-        if (privat->current_controller != NULL)
-        {
-            g_object_ref(privat->current_controller);
-
-            gpartsui_view_controller_set_copy_action(privat->current_controller, privat->copy_action);
-            gpartsui_view_controller_set_delete_action(privat->current_controller, privat->delete_action);
-            gpartsui_view_controller_set_open_document_action(privat->current_controller, privat->open_document_action);
-            gpartsui_view_controller_set_open_website_action(privat->current_controller, privat->open_website_action);
-        }
-    }
 }
 
 static void
@@ -664,7 +433,12 @@ gparts_switch_page_cb(GtkNotebook *notebook, gpointer unused, gint page_no, gpoi
 
     if (privat != NULL)
     {
-        gparts_set_current_controller(GPARTS(user_data), privat->kludge[page_no]);
+        if (GPVIEW_IS_VIEW_INTERFACE(privat->current_view))
+        {
+            gpview_view_interface_deactivate(GPVIEW_VIEW_INTERFACE(privat->current_view));
+        }
+
+        privat->current_view = NULL;
 
         if (page_no >= 0)
         {
@@ -674,21 +448,8 @@ gparts_switch_page_cb(GtkNotebook *notebook, gpointer unused, gint page_no, gpoi
             {
                 gpview_view_interface_activate(GPVIEW_VIEW_INTERFACE(widget));
             }
-            else if (GPVIEW_IS_VIEW_INTERFACE(privat->current_view))
-            {
-                gpview_view_interface_deactivate(GPVIEW_VIEW_INTERFACE(privat->current_view));
-            }
 
             privat->current_view = widget;
-        }
-        else
-        {
-            if (GPVIEW_IS_VIEW_INTERFACE(privat->current_view))
-            {
-                gpview_view_interface_deactivate(GPVIEW_VIEW_INTERFACE(privat->current_view));
-            }
-
-            privat->current_view = NULL;
         }
     }
 }

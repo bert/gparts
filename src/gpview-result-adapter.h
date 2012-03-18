@@ -77,6 +77,9 @@ gpview_result_adapter_get_fields(const GPViewResultAdapter *adapter, GtkTreeSele
 GPartsDatabaseResult*
 gpview_result_adapter_get_result(const GPViewResultAdapter *adapter);
 
+GHashTable*
+gpview_result_adapter_get_table(const GPViewResultAdapter *adapter, GtkTreeIter *iter);
+
 /*! \brief Create a new adapter
  *
  * \param [in] result

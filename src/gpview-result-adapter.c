@@ -21,6 +21,7 @@
 /*! \file gpview-result-adapter.c
  */
 
+#include "sch.h"
 #include "gparts.h"
 #include "gpview.h"
 
@@ -156,7 +157,7 @@ gpview_result_adapter_finalize(GObject *object)
 gboolean
 gpview_result_adapter_get_column_index(GPViewResultAdapter *result_adapter, const gchar *name, gint *index)
 {
-    gboolean success;
+    gboolean success = FALSE;
 
     if (result_adapter != NULL)
     {
@@ -388,6 +389,43 @@ gpview_result_adapter_get_property(GObject *object, guint property_id, GValue *v
         }
     }
 }
+
+GHashTable*
+gpview_result_adapter_get_table(const GPViewResultAdapter *adapter, GtkTreeIter *iter)
+{
+    gint columns;
+    gint index;
+    GPViewResultAdapterPrivate *privat = GPVIEW_RESULT_ADAPTER_GET_PRIVATE(adapter);
+    GHashTable *table = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
+    GValue title = {0};
+
+
+    columns = gparts_database_result_get_column_count(privat->result);
+
+    for (index=0; index<columns; index++)
+    {
+        const gchar *name;
+        gchar *value;
+
+        g_value_init(&title, G_TYPE_STRING);
+        gparts_database_result_get_column_value(privat->result, index, &title);
+        name = g_strdup(g_value_get_string(&title));
+        g_value_unset(&title);
+
+        value = gpview_result_adapter_get_field(
+            adapter,
+            iter,
+            name
+            );
+
+        g_hash_table_insert(table, name, value);
+    }
+
+
+    return table;
+}
+
+
 
 /*! \brief Gets this model's GtkTreeModelFlags.
  *

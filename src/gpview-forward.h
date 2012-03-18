@@ -26,6 +26,12 @@
  *  parts manager view package.
  */
 
+typedef struct _GPViewCategoryModel GPViewCategoryModel;
+typedef struct _GPViewCategoryModelClass GPViewCategoryModelClass;
+
+typedef struct _GPViewCategoryWidget GPViewCategoryWidget;
+typedef struct _GPViewCategoryWidgetClass GPViewCategoryWidgetClass;
+
 typedef struct _GPViewCompanyCtrl GPViewCompanyCtrl;
 typedef struct _GPViewCompanyCtrlClass GPViewCompanyCtrlClass;
 
@@ -43,6 +49,12 @@ typedef struct _GPViewFootprintViewClass GPViewFootprintViewClass;
 
 typedef struct _GPViewPackageView GPViewPackageView;
 typedef struct _GPViewPackageViewClass GPViewPackageViewClass;
+
+typedef struct _GPViewPartCtrl GPViewPartCtrl;
+typedef struct _GPViewPartCtrlClass GPViewPartCtrlClass;
+
+typedef struct _GPViewPartView GPViewPartView;
+typedef struct _GPViewPartViewClass GPViewPartViewClass;
 
 typedef struct _GPViewFactory GPViewFactory;
 typedef struct _GPViewFactoryClass GPViewFactoryClass;

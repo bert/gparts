@@ -47,6 +47,30 @@ gpview_factory_get_type(void);
 GPViewCompanyView*
 gpview_factory_create_company_view(GPViewFactory *factory);
 
+GPViewDeviceView*
+gpview_factory_create_device_view(GPViewFactory *factory);
+
+GPViewDocumentView*
+gpview_factory_create_document_view(GPViewFactory *factory);
+
+GPViewFootprintView*
+gpview_factory_create_footprint_view(GPViewFactory *factory);
+
+GPViewPackageView*
+gpview_factory_create_package_view(GPViewFactory *factory);
+
+GPViewPartView*
+gpview_factory_create_part_view(GPViewFactory *factory);
+
+GPViewSymbolView*
+gpview_factory_create_symbol_view(GPViewFactory *factory);
+
 GPViewFactory*
-gpview_factory_new();
+gpview_factory_new(void);
+
+GPViewFactory*
+gpview_factory_new_with_ui_manager(GtkUIManager *manager);
+
+void
+gpview_factory_set_ui_manager(GPViewFactory *factory, GtkUIManager *manager);
 

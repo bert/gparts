@@ -25,6 +25,7 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
+#include "sch.h"
 #include "gparts.h"
 #include "gpview.h"
 
@@ -322,12 +323,18 @@ gpview_company_view_init(GTypeInstance *instance, gpointer g_class)
 
     if (privat != NULL)
     {
-        privat->tree_view = (GtkTreeView*) gtk_tree_view_new();
+        privat->tree_view = GTK_TREE_VIEW(gtk_tree_view_new());
 
         gtk_scrolled_window_set_policy(
             GTK_SCROLLED_WINDOW(instance),
             GTK_POLICY_AUTOMATIC,   /* hscrollbar_policy */
             GTK_POLICY_AUTOMATIC    /* vscrollbar_policy */
+            );
+
+        gtk_widget_set_size_request(
+            GTK_WIDGET(privat->tree_view),
+            640,
+            480
             );
 
         gtk_container_add(

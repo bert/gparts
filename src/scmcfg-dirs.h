@@ -27,3 +27,6 @@ scmcfg_dirs_find_geda_config(void);
 char*
 scmcfg_dirs_find_geda_data(void);
 
+char*
+scmcfg_dirs_find_gparts_data(void);
+

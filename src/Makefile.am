@@ -260,13 +260,17 @@ libgpdata_la_LIBADD = $(GLIB_LIBS) $(LIBXML_LIBS) libmisc.la
 # This library contains UI elements for views.
 #
 libgpview_la_SOURCES = \
+	gpview-category-model.c \
+	gpview-category-widget.c \
 	gpview-company-ctrl.c \
 	gpview-company-view.c \
 	gpview-device-view.c \
 	gpview-document-view.c \
+	gpview-factory.c \
 	gpview-footprint-view.c \
 	gpview-package-view.c \
-	gpview-factory.c \
+	gpview-part-ctrl.c \
+	gpview-part-view.c \
 	gpview-result-adapter.c \
 	gpview-symbol-view.c \
 	gpview-view-interface.c

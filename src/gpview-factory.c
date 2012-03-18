@@ -25,6 +25,7 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
+#include "sch.h"
 #include "gparts.h"
 #include "gpview.h"
 
@@ -33,6 +34,7 @@
 enum
 {
     GPVIEW_FACTORY_DATABASE = 1,
+    GPVIEW_FACTORY_UI_MANAGER
 };
 
 typedef struct _GPViewFactoryPrivate GPViewFactoryPrivate;
@@ -40,6 +42,11 @@ typedef struct _GPViewFactoryPrivate GPViewFactoryPrivate;
 struct _GPViewFactoryPrivate
 {
     GPartsDatabase *database;
+
+    GPViewCompanyCtrl *company_ctrl;
+    GPViewPartCtrl    *part_ctrl;
+
+    GtkUIManager      *ui_manager;
 };
 
 static void
@@ -77,12 +84,120 @@ gpview_factory_class_init(gpointer g_class, gpointer g_class_data)
             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
+
+    g_object_class_install_property(
+        klasse,
+        GPVIEW_FACTORY_UI_MANAGER,
+        g_param_spec_object(
+            "ui-manager",
+            "UI Manager",
+            "UI Manager",
+            GTK_TYPE_UI_MANAGER,
+            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
+            )
+        );
 }
 
 GPViewCompanyView*
 gpview_factory_create_company_view(GPViewFactory *factory)
 {
-    GPViewCompanyView *view = gpview_company_view_new();
+    GPViewFactoryPrivate *privat = GPVIEW_FACTORY_GET_PRIVATE(factory);
+    GPViewCompanyView *view = NULL;
+
+    if (privat != NULL)
+    {
+        view = gpview_company_view_new_with_controller(privat->company_ctrl);
+    }
+
+    return view;
+}
+
+GPViewDeviceView*
+gpview_factory_create_device_view(GPViewFactory *factory)
+{
+    GPViewFactoryPrivate *privat = GPVIEW_FACTORY_GET_PRIVATE(factory);
+    GPViewDeviceView *view = NULL;
+
+    if (privat != NULL)
+    {
+        view = gpview_device_view_new();
+    }
+
+    return view;
+}
+
+
+GPViewDocumentView*
+gpview_factory_create_document_view(GPViewFactory *factory)
+{
+    GPViewFactoryPrivate *privat = GPVIEW_FACTORY_GET_PRIVATE(factory);
+    GPViewDocumentView *view = NULL;
+
+    if (privat != NULL)
+    {
+        view = gpview_document_view_new();
+    }
+
+    return view;
+}
+
+
+GPViewFootprintView*
+gpview_factory_create_footprint_view(GPViewFactory *factory)
+{
+    GPViewFactoryPrivate *privat = GPVIEW_FACTORY_GET_PRIVATE(factory);
+    GPViewFootprintView *view = NULL;
+
+    if (privat != NULL)
+    {
+        view = gpview_footprint_view_new();
+    }
+
+    return view;
+}
+
+
+GPViewPackageView*
+gpview_factory_create_package_view(GPViewFactory *factory)
+{
+    GPViewFactoryPrivate *privat = GPVIEW_FACTORY_GET_PRIVATE(factory);
+    GPViewPackageView *view = NULL;
+
+    if (privat != NULL)
+    {
+        view = gpview_package_view_new();
+    }
+
+    return view;
+}
+
+
+GPViewPartView*
+gpview_factory_create_part_view(GPViewFactory *factory)
+{
+    GPViewFactoryPrivate *privat = GPVIEW_FACTORY_GET_PRIVATE(factory);
+    GPViewPartView *view = NULL;
+
+    if (privat != NULL)
+    {
+        view = gpview_part_view_new_with_controller(privat->part_ctrl);
+    }
+
+    return view;
+}
+
+
+GPViewSymbolView*
+gpview_factory_create_symbol_view(GPViewFactory *factory)
+
+{
+    GPViewFactoryPrivate *privat = GPVIEW_FACTORY_GET_PRIVATE(factory);
+    GPViewSymbolView *view = NULL;
+
+    if (privat != NULL)
+    {
+        view = gpview_symbol_view_new();
+    }
 
     return view;
 }
@@ -140,13 +255,26 @@ gpview_factory_init(GTypeInstance *instance, gpointer g_class)
 
     if (privat != NULL)
     {
+        privat->company_ctrl = gpview_company_ctrl_new();
+
+        privat->part_ctrl = gpview_part_ctrl_new();
     }
 }
 
 GPViewFactory*
 gpview_factory_new()
 {
-    return (GPViewFactory*) g_object_new(GPVIEW_TYPE_FACTORY, NULL);
+    return GPVIEW_FACTORY(g_object_new(GPVIEW_TYPE_FACTORY, NULL));
+}
+
+GPViewFactory*
+gpview_factory_new_with_ui_manager(GtkUIManager *manager)
+{
+    return GPVIEW_FACTORY(g_object_new(
+        GPVIEW_TYPE_FACTORY,
+        "ui-manager", manager,
+        NULL
+        ));
 }
 
 void
@@ -187,9 +315,39 @@ gpview_factory_set_property(GObject *object, guint property_id, const GValue *va
                 gpview_factory_set_database(view, g_value_get_object(value));
                 break;
 
+            case GPVIEW_FACTORY_UI_MANAGER:
+                gpview_factory_set_ui_manager(view, g_value_get_object(value));
+                break;
+
             default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
         }
+    }
+}
+
+void
+gpview_factory_set_ui_manager(GPViewFactory *factory, GtkUIManager *manager)
+{
+    GPViewFactoryPrivate *privat = GPVIEW_FACTORY_GET_PRIVATE(factory);
+
+    if (privat != NULL)
+    {
+        if (privat->ui_manager != NULL)
+        {
+            g_object_unref(privat->ui_manager);
+        }
+
+        privat->ui_manager = manager;
+
+        if (privat->ui_manager != NULL)
+        {
+            g_object_unref(privat->ui_manager);
+        }
+
+        gpview_company_ctrl_set_ui_manager(privat->company_ctrl, manager);
+        gpview_part_ctrl_set_ui_manager(privat->part_ctrl, manager);
+
+        g_object_notify(G_OBJECT(factory), "ui-manager");
     }
 }
 

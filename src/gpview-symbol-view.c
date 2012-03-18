@@ -25,9 +25,9 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
+#include "schgui.h"
 #include "gparts.h"
 #include "gpview.h"
-#include "schgui.h"
 
 #define GPVIEW_SYMBOL_VIEW_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),GPVIEW_TYPE_SYMBOL_VIEW,GPViewSymbolViewPrivate))
 

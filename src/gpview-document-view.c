@@ -25,6 +25,7 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
+#include "sch.h"
 #include "gparts.h"
 #include "gpview.h"
 
