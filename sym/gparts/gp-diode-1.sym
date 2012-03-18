@@ -32,6 +32,6 @@ device=DIODE
 T 500 700 8 10 1 1 0 1 1
 refdes=D?
 T 500 300 8 10 1 1 0 1 1
-footprint=$(footprint)
+footprint=$(PackageName)
 T 500 500 9 10 1 0 0 1 1
-$(part number)
+$(PartNumber)

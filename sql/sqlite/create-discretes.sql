@@ -27,6 +27,8 @@
 -- discrete semiconductor components.
 --
 
+-- ---------------------------------------------------------------------------
+--
 -- Create a table for diodes.
 --
 -- This table can be used for most diodes, including small-signal, small-signal
@@ -35,6 +37,7 @@
 -- TODO Should this table include additional fields to indicate the diode type?
 -- (e.g. Small-signal, Rectifier, Schottky, etc...)
 --
+
 CREATE TABLE Diode (
 
     PartID             INTEGER PRIMARY KEY,
@@ -45,6 +48,11 @@ CREATE TABLE Diode (
 
     );
 
+
+-- ---------------------------------------------------------------------------
+--
+-- Create a table for diodes.
+--
 
 CREATE TABLE MOSFET (
 
@@ -58,12 +66,16 @@ CREATE TABLE MOSFET (
 
     );
 
+
+-- ---------------------------------------------------------------------------
+--
 -- Create a table for TVS diodes.
 --
 -- TODO What is the best way to indicate bidirectional or unidirectional?  The
 -- type may be apparent from the symbol. Then, an additional field would not
 -- be required.
 --
+
 CREATE TABLE TVSDiode (
 
     PartID            INTEGER PRIMARY KEY, 
@@ -73,8 +85,12 @@ CREATE TABLE TVSDiode (
 
     );
 
+
+-- ---------------------------------------------------------------------------
+--
 -- Create a table for zener diodes.
 --
+
 CREATE TABLE ZenerDiode (
 
     PartID        INTEGER PRIMARY KEY,
@@ -83,8 +99,12 @@ CREATE TABLE ZenerDiode (
 
     );
 
+
+-- ---------------------------------------------------------------------------
+--
 -- Create a table for bipolar junction transistors.
 --
+
 CREATE TABLE BJT (
 
     PartID        INTEGER PRIMARY KEY,
@@ -97,8 +117,11 @@ CREATE TABLE BJT (
     );
 
 
+-- ---------------------------------------------------------------------------
+--
 -- Create a view for diodes.
 --
+
 CREATE VIEW DiodeV AS
     SELECT
         Part.PartID,
@@ -114,6 +137,12 @@ CREATE VIEW DiodeV AS
         JOIN Package USING ( PackageID )
         JOIN Company USING ( CompanyID )
         JOIN Device USING ( DeviceID );
+
+
+-- ---------------------------------------------------------------------------
+--
+-- Create a view for MOSFETs
+--
 
 CREATE VIEW MOSFETV AS
     SELECT
@@ -134,8 +163,76 @@ CREATE VIEW MOSFETV AS
         JOIN Company USING ( CompanyID )
         JOIN Device USING ( DeviceID );
 
+
+-- ---------------------------------------------------------------------------
+--
+-- Create a view for rectifier diodes.
+--
+-- Rectifier diodes are stored in the diode table, but are selected for
+-- a average forward current greater than or equal to 500 mA.
+--
+-- Diodes where the average forward current is null are selected also.
+-- This way prevents parts from getting "lost" by not appearing in
+-- either table.
+--
+
+CREATE VIEW RectifierDiodeV AS
+    SELECT
+        Part.PartID,
+        Company.CompanyName,
+        Part.PartNumber,
+        Package.PackageName,
+        Diode.MaxReverseVoltage AS 'VR',
+        Diode.TypForwardVoltage AS 'VF',
+        Diode.AveForwardCurrent AS 'IF',
+        Device.DeviceID
+    FROM Diode
+        JOIN Part USING ( PartID )
+        JOIN Package USING ( PackageID )
+        JOIN Company USING ( CompanyID )
+        JOIN Device USING ( DeviceID )
+    WHERE
+        Diode.AveForwardCurrent IS NULL OR
+        Diode.AveForwardCurrent >= 0.5;
+
+
+-- ---------------------------------------------------------------------------
+--
+-- Create a view for Switching diodes.
+--
+-- Switching diodes are stored in the diode table, but are selected for
+-- a average forward current less than 500 mA.
+--
+-- Diodes where the average forward current is null are selected also.
+-- This way prevents parts from getting "lost" by not appearing in
+-- either table.
+--
+
+CREATE VIEW SwitchingDiodeV AS
+    SELECT
+        Part.PartID,
+        Company.CompanyName,
+        Part.PartNumber,
+        Package.PackageName,
+        Diode.MaxReverseVoltage AS 'VR',
+        Diode.TypForwardVoltage AS 'VF',
+        Diode.AveForwardCurrent AS 'IF',
+        Device.DeviceID
+    FROM Diode
+        JOIN Part USING ( PartID )
+        JOIN Package USING ( PackageID )
+        JOIN Company USING ( CompanyID )
+        JOIN Device USING ( DeviceID )
+    WHERE
+        Diode.AveForwardCurrent IS NULL OR
+        Diode.AveForwardCurrent < 0.5;
+
+
+-- ---------------------------------------------------------------------------
+--
 -- Create a view for TVS diodes.
 --
+
 CREATE VIEW TVSDiodeV AS
     SELECT
         Part.PartID,
@@ -147,8 +244,12 @@ CREATE VIEW TVSDiodeV AS
         JOIN Part USING ( PartID )
         JOIN Company USING ( CompanyID );
 
+
+-- ---------------------------------------------------------------------------
+--
 -- Create a view for zener diodes.
 --
+
 CREATE VIEW ZenerDiodeV AS
     SELECT
         Part.PartID,
@@ -164,6 +265,9 @@ CREATE VIEW ZenerDiodeV AS
         JOIN Company USING ( CompanyID )
         JOIN Device USING ( DeviceID );
 
+
+-- ---------------------------------------------------------------------------
+--
 -- Create a view for BJTs.
 --
 CREATE VIEW BJTV AS

@@ -46,8 +46,14 @@ INSERT INTO Category (CategoryName, ViewName, ParentID) VALUES(
     );
 
 INSERT INTO Category (CategoryName, ViewName, ParentID) VALUES(
-    "Small-signal",
-    "DiodeV",
+    "Rectifier",
+    "RectifierDiodeV",
+    (SELECT CategoryID FROM Category WHERE CategoryName = "Diodes")
+    );
+
+INSERT INTO Category (CategoryName, ViewName, ParentID) VALUES(
+    "Switching",
+    "SwitchingDiodeV",
     (SELECT CategoryID FROM Category WHERE CategoryName = "Diodes")
     );
 

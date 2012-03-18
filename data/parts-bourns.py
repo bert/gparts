@@ -664,4 +664,74 @@ for package in packages:
         print "        <document category=\"Datasheet\">http://www.bourns.com/data/global/pdfs/CD0603_1005-Z.pdf</document>"
         print "    </zener-diode>"
 
+##############################################################################
+##
+##  CD1206 Surface mount schottky rectifier diodes 
+##
+##############################################################################
+
+devices = [
+    ( 'B220',    20,  0.50, 2.0 ),
+    ( 'B240',    40,  0.50, 2.0 ),
+    ( 'B260',    60,  0.70, 2.0 ),
+    ( 'B2100',  100,  0.85, 2.0 )
+    ]
+
+for device in devices:
+    print "    <diode>"
+    print "        <company-name>Bourns</company-name>"
+    print "        <part-number>CD1206-%s</part-number>" % device[0]
+    print "        <package-name>1206(3216)</package-name>"
+    print "        <device-name>schottky</device-name>"
+    print "        <ave-forward-current>%f</ave-forward-current>" % device[3]
+    print "        <document category=\"Datasheet\">http://www.bourns.com/data/global/pdfs/CD1206_B220_B2100.pdf</document>"
+    print "    </diode>"
+
+##############################################################################
+##
+##  CD0603/1005 Surface mount schottky chip diodes 
+##
+##############################################################################
+
+devices = [
+    ( 'B00340',    40,  0.37, 0.03 ),
+    ( 'B0130L',    30,  0.44, 0.10 ),
+    ( 'B0140L',    40,  0.55, 0.10 ),
+    ( 'B0140R',    40,  0.45, 0.10 ),
+    ( 'B0230',     30,  0.50, 0.20 ),
+    ( 'B0240',     40,  0.55, 0.20 )
+    ]
+
+for device in devices:
+    print "    <diode>"
+    print "        <company-name>Bourns</company-name>"
+    print "        <part-number>CD0603-%s</part-number>" % device[0]
+    print "        <package-name>0603(1806)</package-name>"
+    print "        <device-name>schottky</device-name>"
+    print "        <ave-forward-current>%f</ave-forward-current>" % device[3]
+    print "        <document category=\"Datasheet\">http://www.bourns.com/data/global/pdfs/SBCD0603_1005.pdf</document>"
+    print "    </diode>"
+
+##############################################################################
+##
+##  CD0603/1005 Surface mount chip diodes 
+##
+##############################################################################
+
+devices = [
+    ( 'S0180',     90,  1.00, 0.10 ),
+    ( 'S01575',   100,  1.00, 0.15 ),
+    ( 'S0180R',    90,  1.00, 0.10 )
+    ]
+
+for device in devices:
+    print "    <diode>"
+    print "        <company-name>Bourns</company-name>"
+    print "        <part-number>CD0603-%s</part-number>" % device[0]
+    print "        <package-name>0603(1806)</package-name>"
+    print "        <device-name>diode</device-name>"
+    print "        <ave-forward-current>%f</ave-forward-current>" % device[3]
+    print "        <document category=\"Datasheet\">http://www.bourns.com/data/global/pdfs/CD0603_1005.pdf</document>"
+    print "    </diode>"
+
 print "</data>"
