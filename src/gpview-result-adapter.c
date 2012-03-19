@@ -340,6 +340,8 @@ gpview_result_adapter_get_fields_proc(GtkTreeModel *model, GtkTreePath *path, Gt
                     error = TRUE;
                 }
 
+                g_value_unset(&value);
+
                 if (!error)
                 {
                     if (buffer->str[0] != '\0')

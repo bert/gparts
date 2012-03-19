@@ -203,7 +203,7 @@ gpview_category_model_class_init(gpointer g_class, gpointer g_class_data)
             "",
             "",
             G_TYPE_OBJECT,    /* \todo See if this can be an interface */
-            G_PARAM_READWRITE
+            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
 }

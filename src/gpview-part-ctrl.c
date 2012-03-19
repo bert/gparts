@@ -221,10 +221,21 @@ gpview_part_ctrl_dispose(GObject *object)
 
     if (privat != NULL)
     {
-        if (privat->database != NULL)
-        {
-            g_object_unref(privat->database);
-        }
+        misc_object_unref(privat->clipboard);
+        privat->clipboard = NULL;
+
+        misc_object_unref(privat->current_view);
+        privat->current_view = NULL;
+
+        misc_object_unref(privat->database);
+        privat->database = NULL;
+
+        misc_object_unref(privat->form_factory);
+        privat->form_factory = NULL;
+
+        misc_object_unref(privat->ui_manager);
+        privat->ui_manager = NULL;
+
     }
 
     misc_object_chain_dispose(object);

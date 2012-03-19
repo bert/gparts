@@ -242,20 +242,17 @@ gpview_symbol_view_dispose(GObject *object)
 
     if (privat != NULL)
     {
-        if (privat->adapter != NULL)
-        {
-            g_object_unref(privat->adapter);
-        }
+        misc_object_unref(privat->adapter);
+        privat->adapter = NULL;
 
-        if (privat->database != NULL)
-        {
-            g_object_unref(privat->database);
-        }
+        misc_object_unref(privat->controller);
+        privat->controller = NULL;
 
-        if (privat->result != NULL)
-        {
-            g_object_unref(privat->result);
-        }
+        misc_object_unref(privat->database);
+        privat->database = NULL;
+
+        misc_object_unref(privat->result);
+        privat->result = NULL;
     }
 
     misc_object_chain_dispose(object);

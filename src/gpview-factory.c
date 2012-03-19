@@ -41,7 +41,7 @@ typedef struct _GPViewFactoryPrivate GPViewFactoryPrivate;
 
 struct _GPViewFactoryPrivate
 {
-    GPartsDatabase *database;
+    GPartsDatabase    *database;
 
     GPViewCompanyCtrl *company_ctrl;
     GPViewPartCtrl    *part_ctrl;
@@ -52,6 +52,12 @@ struct _GPViewFactoryPrivate
 
 static void
 gpview_factory_class_init(gpointer g_class, gpointer g_class_data);
+
+static void
+gpview_factory_dispose(GObject *object);
+
+static void
+gpview_factory_finalize(GObject *object);
 
 static void
 gpview_factory_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
@@ -70,6 +76,9 @@ gpview_factory_class_init(gpointer g_class, gpointer g_class_data)
     GObjectClass *klasse = G_OBJECT_CLASS(g_class);
 
     g_type_class_add_private(g_class, sizeof(GPViewFactoryPrivate));
+
+    klasse->dispose  = gpview_factory_dispose;
+    klasse->finalize = gpview_factory_finalize;
 
     klasse->get_property = gpview_factory_get_property;
     klasse->set_property = gpview_factory_set_property;
@@ -202,6 +211,45 @@ gpview_factory_create_symbol_view(GPViewFactory *factory)
 
     return view;
 }
+
+static void
+gpview_factory_dispose(GObject *object)
+{
+    GPViewFactoryPrivate *privat = GPVIEW_FACTORY_GET_PRIVATE(object);
+
+    if (privat != NULL)
+    {
+        misc_object_unref(privat->database);
+        privat->database = NULL;
+
+        misc_object_unref(privat->company_ctrl);
+        privat->company_ctrl = NULL;
+
+        misc_object_unref(privat->part_ctrl);
+        privat->part_ctrl = NULL;
+
+        misc_object_unref(privat->symbol_ctrl);
+        privat->symbol_ctrl = NULL;
+
+        misc_object_unref(privat->ui_manager);
+        privat->ui_manager = NULL;
+    }
+
+    misc_object_chain_dispose(object);
+}
+
+static void
+gpview_factory_finalize(GObject *object)
+{
+    GPViewFactoryPrivate *privat = GPVIEW_FACTORY_GET_PRIVATE(object);
+
+    if (privat != NULL)
+    {
+    }
+
+    misc_object_chain_finalize(object);
+}
+
 
 static void
 gpview_factory_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
@@ -346,7 +394,7 @@ gpview_factory_set_ui_manager(GPViewFactory *factory, GtkUIManager *manager)
 
         if (privat->ui_manager != NULL)
         {
-            g_object_unref(privat->ui_manager);
+            g_object_ref(privat->ui_manager);
         }
 
         gpview_company_ctrl_set_ui_manager(privat->company_ctrl, manager);

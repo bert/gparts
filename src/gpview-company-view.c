@@ -234,10 +234,11 @@ gpview_company_view_dispose(GObject *object)
 
     if (privat != NULL)
     {
-        if (privat->database != NULL)
-        {
-            g_object_unref(privat->database);
-        }
+        misc_object_unref(privat->controller);
+        privat->controller = NULL;
+
+        misc_object_unref(privat->database);
+        privat->database = NULL;
     }
 
     misc_object_chain_dispose(object);

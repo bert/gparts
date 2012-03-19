@@ -35,12 +35,18 @@ typedef struct _GPartsPrivate GPartsPrivate;
 
 struct _GPartsPrivate
 {
-    GtkBuilder       *builder;
+    GtkBuilder             *builder;
 
-    GtkNotebook      *notebook;
+    GPViewFactory          *view_factory;
 
+    GPartsUIConnectModel   *connect_model;
+    GPartsUIDatabaseModel  *database_model;
 
-    GPViewFactory       *view_factory;
+    /* These view objects are inserted into the UI. They will be disposed
+     * of when the toplevel widget is destroyed.
+     */
+
+    GtkNotebook         *notebook;
 
     GPViewCompanyView   *company_view;
     GPViewDeviceView    *device_view;
@@ -52,10 +58,6 @@ struct _GPartsPrivate
 
     GtkWidget           *current_view;
 
-    GPartsUICompanyModel       *company_model;
-    GPartsUIConnectModel       *connect_model;
-    GPartsUIDatabaseModel      *database_model;
-    GPartsUIDocumentModel      *document_model;
 };
 
 /**** Static methods ****/
@@ -116,7 +118,37 @@ gparts_dispose(GObject *object)
 
     if (privat != NULL)
     {
-        g_object_unref(privat->builder);
+        misc_object_unref(privat->builder);
+        privat->builder = NULL;
+
+        misc_object_unref(privat->database_model);
+        privat->database_model = NULL;
+
+        misc_object_unref(privat->view_factory);
+        privat->view_factory = NULL;
+
+#if 0
+        misc_object_unref(privat->company_view);
+        privat->company_view = NULL;
+
+        misc_object_unref(privat->device_view);
+        privat->device_view = NULL;
+
+        misc_object_unref(privat->document_view);
+        privat->document_view = NULL;
+
+        misc_object_unref(privat->footprint_view);
+        privat->footprint_view = NULL;
+
+        misc_object_unref(privat->package_view);
+        privat->package_view = NULL;
+
+        misc_object_unref(privat->part_view);
+        privat->part_view = NULL;
+
+        misc_object_unref(privat->symbol_view);
+        privat->symbol_view = NULL;
+#endif
     }
 
     misc_object_chain_dispose(object);
@@ -225,11 +257,11 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
 
     /**** Controllers ****/
 
-    GObject *customize_ctrl = g_object_new(
-        GPARTS_TYPE_CUSTOMIZE_CTRL,
-        "customize-action", GTK_ACTION(gtk_builder_get_object(privat->builder, "view-customize")),
-        NULL
-        );
+    //GObject *customize_ctrl = g_object_new(
+    //    GPARTS_TYPE_CUSTOMIZE_CTRL,
+    //    "customize-action", GTK_ACTION(gtk_builder_get_object(privat->builder, "view-customize")),
+    //    NULL
+    //    );
 
     /**** Presentation Models ****/
 
@@ -247,6 +279,7 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         NULL
         );
 
+#if 0
     privat->company_model = g_object_new(
         GPARTSUI_TYPE_COMPANY_MODEL,
         "database-model",    privat->database_model,
@@ -258,6 +291,7 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         "database-model",    privat->database_model,
         NULL
         );
+#endif
 
     /**** Presentation Controllers ****/
 

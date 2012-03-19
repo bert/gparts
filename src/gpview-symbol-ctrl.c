@@ -281,7 +281,6 @@ gpview_symbol_ctrl_action_open_cb(GtkAction *action, GPViewSymbolCtrl *ctrl)
             g_string_free(command, TRUE);
         }
 
-        misc_object_unref(loader);
         g_strfreev(symbols);
     }
 }
@@ -357,10 +356,29 @@ gpview_symbol_ctrl_dispose(GObject *object)
 
     if (privat != NULL)
     {
-        if (privat->database != NULL)
-        {
-            g_object_unref(privat->database);
-        }
+        misc_object_unref(privat->action_group_connected);
+        privat->action_group_connected = NULL;
+
+        misc_object_unref(privat->action_group_multiple);
+        privat->action_group_multiple = NULL;
+
+        misc_object_unref(privat->action_group_open);
+        privat->action_group_open = NULL;
+
+        misc_object_unref(privat->action_group_single);
+        privat->action_group_single = NULL;
+
+        misc_object_unref(privat->current_view);
+        privat->database = NULL;
+
+        misc_object_unref(privat->database);
+        privat->database = NULL;
+
+        misc_object_unref(privat->form_factory);
+        privat->database = NULL;
+
+        misc_object_unref(privat->ui_manager);
+        privat->ui_manager = NULL;
     }
 
     misc_object_chain_dispose(object);
