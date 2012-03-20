@@ -240,10 +240,10 @@ gpform_ui_dialog_get_snapshot(const GPFormUIDialog* dialog)
 
     if (dialog != NULL)
     {
-        pixbuf = gtk_widget_get_snapshot(
-            GTK_WIDGET(dialog),
-            NULL
-            );
+        //pixbuf = gtk_widget_get_snapshot(
+        //    GTK_WIDGET(dialog),
+        //    NULL
+        //    );
     }
 
     return pixbuf;

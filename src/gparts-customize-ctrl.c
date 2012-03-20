@@ -158,7 +158,7 @@ gparts_customize_ctrl_build_customize_dialog(GPartsCustomizeCtrl *customize_ctrl
         NULL
         );
 
-    gtk_container_add(GTK_CONTAINER(dialog->vbox), GTK_WIDGET(privat->view));
+    gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(dialog)), GTK_WIDGET(privat->view));
 
     return dialog;
 }

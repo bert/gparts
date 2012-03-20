@@ -402,7 +402,7 @@ gpartsui_connect_controller_database_type_changed_cb(GtkComboBox *combo, GPartsU
 
         gpartsui_connect_model_set_database_type(
             privat->connect_model,
-            gtk_combo_box_get_active_text(GTK_COMBO_BOX(privat->database_type_combo))
+            gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(privat->database_type_combo))
             );
 
         g_signal_handlers_block_by_func(
@@ -434,7 +434,7 @@ gpartsui_connect_controller_database_types_notify_cb(GPartsUIConnectModel *model
 
             while (*temp != NULL)
             {
-                gtk_combo_box_append_text(GTK_COMBO_BOX(privat->database_type_combo), *temp);
+                gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(privat->database_type_combo), *temp);
 
                 temp++;
             }
@@ -467,6 +467,11 @@ gpartsui_connect_controller_dispose(GObject *object)
 
     if (privat != NULL)
     {
+        misc_object_unref(privat->connect_dialog);
+        privat->connect_dialog = NULL;
+
+        misc_object_unref(privat->file_dialog);
+        privat->file_dialog = NULL;
     }
 
     misc_object_chain_dispose(object);
@@ -803,7 +808,7 @@ gpartsui_connect_controller_instance_init(GTypeInstance *instance, gpointer g_cl
         privat->table = gtk_table_new(6, 4, FALSE);
         gtk_table_set_row_spacings(GTK_TABLE(privat->table), 8);
         gtk_table_set_col_spacings(GTK_TABLE(privat->table), 10);
-        GTK_WIDGET_SET_FLAGS(privat->table, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(privat->table), TRUE);
         gtk_container_add(GTK_CONTAINER(content), GTK_WIDGET(privat->table));
 
         /******** an image for decoration ********/
@@ -829,7 +834,7 @@ gpartsui_connect_controller_instance_init(GTypeInstance *instance, gpointer g_cl
             0                                            /* ypadding */
             );
 
-        GTK_WIDGET_SET_FLAGS(privat->image, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(privat->image), TRUE);
 
         /******** database type ********/
 
@@ -854,9 +859,9 @@ gpartsui_connect_controller_instance_init(GTypeInstance *instance, gpointer g_cl
             0                                            /* ypadding */
             );
 
-        GTK_WIDGET_SET_FLAGS(privat->database_type_label, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(privat->database_type_label), TRUE);
 
-        privat->database_type_combo = gtk_combo_box_new_text();
+        privat->database_type_combo = gtk_combo_box_text_new();
 
         gtk_table_attach(
             GTK_TABLE(privat->table),                    /* table */
@@ -871,7 +876,7 @@ gpartsui_connect_controller_instance_init(GTypeInstance *instance, gpointer g_cl
             0                                            /* ypadding */
             );
 
-        GTK_WIDGET_SET_FLAGS(privat->database_type_combo, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(privat->database_type_combo), TRUE);
 
         g_signal_connect(
             privat->database_type_combo,
@@ -903,7 +908,7 @@ gpartsui_connect_controller_instance_init(GTypeInstance *instance, gpointer g_cl
             0                                            /* ypadding */
             );
 
-        GTK_WIDGET_SET_FLAGS(privat->username_label, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(privat->username_label), TRUE);
 
         gtk_table_attach(
             GTK_TABLE(privat->table),                    /* table */
@@ -918,7 +923,7 @@ gpartsui_connect_controller_instance_init(GTypeInstance *instance, gpointer g_cl
             0                                            /* ypadding */
             );
 
-        GTK_WIDGET_SET_FLAGS(privat->username_entry, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(privat->username_entry), TRUE);
 
         g_signal_connect(
             privat->username_entry,
@@ -950,7 +955,7 @@ gpartsui_connect_controller_instance_init(GTypeInstance *instance, gpointer g_cl
             0                                            /* ypadding */
             );
 
-        GTK_WIDGET_SET_FLAGS(privat->password_label, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(privat->password_label), TRUE);
 
         gtk_table_attach(
             GTK_TABLE(privat->table),                    /* table */
@@ -966,7 +971,7 @@ gpartsui_connect_controller_instance_init(GTypeInstance *instance, gpointer g_cl
             );
 
         g_object_set(privat->password_entry, "visibility", FALSE,NULL);
-        GTK_WIDGET_SET_FLAGS(privat->password_entry, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(privat->password_entry), TRUE);
 
         g_signal_connect(
             privat->password_entry,
@@ -998,7 +1003,7 @@ gpartsui_connect_controller_instance_init(GTypeInstance *instance, gpointer g_cl
             0                                            /* ypadding */
             );
 
-        GTK_WIDGET_SET_FLAGS(privat->hostname_label, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(privat->hostname_label), TRUE);
 
         gtk_table_attach(
             GTK_TABLE(privat->table),                    /* table */
@@ -1013,7 +1018,7 @@ gpartsui_connect_controller_instance_init(GTypeInstance *instance, gpointer g_cl
             0                                            /* ypadding */
             );
 
-        GTK_WIDGET_SET_FLAGS(privat->hostname_entry, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(privat->hostname_entry), TRUE);
 
         g_signal_connect(
             privat->hostname_entry,
@@ -1045,7 +1050,7 @@ gpartsui_connect_controller_instance_init(GTypeInstance *instance, gpointer g_cl
             0                                            /* ypadding */
             );
 
-        GTK_WIDGET_SET_FLAGS(privat->database_label, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(privat->database_label), TRUE);
 
         gtk_table_attach(
             GTK_TABLE(privat->table),                    /* table */
@@ -1060,7 +1065,7 @@ gpartsui_connect_controller_instance_init(GTypeInstance *instance, gpointer g_cl
             0                                            /* ypadding */
             );
 
-        GTK_WIDGET_SET_FLAGS(privat->database_entry, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(privat->database_entry), TRUE);
 
         g_signal_connect(
             privat->database_entry,
@@ -1092,7 +1097,7 @@ gpartsui_connect_controller_instance_init(GTypeInstance *instance, gpointer g_cl
             0                                            /* ypadding */
             );
 
-        GTK_WIDGET_SET_FLAGS(privat->filename_label, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(privat->filename_label), TRUE);
 
         gtk_table_attach(
             GTK_TABLE(privat->table),                    /* table */
@@ -1107,7 +1112,7 @@ gpartsui_connect_controller_instance_init(GTypeInstance *instance, gpointer g_cl
             0                                            /* ypadding */
             );
 
-        GTK_WIDGET_SET_FLAGS(privat->filename_entry, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(privat->filename_entry), TRUE);
 
         g_signal_connect(
             privat->filename_entry,
@@ -1131,7 +1136,7 @@ gpartsui_connect_controller_instance_init(GTypeInstance *instance, gpointer g_cl
             0                                            /* ypadding */
             );
 
-        GTK_WIDGET_SET_FLAGS(privat->filename_button, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(privat->filename_button), TRUE);
 
         g_signal_connect(
             privat->filename_button,

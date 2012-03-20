@@ -39,16 +39,16 @@ typedef struct _GPartsConnectControllerPrivate GPartsConnectControllerPrivate;
 
 struct _GPartsConnectControllerPrivate
 {
-    GtkFileChooser *file_dialog;
-    GtkDialog      *login_dialog;
+    GtkFileChooser  *file_dialog;
+    GtkDialog       *login_dialog;
 
-    GtkComboBox    *engine_combo;
-    GtkEntry       *user_name_entry;
-    GtkEntry       *password_entry;
-    GtkEntry       *server_entry;
-    GtkEntry       *database_entry;
-    GtkEntry       *filename_entry;
-    GtkButton      *button;
+    GtkComboBoxText *engine_combo;
+    GtkEntry        *user_name_entry;
+    GtkEntry        *password_entry;
+    GtkEntry        *server_entry;
+    GtkEntry        *database_entry;
+    GtkEntry        *filename_entry;
+    GtkButton       *button;
 };
 
 
@@ -293,7 +293,7 @@ gparts_connect_controller_get_database_type(GPartsConnectController *controller)
 
     if (privat != NULL)
     {
-        type = g_strdup(gtk_combo_box_get_active_text(privat->engine_combo));
+        type = g_strdup(gtk_combo_box_text_get_active_text(privat->engine_combo));
     }
 
     return type;
@@ -363,78 +363,78 @@ gparts_connect_controller_instance_init(GTypeInstance *instance, gpointer g_clas
 
         gtk_container_set_border_width(GTK_CONTAINER(privat->login_dialog), 5);
 
-        content = privat->login_dialog->vbox; //gtk_dialog_get_content_area(private->login_dialog);
+        content = gtk_dialog_get_content_area(privat->login_dialog);
 
         gtk_box_set_spacing(GTK_BOX(content), 8);
 
         table = GTK_TABLE(gtk_table_new(6, 4, FALSE));
         gtk_table_set_row_spacings(table, 8);
         gtk_table_set_col_spacings(table, 10);
-        GTK_WIDGET_SET_FLAGS(table, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(table), TRUE);
         gtk_container_add(GTK_CONTAINER(content), GTK_WIDGET(table));
 
         image = gtk_image_new_from_stock(GTK_STOCK_DIALOG_AUTHENTICATION, GTK_ICON_SIZE_DIALOG);
-        GTK_WIDGET_SET_FLAGS(image, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(image), TRUE);
         gtk_misc_set_alignment(GTK_MISC(image), 0, 0);
         gtk_table_attach(table, GTK_WIDGET(image), 0, 1, 0, 6, GTK_FILL, GTK_FILL, 0, 0);
 
         label = gtk_label_new("Type");
-        GTK_WIDGET_SET_FLAGS(label, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(label), TRUE);
         gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
         gtk_table_attach(table, GTK_WIDGET(label), 1, 2, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
 
-        privat->engine_combo = GTK_COMBO_BOX(gtk_combo_box_new_text());
-        GTK_WIDGET_SET_FLAGS(privat->engine_combo, GTK_VISIBLE);
+        privat->engine_combo = GTK_COMBO_BOX_TEXT(gtk_combo_box_text_new());
+        gtk_widget_set_visible(GTK_WIDGET(privat->engine_combo), TRUE);
         gtk_table_attach(table, GTK_WIDGET(privat->engine_combo), 2, 3, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
 
         label = gtk_label_new("Username");
-        GTK_WIDGET_SET_FLAGS(label, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(label), TRUE);
         gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
         gtk_table_attach(table, GTK_WIDGET(label), 1, 2, 1, 2, GTK_FILL, GTK_FILL, 0, 0);
 
         privat->user_name_entry = GTK_ENTRY(gtk_entry_new());
-        GTK_WIDGET_SET_FLAGS(privat->user_name_entry, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(privat->user_name_entry), TRUE);
         gtk_table_attach(table, GTK_WIDGET(privat->user_name_entry), 2, 3, 1, 2, GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
 
         label = gtk_label_new("Password");
-        GTK_WIDGET_SET_FLAGS(label, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(label), TRUE);
         gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
         gtk_table_attach(table, label, 1, 2, 2, 3, GTK_FILL, GTK_FILL, 0, 0);
 
         privat->password_entry = GTK_ENTRY(gtk_entry_new());
         g_object_set(privat->password_entry, "visibility", FALSE,NULL);
-        GTK_WIDGET_SET_FLAGS(privat->password_entry, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(privat->password_entry), TRUE);
         gtk_table_attach(table, GTK_WIDGET(privat->password_entry), 2, 3, 2, 3, GTK_FILL, GTK_FILL, 0, 0);
 
         label = gtk_label_new("Server");
-        GTK_WIDGET_SET_FLAGS(label, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(label), TRUE);
         gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
         gtk_table_attach(table, label, 1, 2, 3, 4, GTK_FILL, GTK_FILL, 0, 0);
 
         privat->server_entry = GTK_ENTRY(gtk_entry_new());
-        GTK_WIDGET_SET_FLAGS(privat->server_entry, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(privat->server_entry), TRUE);
         gtk_table_attach(table, GTK_WIDGET(privat->server_entry), 2, 3, 3, 4, GTK_FILL, GTK_FILL, 0, 0);
 
         label = gtk_label_new("Database Name");
-        GTK_WIDGET_SET_FLAGS(label, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(label), TRUE);
         gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
         gtk_table_attach(table, label, 1, 2, 4, 5, GTK_FILL, GTK_FILL, 0, 0);
 
         privat->database_entry = GTK_ENTRY(gtk_entry_new());
-        GTK_WIDGET_SET_FLAGS(privat->database_entry, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(privat->database_entry), TRUE);
         gtk_table_attach(table, GTK_WIDGET(privat->database_entry), 2, 3, 4, 5, GTK_FILL, GTK_FILL, 0, 0);
 
         label = gtk_label_new("Filename");
-        GTK_WIDGET_SET_FLAGS(label, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(label), TRUE);
         gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
         gtk_table_attach(table, label, 1, 2, 5, 6, GTK_FILL, GTK_FILL, 0, 0);
 
         privat->filename_entry = GTK_ENTRY(gtk_entry_new());
-        GTK_WIDGET_SET_FLAGS(privat->filename_entry, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(privat->filename_entry), TRUE);
         gtk_table_attach(table, GTK_WIDGET(privat->filename_entry), 2, 3, 5, 6, GTK_FILL, GTK_FILL, 0, 0);
 
         privat->button = GTK_BUTTON(gtk_button_new_with_label("..."));
-        GTK_WIDGET_SET_FLAGS(privat->button, GTK_VISIBLE);
+        gtk_widget_set_visible(GTK_WIDGET(privat->button), TRUE);
         gtk_table_attach(table, GTK_WIDGET(privat->button), 3, 4, 5, 6, GTK_FILL, GTK_FILL, 0, 0);
 
         g_signal_connect(
@@ -560,7 +560,7 @@ gparts_connect_controller_set_database_types(GPartsConnectController *controller
     if (privat != NULL)
     {
         gtk_list_store_clear(
-            GTK_LIST_STORE(gtk_combo_box_get_model(privat->engine_combo))
+            GTK_LIST_STORE(gtk_combo_box_get_model(GTK_COMBO_BOX(privat->engine_combo)))
             );
 
         /* gtk_combo_box_get_model() does not increment the reference count */
@@ -571,14 +571,14 @@ gparts_connect_controller_set_database_types(GPartsConnectController *controller
 
             while (*temp != NULL)
             {
-                gtk_combo_box_append_text(privat->engine_combo, *temp);
+                gtk_combo_box_text_append_text(privat->engine_combo, *temp);
 
                 temp++;
             }
 
-            if (gtk_combo_box_get_active(privat->engine_combo) < 0)
+            if (gtk_combo_box_get_active(GTK_COMBO_BOX(privat->engine_combo)) < 0)
             {
-                gtk_combo_box_set_active(privat->engine_combo, 0);
+                gtk_combo_box_set_active(GTK_COMBO_BOX(privat->engine_combo), 0);
             }
         }
     }

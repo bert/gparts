@@ -70,9 +70,9 @@ AC_SUBST(GMODULE_LIBS)
 
 ##  GTK
 ##
-GTK_VERSION=`$PKG_CONFIG gtk+-2.0 --modversion`
-GTK_CFLAGS=`$PKG_CONFIG gtk+-2.0 --cflags`
-GTK_LIBS=`$PKG_CONFIG gtk+-2.0 --libs`
+GTK_VERSION=`$PKG_CONFIG gtk+-3.0 --modversion`
+GTK_CFLAGS=`$PKG_CONFIG gtk+-3.0 --cflags`
+GTK_LIBS=`$PKG_CONFIG gtk+-3.0 --libs`
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 

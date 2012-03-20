@@ -47,7 +47,7 @@ struct _SchGUIClipboardPrivate
 
 static const GtkTargetEntry schgui_clipboard_targets[] =
 {
-    { "UTF8_STRING",                  0, 1 },
+//    { "UTF8_STRING",                  0, 1 },
     { "application/x-geda-schematic", 0, 2 }
 };
 
