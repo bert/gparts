@@ -701,6 +701,29 @@ gpview_symbol_ctrl_set_database(GPViewSymbolCtrl *ctrl, GPartsDatabase *database
     }
 }
 
+void
+gpview_symbol_ctrl_set_form_factory(GPViewSymbolCtrl *ctrl, GPFormFactory *factory)
+{
+    GPViewSymbolCtrlPrivate *privat = GPVIEW_SYMBOL_CTRL_GET_PRIVATE(ctrl);
+
+    if (privat != NULL)
+    {
+        if (privat->form_factory != NULL)
+        {
+            g_object_unref(privat->form_factory);
+        }
+
+        privat->form_factory = factory;
+
+        if (privat->form_factory != NULL)
+        {
+            g_object_ref(privat->form_factory);
+        }
+
+        g_object_notify(G_OBJECT(ctrl), "form-factory");
+    }
+}
+
 
 static void
 gpview_symbol_ctrl_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec)

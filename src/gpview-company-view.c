@@ -27,6 +27,7 @@
 
 #include "sch.h"
 #include "gparts.h"
+#include "gpform.h"
 #include "gpview.h"
 
 #define GPVIEW_COMPANY_VIEW_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),GPVIEW_TYPE_COMPANY_VIEW,GPViewCompanyViewPrivate))
@@ -244,6 +245,30 @@ gpview_company_view_dispose(GObject *object)
     misc_object_chain_dispose(object);
 }
 
+GStrv
+gpview_company_view_get_ids(const GPViewCompanyView *view)
+{
+    GStrv ids = NULL;
+
+    if (view != NULL)
+    {
+        GPViewCompanyViewPrivate *privat = GPVIEW_COMPANY_VIEW_GET_PRIVATE(view);
+
+        if (privat != NULL)
+        {
+            gint index;
+
+            if (gpview_result_adapter_get_column_index(privat->adapter, "CompanyID", &index))
+            {
+                ids = gpview_result_adapter_get_fields(privat->adapter, privat->selection, index);
+            }
+        }
+    }
+
+    return ids;
+}
+
+
 static void
 gpview_company_view_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
 {
@@ -299,18 +324,22 @@ gpview_company_view_get_type(void)
 }
 
 GStrv
-gpview_company_view_get_websites(GPViewCompanyView *view)
+gpview_company_view_get_websites(const GPViewCompanyView *view)
 {
-    GPViewCompanyViewPrivate *privat = GPVIEW_COMPANY_VIEW_GET_PRIVATE(view);
     GStrv websites = NULL;
 
-    if (privat != NULL)
+    if (view != NULL)
     {
-        gint index;
+        GPViewCompanyViewPrivate *privat = GPVIEW_COMPANY_VIEW_GET_PRIVATE(view);
 
-        if (gpview_result_adapter_get_column_index(privat->adapter, "Website", &index))
+        if (privat != NULL)
         {
-            websites = gpview_result_adapter_get_fields(privat->adapter, privat->selection, index);
+            gint index;
+
+            if (gpview_result_adapter_get_column_index(privat->adapter, "Website", &index))
+            {
+                websites = gpview_result_adapter_get_fields(privat->adapter, privat->selection, index);
+            }
         }
     }
 
@@ -519,6 +548,16 @@ gpview_company_view_set_result(GPViewCompanyView *view, GPartsDatabaseResult *re
             }
 
             gtk_tree_view_set_model(privat->tree_view, GTK_TREE_MODEL(privat->adapter));
+
+            if (privat->adapter != NULL)
+            {
+                gint index;
+
+                if (gpview_result_adapter_get_column_index(privat->adapter, "CompanyName", &index))
+                {
+                    gtk_tree_view_set_search_column(privat->tree_view, index);
+                }
+            }
         }
 
         g_object_notify(G_OBJECT(view), "company-id");

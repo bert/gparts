@@ -264,10 +264,14 @@ libgpview_la_SOURCES = \
 	gpview-category-widget.c \
 	gpview-company-ctrl.c \
 	gpview-company-view.c \
+	gpview-device-ctrl.c \
 	gpview-device-view.c \
+	gpview-document-ctrl.c \
 	gpview-document-view.c \
 	gpview-factory.c \
+	gpview-footprint-ctrl.c \
 	gpview-footprint-view.c \
+	gpview-package-ctrl.c \
 	gpview-package-view.c \
 	gpview-part-ctrl.c \
 	gpview-part-view.c \

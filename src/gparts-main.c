@@ -24,6 +24,7 @@
 #include <dlfcn.h>
 
 #include "gpartsui.h"
+#include "gpform.h"
 #include "gpview.h"
 
 #include "scmcfg-config.h"

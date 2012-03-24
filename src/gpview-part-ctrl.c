@@ -198,12 +198,26 @@ gpview_part_ctrl_create_cb(GtkAction *action, GPViewPartCtrl *ctrl)
 
     if (privat != NULL)
     {
-        GPFormUIDialog *dialog;
+        GPFormUIDialog *dialog = NULL;
+        gchar          *form;
 
-        dialog = gpform_factory_create_form(privat->form_factory, "company-add.xml");
+            g_debug("gpview_part_ctrl_create_cb");
+        form = gpview_part_view_get_create_form(privat->current_view);
+
+        if (form != NULL)
+        {
+            g_debug("Form name: %s", form);
+            dialog = gpform_factory_create_form(privat->form_factory, form);
+            g_free(form);
+        }
 
         if (dialog != NULL)
         {
+            gtk_window_set_transient_for(
+                GTK_WINDOW(dialog),
+                GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(privat->current_view)))
+                );
+
             gtk_widget_show_all(GTK_WIDGET(dialog));
 
             /*gint result =*/ gtk_dialog_run(GTK_DIALOG(dialog));
@@ -503,6 +517,31 @@ gpview_part_ctrl_set_database(GPViewPartCtrl *ctrl, GPartsDatabase *database)
         g_object_notify(G_OBJECT(ctrl), "database");
     }
 }
+
+
+void
+gpview_part_ctrl_set_form_factory(GPViewPartCtrl *ctrl, GPFormFactory *factory)
+{
+    GPViewPartCtrlPrivate *privat = GPVIEW_PART_CTRL_GET_PRIVATE(ctrl);
+
+    if (privat != NULL)
+    {
+        if (privat->form_factory != NULL)
+        {
+            g_object_unref(privat->form_factory);
+        }
+
+        privat->form_factory = factory;
+
+        if (privat->form_factory != NULL)
+        {
+            g_object_ref(privat->form_factory);
+        }
+
+        g_object_notify(G_OBJECT(ctrl), "form-factory");
+    }
+}
+
 
 
 static void

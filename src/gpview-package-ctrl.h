@@ -18,43 +18,43 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gpview-company-view.h
+/*! \file gpview-package-view.h
  */
 
-#define GPVIEW_TYPE_COMPANY_CTRL (gpview_company_ctrl_get_type())
-#define GPVIEW_COMPANY_CTRL(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),GPVIEW_TYPE_COMPANY_CTRL,GPViewCompanyCtrl))
-#define GPVIEW_COMPANY_CTRL_CLASS(cls) (G_TYPE_CHECK_CLASS_CAST((cls),GPVIEW_TYPE_COMPANY_CTRL,GPViewCompanyCtrlClass))
-#define GPVIEW_IS_COMPANY_CTRL(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj),GPVIEW_TYPE_COMPANY_CTRL))
-#define GPVIEW_IS_COMPANY_CTRL_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),GPVIEW_TYPE_COMPANY_CTRL))
-#define GPVIEW_COMPANY_CTRL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),GPVIEW_TYPE_COMPANY_CTRL,GPViewCompanyCtrlClass))
+#define GPVIEW_TYPE_PACKAGE_CTRL (gpview_package_ctrl_get_type())
+#define GPVIEW_PACKAGE_CTRL(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj),GPVIEW_TYPE_PACKAGE_CTRL,GPViewPackageCtrl))
+#define GPVIEW_PACKAGE_CTRL_CLASS(cls) (G_TYPE_CHECK_CLASS_CAST((cls),GPVIEW_TYPE_PACKAGE_CTRL,GPViewPackageCtrlClass))
+#define GPVIEW_IS_PACKAGE_CTRL(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj),GPVIEW_TYPE_PACKAGE_CTRL))
+#define GPVIEW_IS_PACKAGE_CTRL_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),GPVIEW_TYPE_PACKAGE_CTRL))
+#define GPVIEW_PACKAGE_CTRL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),GPVIEW_TYPE_PACKAGE_CTRL,GPViewPackageCtrlClass))
 
 /*! \extends GObject */
-struct _GPViewCompanyCtrl
+struct _GPViewPackageCtrl
 {
     GObject parent;
 };
 
 /*! \private */
-struct _GPViewCompanyCtrlClass
+struct _GPViewPackageCtrlClass
 {
     GObjectClass parent;
 };
 
 /*! \private */
 GType
-gpview_company_ctrl_get_type(void);
+gpview_package_ctrl_get_type(void);
 
-/*! \brief Create a new company view controller
+/*! \brief Create a new package view controller
  *
  *  Use g_object_unref() on the returned pointer when no longer
  *  needed.
  *
  *  \return A new comapny view controller [transfer full]
  */
-GPViewCompanyCtrl*
-gpview_company_ctrl_new(void);
+GPViewPackageCtrl*
+gpview_package_ctrl_new(void);
 
-/*! \brief Create a new company view controller
+/*! \brief Create a new package view controller
  *
  *  Use g_object_unref() on the returned pointer when no longer
  *  needed.
@@ -62,8 +62,8 @@ gpview_company_ctrl_new(void);
  *  \param [in] manager The ui manager
  *  \return A new comapny view controller [transfer full]
  */
-GPViewCompanyCtrl*
-gpview_company_ctrl_new_with_manager(GtkUIManager *manager);
+GPViewPackageCtrl*
+gpview_package_ctrl_new_with_manager(GtkUIManager *manager);
 
 /*! \brief Get the current view associated with this controller.
  *
@@ -73,8 +73,8 @@ gpview_company_ctrl_new_with_manager(GtkUIManager *manager);
  *  \param [in] ctrl The controller [allow none]
  *  \return The current view associated with this controller. [transfer full]
  */
-GPViewCompanyView*
-gpview_company_ctrl_get_current_view(const GPViewCompanyCtrl *ctrl);
+GPViewPackageView*
+gpview_package_ctrl_get_current_view(const GPViewPackageCtrl *ctrl);
 
 /*! \brief Set the database for this controller
  *
@@ -85,7 +85,7 @@ gpview_company_ctrl_get_current_view(const GPViewCompanyCtrl *ctrl);
  *  \param [in] view The database for this controller. [alow none]
  */
 GPartsDatabase*
-gpview_comapny_ctrl_get_database(const GPViewCompanyCtrl *ctrl, GPartsDatabase *database);
+gpview_package_ctrl_get_database(const GPViewPackageCtrl *ctrl);
 
 /*! \brief Get the form factory for this controller
  *
@@ -96,7 +96,7 @@ gpview_comapny_ctrl_get_database(const GPViewCompanyCtrl *ctrl, GPartsDatabase *
  *  \return The form factory for this controller. [transfer full]
  */
 GPFormFactory*
-gpview_company_ctrl_get_form_factory(const GPViewCompanyCtrl *ctrl);
+gpview_package_ctrl_get_form_factory(const GPViewPackageCtrl *ctrl);
 
 /*! \brief Get the UI manger associated with this controller.
  *
@@ -107,7 +107,7 @@ gpview_company_ctrl_get_form_factory(const GPViewCompanyCtrl *ctrl);
  *  \return The UI manager associated with this controller. [transfer full]
  */
 GtkUIManager*
-gpview_company_ctrl_get_ui_manager(const GPViewCompanyCtrl *ctrl);
+gpview_package_ctrl_get_ui_manager(const GPViewPackageCtrl *ctrl);
 
 /*! \brief Set the current view for this controller
  *
@@ -115,7 +115,7 @@ gpview_company_ctrl_get_ui_manager(const GPViewCompanyCtrl *ctrl);
  *  \param [in] view The current view for this controller. [alow none]
  */
 void
-gpview_company_ctrl_set_current_view(GPViewCompanyCtrl *ctrl, GPViewCompanyView *view);
+gpview_package_ctrl_set_current_view(GPViewPackageCtrl *ctrl, GPViewPackageView *view);
 
 /*! \brief Set the database for this controller
  *
@@ -123,7 +123,7 @@ gpview_company_ctrl_set_current_view(GPViewCompanyCtrl *ctrl, GPViewCompanyView 
  *  \param [in] view The database for this controller. [alow none]
  */
 void
-gpview_company_ctrl_set_database(GPViewCompanyCtrl *ctrl, GPartsDatabase *database);
+gpview_package_ctrl_set_database(GPViewPackageCtrl *ctrl, GPartsDatabase *database);
 
 /*! \brief Set the form factory for this controller
  *
@@ -131,7 +131,7 @@ gpview_company_ctrl_set_database(GPViewCompanyCtrl *ctrl, GPartsDatabase *databa
  *  \param [in] factory The form factory for this controller. [alow none]
  */
 void
-gpview_company_ctrl_set_form_factory(GPViewCompanyCtrl *ctrl, GPFormFactory *factory);
+gpview_package_ctrl_set_form_factory(GPViewPackageCtrl *ctrl, GPFormFactory *factory);
 
 /*! \brief Set UI manager for this controller
  *
@@ -139,5 +139,5 @@ gpview_company_ctrl_set_form_factory(GPViewCompanyCtrl *ctrl, GPFormFactory *fac
  *  \param [in] manager The manager for this controller. [allow none]
  */
 void
-gpview_company_ctrl_set_ui_manager(GPViewCompanyCtrl *view, GtkUIManager *ui_manager);
+gpview_package_ctrl_set_ui_manager(GPViewPackageCtrl *view, GtkUIManager *ui_manager);
 

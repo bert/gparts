@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gpview-company-ctrl.c
+/*! \file gpview-device-ctrl.c
  */
 
 #include <glib.h>
@@ -30,148 +30,131 @@
 #include "gpform.h"
 #include "gpview.h"
 
-#define GPVIEW_COMPANY_CTRL_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),GPVIEW_TYPE_COMPANY_CTRL,GPViewCompanyCtrlPrivate))
+#define GPVIEW_DEVICE_CTRL_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),GPVIEW_TYPE_DEVICE_CTRL,GPViewDeviceCtrlPrivate))
 
 enum
 {
-    GPVIEW_COMPANY_CTRL_CURRENT_VIEW = 1,
-    GPVIEW_COMPANY_CTRL_DATABASE,
-    GPVIEW_COMPANY_CTRL_FORM_FACTORY,
-    GPVIEW_COMPANY_CTRL_UI_MANAGER
+    GPVIEW_DEVICE_CTRL_CURRENT_VIEW = 1,
+    GPVIEW_DEVICE_CTRL_DATABASE,
+    GPVIEW_DEVICE_CTRL_FORM_FACTORY,
+    GPVIEW_DEVICE_CTRL_UI_MANAGER
 };
 
-typedef struct _GPViewCompanyCtrlPrivate GPViewCompanyCtrlPrivate;
+typedef struct _GPViewDeviceCtrlPrivate GPViewDeviceCtrlPrivate;
 
-struct _GPViewCompanyCtrlPrivate
+struct _GPViewDeviceCtrlPrivate
 {
     GPartsDatabase    *database;
     GPFormFactory     *form_factory;
-    GPViewCompanyView *current_view;
+    GPViewDeviceView *current_view;
     GtkUIManager      *ui_manager;
 
     GtkActionGroup    *action_group_connected;
     GtkActionGroup    *action_group_multiple;
     GtkActionGroup    *action_group_single;
-    GtkActionGroup    *action_group_website;
 };
 
 static void
-gpview_company_ctrl_class_init(gpointer g_class, gpointer g_class_data);
+gpview_device_ctrl_class_init(gpointer g_class, gpointer g_class_data);
 
 static void
-gpview_company_ctrl_create_cb(GtkAction *action, GPViewCompanyCtrl *ctrl);
+gpview_device_ctrl_create_cb(GtkAction *action, GPViewDeviceCtrl *ctrl);
 
 static void
-gpview_company_ctrl_delete_cb(GtkAction *action, GPViewCompanyCtrl *ctrl);
+gpview_device_ctrl_delete_cb(GtkAction *action, GPViewDeviceCtrl *ctrl);
 
 static void
-gpview_company_ctrl_dispose(GObject *object);
+gpview_device_ctrl_dispose(GObject *object);
 
 static void
-gpview_company_ctrl_edit_cb(GtkAction *action, GPViewCompanyCtrl *ctrl);
+gpview_device_ctrl_edit_cb(GtkAction *action, GPViewDeviceCtrl *ctrl);
 
 static void
-gpview_company_ctrl_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
+gpview_device_ctrl_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec);
 
 static void
-gpview_company_ctrl_init(GTypeInstance *instance, gpointer g_class);
+gpview_device_ctrl_init(GTypeInstance *instance, gpointer g_class);
 
 static void
-gpview_company_ctrl_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
+gpview_device_ctrl_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec);
 
 static void
-gpview_company_ctrl_update_connected_cb(GObject *unused, GParamSpec *pspec, GPViewCompanyCtrl *ctrl);
+gpview_device_ctrl_update_connected_cb(GObject *unused, GParamSpec *pspec, GPViewDeviceCtrl *ctrl);
 
 static void
-gpview_company_ctrl_update_ids_cb(GObject *unused, GParamSpec *pspec, GPViewCompanyCtrl *ctrl);
+gpview_device_ctrl_update_ids_cb(GObject *unused, GParamSpec *pspec, GPViewDeviceCtrl *ctrl);
 
 static void
-gpview_company_ctrl_update_website_cb(GObject *unused, GParamSpec *pspec, GPViewCompanyCtrl *ctrl);
-
-static void
-gpview_company_ctrl_visit_cb(GtkAction *action, GPViewCompanyCtrl *ctrl);
+gpview_device_ctrl_visit_cb(GtkAction *action, GPViewDeviceCtrl *ctrl);
 
 
 
-static const GtkActionEntry gpview_company_ctrl_actions_connected[] =
+static const GtkActionEntry gpview_device_ctrl_actions_connected[] =
 {
     {
-        "company-create",
+        "device-create",
         GTK_STOCK_ADD,
-        "New Company",
+        "New Device",
         NULL,
-        "New Company",
-        G_CALLBACK(gpview_company_ctrl_create_cb)
+        "New Device",
+        G_CALLBACK(gpview_device_ctrl_create_cb)
     },
 };
 
 
-static const GtkActionEntry gpview_company_ctrl_actions_multiple[] =
+static const GtkActionEntry gpview_device_ctrl_actions_multiple[] =
 {
     {
-        "company-delete",
+        "device-delete",
         GTK_STOCK_REMOVE,
-        "Delete Company",
+        "Delete Device",
         NULL,
-        "Delete Company",
-        G_CALLBACK(gpview_company_ctrl_delete_cb)
+        "Delete Device",
+        G_CALLBACK(gpview_device_ctrl_delete_cb)
     }
 };
 
-static const GtkActionEntry gpview_company_ctrl_actions_single[] =
+static const GtkActionEntry gpview_device_ctrl_actions_single[] =
 {
     {
-        "company-edit",
+        "device-edit",
         GTK_STOCK_EDIT,
-        "Edit Company",
+        "Edit Device",
         NULL,
-        "Edit Company",
-        G_CALLBACK(gpview_company_ctrl_edit_cb)
+        "Edit Device",
+        G_CALLBACK(gpview_device_ctrl_edit_cb)
     },
-};
-
-
-static const GtkActionEntry gpview_company_ctrl_actions_website[] =
-{
-    {
-        "company-visit",
-        GTK_STOCK_HOME,
-        "Visit Company Website",
-        NULL,
-        "Visit Company Website",
-        G_CALLBACK(gpview_company_ctrl_visit_cb)
-    }
 };
 
 
 
 static void
-gpview_company_ctrl_class_init(gpointer g_class, gpointer g_class_data)
+gpview_device_ctrl_class_init(gpointer g_class, gpointer g_class_data)
 {
     GObjectClass *klasse = G_OBJECT_CLASS(g_class);
 
-    g_type_class_add_private(g_class, sizeof(GPViewCompanyCtrlPrivate));
+    g_type_class_add_private(g_class, sizeof(GPViewDeviceCtrlPrivate));
 
-    klasse->dispose = gpview_company_ctrl_dispose;
+    klasse->dispose = gpview_device_ctrl_dispose;
 
-    klasse->get_property = gpview_company_ctrl_get_property;
-    klasse->set_property = gpview_company_ctrl_set_property;
+    klasse->get_property = gpview_device_ctrl_get_property;
+    klasse->set_property = gpview_device_ctrl_set_property;
 
     g_object_class_install_property(
         klasse,
-        GPVIEW_COMPANY_CTRL_CURRENT_VIEW,
+        GPVIEW_DEVICE_CTRL_CURRENT_VIEW,
         g_param_spec_object(
             "current-view",
             "Current View",
             "Current View",
-            GPVIEW_TYPE_COMPANY_VIEW,
+            GPVIEW_TYPE_DEVICE_VIEW,
             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
 
     g_object_class_install_property(
         klasse,
-        GPVIEW_COMPANY_CTRL_DATABASE,
+        GPVIEW_DEVICE_CTRL_DATABASE,
         g_param_spec_object(
             "database",
             "Database",
@@ -183,7 +166,7 @@ gpview_company_ctrl_class_init(gpointer g_class, gpointer g_class_data)
 
     g_object_class_install_property(
         klasse,
-        GPVIEW_COMPANY_CTRL_FORM_FACTORY,
+        GPVIEW_DEVICE_CTRL_FORM_FACTORY,
         g_param_spec_object(
             "form-factory",
             "Form Factory",
@@ -195,7 +178,7 @@ gpview_company_ctrl_class_init(gpointer g_class, gpointer g_class_data)
 
     g_object_class_install_property(
         klasse,
-        GPVIEW_COMPANY_CTRL_UI_MANAGER,
+        GPVIEW_DEVICE_CTRL_UI_MANAGER,
         g_param_spec_object(
             "ui-manager",
             "UI Manager",
@@ -208,9 +191,9 @@ gpview_company_ctrl_class_init(gpointer g_class, gpointer g_class_data)
 
 
 static void
-gpview_company_ctrl_create_cb(GtkAction *action, GPViewCompanyCtrl *ctrl)
+gpview_device_ctrl_create_cb(GtkAction *action, GPViewDeviceCtrl *ctrl)
 {
-    GPViewCompanyCtrlPrivate *privat = GPVIEW_COMPANY_CTRL_GET_PRIVATE(ctrl);
+    GPViewDeviceCtrlPrivate *privat = GPVIEW_DEVICE_CTRL_GET_PRIVATE(ctrl);
 
     if (privat != NULL)
     {
@@ -231,9 +214,9 @@ gpview_company_ctrl_create_cb(GtkAction *action, GPViewCompanyCtrl *ctrl)
 
 
 static void
-gpview_company_ctrl_dispose(GObject *object)
+gpview_device_ctrl_dispose(GObject *object)
 {
-    GPViewCompanyCtrlPrivate *privat = GPVIEW_COMPANY_CTRL_GET_PRIVATE(object);
+    GPViewDeviceCtrlPrivate *privat = GPVIEW_DEVICE_CTRL_GET_PRIVATE(object);
 
     if (privat != NULL)
     {
@@ -245,9 +228,6 @@ gpview_company_ctrl_dispose(GObject *object)
 
         misc_object_unref(privat->action_group_single);
         privat->action_group_single = NULL;
-
-        misc_object_unref(privat->action_group_website);
-        privat->action_group_website = NULL;
 
         misc_object_unref(privat->current_view);
         privat->current_view = NULL;
@@ -267,9 +247,9 @@ gpview_company_ctrl_dispose(GObject *object)
 
 
 static void
-gpview_company_ctrl_delete_cb(GtkAction *action, GPViewCompanyCtrl *ctrl)
+gpview_device_ctrl_delete_cb(GtkAction *action, GPViewDeviceCtrl *ctrl)
 {
-    GPViewCompanyCtrlPrivate *privat = GPVIEW_COMPANY_CTRL_GET_PRIVATE(ctrl);
+    GPViewDeviceCtrlPrivate *privat = GPVIEW_DEVICE_CTRL_GET_PRIVATE(ctrl);
 
     if (privat != NULL)
     {
@@ -290,20 +270,20 @@ gpview_company_ctrl_delete_cb(GtkAction *action, GPViewCompanyCtrl *ctrl)
 
 
 static void
-gpview_company_ctrl_edit_cb(GtkAction *action, GPViewCompanyCtrl *ctrl)
+gpview_device_ctrl_edit_cb(GtkAction *action, GPViewDeviceCtrl *ctrl)
 {
     g_debug("Edit Company");
 }
 
 
-GPViewCompanyView*
-gpview_company_ctrl_get_current_view(const GPViewCompanyCtrl *ctrl)
+GPViewDeviceView*
+gpview_device_ctrl_get_current_view(const GPViewDeviceCtrl *ctrl)
 {
-    GPViewCompanyView *current_view = NULL;
+    GPViewDeviceView *current_view = NULL;
 
     if (ctrl != NULL)
     {
-        GPViewCompanyCtrlPrivate *privat = GPVIEW_COMPANY_CTRL_GET_PRIVATE(ctrl);
+        GPViewDeviceCtrlPrivate *privat = GPVIEW_DEVICE_CTRL_GET_PRIVATE(ctrl);
 
         if (privat != NULL)
         {
@@ -320,10 +300,10 @@ gpview_company_ctrl_get_current_view(const GPViewCompanyCtrl *ctrl)
 }
 
 GPartsDatabase*
-gpview_company_ctrl_get_database(const GPViewCompanyCtrl *ctrl)
+gpview_device_ctrl_get_database(const GPViewDeviceCtrl *ctrl)
 {
     GPartsDatabase *database = NULL;
-    GPViewCompanyCtrlPrivate *privat = GPVIEW_COMPANY_CTRL_GET_PRIVATE(ctrl);
+    GPViewDeviceCtrlPrivate *privat = GPVIEW_DEVICE_CTRL_GET_PRIVATE(ctrl);
 
     if (privat != NULL)
     {
@@ -339,10 +319,10 @@ gpview_company_ctrl_get_database(const GPViewCompanyCtrl *ctrl)
 }
 
 GPFormFactory*
-gpview_company_ctrl_get_form_factory(const GPViewCompanyCtrl *ctrl)
+gpview_device_ctrl_get_form_factory(const GPViewDeviceCtrl *ctrl)
 {
     GPFormFactory *form_factory = NULL;
-    GPViewCompanyCtrlPrivate *privat = GPVIEW_COMPANY_CTRL_GET_PRIVATE(ctrl);
+    GPViewDeviceCtrlPrivate *privat = GPVIEW_DEVICE_CTRL_GET_PRIVATE(ctrl);
 
     if (privat != NULL)
     {
@@ -358,28 +338,28 @@ gpview_company_ctrl_get_form_factory(const GPViewCompanyCtrl *ctrl)
 }
 
 static void
-gpview_company_ctrl_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
+gpview_device_ctrl_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
 {
-    GPViewCompanyCtrl *view = GPVIEW_COMPANY_CTRL(object);
+    GPViewDeviceCtrl *view = GPVIEW_DEVICE_CTRL(object);
 
     if (view != NULL)
     {
         switch (property_id)
         {
-            case GPVIEW_COMPANY_CTRL_CURRENT_VIEW:
-                g_value_take_object(value, gpview_company_ctrl_get_current_view(view));
+            case GPVIEW_DEVICE_CTRL_CURRENT_VIEW:
+                g_value_take_object(value, gpview_device_ctrl_get_current_view(view));
                 break;
 
-            case GPVIEW_COMPANY_CTRL_DATABASE:
-                g_value_take_object(value, gpview_company_ctrl_get_database(view));
+            case GPVIEW_DEVICE_CTRL_DATABASE:
+                g_value_take_object(value, gpview_device_ctrl_get_database(view));
                 break;
 
-            case GPVIEW_COMPANY_CTRL_FORM_FACTORY:
-                g_value_take_object(value, gpview_company_ctrl_get_form_factory(view));
+            case GPVIEW_DEVICE_CTRL_FORM_FACTORY:
+                g_value_take_object(value, gpview_device_ctrl_get_form_factory(view));
                 break;
 
-            case GPVIEW_COMPANY_CTRL_UI_MANAGER:
-                g_value_take_object(value, gpview_company_ctrl_get_ui_manager(view));
+            case GPVIEW_DEVICE_CTRL_UI_MANAGER:
+                g_value_take_object(value, gpview_device_ctrl_get_ui_manager(view));
                 break;
 
             default:
@@ -390,22 +370,22 @@ gpview_company_ctrl_get_property(GObject *object, guint property_id, GValue *val
 
 
 GType
-gpview_company_ctrl_get_type(void)
+gpview_device_ctrl_get_type(void)
 {
     static GType type = G_TYPE_INVALID;
 
     if (type == G_TYPE_INVALID)
     {
         static const GTypeInfo tinfo = {
-            sizeof(GPViewCompanyCtrlClass),    /* class_size */
+            sizeof(GPViewDeviceCtrlClass),    /* class_size */
             NULL,                              /* base_init */
             NULL,                              /* base_finalize */
-            gpview_company_ctrl_class_init,    /* class_init */
+            gpview_device_ctrl_class_init,    /* class_init */
             NULL,                              /* class_finalize */
             NULL,                              /* class_data */
-            sizeof(GPViewCompanyCtrl),         /* instance_size */
+            sizeof(GPViewDeviceCtrl),         /* instance_size */
             0,                                 /* n_preallocs */
-            gpview_company_ctrl_init,          /* instance_init */
+            gpview_device_ctrl_init,          /* instance_init */
             NULL                               /* value_table */
             };
 
@@ -417,7 +397,7 @@ gpview_company_ctrl_get_type(void)
 
         type = g_type_register_static(
             G_TYPE_OBJECT,
-            "GPViewCompanyCtrl",
+            "GPViewDeviceCtrl",
             &tinfo,
             0
             );
@@ -430,10 +410,10 @@ gpview_company_ctrl_get_type(void)
 
 
 GtkUIManager*
-gpview_company_ctrl_get_ui_manager(const GPViewCompanyCtrl *ctrl)
+gpview_device_ctrl_get_ui_manager(const GPViewDeviceCtrl *ctrl)
 {
     GtkUIManager *manager = NULL;
-    GPViewCompanyCtrlPrivate *privat = GPVIEW_COMPANY_CTRL_GET_PRIVATE(ctrl);
+    GPViewDeviceCtrlPrivate *privat = GPVIEW_DEVICE_CTRL_GET_PRIVATE(ctrl);
 
     if (privat != NULL)
     {
@@ -450,69 +430,52 @@ gpview_company_ctrl_get_ui_manager(const GPViewCompanyCtrl *ctrl)
 
 
 static void
-gpview_company_ctrl_init(GTypeInstance *instance, gpointer g_class)
+gpview_device_ctrl_init(GTypeInstance *instance, gpointer g_class)
 {
-    GPViewCompanyCtrlPrivate *privat = GPVIEW_COMPANY_CTRL_GET_PRIVATE(instance);
+    GPViewDeviceCtrlPrivate *privat = GPVIEW_DEVICE_CTRL_GET_PRIVATE(instance);
 
     if (privat != NULL)
     {
-        privat->action_group_connected = gtk_action_group_new("company-action-group-connected");
+        privat->action_group_connected = gtk_action_group_new("device-action-group-connected");
 
         gtk_action_group_add_actions(
             privat->action_group_connected,
-            gpview_company_ctrl_actions_connected,
-            G_N_ELEMENTS(gpview_company_ctrl_actions_connected),
+            gpview_device_ctrl_actions_connected,
+            G_N_ELEMENTS(gpview_device_ctrl_actions_connected),
             instance
             );
 
         g_signal_connect(
-            GPVIEW_COMPANY_CTRL(instance),
+            GPVIEW_DEVICE_CTRL(instance),
             "notify::database",
-            G_CALLBACK(gpview_company_ctrl_update_connected_cb),
-            GPVIEW_COMPANY_CTRL(instance)
+            G_CALLBACK(gpview_device_ctrl_update_connected_cb),
+            GPVIEW_DEVICE_CTRL(instance)
             );
 
-        privat->action_group_multiple = gtk_action_group_new("company-action-group-multiple");
+        privat->action_group_multiple = gtk_action_group_new("device-action-group-multiple");
 
         gtk_action_group_add_actions(
             privat->action_group_multiple,
-            gpview_company_ctrl_actions_multiple,
-            G_N_ELEMENTS(gpview_company_ctrl_actions_multiple),
+            gpview_device_ctrl_actions_multiple,
+            G_N_ELEMENTS(gpview_device_ctrl_actions_multiple),
             instance
             );
 
-        privat->action_group_single = gtk_action_group_new("company-action-group-single");
+        privat->action_group_single = gtk_action_group_new("device-action-group-single");
 
         gtk_action_group_add_actions(
             privat->action_group_single,
-            gpview_company_ctrl_actions_single,
-            G_N_ELEMENTS(gpview_company_ctrl_actions_single),
+            gpview_device_ctrl_actions_single,
+            G_N_ELEMENTS(gpview_device_ctrl_actions_single),
             instance
             );
 
         g_signal_connect(
-            GPVIEW_COMPANY_CTRL(instance),
+            GPVIEW_DEVICE_CTRL(instance),
             "notify::current-view",
-            G_CALLBACK(gpview_company_ctrl_update_ids_cb),
-            GPVIEW_COMPANY_CTRL(instance)
+            G_CALLBACK(gpview_device_ctrl_update_ids_cb),
+            GPVIEW_DEVICE_CTRL(instance)
             );
-
-        privat->action_group_website = gtk_action_group_new("company-action-group-website");
-
-        gtk_action_group_add_actions(
-            privat->action_group_website,
-            gpview_company_ctrl_actions_website,
-            G_N_ELEMENTS(gpview_company_ctrl_actions_website),
-            instance
-            );
-
-        g_signal_connect(
-            GPVIEW_COMPANY_CTRL(instance),
-            "notify::current-view",
-            G_CALLBACK(gpview_company_ctrl_update_website_cb),
-            GPVIEW_COMPANY_CTRL(instance)
-            );
-
 
         g_object_notify(G_OBJECT(instance), "current-view");
         g_object_notify(G_OBJECT(instance), "database");
@@ -522,18 +485,18 @@ gpview_company_ctrl_init(GTypeInstance *instance, gpointer g_class)
 }
 
 
-GPViewCompanyCtrl*
-gpview_company_ctrl_new(void)
+GPViewDeviceCtrl*
+gpview_device_ctrl_new(void)
 {
-    return GPVIEW_COMPANY_CTRL(g_object_new(GPVIEW_TYPE_COMPANY_CTRL, NULL));
+    return GPVIEW_DEVICE_CTRL(g_object_new(GPVIEW_TYPE_DEVICE_CTRL, NULL));
 }
 
 
-GPViewCompanyCtrl*
-gpview_company_ctrl_new_with_manager(GtkUIManager *manager)
+GPViewDeviceCtrl*
+gpview_device_ctrl_new_with_manager(GtkUIManager *manager)
 {
-    return GPVIEW_COMPANY_CTRL(g_object_new(
-        GPVIEW_TYPE_COMPANY_CTRL,
+    return GPVIEW_DEVICE_CTRL(g_object_new(
+        GPVIEW_TYPE_DEVICE_CTRL,
         "ui-manager", manager,
         NULL
         ));
@@ -541,9 +504,9 @@ gpview_company_ctrl_new_with_manager(GtkUIManager *manager)
 
 
 void
-gpview_company_ctrl_set_current_view(GPViewCompanyCtrl *ctrl, GPViewCompanyView *view)
+gpview_device_ctrl_set_current_view(GPViewDeviceCtrl *ctrl, GPViewDeviceView *view)
 {
-    GPViewCompanyCtrlPrivate *privat = GPVIEW_COMPANY_CTRL_GET_PRIVATE(ctrl);
+    GPViewDeviceCtrlPrivate *privat = GPVIEW_DEVICE_CTRL_GET_PRIVATE(ctrl);
 
     if (privat != NULL)
     {
@@ -551,13 +514,7 @@ gpview_company_ctrl_set_current_view(GPViewCompanyCtrl *ctrl, GPViewCompanyView 
         {
             g_signal_handlers_disconnect_by_func(
                 privat->current_view,
-                G_CALLBACK(gpview_company_ctrl_update_ids_cb),
-                ctrl
-                );
-
-            g_signal_handlers_disconnect_by_func(
-                privat->current_view,
-                G_CALLBACK(gpview_company_ctrl_update_website_cb),
+                G_CALLBACK(gpview_device_ctrl_update_ids_cb),
                 ctrl
                 );
 
@@ -573,14 +530,7 @@ gpview_company_ctrl_set_current_view(GPViewCompanyCtrl *ctrl, GPViewCompanyView 
             g_signal_connect(
                 privat->current_view,
                 "notify::company-id",
-                G_CALLBACK(gpview_company_ctrl_update_ids_cb),
-                ctrl
-                );
-
-            g_signal_connect(
-                privat->current_view,
-                "notify::websites",
-                G_CALLBACK(gpview_company_ctrl_update_website_cb),
+                G_CALLBACK(gpview_device_ctrl_update_ids_cb),
                 ctrl
                 );
         }
@@ -591,9 +541,9 @@ gpview_company_ctrl_set_current_view(GPViewCompanyCtrl *ctrl, GPViewCompanyView 
 
 
 void
-gpview_company_ctrl_set_database(GPViewCompanyCtrl *ctrl, GPartsDatabase *database)
+gpview_device_ctrl_set_database(GPViewDeviceCtrl *ctrl, GPartsDatabase *database)
 {
-    GPViewCompanyCtrlPrivate *privat = GPVIEW_COMPANY_CTRL_GET_PRIVATE(ctrl);
+    GPViewDeviceCtrlPrivate *privat = GPVIEW_DEVICE_CTRL_GET_PRIVATE(ctrl);
 
     if (privat != NULL)
     {
@@ -601,7 +551,7 @@ gpview_company_ctrl_set_database(GPViewCompanyCtrl *ctrl, GPartsDatabase *databa
         {
             g_signal_handlers_disconnect_by_func(
                 privat->database,
-                G_CALLBACK(gpview_company_ctrl_update_connected_cb),
+                G_CALLBACK(gpview_device_ctrl_update_connected_cb),
                 ctrl
                 );
 
@@ -617,7 +567,7 @@ gpview_company_ctrl_set_database(GPViewCompanyCtrl *ctrl, GPartsDatabase *databa
             g_signal_connect(
                 privat->database,
                 "notify::connected",
-                G_CALLBACK(gpview_company_ctrl_update_connected_cb),
+                G_CALLBACK(gpview_device_ctrl_update_connected_cb),
                 ctrl
                 );
         }
@@ -628,9 +578,9 @@ gpview_company_ctrl_set_database(GPViewCompanyCtrl *ctrl, GPartsDatabase *databa
 
 
 void
-gpview_company_ctrl_set_form_factory(GPViewCompanyCtrl *ctrl, GPFormFactory *factory)
+gpview_device_ctrl_set_form_factory(GPViewDeviceCtrl *ctrl, GPFormFactory *factory)
 {
-    GPViewCompanyCtrlPrivate *privat = GPVIEW_COMPANY_CTRL_GET_PRIVATE(ctrl);
+    GPViewDeviceCtrlPrivate *privat = GPVIEW_DEVICE_CTRL_GET_PRIVATE(ctrl);
 
     if (privat != NULL)
     {
@@ -652,28 +602,28 @@ gpview_company_ctrl_set_form_factory(GPViewCompanyCtrl *ctrl, GPFormFactory *fac
 
 
 static void
-gpview_company_ctrl_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec)
+gpview_device_ctrl_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec)
 {
-    GPViewCompanyCtrl *view = GPVIEW_COMPANY_CTRL(object);
+    GPViewDeviceCtrl *view = GPVIEW_DEVICE_CTRL(object);
 
     if (view != NULL)
     {
         switch (property_id)
         {
-            case GPVIEW_COMPANY_CTRL_CURRENT_VIEW:
-                gpview_company_ctrl_set_current_view(view, g_value_get_object(value));
+            case GPVIEW_DEVICE_CTRL_CURRENT_VIEW:
+                gpview_device_ctrl_set_current_view(view, g_value_get_object(value));
                 break;
 
-            case GPVIEW_COMPANY_CTRL_DATABASE:
-                gpview_company_ctrl_set_database(view, g_value_get_object(value));
+            case GPVIEW_DEVICE_CTRL_DATABASE:
+                gpview_device_ctrl_set_database(view, g_value_get_object(value));
                 break;
 
-            case GPVIEW_COMPANY_CTRL_FORM_FACTORY:
-                gpview_company_ctrl_set_form_factory(view, g_value_get_object(value));
+            case GPVIEW_DEVICE_CTRL_FORM_FACTORY:
+                gpview_device_ctrl_set_form_factory(view, g_value_get_object(value));
                 break;
 
-            case GPVIEW_COMPANY_CTRL_UI_MANAGER:
-                gpview_company_ctrl_set_ui_manager(view, g_value_get_object(value));
+            case GPVIEW_DEVICE_CTRL_UI_MANAGER:
+                gpview_device_ctrl_set_ui_manager(view, g_value_get_object(value));
                 break;
 
             default:
@@ -684,19 +634,14 @@ gpview_company_ctrl_set_property(GObject *object, guint property_id, const GValu
 
 
 void
-gpview_company_ctrl_set_ui_manager(GPViewCompanyCtrl *ctrl, GtkUIManager *ui_manager)
+gpview_device_ctrl_set_ui_manager(GPViewDeviceCtrl *ctrl, GtkUIManager *ui_manager)
 {
-    GPViewCompanyCtrlPrivate *privat = GPVIEW_COMPANY_CTRL_GET_PRIVATE(ctrl);
+    GPViewDeviceCtrlPrivate *privat = GPVIEW_DEVICE_CTRL_GET_PRIVATE(ctrl);
 
     if (privat != NULL)
     {
         if (privat->ui_manager != NULL)
         {
-            gtk_ui_manager_remove_action_group(
-                privat->ui_manager,
-                privat->action_group_website
-                );
-
             gtk_ui_manager_remove_action_group(
                 privat->ui_manager,
                 privat->action_group_single
@@ -738,12 +683,6 @@ gpview_company_ctrl_set_ui_manager(GPViewCompanyCtrl *ctrl, GtkUIManager *ui_man
                 privat->action_group_single,
                 0
                 );
-
-            gtk_ui_manager_insert_action_group(
-                privat->ui_manager,
-                privat->action_group_website,
-                0
-                );
         }
 
         g_object_notify(G_OBJECT(ctrl), "ui-manager");
@@ -752,9 +691,9 @@ gpview_company_ctrl_set_ui_manager(GPViewCompanyCtrl *ctrl, GtkUIManager *ui_man
 
 
 static void
-gpview_company_ctrl_update_connected_cb(GObject *unused, GParamSpec *pspec, GPViewCompanyCtrl *ctrl)
+gpview_device_ctrl_update_connected_cb(GObject *unused, GParamSpec *pspec, GPViewDeviceCtrl *ctrl)
 {
-    GPViewCompanyCtrlPrivate *privat = GPVIEW_COMPANY_CTRL_GET_PRIVATE(ctrl);
+    GPViewDeviceCtrlPrivate *privat = GPVIEW_DEVICE_CTRL_GET_PRIVATE(ctrl);
 
     if (privat != NULL)
     {
@@ -767,14 +706,14 @@ gpview_company_ctrl_update_connected_cb(GObject *unused, GParamSpec *pspec, GPVi
 
 
 static void
-gpview_company_ctrl_update_ids_cb(GObject *unused, GParamSpec *pspec, GPViewCompanyCtrl *ctrl)
+gpview_device_ctrl_update_ids_cb(GObject *unused, GParamSpec *pspec, GPViewDeviceCtrl *ctrl)
 {
-    GPViewCompanyCtrlPrivate *privat = GPVIEW_COMPANY_CTRL_GET_PRIVATE(ctrl);
+    GPViewDeviceCtrlPrivate *privat = GPVIEW_DEVICE_CTRL_GET_PRIVATE(ctrl);
 
     if (privat != NULL)
     {
         gboolean visible = (privat->current_view != NULL);
-        GStrv ids = gpview_company_view_get_ids(privat->current_view);
+        GStrv ids = gpview_device_view_get_ids(privat->current_view);
         gboolean sensitive_1 = visible && (ids != NULL) && (g_strv_length(ids) == 1);
         gboolean sensitive_n = visible && (ids != NULL) && (g_strv_length(ids) > 0);
 
@@ -799,68 +738,6 @@ gpview_company_ctrl_update_ids_cb(GObject *unused, GParamSpec *pspec, GPViewComp
             privat->action_group_single,
             visible
             );
-    }
-}
-
-
-static void
-gpview_company_ctrl_update_website_cb(GObject *unused, GParamSpec *pspec, GPViewCompanyCtrl *ctrl)
-{
-    GPViewCompanyCtrlPrivate *privat = GPVIEW_COMPANY_CTRL_GET_PRIVATE(ctrl);
-
-    if (privat != NULL)
-    {
-        gboolean visible = (privat->current_view != NULL);
-        GStrv websites = gpview_company_view_get_websites(privat->current_view);
-        gboolean sensitive = visible && (websites != NULL) && (g_strv_length(websites) > 0);
-
-        g_strfreev(websites);
-
-        gtk_action_group_set_sensitive(
-            privat->action_group_website,
-            sensitive
-            );
-
-        gtk_action_group_set_visible(
-            privat->action_group_website,
-            visible
-            );
-    }
-}
-
-/* This function sends "failed to create drawable" to the terminal. It
- * seems to be caused by gnome-open and a URL to a website.
- */
-static void
-gpview_company_ctrl_visit_cb(GtkAction *action, GPViewCompanyCtrl *ctrl)
-{
-    GPViewCompanyCtrlPrivate *privat = GPVIEW_COMPANY_CTRL_GET_PRIVATE(ctrl);
-
-    if (privat != NULL)
-    {
-        GStrv websites = gpview_company_view_get_websites(privat->current_view);
-
-        if (websites != NULL)
-        {
-            GString *command = g_string_new(NULL);
-            gchar **temp = websites;
-
-            while (*temp != NULL)
-            {
-                g_string_printf(
-                    command,
-                    "gnome-open %s",
-                    *temp++
-                    );
-
-                g_debug("Command line: %s", command->str);
-
-                g_spawn_command_line_async(command->str, NULL);
-            }
-
-            g_string_free(command, TRUE);
-            g_strfreev(websites);
-        }
     }
 }
 

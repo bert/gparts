@@ -28,64 +28,72 @@
 #define GPVIEW_IS_PART_VIEW_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),GPVIEW_TYPE_PART_VIEW))
 #define GPVIEW_PART_VIEW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),GPVIEW_TYPE_PART_VIEW,GPViewPartViewClass))
 
-/*! \extends GtkHPaned */
+/*! \extends GtkContainer */
 struct _GPViewPartView
 {
-    GtkHPaned parent;
+    GtkScrolledWindow parent;
 };
 
 /*! \private */
 struct _GPViewPartViewClass
 {
-    GtkHPanedClass parent;
+    GtkScrolledWindowClass parent;
 };
 
 /*! \private */
 GType
 gpview_part_view_get_type(void);
 
+/*! \brief Get the controller associated with this view
+ *
+ *  Use g_object_free() on the returned pointer when no longer needed.
+ *
+ *  \param [in] view The view
+ *  \return The controller associated with this view
+ */
+GPViewPartCtrl*
+gpview_part_view_get_controller(const GPViewPartView *view);
+
+/*! \brief Get the selected company IDs
+ *
+ *  Use g_strfreev() on the returned pointer when no longer needed.
+ *
+ *  \param [in] view The view [allow none]
+ *  \return The selected Company IDs
+ */
+GStrv
+gpview_part_view_get_ids(const GPViewPartView *view);
+
+/*! \brief Get the selected company websites
+ *
+ *  Use g_strfreev() on the returned pointer when no longer needed.
+ *
+ *  \param [in] view The view [allow none]
+ *  \return The selected Company websites
+ */
+GStrv
+gpview_part_view_get_websites(const GPViewPartView *view);
+
+/*! \brief Create a new part view
+ *
+ *  \return A new part view
+ */
+GPViewPartView*
+gpview_part_view_new(void);
+
+/*! \brief Create a new part view
+ *
+ *  \param [in] ctrl The controller to associate with this view
+ *  \return A new part view
+ */
 GPViewPartView*
 gpview_part_view_new_with_controller(GPViewPartCtrl *ctrl);
 
+/*! \brief Set the controller associated with this view
+ *
+ *  \param [in] view The view
+ *  \param [in] ctrl The controller to associate with this view
+ */
 void
 gpview_part_view_set_controller(GPViewPartView *view, GPViewPartCtrl *ctrl);
-
-/*! \brief Gets the name of the form used to create a new part
- *
- *  Use g_free on the returned pointer when no longer needed.
- *
- *  \param [in] view This view
- *  \return The name of the form used to create a new part of this
- *  category. This function may return NULL.
- */
-gchar*
-gpview_part_view_get_create_form(const GPViewPartView *view);
-
-/*! \brief Gets the name of the form used to edit an existing part
- *
- *  Use g_free on the returned pointer when no longer needed.
- *
- *  \param [in] view This view
- *  \return The name of the form used to edit an existing part of this
- *  category. This function may return NULL.
- */
-gchar*
-gpview_part_view_get_edit_form(const GPViewPartView *view);
-
-/*! \brief Gets the drawing for the currently selected part.
- *
- *  The part view instantiates the currently selected part and
- *  places it in a drawing. The contents of this drawing can
- *  be cut and paste into a schematic.
- *
- *  Use g_object_unref on the returned pointer when no longer needed.
- *
- *  \param [in] view This view
- *  \return A pointer to the drawing.
- */
-SchDrawing*
-gpview_part_view_get_drawing(const GPViewPartView *view);
-
-GPViewPartView*
-gpview_part_view_new(void);
 

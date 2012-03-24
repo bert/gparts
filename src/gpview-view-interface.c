@@ -27,6 +27,7 @@
 
 #include "sch.h"
 #include "gparts.h"
+#include "gpform.h"
 #include "gpview.h"
 
 

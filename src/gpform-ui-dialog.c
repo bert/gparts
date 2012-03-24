@@ -240,10 +240,32 @@ gpform_ui_dialog_get_snapshot(const GPFormUIDialog* dialog)
 
     if (dialog != NULL)
     {
-        //pixbuf = gtk_widget_get_snapshot(
-        //    GTK_WIDGET(dialog),
-        //    NULL
-        //    );
+        cairo_t *cairo;
+        cairo_surface_t *surface;
+        gint width;
+        gint height;
+
+        gtk_window_get_size(GTK_WINDOW(dialog), &width, &height);
+
+        g_debug("Dialog size %d, %d", width, height);
+
+        surface = cairo_image_surface_create(CAIRO_FORMAT_RGB24, width, height);
+
+        cairo = cairo_create(surface);
+
+        if (cairo != NULL)
+        {
+            gtk_widget_draw(GTK_WIDGET(dialog), cairo);
+            cairo_destroy(cairo);
+            g_debug("rendered");
+        }
+
+        if (surface != NULL)
+        {
+            cairo_surface_write_to_png(surface, "output.png");
+            cairo_surface_destroy(surface);
+            g_debug("wrote");
+        }
     }
 
     return pixbuf;

@@ -28,7 +28,7 @@
 #define GPVIEW_IS_DEVICE_VIEW_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),GPVIEW_TYPE_DEVICE_VIEW))
 #define GPVIEW_DEVICE_VIEW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),GPVIEW_TYPE_DEVICE_VIEW,GPViewDeviceViewClass))
 
-/*! \extends GtkSrolledWindow */
+/*! \extends GtkContainer */
 struct _GPViewDeviceView
 {
     GtkScrolledWindow parent;
@@ -44,6 +44,46 @@ struct _GPViewDeviceViewClass
 GType
 gpview_device_view_get_type(void);
 
+/*! \brief Get the controller associated with this view
+ *
+ *  Use g_object_free() on the returned pointer when no longer needed.
+ *
+ *  \param [in] view The view
+ *  \return The controller associated with this view
+ */
+GPViewDeviceCtrl*
+gpview_device_view_get_controller(const GPViewDeviceView *view);
+
+/*! \brief Get the selected device IDs
+ *
+ *  Use g_strfreev() on the returned pointer when no longer needed.
+ *
+ *  \param [in] view The view [allow none]
+ *  \return The selected Company IDs
+ */
+GStrv
+gpview_device_view_get_ids(const GPViewDeviceView *view);
+
+/*! \brief Create a new device view
+ *
+ *  \return A new company view
+ */
 GPViewDeviceView*
 gpview_device_view_new(void);
+
+/*! \brief Create a new device view
+ *
+ *  \param [in] ctrl The controller to associate with this view
+ *  \return A new company view
+ */
+GPViewDeviceView*
+gpview_device_view_new_with_controller(GPViewDeviceCtrl *ctrl);
+
+/*! \brief Set the controller associated with this view
+ *
+ *  \param [in] view The view
+ *  \param [in] ctrl The controller to associate with this view
+ */
+void
+gpview_device_view_set_controller(GPViewDeviceView *view, GPViewDeviceCtrl *ctrl);
 

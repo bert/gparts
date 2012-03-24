@@ -60,6 +60,16 @@ gpform_factory_get_type(void);
 GPFormUIDialog*
 gpform_factory_create_form(const GPFormFactory *factory, const char *filename);
 
+/*! \brief Get the parent window for dialog boxes
+ *
+ *  The caller must use g_object_unref when the object is no longer needed.
+ *
+ *  \param [in,out] factory
+ *  \return
+ */
+GtkWindow*
+gpform_factory_get_dialog_parent(const GPFormFactory *factory);
+
 /*! \brief Get the id for the UI object
  *
  *  The caller must use g_free when the string is no longer needed.
@@ -97,6 +107,14 @@ gpform_factory_get_xml_path(const GPFormFactory *factory);
  */
 GPFormFactory*
 gpform_factory_new(void);
+
+/*! \brief Set the parent window for dialogs
+ *
+ *  \param [in,out] factory
+ *  \param [in]     parent
+ */
+void
+gpform_factory_set_dialog_parent(GPFormFactory *factory, GtkWindow *parent);
 
 /*! \brief Set the id for the UI object
  *

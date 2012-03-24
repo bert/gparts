@@ -30,6 +30,8 @@ CREATE TABLE Category (
     CategoryID    INTEGER PRIMARY KEY,
     CategoryName  TEXT,
     ViewName      TEXT,
+    CreateForm    TEXT,
+    EditForm      TEXT,
     ParentID      INTEGER,
 
     UNIQUE( CategoryName )

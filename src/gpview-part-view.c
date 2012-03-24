@@ -29,6 +29,7 @@
 
 #include "schgui.h"
 #include "gparts.h"
+#include "gpform.h"
 #include "gpview.h"
 
 #define GPVIEW_PART_VIEW_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),GPVIEW_TYPE_PART_VIEW,GPViewPartViewPrivate))
@@ -409,6 +410,24 @@ gpview_part_view_dispose(GObject *object)
 }
 
 
+gchar*
+gpview_part_view_get_create_form(const GPViewPartView *view)
+{
+    gchar *form = NULL;
+
+    if (view != NULL)
+    {
+        GPViewPartViewPrivate *privat = GPVIEW_PART_VIEW_GET_PRIVATE(view);
+
+        if (privat != NULL)
+        {
+            form = gpview_category_widget_get_create_form(privat->category_widget);
+        }
+    }
+
+    return form;
+}
+
 SchDrawing*
 gpview_part_view_get_drawing(const GPViewPartView *view)
 {
@@ -430,6 +449,24 @@ gpview_part_view_get_drawing(const GPViewPartView *view)
     }
 
     return drawing;
+}
+
+gchar*
+gpview_part_view_get_edit_form(const GPViewPartView *view)
+{
+    gchar *form = NULL;
+
+    if (view != NULL)
+    {
+        GPViewPartViewPrivate *privat = GPVIEW_PART_VIEW_GET_PRIVATE(view);
+
+        if (privat != NULL)
+        {
+            form = gpview_category_widget_get_edit_form(privat->category_widget);
+        }
+    }
+
+    return form;
 }
 
 static void
@@ -487,7 +524,7 @@ gpview_part_view_get_type(void)
 }
 
 GStrv
-gpview_part_view_get_websites(GPViewPartView *view)
+gpview_part_view_get_websites(const GPViewPartView *view)
 {
     GPViewPartViewPrivate *privat = GPVIEW_PART_VIEW_GET_PRIVATE(view);
     GStrv websites = NULL;

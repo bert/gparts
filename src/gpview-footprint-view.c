@@ -27,6 +27,7 @@
 
 #include "sch.h"
 #include "gparts.h"
+#include "gpform.h"
 #include "gpview.h"
 
 #define GPVIEW_FOOTPRINT_VIEW_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),GPVIEW_TYPE_FOOTPRINT_VIEW,GPViewFootprintViewPrivate))
@@ -45,7 +46,7 @@ typedef struct _GPViewFootprintViewPrivate GPViewFootprintViewPrivate;
 struct _GPViewFootprintViewPrivate
 {
     GPViewResultAdapter  *adapter;
-    void                *controller;
+    GPViewFootprintCtrl  *controller;
     GPartsDatabase       *database;
     GPartsDatabaseResult *result;
     GtkTreeSelection     *selection;
@@ -106,11 +107,11 @@ gpview_footprint_view_activate(GPViewViewInterface *widget)
         }
         else if (privat->controller == NULL)
         {
-            g_critical("GPViewCompanyView has a NULL controller");
+            g_critical("GPViewFootprintView has a NULL controller");
         }
         else
         {
-            //gpview_footprint_ctrl_set_current_view(privat->controller, view);
+            gpview_footprint_ctrl_set_current_view(privat->controller, view);
         }
     }
 }
@@ -149,7 +150,6 @@ gpview_footprint_view_class_init(gpointer g_class, gpointer g_class_data)
             )
         );
 
-#if 0
     g_object_class_install_property(
         klasse,
         GPVIEW_FOOTPRINT_VIEW_CONTROLLER,
@@ -161,7 +161,6 @@ gpview_footprint_view_class_init(gpointer g_class, gpointer g_class_data)
             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
-#endif
 
     g_object_class_install_property(
         klasse,
@@ -219,11 +218,11 @@ gpview_footprint_view_deactivate(GPViewViewInterface *widget)
         }
         else if (privat->controller == NULL)
         {
-            g_critical("GPViewCompanyView has a NULL controller");
+            g_critical("GPViewFootprintView has a NULL controller");
         }
         else
         {
-            //gpview_footprint_ctrl_set_current_view(privat->controller, NULL);
+            gpview_footprint_ctrl_set_current_view(privat->controller, NULL);
         }
     }
 }
@@ -244,6 +243,30 @@ gpview_footprint_view_dispose(GObject *object)
 
     misc_object_chain_dispose(object);
 }
+
+GStrv
+gpview_footprint_view_get_ids(const GPViewFootprintView *view)
+{
+    GStrv ids = NULL;
+
+    if (view != NULL)
+    {
+        GPViewFootprintViewPrivate *privat = GPVIEW_FOOTPRINT_VIEW_GET_PRIVATE(view);
+
+        if (privat != NULL)
+        {
+            gint index;
+
+            if (gpview_result_adapter_get_column_index(privat->adapter, "FootprintID", &index))
+            {
+                ids = gpview_result_adapter_get_fields(privat->adapter, privat->selection, index);
+            }
+        }
+    }
+
+    return ids;
+}
+
 
 static void
 gpview_footprint_view_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
@@ -376,7 +399,7 @@ gpview_footprint_view_new()
     return GPVIEW_FOOTPRINT_VIEW(g_object_new(GPVIEW_TYPE_FOOTPRINT_VIEW, NULL));
 }
 
-#if 0
+
 GPViewFootprintView*
 gpview_footprint_view_new_with_controller(GPViewFootprintCtrl *ctrl)
 {
@@ -386,9 +409,8 @@ gpview_footprint_view_new_with_controller(GPViewFootprintCtrl *ctrl)
         NULL
         ));
 }
-#endif
 
-#if 0
+
 void
 gpview_footprint_view_set_controller(GPViewFootprintView *view, GPViewFootprintCtrl *ctrl)
 {
@@ -424,7 +446,7 @@ gpview_footprint_view_set_controller(GPViewFootprintView *view, GPViewFootprintC
         g_object_notify(G_OBJECT(view), "controller");
     }
 }
-#endif
+
 
 void
 gpview_footprint_view_set_database(GPViewFootprintView *view, GPartsDatabase *database)
@@ -471,9 +493,9 @@ gpview_footprint_view_set_property(GObject *object, guint property_id, const GVa
     {
         switch (property_id)
         {
-            //case GPVIEW_FOOTPRINT_VIEW_CONTROLLER:
-            //    gpview_footprint_view_set_controller(view, g_value_get_object(value));
-            //    break;
+            case GPVIEW_FOOTPRINT_VIEW_CONTROLLER:
+                gpview_footprint_view_set_controller(view, g_value_get_object(value));
+                break;
 
             case GPVIEW_FOOTPRINT_VIEW_DATABASE:
                 gpview_footprint_view_set_database(view, g_value_get_object(value));

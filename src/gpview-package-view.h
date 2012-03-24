@@ -28,7 +28,7 @@
 #define GPVIEW_IS_PACKAGE_VIEW_CLASS(cls) (G_TYPE_CHECK_CLASS_TYPE((cls),GPVIEW_TYPE_PACKAGE_VIEW))
 #define GPVIEW_PACKAGE_VIEW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj),GPVIEW_TYPE_PACKAGE_VIEW,GPViewPackageViewClass))
 
-/*! \extends GtkSrolledWindow */
+/*! \extends GtkContainer */
 struct _GPViewPackageView
 {
     GtkScrolledWindow parent;
@@ -44,6 +44,46 @@ struct _GPViewPackageViewClass
 GType
 gpview_package_view_get_type(void);
 
+/*! \brief Get the controller associated with this view
+ *
+ *  Use g_object_free() on the returned pointer when no longer needed.
+ *
+ *  \param [in] view The view
+ *  \return The controller associated with this view
+ */
+GPViewPackageCtrl*
+gpview_package_view_get_controller(const GPViewPackageView *view);
+
+/*! \brief Get the selected package IDs
+ *
+ *  Use g_strfreev() on the returned pointer when no longer needed.
+ *
+ *  \param [in] view The view [allow none]
+ *  \return The selected Company IDs
+ */
+GStrv
+gpview_package_view_get_ids(const GPViewPackageView *view);
+
+/*! \brief Create a new pacakge view
+ *
+ *  \return A new company view
+ */
 GPViewPackageView*
 gpview_package_view_new(void);
+
+/*! \brief Create a new package view
+ *
+ *  \param [in] ctrl The controller to associate with this view
+ *  \return A new company view
+ */
+GPViewPackageView*
+gpview_package_view_new_with_controller(GPViewPackageCtrl *ctrl);
+
+/*! \brief Set the controller associated with this view
+ *
+ *  \param [in] view The view
+ *  \param [in] ctrl The controller to associate with this view
+ */
+void
+gpview_package_view_set_controller(GPViewPackageView *view, GPViewPackageCtrl *ctrl);
 

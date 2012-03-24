@@ -28,16 +28,17 @@
 #include "gpdata.h"
 #include "gpform.h"
 
+    GPFormUIDialog *dialog = NULL;
 static void
 destroy_cb(GtkWidget* widget, gpointer data)
 {
+    gpform_ui_dialog_get_snapshot(dialog);
     gtk_main_quit();
 }
 
 
 int main(int argc, char* argv[])
 {
-    GPFormUIDialog *dialog = NULL;
     GPFormFactory  *factory = NULL;
     GdkPixbuf *pixbuf = NULL;
 
@@ -48,7 +49,7 @@ int main(int argc, char* argv[])
 
     if (factory != NULL)
     {
-        dialog = gpform_factory_create_form(factory, "../xml/forms/arc-edit.xml");
+        dialog = gpform_factory_create_form(factory, "../xml/forms/inductor-add.xml");
     }
 
     if (dialog != NULL)
@@ -63,26 +64,9 @@ int main(int argc, char* argv[])
 
         gtk_widget_show_all(GTK_WIDGET(dialog));
 
-        pixbuf = gpform_ui_dialog_get_snapshot(dialog);
 
         gpform_ui_dialog_set_model(dialog, NULL);
     }
-
-    if (pixbuf != NULL)
-    {
-        g_debug("%s", G_OBJECT_TYPE_NAME(pixbuf));
-
-        gdk_pixbuf_save(
-            pixbuf,
-            "screenshot",
-            "png",
-            NULL,
-            NULL
-            );
-
-        g_object_unref(pixbuf);
-    }
-
 
     {
         GPDataFactory *factory = gpdata_factory_new();

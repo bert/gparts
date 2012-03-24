@@ -27,6 +27,7 @@
 
 #include "sch.h"
 #include "gparts.h"
+#include "gpform.h"
 #include "gpview.h"
 
 #define GPVIEW_FACTORY_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),GPVIEW_TYPE_FACTORY,GPViewFactoryPrivate))
@@ -34,6 +35,7 @@
 enum
 {
     GPVIEW_FACTORY_DATABASE = 1,
+    GPVIEW_FACTORY_FORM_FACTORY,
     GPVIEW_FACTORY_UI_MANAGER
 };
 
@@ -41,13 +43,18 @@ typedef struct _GPViewFactoryPrivate GPViewFactoryPrivate;
 
 struct _GPViewFactoryPrivate
 {
-    GPartsDatabase    *database;
+    GPartsDatabase      *database;
+    GPFormFactory       *form_factory;
+    GtkUIManager        *ui_manager;
 
-    GPViewCompanyCtrl *company_ctrl;
-    GPViewPartCtrl    *part_ctrl;
-    GPViewSymbolCtrl  *symbol_ctrl;
+    GPViewCompanyCtrl   *company_ctrl;
+    GPViewDeviceCtrl    *device_ctrl;
+    GPViewDocumentCtrl  *document_ctrl;
+    GPViewFootprintCtrl *footprint_ctrl;
+    GPViewPackageCtrl   *package_ctrl;
+    GPViewPartCtrl      *part_ctrl;
+    GPViewSymbolCtrl    *symbol_ctrl;
 
-    GtkUIManager      *ui_manager;
 };
 
 static void
@@ -130,7 +137,7 @@ gpview_factory_create_device_view(GPViewFactory *factory)
 
     if (privat != NULL)
     {
-        view = gpview_device_view_new();
+        view = gpview_device_view_new_with_controller(privat->device_ctrl);
     }
 
     return view;
@@ -145,7 +152,7 @@ gpview_factory_create_document_view(GPViewFactory *factory)
 
     if (privat != NULL)
     {
-        view = gpview_document_view_new();
+        view = gpview_document_view_new_with_controller(privat->document_ctrl);
     }
 
     return view;
@@ -160,7 +167,7 @@ gpview_factory_create_footprint_view(GPViewFactory *factory)
 
     if (privat != NULL)
     {
-        view = gpview_footprint_view_new();
+        view = gpview_footprint_view_new_with_controller(privat->footprint_ctrl);
     }
 
     return view;
@@ -175,7 +182,7 @@ gpview_factory_create_package_view(GPViewFactory *factory)
 
     if (privat != NULL)
     {
-        view = gpview_package_view_new();
+        view = gpview_package_view_new_with_controller(privat->package_ctrl);
     }
 
     return view;
@@ -224,6 +231,18 @@ gpview_factory_dispose(GObject *object)
 
         misc_object_unref(privat->company_ctrl);
         privat->company_ctrl = NULL;
+
+        misc_object_unref(privat->device_ctrl);
+        privat->device_ctrl = NULL;
+
+        misc_object_unref(privat->document_ctrl);
+        privat->document_ctrl = NULL;
+
+        misc_object_unref(privat->footprint_ctrl);
+        privat->footprint_ctrl = NULL;
+
+        misc_object_unref(privat->package_ctrl);
+        privat->package_ctrl = NULL;
 
         misc_object_unref(privat->part_ctrl);
         privat->part_ctrl = NULL;
@@ -306,6 +325,14 @@ gpview_factory_init(GTypeInstance *instance, gpointer g_class)
     {
         privat->company_ctrl = gpview_company_ctrl_new();
 
+        privat->device_ctrl = gpview_device_ctrl_new();
+
+        privat->document_ctrl = gpview_document_ctrl_new();
+
+        privat->footprint_ctrl = gpview_footprint_ctrl_new();
+
+        privat->package_ctrl = gpview_package_ctrl_new();
+
         privat->part_ctrl = gpview_part_ctrl_new();
 
         privat->symbol_ctrl = gpview_symbol_ctrl_new();
@@ -349,9 +376,46 @@ gpview_factory_set_database(GPViewFactory *view, GPartsDatabase *database)
             g_object_unref(privat->database);
         }
 
+        gpview_company_ctrl_set_database(privat->company_ctrl, database);
+        gpview_device_ctrl_set_database(privat->device_ctrl, database);
+        gpview_document_ctrl_set_database(privat->document_ctrl, database);
+        gpview_footprint_ctrl_set_database(privat->footprint_ctrl, database);
+        gpview_package_ctrl_set_database(privat->package_ctrl, database);
+        gpview_part_ctrl_set_database(privat->part_ctrl, database);
         gpview_symbol_ctrl_set_database(privat->symbol_ctrl, database);
 
         g_object_notify(G_OBJECT(view), "database");
+    }
+}
+
+void
+gpview_factory_set_form_factory(GPViewFactory *factory, GPFormFactory *form_factory)
+{
+    GPViewFactoryPrivate *privat = GPVIEW_FACTORY_GET_PRIVATE(factory);
+
+    if (privat != NULL)
+    {
+        if (privat->form_factory != NULL)
+        {
+            g_object_unref(privat->form_factory);
+        }
+
+        privat->form_factory = form_factory;
+
+        if (privat->form_factory != NULL)
+        {
+            g_object_ref(privat->form_factory);
+        }
+
+        gpview_company_ctrl_set_form_factory(privat->company_ctrl, form_factory);
+        gpview_device_ctrl_set_form_factory(privat->device_ctrl, form_factory);
+        gpview_document_ctrl_set_form_factory(privat->document_ctrl, form_factory);
+        gpview_footprint_ctrl_set_form_factory(privat->footprint_ctrl, form_factory);
+        gpview_package_ctrl_set_form_factory(privat->package_ctrl, form_factory);
+        gpview_part_ctrl_set_form_factory(privat->part_ctrl, form_factory);
+        gpview_symbol_ctrl_set_form_factory(privat->symbol_ctrl, form_factory);
+
+        g_object_notify(G_OBJECT(factory), "form-factory");
     }
 }
 
@@ -366,6 +430,10 @@ gpview_factory_set_property(GObject *object, guint property_id, const GValue *va
         {
             case GPVIEW_FACTORY_DATABASE:
                 gpview_factory_set_database(view, g_value_get_object(value));
+                break;
+
+            case GPVIEW_FACTORY_FORM_FACTORY:
+                gpview_factory_set_form_factory(view, g_value_get_object(value));
                 break;
 
             case GPVIEW_FACTORY_UI_MANAGER:
@@ -398,6 +466,10 @@ gpview_factory_set_ui_manager(GPViewFactory *factory, GtkUIManager *manager)
         }
 
         gpview_company_ctrl_set_ui_manager(privat->company_ctrl, manager);
+        gpview_device_ctrl_set_ui_manager(privat->device_ctrl, manager);
+        gpview_document_ctrl_set_ui_manager(privat->document_ctrl, manager);
+        gpview_footprint_ctrl_set_ui_manager(privat->footprint_ctrl, manager);
+        gpview_package_ctrl_set_ui_manager(privat->package_ctrl, manager);
         gpview_part_ctrl_set_ui_manager(privat->part_ctrl, manager);
         gpview_symbol_ctrl_set_ui_manager(privat->symbol_ctrl, manager);
 

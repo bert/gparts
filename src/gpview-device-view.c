@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA
  */
 
-/*! \file gpview-company-view.c
+/*! \file gpview-device-view.c
  */
 
 #include <glib.h>
@@ -27,6 +27,7 @@
 
 #include "sch.h"
 #include "gparts.h"
+#include "gpform.h"
 #include "gpview.h"
 
 #define GPVIEW_DEVICE_VIEW_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),GPVIEW_TYPE_DEVICE_VIEW,GPViewDeviceViewPrivate))
@@ -45,7 +46,7 @@ typedef struct _GPViewDeviceViewPrivate GPViewDeviceViewPrivate;
 struct _GPViewDeviceViewPrivate
 {
     GPViewResultAdapter  *adapter;
-    void                *controller;
+    GPViewDeviceCtrl     *controller;
     GPartsDatabase       *database;
     GPartsDatabaseResult *result;
     GtkTreeSelection     *selection;
@@ -106,11 +107,11 @@ gpview_device_view_activate(GPViewViewInterface *widget)
         }
         else if (privat->controller == NULL)
         {
-            g_critical("GPViewCompanyView has a NULL controller");
+            g_critical("GPViewDeviceView has a NULL controller");
         }
         else
         {
-            //gpview_device_ctrl_set_current_view(privat->controller, view);
+            gpview_device_ctrl_set_current_view(privat->controller, view);
         }
     }
 }
@@ -149,7 +150,6 @@ gpview_device_view_class_init(gpointer g_class, gpointer g_class_data)
             )
         );
 
-#if 0
     g_object_class_install_property(
         klasse,
         GPVIEW_DEVICE_VIEW_CONTROLLER,
@@ -161,7 +161,6 @@ gpview_device_view_class_init(gpointer g_class, gpointer g_class_data)
             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
-#endif
 
     g_object_class_install_property(
         klasse,
@@ -219,11 +218,11 @@ gpview_device_view_deactivate(GPViewViewInterface *widget)
         }
         else if (privat->controller == NULL)
         {
-            g_critical("GPViewCompanyView has a NULL controller");
+            g_critical("GPViewDeviceView has a NULL controller");
         }
         else
         {
-            //gpview_device_ctrl_set_current_view(privat->controller, NULL);
+            gpview_device_ctrl_set_current_view(privat->controller, NULL);
         }
     }
 }
@@ -244,6 +243,30 @@ gpview_device_view_dispose(GObject *object)
 
     misc_object_chain_dispose(object);
 }
+
+GStrv
+gpview_device_view_get_ids(const GPViewDeviceView *view)
+{
+    GStrv ids = NULL;
+
+    if (view != NULL)
+    {
+        GPViewDeviceViewPrivate *privat = GPVIEW_DEVICE_VIEW_GET_PRIVATE(view);
+
+        if (privat != NULL)
+        {
+            gint index;
+
+            if (gpview_result_adapter_get_column_index(privat->adapter, "DeviceID", &index))
+            {
+                ids = gpview_result_adapter_get_fields(privat->adapter, privat->selection, index);
+            }
+        }
+    }
+
+    return ids;
+}
+
 
 static void
 gpview_device_view_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
@@ -376,7 +399,6 @@ gpview_device_view_new()
     return GPVIEW_DEVICE_VIEW(g_object_new(GPVIEW_TYPE_DEVICE_VIEW, NULL));
 }
 
-#if 0
 GPViewDeviceView*
 gpview_device_view_new_with_controller(GPViewDeviceCtrl *ctrl)
 {
@@ -386,9 +408,7 @@ gpview_device_view_new_with_controller(GPViewDeviceCtrl *ctrl)
         NULL
         ));
 }
-#endif
 
-#if 0
 void
 gpview_device_view_set_controller(GPViewDeviceView *view, GPViewDeviceCtrl *ctrl)
 {
@@ -424,7 +444,6 @@ gpview_device_view_set_controller(GPViewDeviceView *view, GPViewDeviceCtrl *ctrl
         g_object_notify(G_OBJECT(view), "controller");
     }
 }
-#endif
 
 void
 gpview_device_view_set_database(GPViewDeviceView *view, GPartsDatabase *database)
@@ -471,9 +490,9 @@ gpview_device_view_set_property(GObject *object, guint property_id, const GValue
     {
         switch (property_id)
         {
-            //case GPVIEW_DEVICE_VIEW_CONTROLLER:
-            //    gpview_device_view_set_controller(view, g_value_get_object(value));
-            //    break;
+            case GPVIEW_DEVICE_VIEW_CONTROLLER:
+                gpview_device_view_set_controller(view, g_value_get_object(value));
+                break;
 
             case GPVIEW_DEVICE_VIEW_DATABASE:
                 gpview_device_view_set_database(view, g_value_get_object(value));

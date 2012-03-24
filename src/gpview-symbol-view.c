@@ -27,6 +27,7 @@
 
 #include "schgui.h"
 #include "gparts.h"
+#include "gpform.h"
 #include "gpview.h"
 
 #define GPVIEW_SYMBOL_VIEW_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),GPVIEW_TYPE_SYMBOL_VIEW,GPViewSymbolViewPrivate))
@@ -661,6 +662,16 @@ gpview_symbol_view_set_result(GPViewSymbolView *view, GPartsDatabaseResult *resu
             }
 
             gtk_tree_view_set_model(privat->symbol_view, GTK_TREE_MODEL(privat->adapter));
+
+            if (privat->adapter != NULL)
+            {
+                gint index;
+
+                if (gpview_result_adapter_get_column_index(privat->adapter, "SymbolName", &index))
+                {
+                    gtk_tree_view_set_search_column(privat->symbol_view, index);
+                }
+            }
         }
 
         g_object_notify(G_OBJECT(view), "symbol-ids");

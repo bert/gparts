@@ -23,6 +23,7 @@
 
 #include "sch.h"
 #include "gparts.h"
+#include "gpform.h"
 #include "gpview.h"
 
 #define GPVIEW_RESULT_ADAPTER_GET_PRIVATE(object) G_TYPE_INSTANCE_GET_PRIVATE(object,GPVIEW_TYPE_RESULT_ADAPTER,GPViewResultAdapterPrivate)

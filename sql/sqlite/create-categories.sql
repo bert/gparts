@@ -93,21 +93,27 @@ INSERT INTO Category (CategoryName, ViewName, ParentID) VALUES(
     (SELECT CategoryID FROM Category WHERE CategoryName = "UNKNOWN")
     );
 
-INSERT INTO Category (CategoryName, ViewName, ParentID) VALUES(
+INSERT INTO Category (CategoryName, ViewName, CreateForm, EditForm, ParentID) VALUES(
     "Capacitors",
     "CapacitorV",
+    "capacitor-add.xml",
+    "capacitor-add.xml",
     (SELECT CategoryID FROM Category WHERE CategoryName = "Passives")
     );
 
-INSERT INTO Category (CategoryName, ViewName, ParentID) VALUES(
+INSERT INTO Category (CategoryName, ViewName, CreateForm, EditForm, ParentID) VALUES(
     "Inductors",
     "InductorV",
+    "inductor-add.xml",
+    "inductor-add.xml",
     (SELECT CategoryID FROM Category WHERE CategoryName = "Passives")
     );
 
-INSERT INTO Category (CategoryName, ViewName, ParentID) VALUES(
+INSERT INTO Category (CategoryName, ViewName, CreateForm, EditForm, ParentID) VALUES(
     "Resistors",
     "ResistorV",
+    "resistor-add.xml",
+    "resistor-add.xml",
     (SELECT CategoryID FROM Category WHERE CategoryName = "Passives")
     );
 

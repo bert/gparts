@@ -48,6 +48,12 @@ gpview_category_widget_new();
 
 
 gchar*
+gpview_category_widget_get_create_form(GPViewCategoryWidget *widget);
+
+gchar*
+gpview_category_widget_get_edit_form(GPViewCategoryWidget *widget);
+
+gchar*
 gpview_category_widget_get_view_name(GPViewCategoryWidget *widget);
 
 GPartsDatabase*

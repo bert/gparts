@@ -33,7 +33,8 @@
 
 enum
 {
-    GPFORM_FACTORY_FORM_ID = 1,
+    GPFORM_FACTORY_DIALOG_PARENT = 1,
+    GPFORM_FACTORY_FORM_ID,
     GPFORM_FACTORY_IMAGE_PATH,
     GPFORM_FACTORY_XML_PATH
 };
@@ -42,9 +43,10 @@ typedef struct _GPFormFactoryPrivate GPFormFactoryPrivate;
 
 struct _GPFormFactoryPrivate
 {
-    char *form_id;
-    char *image_path;
-    char *xml_path;
+    GtkWindow *dialog_parent;
+    gchar     *form_id;
+    gchar     *image_path;
+    gchar     *xml_path;
 };
 
 
@@ -73,7 +75,6 @@ static void
 gpform_factory_class_init(gpointer g_class, gpointer g_class_data)
 {
     GObjectClass *klasse = G_OBJECT_CLASS(g_class);
-    GPFormFactoryClass *klasse1 = GPFORM_FACTORY_CLASS(g_class);
 
     g_type_class_add_private(klasse, sizeof(GPFormFactoryPrivate));
 
@@ -82,6 +83,19 @@ gpform_factory_class_init(gpointer g_class, gpointer g_class_data)
 
     klasse->get_property = gpform_factory_get_property;
     klasse->set_property = gpform_factory_set_property;
+
+    g_object_class_install_property(
+        klasse,
+        GPFORM_FACTORY_DIALOG_PARENT,
+        g_param_spec_object(
+            "dialog-parent",
+            "Dialog Parent",
+            "Dialog Parent",
+            GTK_TYPE_WINDOW,
+            G_PARAM_LAX_VALIDATION | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
+            )
+        );
+
 
     g_object_class_install_property(
         klasse,
@@ -132,7 +146,7 @@ gpform_factory_class_init(gpointer g_class, gpointer g_class_data)
 GPFormUIDialog*
 gpform_factory_create_form(const GPFormFactory *factory, const char *filename)
 {
-    GtkDialog *dialog = NULL;
+    GPFormUIDialog *dialog = NULL;
     GPFormFactoryPrivate *privat = GPFORM_FACTORY_GET_PRIVATE(factory);
 
     if (privat != NULL)
@@ -162,6 +176,11 @@ gpform_factory_create_form(const GPFormFactory *factory, const char *filename)
         builder = NULL;
 
         g_free(filepath);
+
+        gtk_window_set_transient_for(
+            GTK_WINDOW(dialog),
+            privat->dialog_parent
+            );
     }
 
     return dialog;
@@ -170,6 +189,15 @@ gpform_factory_create_form(const GPFormFactory *factory, const char *filename)
 static void
 gpform_factory_dispose(GObject *object)
 {
+
+    GPFormFactoryPrivate *privat = GPFORM_FACTORY_GET_PRIVATE(object);
+
+    if (privat != NULL)
+    {
+        misc_object_unref(privat->dialog_parent);
+        privat->dialog_parent = NULL;
+    }
+
     misc_object_chain_dispose(object);
 }
 
@@ -193,6 +221,29 @@ gpform_factory_finalize(GObject *object)
     misc_object_chain_finalize(object);
 }
 
+GtkWindow*
+gpform_factory_get_dialog_parent(const GPFormFactory *factory)
+{
+    GtkWindow *parent = NULL;
+
+    if (factory != NULL)
+    {
+        GPFormFactoryPrivate *privat = GPFORM_FACTORY_GET_PRIVATE(factory);
+
+        if (privat != NULL)
+        {
+            parent = privat->dialog_parent;
+
+            if (parent != NULL)
+            {
+                g_object_ref(parent);
+            }
+        }
+    }
+
+    return parent;
+}
+
 static void
 gpform_factory_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
 {
@@ -202,6 +253,10 @@ gpform_factory_get_property(GObject *object, guint property_id, GValue *value, G
     {
         switch (property_id)
         {
+            case GPFORM_FACTORY_DIALOG_PARENT:
+                g_value_take_object(value, gpform_factory_get_dialog_parent(factory));
+                break;
+
             case GPFORM_FACTORY_FORM_ID:
                 g_value_take_string(value, gpform_factory_get_form_id(factory));
                 break;
@@ -251,6 +306,27 @@ gpform_factory_get_type(void)
     return type;
 }
 
+void
+gpform_factory_set_dialog_parent(GPFormFactory *factory, GtkWindow *parent)
+{
+    GPFormFactoryPrivate *privat = GPFORM_FACTORY_GET_PRIVATE(factory);
+
+    if (privat != NULL)
+    {
+        if (privat->dialog_parent != NULL)
+        {
+            g_object_unref(privat->dialog_parent);
+        }
+
+        privat->dialog_parent = parent;
+
+        if (privat->dialog_parent != NULL)
+        {
+            g_object_ref(privat->dialog_parent);
+        }
+    }
+}
+
 static void
 gpform_factory_set_property(GObject *object, guint property_id, const GValue *value, GParamSpec *pspec)
 {
@@ -260,6 +336,10 @@ gpform_factory_set_property(GObject *object, guint property_id, const GValue *va
     {
         switch (property_id)
         {
+            case GPFORM_FACTORY_DIALOG_PARENT:
+                gpform_factory_set_dialog_parent(factory, g_value_get_object(value));
+                break;
+
             case GPFORM_FACTORY_FORM_ID:
                 gpform_factory_set_form_id(factory, g_value_get_string(value));
                 break;
@@ -342,7 +422,9 @@ gpform_factory_init(GTypeInstance *instance, gpointer g_class)
 
         privat->xml_path = g_build_path(
             G_DIR_SEPARATOR_S,
-            ".",
+            "..",
+            "xml",
+            "forms",
             /* DATADIR, */
             /* PACKAGE_NAME, */
             /* "xml", */

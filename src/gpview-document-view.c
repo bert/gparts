@@ -27,6 +27,7 @@
 
 #include "sch.h"
 #include "gparts.h"
+#include "gpform.h"
 #include "gpview.h"
 
 #define GPVIEW_DOCUMENT_VIEW_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj),GPVIEW_TYPE_DOCUMENT_VIEW,GPViewDocumentViewPrivate))
@@ -45,7 +46,7 @@ typedef struct _GPViewDocumentViewPrivate GPViewDocumentViewPrivate;
 struct _GPViewDocumentViewPrivate
 {
     GPViewResultAdapter  *adapter;
-    void                *controller;
+    GPViewDocumentCtrl   *controller;
     GPartsDatabase       *database;
     GPartsDatabaseResult *result;
     GtkTreeSelection     *selection;
@@ -106,11 +107,11 @@ gpview_document_view_activate(GPViewViewInterface *widget)
         }
         else if (privat->controller == NULL)
         {
-            g_critical("GPViewCompanyView has a NULL controller");
+            g_critical("GPViewDocumentView has a NULL controller");
         }
         else
         {
-            //gpview_document_ctrl_set_current_view(privat->controller, view);
+            gpview_document_ctrl_set_current_view(privat->controller, view);
         }
     }
 }
@@ -149,7 +150,6 @@ gpview_document_view_class_init(gpointer g_class, gpointer g_class_data)
             )
         );
 
-#if 0
     g_object_class_install_property(
         klasse,
         GPVIEW_DOCUMENT_VIEW_CONTROLLER,
@@ -161,7 +161,6 @@ gpview_document_view_class_init(gpointer g_class, gpointer g_class_data)
             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
             )
         );
-#endif
 
     g_object_class_install_property(
         klasse,
@@ -219,11 +218,11 @@ gpview_document_view_deactivate(GPViewViewInterface *widget)
         }
         else if (privat->controller == NULL)
         {
-            g_critical("GPViewCompanyView has a NULL controller");
+            g_critical("GPViewDocumentView has a NULL controller");
         }
         else
         {
-            //gpview_document_ctrl_set_current_view(privat->controller, NULL);
+            gpview_document_ctrl_set_current_view(privat->controller, NULL);
         }
     }
 }
@@ -244,6 +243,30 @@ gpview_document_view_dispose(GObject *object)
 
     misc_object_chain_dispose(object);
 }
+
+GStrv
+gpview_document_view_get_ids(const GPViewDocumentView *view)
+{
+    GStrv ids = NULL;
+
+    if (view != NULL)
+    {
+        GPViewDocumentViewPrivate *privat = GPVIEW_DOCUMENT_VIEW_GET_PRIVATE(view);
+
+        if (privat != NULL)
+        {
+            gint index;
+
+            if (gpview_result_adapter_get_column_index(privat->adapter, "DocumentID", &index))
+            {
+                ids = gpview_result_adapter_get_fields(privat->adapter, privat->selection, index);
+            }
+        }
+    }
+
+    return ids;
+}
+
 
 static void
 gpview_document_view_get_property(GObject *object, guint property_id, GValue *value, GParamSpec *pspec)
@@ -376,7 +399,6 @@ gpview_document_view_new()
     return GPVIEW_DOCUMENT_VIEW(g_object_new(GPVIEW_TYPE_DOCUMENT_VIEW, NULL));
 }
 
-#if 0
 GPViewDocumentView*
 gpview_document_view_new_with_controller(GPViewDocumentCtrl *ctrl)
 {
@@ -386,9 +408,7 @@ gpview_document_view_new_with_controller(GPViewDocumentCtrl *ctrl)
         NULL
         ));
 }
-#endif
 
-#if 0
 void
 gpview_document_view_set_controller(GPViewDocumentView *view, GPViewDocumentCtrl *ctrl)
 {
@@ -424,7 +444,6 @@ gpview_document_view_set_controller(GPViewDocumentView *view, GPViewDocumentCtrl
         g_object_notify(G_OBJECT(view), "controller");
     }
 }
-#endif
 
 void
 gpview_document_view_set_database(GPViewDocumentView *view, GPartsDatabase *database)
@@ -471,9 +490,9 @@ gpview_document_view_set_property(GObject *object, guint property_id, const GVal
     {
         switch (property_id)
         {
-            //case GPVIEW_DOCUMENT_VIEW_CONTROLLER:
-            //    gpview_document_view_set_controller(view, g_value_get_object(value));
-            //    break;
+            case GPVIEW_DOCUMENT_VIEW_CONTROLLER:
+                gpview_document_view_set_controller(view, g_value_get_object(value));
+                break;
 
             case GPVIEW_DOCUMENT_VIEW_DATABASE:
                 gpview_document_view_set_database(view, g_value_get_object(value));

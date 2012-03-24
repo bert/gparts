@@ -4,13 +4,25 @@
         <menu name="entity" action="entity">
             <menu name="entity-create" action="entity-create">
                 <menuitem name="company-create" action="company-create"/>
+                <menuitem name="device-create" action="device-create"/>
+                <menuitem name="document-create" action="document-create"/>
+                <menuitem name="footprint-create" action="footprint-create"/>
+                <menuitem name="package-create" action="package-create"/>
                 <menuitem name="part-create" action="part-create"/>
                 <menuitem name="symbol-create" action="symbol-create"/>
             </menu>
             <menuitem name="company-edit" action="company-edit"/>
+            <menuitem name="device-edit" action="device-edit"/>
+            <menuitem name="document-edit" action="document-edit"/>
+            <menuitem name="footprint-edit" action="footprint-edit"/>
+            <menuitem name="package-edit" action="package-edit"/>
             <menuitem name="part-edit" action="part-edit"/>
             <menuitem name="symbol-edit" action="symbol-edit"/>
             <menuitem name="company-delete" action="company-delete"/>
+            <menuitem name="device-delete" action="device-delete"/>
+            <menuitem name="document-delete" action="document-delete"/>
+            <menuitem name="footprint-delete" action="footprint-delete"/>
+            <menuitem name="package-delete" action="package-delete"/>
             <menuitem name="part-delete" action="part-delete"/>
             <menuitem name="symbol-delete" action="symbol-delete"/>
             <menuitem name="company-visit" action="company-visit"/>
@@ -18,12 +30,24 @@
     </menubar>
     <toolbar name="main_toolbar">
         <toolitem action="company-create"/>
+        <toolitem action="device-create"/>
+        <toolitem action="document-create"/>
+        <toolitem action="footprint-create"/>
+        <toolitem action="package-create"/>
         <toolitem action="part-create"/>
         <toolitem action="symbol-create"/>
         <toolitem action="company-delete"/>
+        <toolitem action="device-delete"/>
+        <toolitem action="document-delete"/>
+        <toolitem action="footprint-delete"/>
+        <toolitem action="package-delete"/>
         <toolitem action="part-delete"/>
         <toolitem action="symbol-delete"/>
         <toolitem action="company-edit"/>
+        <toolitem action="device-edit"/>
+        <toolitem action="document-edit"/>
+        <toolitem action="footprint-edit"/>
+        <toolitem action="package-edit"/>
         <toolitem action="part-edit"/>
         <toolitem action="symbol-edit"/>
         <separator/>

@@ -44,17 +44,56 @@ struct _GPViewCompanyViewClass
 GType
 gpview_company_view_get_type(void);
 
-/*
+/*! \brief Get the controller associated with this view
+ *
+ *  Use g_object_free() on the returned pointer when no longer needed.
+ *
+ *  \param [in] view The view
+ *  \return The controller associated with this view
+ */
+GPViewCompanyCtrl*
+gpview_company_view_get_controller(const GPViewCompanyView *view);
+
+/*! \brief Get the selected company IDs
+ *
+ *  Use g_strfreev() on the returned pointer when no longer needed.
+ *
+ *  \param [in] view The view [allow none]
+ *  \return The selected Company IDs
  */
 GStrv
-gpview_company_view_get_websites(GPViewCompanyView *view);
+gpview_company_view_get_ids(const GPViewCompanyView *view);
 
+/*! \brief Get the selected company websites
+ *
+ *  Use g_strfreev() on the returned pointer when no longer needed.
+ *
+ *  \param [in] view The view [allow none]
+ *  \return The selected Company websites
+ */
+GStrv
+gpview_company_view_get_websites(const GPViewCompanyView *view);
+
+/*! \brief Create a new company view
+ *
+ *  \return A new company view
+ */
 GPViewCompanyView*
 gpview_company_view_new(void);
 
+/*! \brief Create a new company view
+ *
+ *  \param [in] ctrl The controller to associate with this view
+ *  \return A new company view
+ */
 GPViewCompanyView*
 gpview_company_view_new_with_controller(GPViewCompanyCtrl *ctrl);
 
+/*! \brief Set the controller associated with this view
+ *
+ *  \param [in] view The view
+ *  \param [in] ctrl The controller to associate with this view
+ */
 void
 gpview_company_view_set_controller(GPViewCompanyView *view, GPViewCompanyCtrl *ctrl);
 

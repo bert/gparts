@@ -27,6 +27,7 @@
 
 #include "sch.h"
 #include "gparts.h"
+#include "gpform.h"
 #include "gpview.h"
 
 enum
@@ -99,6 +100,18 @@ gpview_category_widget_class_init(gpointer g_class, gpointer g_class_data)
 
     g_object_class_install_property(
         klasse,
+        GPVIEW_CATEGORY_WIDGET_CREATE_FORM,
+        g_param_spec_string(
+            "create-form",
+            "Create Form",
+            "Create Form",
+            NULL,
+            G_PARAM_READABLE | G_PARAM_STATIC_STRINGS
+            )
+        );
+
+    g_object_class_install_property(
+        klasse,
         GPVIEW_CATEGORY_WIDGET_DATABASE,
         g_param_spec_object(
             "database",
@@ -106,6 +119,18 @@ gpview_category_widget_class_init(gpointer g_class, gpointer g_class_data)
             "Database",
             GPARTS_TYPE_DATABASE,
             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
+            )
+        );
+
+    g_object_class_install_property(
+        klasse,
+        GPVIEW_CATEGORY_WIDGET_EDIT_FORM,
+        g_param_spec_string(
+            "edit-form",
+            "Edit Form",
+            "Edit Form",
+            NULL,
+            G_PARAM_READABLE | G_PARAM_STATIC_STRINGS
             )
         );
 
@@ -136,6 +161,26 @@ gpview_category_widget_dispose(GObject *object)
     misc_object_chain_dispose(object);
 }
 
+gchar*
+gpview_category_widget_get_create_form(GPViewCategoryWidget *widget)
+{
+    gchar *name = NULL;
+    GPViewCategoryWidgetPrivate *privat = GPVIEW_CATEGORY_WIDGET_GET_PRIVATE(widget);
+
+    if (privat != NULL)
+    {
+        GtkTreeIter iter;
+
+        if (gtk_tree_selection_get_selected(privat->selection, NULL, &iter))
+        {
+            name = gpview_category_model_get_field(privat->model, &iter, "CreateForm");
+        }
+    }
+
+    return name;
+}
+
+
 
 GPartsDatabase*
 gpview_category_widget_get_database(GPViewCategoryWidget *widget)
@@ -149,6 +194,25 @@ gpview_category_widget_get_database(GPViewCategoryWidget *widget)
     }
 
     return database;
+}
+
+gchar*
+gpview_category_widget_get_edit_form(GPViewCategoryWidget *widget)
+{
+    gchar *name = NULL;
+    GPViewCategoryWidgetPrivate *privat = GPVIEW_CATEGORY_WIDGET_GET_PRIVATE(widget);
+
+    if (privat != NULL)
+    {
+        GtkTreeIter iter;
+
+        if (gtk_tree_selection_get_selected(privat->selection, NULL, &iter))
+        {
+            name = gpview_category_model_get_field(privat->model, &iter, "EditForm");
+        }
+    }
+
+    return name;
 }
 
 
