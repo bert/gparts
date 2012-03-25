@@ -65,6 +65,15 @@ gpview_document_ctrl_new(void);
 GPViewDocumentCtrl*
 gpview_document_ctrl_new_with_manager(GtkUIManager *manager);
 
+/*! \brief Add new documents to the database
+ *
+ *
+ *  \param [in] ctrl This controller [allow none]
+ *  \param [in] uris The document URIs [allow none]
+ */
+void
+gpview_document_ctrl_add_uris(GPViewDocumentCtrl *ctrl, const GStrv uris);
+
 /*! \brief Get the current view associated with this controller.
  *
  *  Use g_object_unref() on the returned pointer when no longer

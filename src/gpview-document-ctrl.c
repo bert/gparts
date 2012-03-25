@@ -128,6 +128,28 @@ static const GtkActionEntry gpview_document_ctrl_actions_single[] =
 
 
 
+void
+gpview_document_ctrl_add_uris(GPViewDocumentCtrl *ctrl, const GStrv uris)
+{
+    g_debug("gpview_document_ctrl_add_uris: Not Implemented");
+
+    if ((ctrl != NULL) && (uris != NULL))
+    {
+        GPViewDocumentCtrlPrivate *privat = GPVIEW_DOCUMENT_CTRL_GET_PRIVATE(ctrl);
+
+        if (privat != NULL)
+        {
+            gchar **temp = uris;
+
+            while (*temp != NULL)
+            {
+                g_debug("    %s", *temp);
+                temp++;
+            }
+        }
+    }
+}
+
 static void
 gpview_document_ctrl_class_init(gpointer g_class, gpointer g_class_data)
 {

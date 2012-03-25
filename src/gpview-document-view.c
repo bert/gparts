@@ -87,6 +87,11 @@ static void
 gpview_document_view_update_cb(GObject *unused, GParamSpec *pspec, GPViewDocumentView *view);
 
 
+static const GtkTargetEntry gpview_document_view_targets[] =
+{
+    { "text/uri-list", 0, 1 }
+};
+
 
 static void
 gpview_document_view_activate(GPViewViewInterface *widget)
@@ -244,6 +249,88 @@ gpview_document_view_dispose(GObject *object)
     misc_object_chain_dispose(object);
 }
 
+static void
+gpview_document_view_drag_data_received_cb(GtkWidget *widget, GdkDragContext *context, gint x, gint y, GtkSelectionData *data, guint info, guint time, GPViewSymbolView *view)
+{
+    gboolean success = FALSE;
+
+    GPViewDocumentViewPrivate *privat = GPVIEW_DOCUMENT_VIEW_GET_PRIVATE(view);
+
+    if (privat != NULL)
+    {
+        if (info != 1)
+        {
+            g_debug("gpview_document_view_drag_data_received_cb: Wrong format");
+        }
+        else if (data == NULL)
+        {
+            g_debug("gpview_document_view_drag_data_received_cb: NULL data pointer");
+        }
+        else if (gtk_selection_data_get_length(data) < 0)
+        {
+            g_debug("gpview_document_view_drag_data_received_cb: Invalid length");
+        }
+        else
+        {
+            GStrv uris = gtk_selection_data_get_uris(data);
+
+            gpview_document_ctrl_add_uris(privat->controller, uris);
+            g_strfreev(uris);
+
+            success = TRUE;
+        }
+
+    }
+
+    gtk_drag_finish(context, success, FALSE, time);
+
+    g_signal_stop_emission_by_name(
+        widget,
+        "drag-data-received"
+        );
+}
+
+void
+gpview_document_view_drag_leave_cb(GtkWidget *widget, GdkDragContext *context, guint time, GPViewSymbolView *view)
+{
+    GPViewDocumentViewPrivate *privat = GPVIEW_DOCUMENT_VIEW_GET_PRIVATE(view);
+
+    if (privat != NULL)
+    {
+    }
+
+    gtk_drag_unhighlight(widget);
+}
+
+/* \todo Need to disable drag and drop when the database is not available. */
+
+static gboolean
+gpview_document_view_drag_motion_cb(GtkWidget *widget, GdkDragContext *context, gint x, gint y, guint time, GPViewSymbolView *view)
+{
+    GPViewDocumentViewPrivate *privat = GPVIEW_DOCUMENT_VIEW_GET_PRIVATE(view);
+
+    if (privat != NULL)
+    {
+        GdkAtom target;
+
+        gtk_drag_highlight(widget);
+
+        target = gtk_drag_dest_find_target(widget, context, NULL);
+
+        if (target == GDK_NONE)
+        {
+            gdk_drag_status(context, 0, time);
+        }
+        else
+        {
+            gdk_drag_status(context, gdk_drag_context_get_suggested_action(context), time);
+        }
+    }
+
+    return TRUE;
+}
+
+
 GStrv
 gpview_document_view_get_ids(const GPViewDocumentView *view)
 {
@@ -381,6 +468,38 @@ gpview_document_view_init(GTypeInstance *instance, gpointer g_class)
             G_CALLBACK(gpview_document_view_update_cb),
             instance
             );
+
+        /* initialize drag and drop */
+
+        g_signal_connect(
+            privat->tree_view,
+            "drag-leave",
+            G_CALLBACK(gpview_document_view_drag_leave_cb),
+            instance
+            );
+
+        g_signal_connect(
+            privat->tree_view,
+            "drag-data-received",
+            G_CALLBACK(gpview_document_view_drag_data_received_cb),
+            instance
+            );
+
+        g_signal_connect(
+            privat->tree_view,
+            "drag-motion",
+            G_CALLBACK(gpview_document_view_drag_motion_cb),
+            instance
+            );
+
+        gtk_drag_dest_set(
+            GTK_WIDGET(privat->tree_view),
+            GTK_TARGET_OTHER_APP | GTK_TARGET_OTHER_WIDGET,
+            gpview_document_view_targets,
+            G_N_ELEMENTS(gpview_document_view_targets),
+            GDK_ACTION_PRIVATE
+            );
+
     }
 }
 
