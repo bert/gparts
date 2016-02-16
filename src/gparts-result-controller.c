@@ -466,7 +466,7 @@ gparts_result_controller_refresh(GPartsResultController *controller)
     if (database != NULL &&
         privat->target != NULL &&
         privat->template != NULL &&
-        gtk_widget_get_visible(privat->target))
+        GTK_WIDGET_VISIBLE(privat->target))
     {
         gchar *query = gparts_result_controller_build(controller);
 
@@ -493,7 +493,7 @@ gparts_result_controller_notify_focus_cb(GtkWidget *widget, GParamSpec *pspec, G
 
     if (privat->customize_ctrl != NULL)
     {
-        if (gtk_widget_has_focus(widget))
+        if (GTK_WIDGET_HAS_FOCUS(widget))
         {
             gparts_customize_ctrl_set_target_view(privat->customize_ctrl, widget);
         }
@@ -1179,3 +1179,5 @@ gparts_result_controller_popup_menu_cb(GtkWidget *widget, GPartsResultController
         gtk_menu_item_set_submenu(item, sub);
     }
 #endif
+
+

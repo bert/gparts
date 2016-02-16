@@ -572,9 +572,8 @@ gpview_category_model_get_path(GtkTreeModel *tree_model, GtkTreeIter *iter)
 
     g_debug("gpview_category_model_get_path");
 
-    //g_assert(FALSE);
+    g_assert(FALSE);
 
-    return NULL;
 }
 
 /*! \brief Retrieve a value from the tree model.

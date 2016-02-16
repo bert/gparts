@@ -375,8 +375,6 @@ gparts_instance_init(GTypeInstance* instance, gpointer g_class)
         G_BINDING_DEFAULT
         );
 
-    gtk_window_set_default_size(GTK_WINDOW(widget), 900, 600);
-
     gtk_widget_show_all(widget);
 }
 

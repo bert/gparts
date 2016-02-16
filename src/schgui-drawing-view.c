@@ -66,7 +66,7 @@ static void
 schgui_drawing_view_configure_event_cb(GtkWidget *widget, GdkEventConfigure *event, gpointer user_data);
 
 static void
-schgui_drawing_view_draw_event_cb(GtkWidget *widget, cairo_t *cairo, gpointer user_data);
+schgui_drawing_view_expose_event_cb(GtkWidget *widget, GdkEventExpose *event, gpointer user_data);
 
 static void
 schgui_drawing_view_realize_cb(GtkWidget *widget, gpointer user_data);
@@ -267,13 +267,13 @@ schgui_drawing_view_realize_cb(GtkWidget *widget, gpointer user_data)
  *
  */
 static void
-schgui_drawing_view_draw_event_cb(GtkWidget *widget, cairo_t *cairo, gpointer user_data)
+schgui_drawing_view_expose_event_cb(GtkWidget *widget, GdkEventExpose *event, gpointer user_data)
 {
     SchGUIDrawingViewPrivate *privat = SCHGUI_DRAWING_VIEW_GET_PRIVATE(widget);
 
     if ((privat != NULL) && (privat->drafter != NULL))
     {
-        schgui_cairo_drafter_draw_to_cairo(privat->drafter, cairo);
+        schgui_cairo_drafter_draw_to_widget(privat->drafter, widget);
     }
 }
 
@@ -352,8 +352,8 @@ schgui_drawing_view_init(GTypeInstance *instance, gpointer g_class)
 
     g_signal_connect(
         G_OBJECT(instance),
-        "draw",
-        G_CALLBACK(schgui_drawing_view_draw_event_cb),
+        "expose-event",
+        G_CALLBACK(schgui_drawing_view_expose_event_cb),
         instance
         );
 

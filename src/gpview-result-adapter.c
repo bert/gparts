@@ -822,7 +822,7 @@ gpview_result_adapter_adjust_columns(const GPViewResultAdapter *adapter, GtkTree
 
             }
 
-            list = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(column));
+            list = gtk_tree_view_column_get_cell_renderers(column);
 
             if (list != NULL)
             {

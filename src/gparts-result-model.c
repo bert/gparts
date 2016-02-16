@@ -652,7 +652,7 @@ gparts_result_model_set_columns(GPartsDatabaseResult *result, GtkTreeView *tree_
 
         }
 
-        list = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(column));
+        list = gtk_tree_view_column_get_cell_renderers(column);
 
         if (list != NULL)
         {

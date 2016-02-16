@@ -562,6 +562,12 @@ gpview_part_view_init(GTypeInstance *instance, gpointer g_class)
 
         privat->part_tree = GTK_TREE_VIEW(gtk_tree_view_new());
 
+        gtk_widget_set_size_request(
+            GTK_WIDGET(privat->part_tree),
+            500,
+            480
+            );
+
         privat->part_selection = gtk_tree_view_get_selection(privat->part_tree);
 
         gtk_tree_selection_set_mode(
@@ -587,7 +593,19 @@ gpview_part_view_init(GTypeInstance *instance, gpointer g_class)
 
         privat->drawing_view = schgui_drawing_view_new();
 
+        gtk_widget_set_size_request(
+            GTK_WIDGET(privat->drawing_view),
+            300,
+            240
+            );
+
         privat->device_tree = GTK_TREE_VIEW(gtk_tree_view_new());
+
+        gtk_widget_set_size_request(
+            GTK_WIDGET(privat->device_tree),
+            300,
+            240
+            );
 
         privat->device_selection = gtk_tree_view_get_selection(privat->device_tree);
 
@@ -597,11 +615,6 @@ gpview_part_view_init(GTypeInstance *instance, gpointer g_class)
             );
 
         vpaned = GTK_VPANED(gtk_vpaned_new());
-
-        gtk_paned_set_position(
-            GTK_PANED(vpaned),
-            240
-            );
 
         gtk_container_add(
             GTK_CONTAINER(vpaned),
@@ -614,11 +627,6 @@ gpview_part_view_init(GTypeInstance *instance, gpointer g_class)
             );
 
         hpaned = GTK_HPANED(gtk_hpaned_new());
-
-        gtk_paned_set_position(
-            GTK_PANED(hpaned),
-            400
-            );
 
         gtk_container_add(
             GTK_CONTAINER(hpaned),
@@ -633,11 +641,6 @@ gpview_part_view_init(GTypeInstance *instance, gpointer g_class)
         gtk_container_add(
             GTK_CONTAINER(instance),
             GTK_WIDGET(hpaned)
-            );
-
-        gtk_paned_set_position(
-            GTK_PANED(instance),
-            200
             );
 
         g_signal_connect(

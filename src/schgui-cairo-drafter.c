@@ -25,7 +25,6 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
-#include "misc-object.h"
 #include "schgui.h"
 
 
@@ -196,8 +195,7 @@ schgui_cairo_drafter_draw_to_widget(SchGUICairoDrafter *drafter, GtkWidget *widg
 
     if (privat != NULL)
     {
-        //cairo_t *cairo = gdk_cairo_create(widget->window);
-        cairo_t *cairo = gdk_cairo_create(gtk_widget_get_window(widget));
+        cairo_t *cairo = gdk_cairo_create(widget->window);
 
         if (cairo != NULL)
         {
@@ -424,8 +422,7 @@ schgui_cairo_drafter_zoom_extents(SchGUICairoDrafter *drafter, GtkWidget *widget
             double     zx;
             double     zy;
 
-            //cairo = gdk_cairo_create(widget->window);
-            cairo = gdk_cairo_create(gtk_widget_get_window(widget));
+            cairo = gdk_cairo_create(widget->window);
            // schgui_cairo_drafter_begin_drawing(privat->drafter, widget);
 
             //schgui_cairo_drafter_drawing_bounds1(drafter, privat->drawing, &bounds);
@@ -446,8 +443,7 @@ schgui_cairo_drafter_zoom_extents(SchGUICairoDrafter *drafter, GtkWidget *widget
 
            // schgui_cairo_drafter_end_drawing(privat->drafter);
 
-            w = gdk_window_get_width(gtk_widget_get_window(widget));
-            h = gdk_window_get_height(gtk_widget_get_window(widget));
+            gdk_drawable_get_size(gtk_widget_get_window(widget), &w, &h);
 
             zx = 0.9 * (double)w / (bounds.max_x - bounds.min_x);
             zy = 0.9 * (double)h / (bounds.max_y - bounds.min_y);
